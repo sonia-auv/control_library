@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<package>
+  <name>control_library</name>
+  <version>0.0.0</version>
+  <description>The proc_control package</description>
+
+  <maintainer email="olavoie9507@gmail.com">Jeremie</maintainer>
+
+  <license>GPLv3</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <build_depend>roscpp</build_depend>
+  <build_depend>yaml-cpp</build_depend>
+
+  <run_depend>roscpp</run_depend>
+  <run_depend>yaml-cpp</run_depend>
+
+</package>
