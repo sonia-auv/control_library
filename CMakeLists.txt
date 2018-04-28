@@ -63,6 +63,6 @@ install(TARGETS control DESTINATION build)
 
 #==========================================================================
 # U N I T   T E S T S
-#if (${CATKIN_ENABLE_TESTING})
-#    add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/test)
-#endif ()
+if (${CATKIN_ENABLE_TESTING})
+    add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/test)
+endif ()
