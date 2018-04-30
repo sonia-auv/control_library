@@ -27,19 +27,6 @@
 cmake_minimum_required(VERSION 2.8)
 project(control_library)
 
-if (NOT CMAKE_BUILD_TYPE)
-  set(CMAKE_BUILD_TYPE Debug CACHE STRING
-      "Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel."
-      FORCE)
-endif (NOT CMAKE_BUILD_TYPE)
-
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -std=c++11 -Wall")
-set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -std=c++11 -O3 -s")
-
-set(CMAKE_MODULE_PATH "/usr/share/cmake-3.0/Modules")
-
-set(control_library_SRC_DIR "src")
-
 #===============================================================================
 # C A T K I N   C O N F I G U R A T I O N
 find_package(
@@ -47,18 +34,17 @@ find_package(
         roscpp
 )
 
+file(GLOB_RECURSE SOURCE_FILES *.cc)
+file(GLOB HEADER_FILES *.h)
+
 #===============================================================================
 # I N C L U D E   F I L E S
-
-file(GLOB_RECURSE control_library_FILES
-    "${control_library_SRC_DIR}/*.cc"
-    "${control_library_SRC_DIR}/*.h")
-
-
-#==========================================================================
-# C R E A T E   E X E C U T A B L E
-add_library(control SHARED ${control_library_FILES})
+add_library(control SHARED ${SOURCE_FILES} ${HEADER_FILES})
 target_link_libraries(control ${Eigen_LIBRARIES} yaml-cpp)
+
+# Build option
+target_compile_options(control PRIVATE -W -Wall -Wextra -Werror -O3 -std=c++11)
+
 install(TARGETS control DESTINATION build)
 
 #==========================================================================
