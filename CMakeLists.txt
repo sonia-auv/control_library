@@ -1,5 +1,5 @@
 # \file     CMakeLists.txt
-# \author   Olivier Lavoie <olavoie9507@gmail.com>
+# \author   Jeremie St-Jules-Prevost <jeremie.st.jules.prevost@gmail.com>
 # \date     23/09/2016
 #
 # \copyright Copyright (c) 2016 S.O.N.I.A. All rights reserved.
@@ -27,28 +27,45 @@
 cmake_minimum_required(VERSION 2.8)
 project(control_library)
 
-#===============================================================================
-# C A T K I N   C O N F I G U R A T I O N
-find_package(
-        catkin REQUIRED COMPONENTS
-        roscpp
-)
+if (NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE Debug CACHE STRING
+            "Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel."
+            FORCE)
+endif (NOT CMAKE_BUILD_TYPE)
 
-file(GLOB_RECURSE SOURCE_FILES *.cc)
-file(GLOB HEADER_FILES *.h)
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -std=c++11 -Wall")
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -std=c++11 -O3 -s")
+
+set(CMAKE_MODULE_PATH "/usr/share/cmake-3.0/Modules")
+
+set(control_SRC_DIR "src")
+
+find_package(catkin)
 
 #===============================================================================
 # I N C L U D E   F I L E S
-add_library(control SHARED ${SOURCE_FILES} ${HEADER_FILES})
-target_link_libraries(control ${Eigen_LIBRARIES} yaml-cpp)
 
-# Build option
-target_compile_options(control PRIVATE -W -Wall -Wextra -Werror -O3 -std=c++11)
+file(GLOB_RECURSE control_FILES
+        "${control_SRC_DIR}/*.cc"
+        "${control_SRC_DIR}/*.h")
 
-install(TARGETS control DESTINATION build)
+include_directories(
+        ${catkin_INCLUDE_DIRS}
+        ${control_SRC_DIR}
+)
+
+catkin_package(
+        INCLUDE_DIRS ${control_SRC_DIR}
+        LIBRARIES
+        CATKIN_DEPENDS roscpp
+)
+
+#==========================================================================
+# C R E A T E   E X E C U T A B L E
+add_library(control SHARED ${control_FILES})
+#add_executable(${PROJECT_NAME} ${control_FILES})
+target_link_libraries(control ${catkin_LIBRARIES} ${Eigen_LIBRARIES} yaml-cpp)
 
 #==========================================================================
 # U N I T   T E S T S
-if (${CATKIN_ENABLE_TESTING})
-    add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/test)
-endif ()
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/test)
