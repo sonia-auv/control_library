@@ -1,3 +1,7 @@
 catkin_add_gtest(TransferFunctionTest TransferFunctionTest.cc ${SOURCE_FILES})
 target_link_libraries(TransferFunctionTest control)
 set_target_properties(TransferFunctionTest PROPERTIES LINKER_LANGUAGE CXX )
+
+catkin_add_gtest(TrajectoryGeneratorTest TrajectoryGeneratorTest.cc ${SOURCE_FILES})
+target_link_libraries(TrajectoryGeneratorTest control)
+set_target_properties(TrajectoryGeneratorTest PROPERTIES LINKER_LANGUAGE CXX )

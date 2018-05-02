@@ -1,6 +1,6 @@
 timeStamp      = 0.1;
-TrajectoryTime = 10;
-responseTime   = TrajectoryTime / timeStamp;
+TrajectoryTime = 11;
+responseTime   = TrajectoryTime / timeStamp
 startPose      = 0;
 endPose        = 13;
 
@@ -10,7 +10,7 @@ acceleration = 0;
 for i=1:(responseTime)
     pose         = [pose, poseTrajectory(i, startPose, endPose, responseTime)];
     velocity     = [velocity, velocityTrajectory(i, startPose, endPose, responseTime)];
-    acceleration = [acceleration, accelarationTrajectory(i, startPose, endPose, responseTime)];
+    acceleration = [acceleration, accelarationTrajectory_(i, startPose, endPose, responseTime)];
 end
 
 plot(pose)
@@ -40,7 +40,7 @@ function y = velocityTrajectory(t, P0, P1, timeResponse)
 
 end
 
-function y = accelarationTrajectory(t, P0, P1, timeResponse)
+function y = accelarationTrajectory_(t, P0, P1, timeResponse)
     spline_time         = t;
     t_f_squared = timeResponse^2;
     t_f_cubed   = timeResponse^3;
