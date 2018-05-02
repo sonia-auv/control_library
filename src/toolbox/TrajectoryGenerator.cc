@@ -24,7 +24,7 @@
  */
 
 #include "TrajectoryGenerator.h"
-#include "iostream"
+
 
 namespace control
 {
@@ -32,20 +32,21 @@ namespace control
         responseTime_(0.0),
         timeStamp_(timeStamp)
     {
-        startPose_    = Eigen::VectorXd::Zero(CARTESIAN_SPACE);
-        endPose_      = Eigen::VectorXd::Zero(CARTESIAN_SPACE);
-        startPostion_ = Eigen::Vector3d::Zero();
-        endPosition_  = Eigen::Vector3d::Zero();
+        startPosition_ = Eigen::VectorXd::Zero(CARTESIAN_SPACE);
+        endPosition_   = Eigen::VectorXd::Zero(CARTESIAN_SPACE);
 
     }
 
     void TrajectoryGenerator::GenerateTrajectory(double trajectoryTime, Eigen::VectorXd &startPose, Eigen::VectorXd &endPose)
     {
-        startPose_      = startPose;
-        endPose_        = endPose;
+        Eigen::Vector3d startOrientation = Eigen::Vector3d(startPose[3], startPose[4], startPose[5]);
+        Eigen::Vector3d endOrientation   = Eigen::Vector3d(Eigen::Vector3d(endPose[3], endPose[4], endPose[5]));
 
-        startPostion_ << startPose_[0], startPose_[1], startPose_[2];
-        endPosition_  << endPose_[0], endPose_[1], endPose_[2];
+        startOrientation_ = EulerToQuaternion(startOrientation);
+        endOrientation_   = EulerToQuaternion(endOrientation);
+
+        startPosition_ = startPose;
+        endPosition_  << endPose[0], endPose[1], endPose[2], Interpolation(1.0);
 
         responseTime_ = trajectoryTime / timeStamp_;
 
@@ -60,54 +61,59 @@ namespace control
     Eigen::VectorXd TrajectoryGenerator::PoseTrajectory(double time)
     {
         Eigen::VectorXd poseTrajectory = Eigen::VectorXd::Zero(CARTESIAN_SPACE);
-        poseTrajectory << TranslationPositionTrajectory(time), 0.0, 0.0, 0.0;
+        poseTrajectory = TranslationPositionTrajectory(time);
+        poseTrajectory << poseTrajectory[0], poseTrajectory[1], poseTrajectory[2], Interpolation(1.0);
         return poseTrajectory;
     }
 
     Eigen::VectorXd TrajectoryGenerator::TwistTrajectory(double time)
     {
         Eigen::VectorXd twistTrajectory = Eigen::VectorXd::Zero(CARTESIAN_SPACE);
-        twistTrajectory << TranslationSpeedTrajectory(time), 0.0, 0.0, 0.0;
+        twistTrajectory = TranslationSpeedTrajectory(time);
         return twistTrajectory;
     }
 
     Eigen::VectorXd TrajectoryGenerator::AccelerationTrajectory(double time)
     {
         Eigen::VectorXd accelerationTrajectory = Eigen::VectorXd::Zero(CARTESIAN_SPACE);
-        accelerationTrajectory << TranslationAccelerationTrajectory(time), 0.0, 0.0, 0.0;
+        accelerationTrajectory = TranslationAccelerationTrajectory(time);
         return accelerationTrajectory;
     }
 
-    Eigen::Vector3d TrajectoryGenerator::TranslationPositionTrajectory(double time)
+    Eigen::VectorXd TrajectoryGenerator::TranslationPositionTrajectory(double time)
     {
         double splineTimeSquared   = pow(time, 2);
         double splineTimeCubed     = pow(time, 3);
         double responseTimeSquared = pow(responseTime_, 2);
         double responseTimeCubed   = pow(responseTime_, 3);
 
-        return startPostion_ + (3 / responseTimeSquared) * (endPosition_ - startPostion_) * splineTimeSquared + (-2 / responseTimeCubed) * (endPosition_ - startPostion_) * splineTimeCubed;
+        return startPosition_ + (3 / responseTimeSquared) * (endPosition_ - startPosition_) * splineTimeSquared + (-2 / responseTimeCubed) * (endPosition_ - startPosition_) * splineTimeCubed;
     }
 
-    Eigen::Vector3d TrajectoryGenerator::TranslationSpeedTrajectory(double time)
+    Eigen::VectorXd TrajectoryGenerator::TranslationSpeedTrajectory(double time)
     {
         double splineTime          = time;
         double splineTimeSquared   = pow(time, 2);
         double responseTimeSquared = pow(responseTime_, 2);
         double responseTimeCubed   = pow(responseTime_, 3);
 
-        return 2 * (3 / responseTimeSquared) * (endPosition_ - startPostion_) * splineTime + 3 * (-2 / responseTimeCubed) * (endPosition_ - startPostion_) * splineTimeSquared;
+        return 2 * (3 / responseTimeSquared) * (endPosition_ - startPosition_) * splineTime + 3 * (-2 / responseTimeCubed) * (endPosition_ - startPosition_) * splineTimeSquared;
     }
 
-    Eigen::Vector3d TrajectoryGenerator::TranslationAccelerationTrajectory(double time)
+    Eigen::VectorXd TrajectoryGenerator::TranslationAccelerationTrajectory(double time)
     {
         double splineTime          = time;
         double responseTimeSquared = pow(responseTime_, 2);
         double responseTimeCubed   = pow(responseTime_, 3);
 
-        return 2 * (3 / responseTimeSquared) * (endPosition_ - startPostion_) + 6 * (-2 / responseTimeCubed) * (endPosition_ - startPostion_) * splineTime;
+        return 2 * (3 / responseTimeSquared) * (endPosition_ - startPosition_) + 6 * (-2 / responseTimeCubed) * (endPosition_ - startPosition_) * splineTime;
     }
 
 
-
+    Eigen::Vector3d TrajectoryGenerator::Interpolation(double time)
+    {
+        endOrientation_.slerp(time, startOrientation_);
+        return endOrientation_.toRotationMatrix().eulerAngles(0, 1, 2);
+    }
 
 }

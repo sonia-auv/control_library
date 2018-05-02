@@ -29,6 +29,7 @@
 #include <eigen3/Eigen/Eigen>
 #include <vector>
 
+#include "Transformation.h"
 #include "ControlType.h"
 
 
@@ -49,21 +50,18 @@ namespace control
         Eigen::VectorXd PoseTrajectory(double time);
         Eigen::VectorXd TwistTrajectory(double time);
         Eigen::VectorXd AccelerationTrajectory(double time);
-        Eigen::Vector3d TranslationPositionTrajectory(double time);
-        Eigen::Vector3d TranslationSpeedTrajectory(double time);
-        Eigen::Vector3d TranslationAccelerationTrajectory(double time);
-//        Eigen::Vector3d OrientationPositionTrajectory(double time);
-//        Eigen::Vector3d OrientationSpeedTrajectory(double time);
-//        Eigen::Vector3d OrientationAccelerationTrajectory(double time);
+        Eigen::VectorXd TranslationPositionTrajectory(double time);
+        Eigen::VectorXd TranslationSpeedTrajectory(double time);
+        Eigen::VectorXd TranslationAccelerationTrajectory(double time);
+        Eigen::Vector3d Interpolation(double time);
 
         double responseTime_;
         double timeStamp_;
 
-        Eigen::VectorXd startPose_;
-        Eigen::VectorXd endPose_;
-
-        Eigen::Vector3d startPostion_;
-        Eigen::Vector3d endPosition_;
+        Eigen::VectorXd startPosition_;
+        Eigen::VectorXd endPosition_;
+        Eigen::Quaterniond startOrientation_;
+        Eigen::Quaterniond endOrientation_;
 
         std::vector<Eigen::VectorXd> poseTrajectory_;
         std::vector<Eigen::VectorXd> twistTrajectory_;

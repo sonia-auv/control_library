@@ -48,7 +48,7 @@ public:
 
         for (Eigen::VectorXd &pose : outTrajectory_)
         {
-            myfile << pose[0] << ";" << pose[1] << ";" << pose[2] << std::endl;
+            myfile << pose[0] << ";" << pose[1] << ";" << pose[2] << ";" << pose[3] << ";" << pose[4] << ";" << pose[5] << std::endl;
         }
         myfile.close();
     }
@@ -68,7 +68,7 @@ TEST_F(TrajectoryGenerator_Unit_Test, TrajectoryGeneratorTestPose)
     Eigen::VectorXd initialPose = Eigen::VectorXd::Zero(CARTESIAN_SPACE);
     Eigen::VectorXd finalPose   = Eigen::VectorXd::Zero(CARTESIAN_SPACE);
 
-    finalPose << 10.0, 0.0, 11.0, 0.0, 0.0, 0.0;
+    finalPose << 10.0, 0.0, 11.0, 0.0, 0.0, M_PI;
 
     pTrajectoryGenerator_->GenerateTrajectory(trajectoryTime, initialPose, finalPose);
     outTrajectory_ = pTrajectoryGenerator_->GetPoseTrajectory();
@@ -106,7 +106,33 @@ TEST_F(TrajectoryGenerator_Unit_Test, TrajectoryGeneratorTestAcceleration)
     fileName_      = "TrajectoryAcceleration.csv";
 }
 
+TEST_F(TrajectoryGenerator_Unit_Test, TrajectoryGeneratorTestOrientationPosition)
+{
+    double trajectoryTime = 10.0;
+    Eigen::VectorXd initialPose = Eigen::VectorXd::Zero(CARTESIAN_SPACE);
+    Eigen::VectorXd finalPose   = Eigen::VectorXd::Zero(CARTESIAN_SPACE);
 
+    initialPose << 0.0, 0.0, 0.0, 0.0, 0.0, 0.785398;
+    finalPose << 10.0, 0.0, 11.0, 0.0, 0.0, 5.75959;
+
+    pTrajectoryGenerator_->GenerateTrajectory(trajectoryTime, initialPose, finalPose);
+    outTrajectory_ = pTrajectoryGenerator_->GetPoseTrajectory();
+    fileName_      = "TrajectoryOrientationPosition.csv";
+}
+
+TEST_F(TrajectoryGenerator_Unit_Test, TrajectoryGeneratorTestOrientationSpeed)
+{
+    double trajectoryTime = 10.0;
+    Eigen::VectorXd initialPose = Eigen::VectorXd::Zero(CARTESIAN_SPACE);
+    Eigen::VectorXd finalPose   = Eigen::VectorXd::Zero(CARTESIAN_SPACE);
+
+    initialPose << 0.0, 0.0, 0.0, 0.0, 0.0, 0.785398;
+    finalPose << 10.0, 0.0, 11.0, 0.0, 0.0, 5.75959;
+
+    pTrajectoryGenerator_->GenerateTrajectory(trajectoryTime, initialPose, finalPose);
+    outTrajectory_ = pTrajectoryGenerator_->GetTwistTrajectory();
+    fileName_      = "TrajectoryOrientationSpeed.csv";
+}
 
 int main(int argc, char **argv) {
     testing::InitGoogleTest(&argc, argv);
