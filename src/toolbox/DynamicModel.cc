@@ -13,19 +13,14 @@ namespace control
     {
         Eigen::VectorXd cartesianWrench;
 
-        cartesianWrench = ComputeAddedMass(acceleration) + ComputeDamping(velocity) + ComputeGravity(orientation);
+        cartesianWrench = auvDynamicParameters_->auvAddedMass * acceleration + ComputeDamping(velocity) * velocity + ComputeGravity(orientation);
 
         return cartesianWrench;
     }
 
-    Eigen::VectorXd DynamicModel::ComputeAddedMass(Eigen::VectorXd &acceleration)
-    {
-        return auvDynamicParameters_->auvAddedMass * acceleration;
-    }
-
     Eigen::VectorXd DynamicModel::ComputeDamping(Eigen::VectorXd &velocity)
     {
-        return auvDynamicParameters_->auvDamping.constDragCoefficient +  auvDynamicParameters_->auvDamping.quadDragCoefficient * velocity * velocity;
+        return auvDynamicParameters_->auvDamping.constDragCoefficient +  auvDynamicParameters_->auvDamping.quadDragCoefficient * (velocity * velocity);
     }
 
     Eigen::VectorXd DynamicModel::ComputeGravity(Eigen::Vector3d &orientation)

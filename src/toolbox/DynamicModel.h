@@ -20,7 +20,6 @@ namespace control
         Eigen::VectorXd Update(Eigen::VectorXd &acceleration, Eigen::VectorXd &velocity, Eigen::Vector3d &orientation);
 
     private:
-        Eigen::VectorXd ComputeAddedMass(Eigen::VectorXd &acceleration);
         Eigen::VectorXd ComputeDamping(Eigen::VectorXd &velocity);
         Eigen::VectorXd ComputeGravity(Eigen::Vector3d &orientation);
 
