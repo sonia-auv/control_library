@@ -15,7 +15,9 @@ struct DynamicModelParam
 {
     Eigen::MatrixXd auvDamping;
     Eigen::MatrixXd auvAddedMass;
-
+    Eigen::Vector3d auvBuoyancyCenter;
+    double          resultingForce;
+    double          buoyancyForce;
 };
 
 #endif //CONTROL_LIBRARY_CONTROLTYPE_H

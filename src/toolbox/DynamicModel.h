@@ -8,11 +8,24 @@
 #include <memory>
 #include <eigen3/Eigen/Eigen>
 
+#include "ControlType.h"
+
 namespace control
 {
     class DynamicModel {
     private:
-        DynamicModel(std::shared_ptr<>);
+        DynamicModel(std::shared_ptr<DynamicModelParam> &auvDynamicParameters);
+        ~DynamicModel() = default;
+
+        Eigen::VectorXd Update(Eigen::VectorXd &acceleration, Eigen::VectorXd &velocity, Eigen::Vector3d &orientation);
+
+    private:
+        Eigen::VectorXd ComputeAddedMass(Eigen::VectorXd &acceleration);
+        Eigen::VectorXd ComputeDamping(Eigen::VectorXd &velocity);
+        Eigen::VectorXd ComputeGravity(Eigen::Vector3d &orientation);
+
+        std::shared_ptr<DynamicModelParam> auvDynamicParameters_;
+
     };
 }
 
