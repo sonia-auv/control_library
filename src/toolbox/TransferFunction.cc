@@ -32,7 +32,6 @@ namespace control
         nbTransferFunction_(nbTransferFunction)
     {
         filterResult_      = Eigen::VectorXd::Zero(nbTransferFunction);
-        lastError_         = Eigen::VectorXd::Zero(nbTransferFunction);
         denominatorFactor_ = Eigen::ArrayXXd::Zero(nbTransferFunction, filterOrder_);
         outputHistory_     = Eigen::ArrayXXd::Zero(nbTransferFunction, filterOrder_);
         numeratorFactor_   = Eigen::ArrayXXd::Zero(nbTransferFunction, filterOrder_ + 1);

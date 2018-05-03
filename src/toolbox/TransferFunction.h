@@ -47,7 +47,6 @@ namespace control
         int             filterOrder_;
         int             nbTransferFunction_;
         Eigen::VectorXd filterResult_;
-        Eigen::VectorXd lastError_;
         Eigen::ArrayXXd denominatorFactor_;
         Eigen::ArrayXXd outputHistory_;
         Eigen::ArrayXXd numeratorFactor_;

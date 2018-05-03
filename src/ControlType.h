@@ -11,9 +11,15 @@ const int CARTESIAN_SPACE   = 6;
 const int POSITION_SPACE    = 3;
 const int ORIENTATION_SPACE = 3;
 
+struct dragParameters
+{
+    Eigen::VectorXd constDragCoefficient;
+    Eigen::VectorXd quadDragCoefficient;
+};
+
 struct DynamicModelParam
 {
-    Eigen::MatrixXd auvDamping;
+    dragParameters  auvDamping;
     Eigen::MatrixXd auvAddedMass;
     Eigen::Vector3d auvBuoyancyCenter;
     double          resultingForce;

@@ -25,7 +25,7 @@ namespace control
 
     Eigen::VectorXd DynamicModel::ComputeDamping(Eigen::VectorXd &velocity)
     {
-        return auvDynamicParameters_->auvDamping * velocity;
+        return auvDynamicParameters_->auvDamping.constDragCoefficient +  auvDynamicParameters_->auvDamping.quadDragCoefficient * velocity * velocity;
     }
 
     Eigen::VectorXd DynamicModel::ComputeGravity(Eigen::Vector3d &orientation)
