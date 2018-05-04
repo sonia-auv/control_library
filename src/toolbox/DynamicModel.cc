@@ -11,11 +11,11 @@ namespace control
 
     Eigen::VectorXd DynamicModel::Update(Eigen::VectorXd &acceleration, Eigen::VectorXd &velocity, Eigen::Vector3d &orientation)
     {
-        Eigen::VectorXd cartesianWrench;
+        Eigen::VectorXd wrench;
 
-        cartesianWrench = auvDynamicParameters_->auvAddedMass * acceleration + ComputeDamping(velocity) * velocity + ComputeGravity(orientation);
+        wrench = auvDynamicParameters_->auvAddedMass * acceleration + ComputeDamping(velocity) * velocity + ComputeGravity(orientation);
 
-        return cartesianWrench;
+        return wrench;
     }
 
     Eigen::VectorXd DynamicModel::ComputeDamping(Eigen::VectorXd &velocity)

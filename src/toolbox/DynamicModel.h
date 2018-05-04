@@ -28,6 +28,4 @@ namespace control
     };
 }
 
-
-
 #endif //CONTROL_LIBRARY_DYNAMICMODEL_H
