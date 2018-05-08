@@ -47,7 +47,7 @@ public:
 
         for (Eigen::VectorXd &pose : outTrajectory_)
         {
-            myfile << pose[0] << ";" << pose[1] << ";" << pose[2] << std::endl;
+            myfile << pose[0] << ";" << pose[1] << ";" << pose[2] << ";" << pose[3] << ";" << pose[4] << ";" << pose[5] << std::endl;
         }
         myfile.close();
     }
@@ -62,12 +62,12 @@ public:
 
 TEST_F(TrajectoryGenerator_Unit_Test, TrajectoryGeneratorTestPose)
 {
-    double trajectoryTime = 1.0;
+    double trajectoryTime = 10.0;
     double tol = 1e-10;
     Eigen::VectorXd initialPose = Eigen::VectorXd::Zero(control::CARTESIAN_SPACE);
     Eigen::VectorXd finalPose   = Eigen::VectorXd::Zero(control::CARTESIAN_SPACE);
 
-    finalPose << 10.0, 0.0, 11.0, 0.0, 0.0, 0.0;
+    finalPose << 10.0, 0.0, 11.0, 0.0, 0.0, M_PI;
 
     pTrajectoryGenerator_->GenerateTrajectory(trajectoryTime, initialPose, finalPose);
     outTrajectory_ = pTrajectoryGenerator_->GetPoseTrajectory();
@@ -137,4 +137,3 @@ int main(int argc, char **argv) {
     testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }
-
