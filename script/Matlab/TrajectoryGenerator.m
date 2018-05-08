@@ -43,8 +43,4 @@ function y = accelarationTrajectory(t, P0, P1, timeResponse)
     t_f_cubed   = timeResponse^3;
     
     y = 2 * (3 / t_f_squared) * (P1 - P0) + 6 * (-2 / t_f_cubed) * (P1 - P0) * spline_time;
-
 end
-
-
-

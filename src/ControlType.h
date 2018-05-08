@@ -27,6 +27,7 @@
 
 #include <eigen3/Eigen/Eigen>
 
+
 namespace control
 {
     const int CARTESIAN_SPACE   = 6;
@@ -48,7 +49,5 @@ namespace control
         double          buoyancyForce;
     };
 }
-
-
 
 #endif //CONTROL_LIBRARY_CONTROLTYPE_H

@@ -1,3 +1,4 @@
+
 /**
  * \file	Transformation.cc
  * \author	Olivier Lavoie <olavoie9507@gmail.com>
@@ -41,3 +42,4 @@ namespace control
         return quaternion;
     }
 }
+
