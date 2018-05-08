@@ -1,18 +1,19 @@
 
 function [pose, velocity, acceleration] = TrajectoryGenerator()
-    timeStamp      = 0.01;
-    TrajectoryTime = 0.3;
+    timeStamp      = 0.02;
+    TrajectoryTime = 4;
     responseTime   = TrajectoryTime / timeStamp;
     startPose      = 0;
-    endPose        = 3;
-    
-    j = 1;
-    for i=1:(responseTime * (1/timeStamp))
-        j = i * timeStamp;
-        pose(i)         = poseTrajectory(j, startPose, endPose, responseTime);
-        velocity(i)     = velocityTrajectory(j, startPose, endPose, responseTime);
-        acceleration(i) = accelarationTrajectory_(j, startPose, endPose, responseTime);
-    end    
+    endPose        = 1;
+
+    i = 1;
+    for t=0:(responseTime)
+        j = t * timeStamp;
+        pose(i)         = poseTrajectory(j, startPose, endPose, TrajectoryTime);
+        velocity(i)     = velocityTrajectory(j, startPose, endPose, TrajectoryTime);
+        acceleration(i) = accelarationTrajectory(j, startPose, endPose, TrajectoryTime);
+        i = i + 1;
+    end
 end
 
 
@@ -36,7 +37,7 @@ function y = velocityTrajectory(t, P0, P1, timeResponse)
 
 end
 
-function y = accelarationTrajectory_(t, P0, P1, timeResponse)
+function y = accelarationTrajectory(t, P0, P1, timeResponse)
     spline_time         = t;
     t_f_squared = timeResponse^2;
     t_f_cubed   = timeResponse^3;

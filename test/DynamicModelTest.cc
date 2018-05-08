@@ -39,7 +39,7 @@ public:
 
     void SetUp()
     {
-        timeStamp_ = 0.01;
+        timeStamp_ = 0.02;
         pTrajectoryGenerator_ = std::make_shared<control::TrajectoryGenerator>(timeStamp_);
         pDynamicModelParam_   = std::make_shared<control::DynamicModelParam>();
     }
@@ -97,13 +97,13 @@ public:
 
 TEST_F(DynamicModel_Unit_Test, DynamicModelXaxisTest)
 {
-    double trajectoryTime = 3.0;
+    double trajectoryTime = 5.0;
 
     fileName_         = "DynamicModelXaxis.csv";
     Eigen::VectorXd initialPose = Eigen::VectorXd::Zero(control::CARTESIAN_SPACE);
     Eigen::VectorXd finalPose   = Eigen::VectorXd::Zero(control::CARTESIAN_SPACE);
 
-    finalPose << 3.0, 0.0, 0.0, 0.0, 0.0, 0.0;
+    finalPose << 1.0, 0.0, 0.0, 0.0, 0.0, 0.0;
 
     pTrajectoryGenerator_->GenerateTrajectory(trajectoryTime, initialPose, finalPose);
     poseTrajectory_   = pTrajectoryGenerator_->GetPoseTrajectory();

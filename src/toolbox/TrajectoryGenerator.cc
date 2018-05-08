@@ -47,13 +47,15 @@ namespace control
         startPosition_ = startPose;
         endPosition_  << endPose[0], endPose[1], endPose[2], Interpolation(1.0);
 
-        responseTime_ = trajectoryTime / timeStamp_;
+        responseTime_ = trajectoryTime;
 
-        for (int i = 0; i <= int(responseTime_); i++)
+        double time;
+        for (int i = 0; i < int(trajectoryTime / timeStamp_); i++)
         {
-            poseTrajectory_.push_back(PoseTrajectory(i));
-            twistTrajectory_.push_back(TwistTrajectory(i));
-            accelerationTrajectory_.push_back(AccelerationTrajectory(i));
+            time = i * timeStamp_;
+            poseTrajectory_.push_back(PoseTrajectory(time));
+            twistTrajectory_.push_back(TwistTrajectory(time));
+            accelerationTrajectory_.push_back(AccelerationTrajectory(time));
         }
     }
 

@@ -62,7 +62,7 @@ public:
 
 TEST_F(TrajectoryGenerator_Unit_Test, TrajectoryGeneratorTestPose)
 {
-    double trajectoryTime = 10.0;
+    double trajectoryTime = 1.0;
     double tol = 1e-10;
     Eigen::VectorXd initialPose = Eigen::VectorXd::Zero(control::CARTESIAN_SPACE);
     Eigen::VectorXd finalPose   = Eigen::VectorXd::Zero(control::CARTESIAN_SPACE);
@@ -75,13 +75,13 @@ TEST_F(TrajectoryGenerator_Unit_Test, TrajectoryGeneratorTestPose)
 
     for (int i = 0; i < control::CARTESIAN_SPACE; i ++)
     {
-        EXPECT_NEAR(outTrajectory_[int(trajectoryTime / timeStamp_)][i], finalPose[i], tol);
+        EXPECT_NEAR(outTrajectory_[outTrajectory_.size() - 1][i], finalPose[i], tol);
     }
 }
 
 TEST_F(TrajectoryGenerator_Unit_Test, TrajectoryGeneratorTestTwist)
 {
-    double trajectoryTime = 10.0;
+    double trajectoryTime = 1.0;
     Eigen::VectorXd initialPose = Eigen::VectorXd::Zero(control::CARTESIAN_SPACE);
     Eigen::VectorXd finalPose   = Eigen::VectorXd::Zero(control::CARTESIAN_SPACE);
 
@@ -94,7 +94,7 @@ TEST_F(TrajectoryGenerator_Unit_Test, TrajectoryGeneratorTestTwist)
 
 TEST_F(TrajectoryGenerator_Unit_Test, TrajectoryGeneratorTestAcceleration)
 {
-    double trajectoryTime = 10.0;
+    double trajectoryTime = 1.0;
     Eigen::VectorXd initialPose = Eigen::VectorXd::Zero(control::CARTESIAN_SPACE);
     Eigen::VectorXd finalPose   = Eigen::VectorXd::Zero(control::CARTESIAN_SPACE);
 
@@ -107,7 +107,7 @@ TEST_F(TrajectoryGenerator_Unit_Test, TrajectoryGeneratorTestAcceleration)
 
 TEST_F(TrajectoryGenerator_Unit_Test, TrajectoryGeneratorTestOrientationPosition)
 {
-    double trajectoryTime = 10.0;
+    double trajectoryTime = 1.0;
     Eigen::VectorXd initialPose = Eigen::VectorXd::Zero(control::CARTESIAN_SPACE);
     Eigen::VectorXd finalPose   = Eigen::VectorXd::Zero(control::CARTESIAN_SPACE);
 
@@ -121,7 +121,7 @@ TEST_F(TrajectoryGenerator_Unit_Test, TrajectoryGeneratorTestOrientationPosition
 
 TEST_F(TrajectoryGenerator_Unit_Test, TrajectoryGeneratorTestOrientationSpeed)
 {
-    double trajectoryTime = 10.0;
+    double trajectoryTime = 1.0;
     Eigen::VectorXd initialPose = Eigen::VectorXd::Zero(control::CARTESIAN_SPACE);
     Eigen::VectorXd finalPose   = Eigen::VectorXd::Zero(control::CARTESIAN_SPACE);
 

@@ -8,9 +8,9 @@ Z_SURFACE              = X_SURFACE + Y_SURFACE;
 ROLL_SURFACE           = 0.0;
 PITCH_SURFACE          = 0.0;
 YAW_SURFACE            = 0.40 * 0.17;
-GRAVITY                = AUV_MASS * 9.81
-BUOYANCY               = -AUV_VOLUME * 1025 * 9.81
-resultingForce         = GRAVITY + BUOYANCY
+GRAVITY                = AUV_MASS * 9.81;
+BUOYANCY               = -AUV_VOLUME * 1025 * 9.81;
+resultingForce         = GRAVITY + BUOYANCY;
 
 ConstDragCoefficient   = [136.1473; 104.6571; 0.0; 0.0; 0.0; 76.4971];
 QuadDragCoefficient    = [3.7787; 51.7301; 0.0; 0.0; 0.0; -122.1888];
@@ -35,16 +35,17 @@ for i = 1:length(v)
 
     T = M * acceleration + D .* velocity + G;
     
-    TTx(i) = T(1);
-    TTy(i) = T(2);
-    TTz(i) = T(3);
+    TTx(i)  = T(1);
+    TTy(i)  = T(2);
+    TTz(i)  = T(3);
+    TTyaw(i) = T(6);
     
 end
 
 figure% plot against left y-axis 
 hold on
 plot(TTx) 
-plot(TTz) 
+plot(TTyaw) 
 title('Wrench')
 figure
 plot(v)
