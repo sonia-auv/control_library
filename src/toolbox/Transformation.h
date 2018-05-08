@@ -1,7 +1,6 @@
 /**
  * \file	Transformation.h
  * \author	Olivier Lavoie <olavoie9507@gmail.com>
- * \date	10/21/17
  *
  * \copyright Copyright (c) 2018 S.O.N.I.A. AUV All rights reserved.
  *

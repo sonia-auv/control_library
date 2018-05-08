@@ -1,7 +1,6 @@
 /**
  * \file	TrajectoryGeneratorTest.cc
  * \author	Olivier Lavoie <olavoie9507@gmail.com>
- * \date	10/21/17
  *
  * \copyright Copyright (c) 2018 S.O.N.I.A. AUV All rights reserved.
  *
@@ -65,8 +64,8 @@ TEST_F(TrajectoryGenerator_Unit_Test, TrajectoryGeneratorTestPose)
 {
     double trajectoryTime = 10.0;
     double tol = 1e-10;
-    Eigen::VectorXd initialPose = Eigen::VectorXd::Zero(CARTESIAN_SPACE);
-    Eigen::VectorXd finalPose   = Eigen::VectorXd::Zero(CARTESIAN_SPACE);
+    Eigen::VectorXd initialPose = Eigen::VectorXd::Zero(control::CARTESIAN_SPACE);
+    Eigen::VectorXd finalPose   = Eigen::VectorXd::Zero(control::CARTESIAN_SPACE);
 
     finalPose << 10.0, 0.0, 11.0, 0.0, 0.0, M_PI;
 
@@ -74,7 +73,7 @@ TEST_F(TrajectoryGenerator_Unit_Test, TrajectoryGeneratorTestPose)
     outTrajectory_ = pTrajectoryGenerator_->GetPoseTrajectory();
     fileName_      = "TrajectoryPose.csv";
 
-    for (int i = 0; i < CARTESIAN_SPACE; i ++)
+    for (int i = 0; i < control::CARTESIAN_SPACE; i ++)
     {
         EXPECT_NEAR(outTrajectory_[int(trajectoryTime / timeStamp_)][i], finalPose[i], tol);
     }
@@ -83,8 +82,8 @@ TEST_F(TrajectoryGenerator_Unit_Test, TrajectoryGeneratorTestPose)
 TEST_F(TrajectoryGenerator_Unit_Test, TrajectoryGeneratorTestTwist)
 {
     double trajectoryTime = 10.0;
-    Eigen::VectorXd initialPose = Eigen::VectorXd::Zero(CARTESIAN_SPACE);
-    Eigen::VectorXd finalPose   = Eigen::VectorXd::Zero(CARTESIAN_SPACE);
+    Eigen::VectorXd initialPose = Eigen::VectorXd::Zero(control::CARTESIAN_SPACE);
+    Eigen::VectorXd finalPose   = Eigen::VectorXd::Zero(control::CARTESIAN_SPACE);
 
     finalPose << 10.0, 0.0, 11.0, 0.0, 0.0, 0.0;
 
@@ -96,8 +95,8 @@ TEST_F(TrajectoryGenerator_Unit_Test, TrajectoryGeneratorTestTwist)
 TEST_F(TrajectoryGenerator_Unit_Test, TrajectoryGeneratorTestAcceleration)
 {
     double trajectoryTime = 10.0;
-    Eigen::VectorXd initialPose = Eigen::VectorXd::Zero(CARTESIAN_SPACE);
-    Eigen::VectorXd finalPose   = Eigen::VectorXd::Zero(CARTESIAN_SPACE);
+    Eigen::VectorXd initialPose = Eigen::VectorXd::Zero(control::CARTESIAN_SPACE);
+    Eigen::VectorXd finalPose   = Eigen::VectorXd::Zero(control::CARTESIAN_SPACE);
 
     finalPose << 10.0, 0.0, 11.0, 0.0, 0.0, 0.0;
 
@@ -109,8 +108,8 @@ TEST_F(TrajectoryGenerator_Unit_Test, TrajectoryGeneratorTestAcceleration)
 TEST_F(TrajectoryGenerator_Unit_Test, TrajectoryGeneratorTestOrientationPosition)
 {
     double trajectoryTime = 10.0;
-    Eigen::VectorXd initialPose = Eigen::VectorXd::Zero(CARTESIAN_SPACE);
-    Eigen::VectorXd finalPose   = Eigen::VectorXd::Zero(CARTESIAN_SPACE);
+    Eigen::VectorXd initialPose = Eigen::VectorXd::Zero(control::CARTESIAN_SPACE);
+    Eigen::VectorXd finalPose   = Eigen::VectorXd::Zero(control::CARTESIAN_SPACE);
 
     initialPose << 0.0, 0.0, 0.0, 0.0, 0.0, 0.785398;
     finalPose << 10.0, 0.0, 11.0, 0.0, 0.0, 5.75959;
@@ -123,8 +122,8 @@ TEST_F(TrajectoryGenerator_Unit_Test, TrajectoryGeneratorTestOrientationPosition
 TEST_F(TrajectoryGenerator_Unit_Test, TrajectoryGeneratorTestOrientationSpeed)
 {
     double trajectoryTime = 10.0;
-    Eigen::VectorXd initialPose = Eigen::VectorXd::Zero(CARTESIAN_SPACE);
-    Eigen::VectorXd finalPose   = Eigen::VectorXd::Zero(CARTESIAN_SPACE);
+    Eigen::VectorXd initialPose = Eigen::VectorXd::Zero(control::CARTESIAN_SPACE);
+    Eigen::VectorXd finalPose   = Eigen::VectorXd::Zero(control::CARTESIAN_SPACE);
 
     initialPose << 0.0, 0.0, 0.0, 0.0, 0.0, 0.785398;
     finalPose << 10.0, 0.0, 11.0, 0.0, 0.0, 5.75959;
