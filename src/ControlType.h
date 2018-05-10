@@ -48,6 +48,21 @@ namespace control
         double          resultingForce;
         double          buoyancyForce;
     };
+
+    struct ControllerCMD
+    {
+        Eigen::VectorXd errorPose;
+        Eigen::VectorXd errorVelocity;
+        Eigen::VectorXd acceleration;
+        Eigen::VectorXd velocity;
+        Eigen::Vector3d orientation;
+    };
+
+    struct TransferFunctionCoefficient
+    {
+        Eigen::ArrayXXd numeratorFactor;
+        Eigen::ArrayXXd denominatorFactor;
+    };
 }
 
 #endif //CONTROL_LIBRARY_CONTROLTYPE_H

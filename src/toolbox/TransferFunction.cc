@@ -26,18 +26,14 @@
 
 namespace control
 {
-    TransferFunction::TransferFunction(int nbTransferFunction, std::vector<Eigen::ArrayXXd> &transferFunctionCoefficient, int filterOrder) :
+    TransferFunction::TransferFunction(int nbTransferFunction, std::shared_ptr<TransferFunctionCoefficient> &transferFunctionCoefficient, int filterOrder) :
         filterOrder_(filterOrder),
-        nbTransferFunction_(nbTransferFunction)
+        nbTransferFunction_(nbTransferFunction),
+        transferFunctionCoefficient_(transferFunctionCoefficient)
     {
         filterResult_      = Eigen::VectorXd::Zero(nbTransferFunction);
-        denominatorFactor_ = Eigen::ArrayXXd::Zero(nbTransferFunction, filterOrder_);
         outputHistory_     = Eigen::ArrayXXd::Zero(nbTransferFunction, filterOrder_);
-        numeratorFactor_   = Eigen::ArrayXXd::Zero(nbTransferFunction, filterOrder_ + 1);
         errorHistory_      = Eigen::ArrayXXd::Zero(nbTransferFunction, filterOrder_ + 1);
-
-        numeratorFactor_   = transferFunctionCoefficient[0];
-        denominatorFactor_ = transferFunctionCoefficient[1];
     }
 
     Eigen::VectorXd TransferFunction::Update(Eigen::VectorXd &error)
@@ -57,8 +53,8 @@ namespace control
 
     Eigen::VectorXd TransferFunction::FilterXOrder()
     {
-        Eigen::VectorXd numeratorResult = (numeratorFactor_ * errorHistory_).rowwise().sum();
-        Eigen::VectorXd denominatorResult = (denominatorFactor_ * outputHistory_).rowwise().sum();
+        Eigen::VectorXd numeratorResult = (transferFunctionCoefficient_->numeratorFactor * errorHistory_).rowwise().sum();
+        Eigen::VectorXd denominatorResult = (transferFunctionCoefficient_->denominatorFactor * outputHistory_).rowwise().sum();
         return numeratorResult - denominatorResult;
     }
 

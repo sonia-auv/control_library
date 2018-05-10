@@ -27,6 +27,9 @@
 
 #include <eigen3/Eigen/Eigen>
 #include <vector>
+#include <memory>
+
+#include "ControlType.h"
 
 namespace control
 {
@@ -34,7 +37,7 @@ namespace control
     {
 
     public:
-        TransferFunction(int nbTransferFunction, std::vector<Eigen::ArrayXXd> &transferFunctionCoefficient, int filterOrder);
+        TransferFunction(int nbTransferFunction, std::shared_ptr<TransferFunctionCoefficient> &transferFunctionCoefficient, int filterOrder);
         ~TransferFunction() = default;
 
         Eigen::VectorXd Update(Eigen::VectorXd &error);
@@ -46,10 +49,10 @@ namespace control
         int             filterOrder_;
         int             nbTransferFunction_;
         Eigen::VectorXd filterResult_;
-        Eigen::ArrayXXd denominatorFactor_;
         Eigen::ArrayXXd outputHistory_;
-        Eigen::ArrayXXd numeratorFactor_;
         Eigen::ArrayXXd errorHistory_;
+
+        std::shared_ptr<TransferFunctionCoefficient> transferFunctionCoefficient_;
 
     };
 
