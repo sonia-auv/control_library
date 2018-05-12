@@ -13,3 +13,7 @@ set_target_properties(DynamicModelTest PROPERTIES LINKER_LANGUAGE CXX )
 catkin_add_gtest(ControllerPIDWithDynamicTest ControllerPIDWithDynamicTest.cc ${SOURCE_FILES})
 target_link_libraries(ControllerPIDWithDynamicTest control)
 set_target_properties(ControllerPIDWithDynamicTest PROPERTIES LINKER_LANGUAGE CXX )
+
+catkin_add_gtest(ControllerPIDTest ControllerPIDTest.cc ${SOURCE_FILES})
+target_link_libraries(ControllerPIDTest control)
+set_target_properties(ControllerPIDTest PROPERTIES LINKER_LANGUAGE CXX )

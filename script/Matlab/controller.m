@@ -16,3 +16,5 @@ step(sys3)
 % integrator = tf([200], [1,3,4])
 % 
 % sys2 = c2d(integrator, 0.02,'tunstin')
+
+plot(ans(1))
