@@ -29,9 +29,9 @@ namespace control
 {
     ControllerPIDWithDynamic::ControllerPIDWithDynamic(std::shared_ptr<TransferFunctionCoefficient> &transferFunctionCoefficientPosition,
                            std::shared_ptr<TransferFunctionCoefficient> &transferFunctionCoefficientVelocity,
-                           std::shared_ptr<DynamicModelParam> &dynamicModelParam, int &filterOrder):
-        transferFunctionPosition_(CARTESIAN_SPACE, transferFunctionCoefficientPosition, filterOrder),
-        transferFunctionVelocity_(CARTESIAN_SPACE, transferFunctionCoefficientVelocity, filterOrder),
+                           std::shared_ptr<DynamicModelParam> &dynamicModelParam, int filterOrderPosition, int filterOrderVelocity):
+        transferFunctionPosition_(CARTESIAN_SPACE, transferFunctionCoefficientPosition, filterOrderPosition),
+        transferFunctionVelocity_(CARTESIAN_SPACE, transferFunctionCoefficientVelocity, filterOrderVelocity),
         dynamicModel_(dynamicModelParam)
     {
         positionCommand_ = Eigen::VectorXd::Zero(CARTESIAN_SPACE);

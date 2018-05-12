@@ -38,10 +38,12 @@ namespace control
     public:
         ControllerPIDWithDynamic(std::shared_ptr<TransferFunctionCoefficient> &transferFunctionCoefficientPosition,
                    std::shared_ptr<TransferFunctionCoefficient> &transferFunctionCoefficientVelocity,
-                   std::shared_ptr<DynamicModelParam> &dynamicModelParam, int &filterOrder);
+                   std::shared_ptr<DynamicModelParam> &dynamicModelParam, int filterOrderPosition, int filterOrderVelocity);
         ~ControllerPIDWithDynamic() = default;
 
         Eigen::VectorXd Update(ControllerCMD &controllerCMD);
+        Eigen::VectorXd GetPose() { return positionCommand_;}
+
 
     private:
 

@@ -9,3 +9,7 @@ set_target_properties(TrajectoryGeneratorTest PROPERTIES LINKER_LANGUAGE CXX )
 catkin_add_gtest(DynamicModelTest DynamicModelTest.cc ${SOURCE_FILES})
 target_link_libraries(DynamicModelTest control)
 set_target_properties(DynamicModelTest PROPERTIES LINKER_LANGUAGE CXX )
+
+catkin_add_gtest(ControllerPIDWithDynamicTest ControllerPIDWithDynamicTest.cc ${SOURCE_FILES})
+target_link_libraries(ControllerPIDWithDynamicTest control)
+set_target_properties(ControllerPIDWithDynamicTest PROPERTIES LINKER_LANGUAGE CXX )

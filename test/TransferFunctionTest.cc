@@ -160,6 +160,51 @@ TEST_F(TransferFunction_Unit_Test, TransferFunction3Order)
 
 }
 
+TEST_F(TransferFunction_Unit_Test, TransferFunctionXaxisRobot)
+{
+    /*            1
+      ft =  -------------- --> T = 0.02
+            49.5 s + 136.1
+    */
+    const float tolerance = 1E-5f;
+    int filterOrder = 1;
+    int nbIteration = 170;
+    fileName_ = "TransferFunctionXaxisRobot.csv";
+
+    denominatorFactor_ = Eigen::ArrayXXd::Zero(nbDegreeOfFreedom_, 1);
+    numeratorFactor_   = Eigen::ArrayXXd::Zero(nbDegreeOfFreedom_, 1 + 1);
+
+    for (int i = 0; i < nbDegreeOfFreedom_; i++)
+    {
+        denominatorFactor_.row(i) << -0.946463485239604;
+        numeratorFactor_.row(i)   << 0.000196612473256526, 0.000196612473256526;
+    }
+
+    pTransferFunctionCoefficient_->numeratorFactor  = numeratorFactor_;
+    pTransferFunctionCoefficient_->denominatorFactor = denominatorFactor_;
+
+    init(filterOrder, pTransferFunctionCoefficient_);
+    Eigen::VectorXd result = Eigen::VectorXd::Zero(nbDegreeOfFreedom_);
+    Eigen::VectorXd command;
+    //step command
+    command.setConstant(nbDegreeOfFreedom_, 1.0f);
+    Eigen::VectorXd expectedInfinity = Eigen::VectorXd::Zero(nbDegreeOfFreedom_);
+    // with the final value theorem we get : 0.007348
+    expectedInfinity.setConstant(nbDegreeOfFreedom_, 0.007348);
+
+    for (int i = 0; i <= nbIteration; i++)
+    {
+        result = pTransferFunction_->Update(command);
+        historyResult_.push_back(result);
+    }
+
+    for (int atcIdx = 0; atcIdx < nbDegreeOfFreedom_; atcIdx++)
+    {
+        EXPECT_NEAR(expectedInfinity(atcIdx), historyResult_[nbIteration](atcIdx), tolerance);
+    }
+
+}
+
 int main(int argc, char **argv) {
     testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();

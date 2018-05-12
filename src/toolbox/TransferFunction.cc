@@ -24,6 +24,7 @@
 
 #include "TransferFunction.h"
 
+
 namespace control
 {
     TransferFunction::TransferFunction(int nbTransferFunction, std::shared_ptr<TransferFunctionCoefficient> &transferFunctionCoefficient, int filterOrder) :
