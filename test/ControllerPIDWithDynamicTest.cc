@@ -132,7 +132,7 @@ public:
     std::shared_ptr<control::TransferFunctionCoefficient>  pTransferFunctionCoefficientPosition_;
     std::shared_ptr<control::TransferFunctionCoefficient>  pTransferFunctionCoefficientVelocity_;
     std::shared_ptr<control::TransferFunctionCoefficient>  pTransferFunctionCoefficientRobot_;
-    std::shared_ptr<control::ControllerPIDWithDynamic>     AUVController_;
+    std::shared_ptr<control::ControllerIF>                 AUVController_;
     std::shared_ptr<control::TransferFunction>             pRobotTransferFunction_;
     std::shared_ptr<control::TransferFunction>             pIntegralTransferFunction_;
 
@@ -176,7 +176,7 @@ TEST_F(ControllerPIDWithDynamic_Unit_Test, ControllerPIDDynamicXaxisTest)
     Eigen::VectorXd actualTwist = Eigen::VectorXd::Zero(control::CARTESIAN_SPACE);
     Eigen::VectorXd wrench      = Eigen::VectorXd::Zero(control::CARTESIAN_SPACE);
 
-    for (unsigned int i = 0; i < poseTrajectory_.size(); i++)
+    for (unsigned int i = 0; i < 372; i++)
     {
         if (i < poseTrajectory_.size())
         {
@@ -202,7 +202,7 @@ TEST_F(ControllerPIDWithDynamic_Unit_Test, ControllerPIDDynamicXaxisTest)
 
         actualTwist = pRobotTransferFunction_->Update(wrench);
         actualPose  = pIntegralTransferFunction_->Update(actualTwist);
-        outPose_.push_back(controllerCMD.errorPose);
+        outPose_.push_back(actualPose);
 
     }
 }

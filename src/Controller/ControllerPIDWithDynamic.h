@@ -30,20 +30,20 @@
 
 #include "toolbox/DynamicModel.h"
 #include "toolbox/TransferFunction.h"
+#include "ControllerIF.h"
 #include "ControlType.h"
 
 namespace control
 {
-    class ControllerPIDWithDynamic {
+    class ControllerPIDWithDynamic : public ControllerIF
+    {
     public:
         ControllerPIDWithDynamic(std::shared_ptr<TransferFunctionCoefficient> &transferFunctionCoefficientPosition,
                    std::shared_ptr<TransferFunctionCoefficient> &transferFunctionCoefficientVelocity,
                    std::shared_ptr<DynamicModelParam> &dynamicModelParam, int filterOrderPosition, int filterOrderVelocity);
-        ~ControllerPIDWithDynamic() = default;
+        virtual ~ControllerPIDWithDynamic() = default;
 
-        Eigen::VectorXd Update(ControllerCMD &controllerCMD);
-        Eigen::VectorXd GetPose() { return positionCommand_;}
-
+        Eigen::VectorXd Update(ControllerCMD &controllerCMD) override;
 
     private:
 
