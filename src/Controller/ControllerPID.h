@@ -22,6 +22,7 @@ namespace control
         virtual ~ControllerPID() = default;
 
         Eigen::VectorXd Update(ControllerCMD &controllerCMD) override;
+        void Exit() override;
 
     private:
 

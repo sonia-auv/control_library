@@ -63,6 +63,26 @@ namespace control
         Eigen::ArrayXXd numeratorFactor;
         Eigen::ArrayXXd denominatorFactor;
     };
+
+    struct TrajectoryGeneratorType
+    {
+        double          time;
+        Eigen::VectorXd startPose;
+        Eigen::VectorXd endPose;
+    };
+
+    struct TrajectoryResultType
+    {
+        std::vector<Eigen::VectorXd> pose;
+        std::vector<Eigen::VectorXd> twist;
+        std::vector<Eigen::VectorXd> accel;
+    };
+    
+    enum ControlType
+    {
+        PID = 0,
+        PIDWithDynamic
+    };
 }
 
 #endif //CONTROL_LIBRARY_CONTROLTYPE_H

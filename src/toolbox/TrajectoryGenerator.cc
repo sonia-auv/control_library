@@ -31,9 +31,7 @@ namespace control
             responseTime_(0.0),
             timeStamp_(timeStamp)
     {
-        startPosition_ = Eigen::VectorXd::Zero(CARTESIAN_SPACE);
-        endPosition_   = Eigen::VectorXd::Zero(CARTESIAN_SPACE);
-
+        SetZero();
     }
 
     void TrajectoryGenerator::GenerateTrajectory(double trajectoryTime, Eigen::VectorXd &startPose, Eigen::VectorXd &endPose)
@@ -115,6 +113,16 @@ namespace control
     {
         endOrientation_.slerp(time, startOrientation_);
         return endOrientation_.toRotationMatrix().eulerAngles(0, 1, 2);
+    }
+    
+    void TrajectoryGenerator::SetZero() 
+    {
+        poseTrajectory_.clear();
+        twistTrajectory_.clear();
+        accelerationTrajectory_.clear();
+
+        startPosition_ = Eigen::VectorXd::Zero(CARTESIAN_SPACE);
+        endPosition_   = Eigen::VectorXd::Zero(CARTESIAN_SPACE);
     }
 
 }

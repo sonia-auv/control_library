@@ -44,6 +44,7 @@ namespace control
         virtual ~ControllerPIDWithDynamic() = default;
 
         Eigen::VectorXd Update(ControllerCMD &controllerCMD) override;
+        void Exit() override;
 
     private:
 

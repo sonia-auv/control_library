@@ -34,6 +34,7 @@ namespace control
         virtual ~ControllerIF() = default;
 
         virtual Eigen::VectorXd Update(ControllerCMD &controllerCMD) = 0;
+        virtual void Exit() = 0;
 
     };
 }

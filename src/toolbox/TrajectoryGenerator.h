@@ -43,7 +43,7 @@ namespace control
         std::vector<Eigen::VectorXd> GetPoseTrajectory() { return poseTrajectory_;}
         std::vector<Eigen::VectorXd> GetTwistTrajectory() { return twistTrajectory_;}
         std::vector<Eigen::VectorXd> GetAccelerationTrajectory() { return accelerationTrajectory_;}
-
+        void SetZero();
 
     private:
         Eigen::VectorXd PoseTrajectory(double time);

@@ -41,6 +41,8 @@ namespace control
         ~TransferFunction() = default;
 
         Eigen::VectorXd Update(Eigen::VectorXd &error);
+        
+        void SetZero();
 
     private:
         Eigen::VectorXd FilterXOrder();

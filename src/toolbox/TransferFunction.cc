@@ -32,9 +32,7 @@ namespace control
         nbTransferFunction_(nbTransferFunction),
         transferFunctionCoefficient_(transferFunctionCoefficient)
     {
-        filterResult_      = Eigen::VectorXd::Zero(nbTransferFunction);
-        outputHistory_     = Eigen::ArrayXXd::Zero(nbTransferFunction, filterOrder_);
-        errorHistory_      = Eigen::ArrayXXd::Zero(nbTransferFunction, filterOrder_ + 1);
+        SetZero();
     }
 
     Eigen::VectorXd TransferFunction::Update(Eigen::VectorXd &error)
@@ -57,6 +55,13 @@ namespace control
         Eigen::VectorXd numeratorResult = (transferFunctionCoefficient_->numeratorFactor * errorHistory_).rowwise().sum();
         Eigen::VectorXd denominatorResult = (transferFunctionCoefficient_->denominatorFactor * outputHistory_).rowwise().sum();
         return numeratorResult - denominatorResult;
+    }
+    
+    void TransferFunction::SetZero() 
+    {
+        filterResult_      = Eigen::VectorXd::Zero(nbTransferFunction_);
+        outputHistory_     = Eigen::ArrayXXd::Zero(nbTransferFunction_, filterOrder_);
+        errorHistory_      = Eigen::ArrayXXd::Zero(nbTransferFunction_, filterOrder_ + 1);
     }
 
 }
