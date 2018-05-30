@@ -8,9 +8,9 @@
 #include <memory>
 
 #include "ControlType.h"
-#include "Controller/ControllerPIDWithDynamic.h"
-#include "Controller/ControllerPID.h"
-#include "toolbox/TrajectoryGenerator.h"
+#include "control_library/Controller/ControllerPIDWithDynamic.h"
+#include "control_library/Controller/ControllerPID.h"
+#include "control_library/toolbox/TrajectoryGenerator.h"
 
 namespace control
 {

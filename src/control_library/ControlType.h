@@ -34,6 +34,9 @@ namespace control
     const int POSITION_SPACE    = 3;
     const int ORIENTATION_SPACE = 3;
 
+    const double DEGREE_TO_RAD = M_PI / 180.0;
+    const double RAD_TO_DEGREE = 180.0 / M_PI;
+
     struct dragParameters
     {
         Eigen::VectorXd constDragCoefficient;

@@ -1,6 +1,5 @@
 # \file     CMakeLists.txt
 # \author   Olivier Lavoie <olavoie9507@gmail.com>
-# \date     23/09/2016
 #
 # \copyright Copyright (c) 2018 S.O.N.I.A. All rights reserved.
 #
@@ -36,36 +35,59 @@ endif (NOT CMAKE_BUILD_TYPE)
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -std=c++11 -Wall")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -std=c++11 -O3 -s")
 
-set(CMAKE_MODULE_PATH "/usr/share/cmake-3.0/Modules")
 
-set(control_SRC_DIR "src")
+set(control_library_SRC_DIR "src")
 
-find_package(catkin)
+#===============================================================================
+# C A T K I N   C O N F I G U R A T I O N
+
+find_package(catkin REQUIRED COMPONENTS
+        roscpp
+        )
+
+find_package(catkin REQUIRED cmake_modules)
+find_package(Eigen3 REQUIRED)
+
+catkin_package(
+        INCLUDE_DIRS src
+        LIBRARIES sonia_control
+        CATKIN_DEPENDS
+        roscpp
+)
 
 #===============================================================================
 # I N C L U D E   F I L E S
 
-file(GLOB_RECURSE control_FILES
-        "${control_SRC_DIR}/*.cc"
-        "${control_SRC_DIR}/*.h")
+file(GLOB_RECURSE control_library_SRC_FILES "${control_library_SRC_DIR}/*.h"
+                                "${control_library_SRC_DIR}/*.cc")
 
 include_directories(
         ${catkin_INCLUDE_DIRS}
-        ${control_SRC_DIR}
-)
-
-catkin_package(
-        INCLUDE_DIRS ${control_SRC_DIR}
-        LIBRARIES
-        CATKIN_DEPENDS roscpp
+        ${Eigen_INCLUDE_DIRS}
+        ${control_library_SRC_DIR}
 )
 
 #==========================================================================
 # C R E A T E   E X E C U T A B L E
-add_library(control SHARED ${control_FILES})
-#add_executable(${PROJECT_NAME} ${control_FILES})
-target_link_libraries(control ${catkin_LIBRARIES} ${Eigen_LIBRARIES} yaml-cpp)
+add_library(sonia_control SHARED ${control_library_SRC_FILES})
+target_link_libraries(sonia_control ${catkin_LIBRARIES} ${Eigen_LIBRARIES} yaml-cpp)
+set_target_properties(sonia_control PROPERTIES LINKER_LANGUAGE CXX)
+
+install(
+        TARGETS ${TARGET_NAME}
+        ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+        LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+        RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
+
+install(
+        DIRECTORY ${control_library_SRC_DIR}/${PROJECT_NAME}/
+        DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
+        PATTERN ".git" EXCLUDE
+)
 
 #==========================================================================
 # U N I T   T E S T S
+if (${CATKIN_ENABLE_TESTING})
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/test)
+endif()

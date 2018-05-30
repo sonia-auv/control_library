@@ -1,5 +1,5 @@
 /**
- * \file	TransferFunctionTest.h
+ * \file	DynamicModel.h
  * \author	Olivier Lavoie <olavoie9507@gmail.com>
  *
  * \copyright Copyright (c) 2018 S.O.N.I.A. AUV All rights reserved.
@@ -22,44 +22,30 @@
  * along with S.O.N.I.A. AUV software. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef CONTROL_LIBRARY_TRANSFERFUNCTION_H
-#define CONTROL_LIBRARY_TRANSFERFUNCTION_H
+#ifndef CONTROL_LIBRARY_DYNAMICMODEL_H
+#define CONTROL_LIBRARY_DYNAMICMODEL_H
 
-#include <eigen3/Eigen/Eigen>
-#include <vector>
 #include <memory>
+#include <eigen3/Eigen/Eigen>
 
-#include "ControlType.h"
+#include "control_library/ControlType.h"
 
 namespace control
 {
-    class TransferFunction
-    {
-
+    class DynamicModel {
     public:
-        TransferFunction(int nbTransferFunction, std::shared_ptr<TransferFunctionCoefficient> &transferFunctionCoefficient, int filterOrder);
-        ~TransferFunction() = default;
+        DynamicModel(std::shared_ptr<DynamicModelParam> &auvDynamicParameters);
+        ~DynamicModel() = default;
 
-        Eigen::VectorXd Update(Eigen::VectorXd &error);
-        
-        void SetZero();
+        Eigen::VectorXd Update(Eigen::VectorXd &acceleration, Eigen::VectorXd &velocity, Eigen::Vector3d &orientation);
 
     private:
-        Eigen::VectorXd FilterXOrder();
-        void UpdateHistory();
+        Eigen::VectorXd ComputeDamping(Eigen::VectorXd &velocity);
+        Eigen::VectorXd ComputeGravity(Eigen::Vector3d &orientation);
 
-        int             filterOrder_;
-        int             nbTransferFunction_;
-        Eigen::VectorXd filterResult_;
-        Eigen::ArrayXXd outputHistory_;
-        Eigen::ArrayXXd errorHistory_;
-
-        std::shared_ptr<TransferFunctionCoefficient> transferFunctionCoefficient_;
+        std::shared_ptr<DynamicModelParam> auvDynamicParameters_;
 
     };
-
 }
 
-
-
-#endif //CONTROL_LIBRARY_TRANSFERFUNCTION_H
+#endif //CONTROL_LIBRARY_DYNAMICMODEL_H

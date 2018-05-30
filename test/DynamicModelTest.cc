@@ -24,9 +24,9 @@
 #include <gtest/gtest.h>
 #include <memory>
 #include <fstream>
-#include "toolbox/TrajectoryGenerator.h"
-#include "toolbox/DynamicModel.h"
-#include "ControlType.h"
+#include "control_library/toolbox/TrajectoryGenerator.h"
+#include "control_library/toolbox/DynamicModel.h"
+#include "control_library/ControlType.h"
 
 #include <iostream>
 
