@@ -29,7 +29,7 @@
 #include <vector>
 #include <memory>
 
-#include "ControlType.h"
+#include "control_library/ControlType.h"
 
 namespace control
 {
@@ -41,6 +41,8 @@ namespace control
         ~TransferFunction() = default;
 
         Eigen::VectorXd Update(Eigen::VectorXd &error);
+        
+        void SetZero();
 
     private:
         Eigen::VectorXd FilterXOrder();

@@ -41,4 +41,10 @@ namespace control
 
         return computedWrench_;
     }
+    
+    void ControllerPID::Exit() 
+    {
+        positionCommand_ = Eigen::VectorXd::Zero(CARTESIAN_SPACE);
+        transferFunction_.SetZero();
+    }
 }

@@ -26,8 +26,8 @@
 #include <memory>
 #include <fstream>
 
-#include "toolbox/TransferFunction.h"
-#include "ControlType.h"
+#include "control_library/toolbox/TransferFunction.h"
+#include "control_library/ControlType.h"
 
 class TransferFunction_Unit_Test : public testing::Test
 {

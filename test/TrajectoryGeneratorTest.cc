@@ -25,7 +25,7 @@
 #include <gtest/gtest.h>
 #include <memory>
 #include <fstream>
-#include "toolbox/TrajectoryGenerator.h"
+#include "control_library/toolbox/TrajectoryGenerator.h"
 
 
 class TrajectoryGenerator_Unit_Test : public testing::Test

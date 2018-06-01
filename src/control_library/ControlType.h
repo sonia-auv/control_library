@@ -34,6 +34,9 @@ namespace control
     const int POSITION_SPACE    = 3;
     const int ORIENTATION_SPACE = 3;
 
+    const double DEGREE_TO_RAD = M_PI / 180.0;
+    const double RAD_TO_DEGREE = 180.0 / M_PI;
+
     struct dragParameters
     {
         Eigen::VectorXd constDragCoefficient;
@@ -62,6 +65,34 @@ namespace control
     {
         Eigen::ArrayXXd numeratorFactor;
         Eigen::ArrayXXd denominatorFactor;
+    };
+
+    struct TrajectoryGeneratorType
+    {
+        double          time;
+        Eigen::VectorXd startPose;
+        Eigen::VectorXd endPose;
+    };
+
+    struct TrajectoryResultList
+    {
+        std::vector<Eigen::VectorXd> pose;
+        std::vector<Eigen::VectorXd> twist;
+        std::vector<Eigen::VectorXd> accel;
+    };
+
+    struct TrajectoryResult
+    {
+        Eigen::VectorXd pose;
+        Eigen::VectorXd twist;
+        Eigen::VectorXd accel;
+    };
+
+
+    enum ControlType
+    {
+        PID = 0,
+        PIDWithDynamic
     };
 }
 

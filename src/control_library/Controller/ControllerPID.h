@@ -8,9 +8,9 @@
 #include <eigen3/Eigen/Eigen>
 #include <memory>
 
-#include "toolbox/TransferFunction.h"
+#include "control_library/toolbox/TransferFunction.h"
 #include "ControllerIF.h"
-#include "ControlType.h"
+#include "control_library/ControlType.h"
 
 
 namespace control
@@ -22,6 +22,7 @@ namespace control
         virtual ~ControllerPID() = default;
 
         Eigen::VectorXd Update(ControllerCMD &controllerCMD) override;
+        void Exit() override;
 
     private:
 
