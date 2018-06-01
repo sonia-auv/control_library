@@ -24,18 +24,24 @@ namespace control
         ControlInterface(std::shared_ptr<TransferFunctionCoefficient> &transferFunctionCoefficient, int filterOrder);
         ~ControlInterface() = default;
 
-        TrajectoryResultType GenerateTrajectory(TrajectoryGeneratorType &trajectoryGeneratorType);
+        void GenerateTrajectory(TrajectoryGeneratorType &trajectoryGeneratorType);
+        TrajectoryResult GetTrajetory();
+        bool IsTrajectoryComputed() {return isTrajectoryComputed_;}
+        void ResetTrajectory();
         Eigen::VectorXd Process(ControllerCMD command);
 
     private:
         std::shared_ptr<ControllerIF>        pAuvController_;
         std::shared_ptr<TrajectoryGenerator> pTrajectoryGenerator_;
+        TrajectoryResultList                 trajectoryResultList_;
 
-        Eigen::VectorXd computedWrench_;
+        Eigen::VectorXd  computedWrench_;
+        TrajectoryResult trajectoryResult_;
+
+        bool isTrajectoryComputed_;
+        unsigned int i_;
     };
 
 }
-
-
 
 #endif //CONTROL_LIBRARY_CONTROLINTERFACE_H

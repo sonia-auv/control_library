@@ -74,13 +74,21 @@ namespace control
         Eigen::VectorXd endPose;
     };
 
-    struct TrajectoryResultType
+    struct TrajectoryResultList
     {
         std::vector<Eigen::VectorXd> pose;
         std::vector<Eigen::VectorXd> twist;
         std::vector<Eigen::VectorXd> accel;
     };
-    
+
+    struct TrajectoryResult
+    {
+        Eigen::VectorXd pose;
+        Eigen::VectorXd twist;
+        Eigen::VectorXd accel;
+    };
+
+
     enum ControlType
     {
         PID = 0,

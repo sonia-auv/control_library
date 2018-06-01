@@ -10,7 +10,8 @@ namespace control
                                        std::shared_ptr<TransferFunctionCoefficient> &transferFunctionCoefficientVelocity,
                                        std::shared_ptr<DynamicModelParam> &dynamicModelParam, int filterOrderPosition, int filterOrderVelocity):
             pAuvController_(nullptr),
-            pTrajectoryGenerator_(nullptr)
+            pTrajectoryGenerator_(nullptr),
+            isTrajectoryComputed_(false)
     {
         pAuvController_       = std::make_shared<ControllerPIDWithDynamic>(transferFunctionCoefficientPosition, transferFunctionCoefficientVelocity, dynamicModelParam, filterOrderPosition, filterOrderVelocity);
         pTrajectoryGenerator_ = std::make_shared<TrajectoryGenerator>(0.02);
@@ -18,24 +19,55 @@ namespace control
 
     ControlInterface::ControlInterface(std::shared_ptr<TransferFunctionCoefficient> &transferFunctionCoefficient, int filterOrder):
             pAuvController_(nullptr),
-            pTrajectoryGenerator_(nullptr)
+            pTrajectoryGenerator_(nullptr),
+            isTrajectoryComputed_(false)
     {
         pAuvController_       = std::make_shared<ControllerPID>(transferFunctionCoefficient, filterOrder);
         pTrajectoryGenerator_ = std::make_shared<TrajectoryGenerator>(0.02);
     }
 
-    TrajectoryResultType ControlInterface::GenerateTrajectory(TrajectoryGeneratorType &trajectoryGeneratorType)
+    void ControlInterface::GenerateTrajectory(TrajectoryGeneratorType &trajectoryGeneratorType)
     {
-        TrajectoryResultType trajectoryResult;
-
-        pTrajectoryGenerator_->SetZero();
+        ResetTrajectory();
 
         pTrajectoryGenerator_->GenerateTrajectory(trajectoryGeneratorType.time, trajectoryGeneratorType.startPose, trajectoryGeneratorType.endPose);
-        trajectoryResult.pose  = pTrajectoryGenerator_->GetPoseTrajectory();
-        trajectoryResult.twist = pTrajectoryGenerator_->GetTwistTrajectory();
-        trajectoryResult.accel = pTrajectoryGenerator_->GetAccelerationTrajectory();
+        trajectoryResultList_.pose  = pTrajectoryGenerator_->GetPoseTrajectory();
+        trajectoryResultList_.twist = pTrajectoryGenerator_->GetTwistTrajectory();
+        trajectoryResultList_.accel = pTrajectoryGenerator_->GetAccelerationTrajectory();
 
-        return trajectoryResult;
+        isTrajectoryComputed_ = true;
+        i_ = 0;
+    }
+
+    TrajectoryResult ControlInterface::GetTrajetory()
+    {
+        if (trajectoryResultList_.pose.size() > i_)
+        {
+            trajectoryResult_.pose = trajectoryResultList_.pose.at(i_);
+        }
+
+        if (trajectoryResultList_.twist.size() > i_)
+        {
+            trajectoryResult_.twist = trajectoryResultList_.twist.at(i_);
+        }
+
+        if (trajectoryResultList_.accel.size() > i_)
+        {
+            trajectoryResult_.accel = trajectoryResultList_.accel.at(i_);
+        }
+
+        i_++;
+
+        return trajectoryResult_;
+    }
+
+    void ControlInterface::ResetTrajectory()
+    {
+        pTrajectoryGenerator_->SetZero();
+        trajectoryResultList_.pose.clear();
+        trajectoryResultList_.twist.clear();
+        trajectoryResultList_.accel.clear();
+        isTrajectoryComputed_ = false;
     }
 
     Eigen::VectorXd ControlInterface::Process(ControllerCMD command)

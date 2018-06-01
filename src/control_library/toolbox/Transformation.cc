@@ -41,5 +41,14 @@ namespace control
         Eigen::Quaterniond quaternion(EulerToRotationMatrix(eulerAngle))   ;
         return quaternion;
     }
+
+    Eigen::Affine3d HomogeneousMatrix(Eigen::Vector3d &eulerAngle, Eigen::Vector3d &translation) {
+
+        Eigen::Affine3d mat;
+        mat.linear() = EulerToRotationMatrix(eulerAngle);
+        mat.translation() = translation;
+
+        return mat;
+    }
 }
 
