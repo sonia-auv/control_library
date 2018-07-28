@@ -1,6 +1,6 @@
-TFpid = tf([2.7, 40, 1.85], [1, 0])
+TFpid = tf([2.7, 40, 1.85], [1, 0]);
 
-sys = c2d(TFpid, 0.02,'tunstin')
+sys = c2d(TFpid, 0.02,'tunstin');
 
 % integrator = tf([1], [1,0])
 
