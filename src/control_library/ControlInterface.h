@@ -17,6 +17,8 @@ namespace control
     class ControlInterface
     {
     public:
+        ControlInterface();
+
         ControlInterface(std::shared_ptr<TransferFunctionCoefficient> &transferFunctionCoefficientPosition,
                          std::shared_ptr<TransferFunctionCoefficient> &transferFunctionCoefficientVelocity,
                          std::shared_ptr<DynamicModelParam> &dynamicModelParam, int filterOrderPosition, int filterOrderVelocity);

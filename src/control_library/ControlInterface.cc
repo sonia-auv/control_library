@@ -6,6 +6,13 @@
 
 namespace control
 {
+    ControlInterface::ControlInterface():
+        isTrajectoryComputed_(false)
+    {
+        pTrajectoryGenerator_ = std::make_shared<TrajectoryGenerator>(0.02);
+    }
+
+
     ControlInterface::ControlInterface(std::shared_ptr<TransferFunctionCoefficient> &transferFunctionCoefficientPosition,
                                        std::shared_ptr<TransferFunctionCoefficient> &transferFunctionCoefficientVelocity,
                                        std::shared_ptr<DynamicModelParam> &dynamicModelParam, int filterOrderPosition, int filterOrderVelocity):

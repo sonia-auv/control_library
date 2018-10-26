@@ -36,6 +36,24 @@ namespace control
         return mat;
     }
 
+    Eigen::Matrix3d EulerToRotationMatrix(Eigen::VectorXd &pose)
+    {
+        Eigen::Matrix3d mat;
+        mat = (Eigen::AngleAxisd(pose[3], Eigen::Vector3d::UnitX())
+               * Eigen::AngleAxisd(pose[4], Eigen::Vector3d::UnitY())
+               * Eigen::AngleAxisd(pose[5], Eigen::Vector3d::UnitZ())).toRotationMatrix();
+        return mat;
+    }
+
+    Eigen::Matrix3d EulerToRotationMatrix(double & roll, double & pitch, double & yaw)
+    {
+        Eigen::Matrix3d mat;
+        mat = (Eigen::AngleAxisd(roll, Eigen::Vector3d::UnitX())
+               * Eigen::AngleAxisd(pitch, Eigen::Vector3d::UnitY())
+               * Eigen::AngleAxisd(yaw, Eigen::Vector3d::UnitZ())).toRotationMatrix();
+        return mat;
+    }
+
     Eigen::Quaterniond EulerToQuaternion(Eigen::Vector3d &eulerAngle)
     {
         Eigen::Quaterniond quaternion(EulerToRotationMatrix(eulerAngle))   ;
@@ -47,6 +65,15 @@ namespace control
         Eigen::Affine3d mat;
         mat.linear() = EulerToRotationMatrix(eulerAngle);
         mat.translation() = translation;
+
+        return mat;
+    }
+
+    Eigen::Affine3d HomogeneousMatrix(Eigen::VectorXd &pose) {
+
+        Eigen::Affine3d mat;
+        mat.linear() = EulerToRotationMatrix(pose[3], pose[4], pose[5]);
+        mat.translation() << pose[0], pose[1], pose[2];
 
         return mat;
     }
