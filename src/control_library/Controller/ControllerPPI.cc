@@ -35,7 +35,7 @@ namespace control
 
     Eigen::VectorXd ControllerPPI::Update(ControllerCMD &controllerCMD)
     {
-        positionCommand_  = controllerCMD.errorPose.array() * gainP_ - controllerCMD.errorVelocity.array();
+        positionCommand_  = controllerCMD.errorPose.array() * gainP_ - controllerCMD.velocity.array();
         computedWrench_ = transferFunction_.Update(positionCommand_);
         return computedWrench_;
     }
