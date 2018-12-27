@@ -46,8 +46,13 @@ namespace control
 
     void TransferFunction::UpdateHistory()
     {
-        outputHistory_.matrix().block(0,1,nbTransferFunction_, filterOrder_ - 1) = outputHistory_.matrix().block(0,0,nbTransferFunction_, filterOrder_ - 1);
-        errorHistory_.matrix().block(0,1,nbTransferFunction_, filterOrder_) = errorHistory_.matrix().block(0,0,nbTransferFunction_, filterOrder_);
+        Eigen::ArrayXXd outputHistory = Eigen::ArrayXXd::Zero(nbTransferFunction_, filterOrder_);
+        Eigen::ArrayXXd errorHistory  = Eigen::ArrayXXd::Zero(nbTransferFunction_, filterOrder_ + 1);
+        outputHistory.matrix().block(0,1,nbTransferFunction_, filterOrder_ - 1) = outputHistory_.matrix().block(0,0,nbTransferFunction_, filterOrder_ - 1);
+        errorHistory.matrix().block(0,1,nbTransferFunction_, filterOrder_) = errorHistory_.matrix().block(0,0,nbTransferFunction_, filterOrder_);
+        outputHistory_ = outputHistory;
+        errorHistory_ = errorHistory;
+
     }
 
     Eigen::VectorXd TransferFunction::FilterXOrder()

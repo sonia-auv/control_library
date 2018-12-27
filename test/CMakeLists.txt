@@ -21,3 +21,7 @@ set_target_properties(ControllerPIDTest PROPERTIES LINKER_LANGUAGE CXX )
 catkin_add_gtest(PPISimulationTest PPISimulationTest.cc ${SOURCE_FILES})
 target_link_libraries(PPISimulationTest sonia_control)
 set_target_properties(PPISimulationTest PROPERTIES LINKER_LANGUAGE CXX )
+
+catkin_add_gtest(CommandBSimulationTest CommandBSimulationTest.cc ${SOURCE_FILES})
+target_link_libraries(CommandBSimulationTest sonia_control)
+set_target_properties(CommandBSimulationTest PROPERTIES LINKER_LANGUAGE CXX )
