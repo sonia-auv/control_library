@@ -88,6 +88,13 @@ namespace control
         Eigen::VectorXd accel;
     };
 
+    struct PIDParameters
+    {
+        double Kp;
+        double Ki;
+        double Kd;
+        double iLimit;
+    };
 
     enum ControlType
     {
