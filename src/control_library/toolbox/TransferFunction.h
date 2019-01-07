@@ -28,7 +28,7 @@
 #include <eigen3/Eigen/Eigen>
 #include <vector>
 #include <memory>
-
+#include <fstream>
 #include "control_library/ControlType.h"
 
 namespace control
@@ -43,6 +43,7 @@ namespace control
         Eigen::VectorXd Update(Eigen::VectorXd &error);
         
         void SetZero();
+        Eigen::ArrayXXd & ss() {return outputHistory_;}
 
     private:
         Eigen::VectorXd FilterXOrder();
