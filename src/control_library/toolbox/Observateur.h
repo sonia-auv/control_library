@@ -5,7 +5,6 @@
 #include <vector>
 #include <memory>
 #include <fstream>
-#include "control_library/ControlType.h"
 
 namespace control
 {
@@ -13,7 +12,7 @@ namespace control
     {
 
     public:
-        Observateur(Eigen::MatrixXd Ad, Eigen::MatrixXd Hd,Eigen::MatrixXd Bd,Eigen::MatrixXd Cd);
+        Observateur(Eigen::MatrixXd Ad, Eigen::MatrixXd Bd, Eigen::MatrixXd Cd, Eigen::MatrixXd Hd);
         ~Observateur() = default;
 
         Eigen::MatrixXd Update(Eigen::MatrixXd x, Eigen::MatrixXd u, Eigen::MatrixXd y);
@@ -21,10 +20,10 @@ namespace control
 
     private:
 
-        Eigen::MatrixXd Ad;
-        Eigen::MatrixXd Hd;
-        Eigen::MatrixXd Bd;
-        Eigen::MatrixXd Cd;
+        Eigen::MatrixXd Ad_;
+        Eigen::MatrixXd Bd_;
+        Eigen::MatrixXd Cd_;
+        Eigen::MatrixXd Hd_;
         
 
     };
