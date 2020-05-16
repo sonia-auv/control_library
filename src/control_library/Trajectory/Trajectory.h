@@ -9,6 +9,7 @@
 
 #include "control_library/ControlType.h"
 #include "control_library/toolbox/TrajectoryGenerator.h"
+#include "control_library/toolbox/SpeedTrajectoryGenerator.h"
 
 namespace control
 {
@@ -19,12 +20,15 @@ namespace control
         ~Trajectory() = default;
 
         void GenerateTrajectory(TrajectoryGeneratorType &trajectoryGeneratorType);
+        void SpeedGenerateTrajectory(TrajectoryGeneratorType &TrajectoryGeneratorType);
         TrajectoryResult GetTrajectory();
+        TrajectoryResult GetSpeedTrajectory();
         bool IsTrajectoryComputed() {return isTrajectoryComputed_;}
         void ResetTrajectory();
 
     private:
         std::shared_ptr<TrajectoryGenerator> pTrajectoryGenerator_;
+        std::shared_ptr<SpeedTrajectoryGenerator> pspeedTrajectoryGenerator_;
         TrajectoryResultList                 trajectoryResultList_;
 
         TrajectoryResult trajectoryResult_;

@@ -42,18 +42,11 @@ namespace control
         void SpeedGenerateTrajectory(double trajectoryTime, Eigen::VectorXd &startPose, Eigen::VectorXd &endPose);
         std::vector<Eigen::VectorXd> GetPoseTrajectory() { return poseTrajectory_;}
         std::vector<Eigen::VectorXd> GetTwistTrajectory() { return twistTrajectory_;}
-        //std::vector<Eigen::VectorXd> GetAccelerationTrajectory() { return accelerationTrajectory_;}
         void SetZero();
 
     private:
-        Eigen::VectorXd PoseTrajectory(double time);
-        Eigen::VectorXd TwistTrajectory(double time);
-        //Eigen::VectorXd AccelerationTrajectory(double time);
-        Eigen::VectorXd TranslationPositionTrajectory(double time);
         Eigen::VectorXd HermitePositionTrajectory(double time);
-        Eigen::VectorXd TranslationSpeedTrajectory(double time);
         Eigen::VectorXd HermiteSpeedTrajectory();
-        //Eigen::VectorXd TranslationAccelerationTrajectory(double time);
         Eigen::Vector3d Interpolation(double time);
 
         double responseTime_;
@@ -78,8 +71,6 @@ namespace control
 
         std::vector<Eigen::VectorXd> poseTrajectory_;
         std::vector<Eigen::VectorXd> twistTrajectory_;
-        //std::vector<Eigen::VectorXd> accelerationTrajectory_;
-
     };
 }
 
