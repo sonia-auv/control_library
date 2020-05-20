@@ -1,5 +1,3 @@
-disp(EQNW);
-
 t = T200Thruster(EQNW);
 
 disp("Test T200Thruster class...");

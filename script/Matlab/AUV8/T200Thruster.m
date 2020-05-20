@@ -2,12 +2,6 @@ classdef T200Thruster < Thruster
     % T200THRUSTER class.
     
     properties
-        force;
-        power;
-        current;
-        rpm;
-        inputPwm;
-        
         eqNewtonsWatts;
         eqPwmNewtons;
         eqPwmCurrent;

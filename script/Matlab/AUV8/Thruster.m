@@ -2,7 +2,11 @@ classdef Thruster < matlab.mixin.Heterogeneous
     % THRUSTER class.
     
     properties
-        
+        force;
+        power;
+        current;
+        rpm;
+        inputPwm;
     end
     
     methods
