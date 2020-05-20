@@ -33,13 +33,12 @@ namespace control
     {
         SetZero();
         amplitude_ = 5.0;
-        maxAngle_ = 90;
+        maxAngle_ = 3.1416/2;
         maxSpeed_ = 0.5;
         kSpeed_ = 0.15;
-        kAngle_ = 0.02;
     }
 
-    void SpeedTrajectoryGenerator::SpeedGenerateTrajectory(double trajectoryTime, Eigen::VectorXd &startPose, Eigen::VectorXd &endPose) // Z isnt implented yet start and end should be equal
+    void SpeedTrajectoryGenerator::SpeedGenerateTrajectory(double trajectoryTime, Eigen::VectorXd &startPose, Eigen::VectorXd &endPose) // Z isnt implented yet start and end should be equal if mouvement in X and Y
     {
         double time{0};
         Eigen::Vector3d startOrientation = Eigen::Vector3d(startPose[3], startPose[4], startPose[5]);
@@ -53,13 +52,13 @@ namespace control
 
         hermiteXvalues_[0] = startPosition_[0];
         hermiteXvalues_[1] = endPosition_[0];
-        hermiteXvalues_[2] = amplitude_ * sin(startPosition_[5]*DEGREE_TO_RAD);
-        hermiteXvalues_[3] = amplitude_ * sin(endPosition_[5]*DEGREE_TO_RAD);
+        hermiteXvalues_[2] = amplitude_ * sin(startPosition_[5]*DEGREE_TO_RAD) + startPosition_[0];
+        hermiteXvalues_[3] = amplitude_ * sin(endPosition_[5]*DEGREE_TO_RAD) + endPosition_[0];
         
         hermiteYvalues_[0] = startPosition_[1];
         hermiteYvalues_[1] = endPosition_[1];
-        hermiteYvalues_[2] = amplitude_ * cos(startPosition_[5]*DEGREE_TO_RAD);
-        hermiteYvalues_[3] = amplitude_ * cos(endPosition_[5]*DEGREE_TO_RAD);
+        hermiteYvalues_[2] = amplitude_ * cos(startPosition_[5]*DEGREE_TO_RAD) + startPosition_[1];
+        hermiteYvalues_[3] = amplitude_ * cos(endPosition_[5]*DEGREE_TO_RAD) + startPosition_[1];
 
         while (time <= 1.0)
         {
@@ -160,7 +159,7 @@ namespace control
      */
     double SpeedTrajectoryGenerator::AngleYaw(Eigen::VectorXd &pose)
     {
-        double angle = atan2(endPosition_[1]-pose[1],endPosition_[0]-pose[0])*RAD_TO_DEGREE;
+        double angle = atan2(endPosition_[1]-pose[1],endPosition_[0]-pose[0]);
 
         if(angle <= -maxAngle_)
         {

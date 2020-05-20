@@ -55,7 +55,6 @@ namespace control
         double maxAngle_;
         double maxSpeed_;
         double kSpeed_;
-        double kAngle_;
 
         double HermiteX(double time);
         double HermiteY(double time);

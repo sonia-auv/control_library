@@ -10,7 +10,7 @@ namespace control
         isTrajectoryComputed_(false)
     {
         //pTrajectoryGenerator_ = std::make_shared<TrajectoryGenerator>(0.02);
-        pspeedTrajectoryGenerator_ = std::make_shared<SpeedTrajectoryGenerator>(0.2);
+        pspeedTrajectoryGenerator_ = std::make_shared<SpeedTrajectoryGenerator>(0.02);
     }
 
     /*void Trajectory::GenerateTrajectory(TrajectoryGeneratorType &trajectoryGeneratorType)
