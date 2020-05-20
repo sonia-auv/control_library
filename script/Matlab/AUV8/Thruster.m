@@ -11,11 +11,6 @@ classdef Thruster < matlab.mixin.Heterogeneous
            
         end
     end
-    
-    methods(Access=private)
-        % Get relation function between data.
-        getRelation(this, x, y);
-    end
         
     methods(Abstract, Access=public)
         % Function to convert pwm to thrust (Kg f).

@@ -11,7 +11,7 @@ TW= GetMinMax(W);
 % =========================================================================
 % Fonction
 %==========================================================================
-function f= GetRelation(x,y)
+function f = GetRelation(x,y)
 % trouve une équoition d'orde 6 pour un nuage de point donnée.
 % Arguments : x, Matrice des composante x.
 %             y, Matrice des composante y.
