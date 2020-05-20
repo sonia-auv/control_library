@@ -20,14 +20,14 @@ namespace control
         ~Trajectory() = default;
 
         void GenerateTrajectory(TrajectoryGeneratorType &trajectoryGeneratorType);
-        void SpeedGenerateTrajectory(TrajectoryGeneratorType &TrajectoryGeneratorType);
+        void SpeedGenerateTrajectory(TrajectoryGeneratorType &trajectoryGeneratorType);
         TrajectoryResult GetTrajectory();
         TrajectoryResult GetSpeedTrajectory();
         bool IsTrajectoryComputed() {return isTrajectoryComputed_;}
         void ResetTrajectory();
 
     private:
-        std::shared_ptr<TrajectoryGenerator> pTrajectoryGenerator_;
+        //std::shared_ptr<TrajectoryGenerator> pTrajectoryGenerator_;
         std::shared_ptr<SpeedTrajectoryGenerator> pspeedTrajectoryGenerator_;
         TrajectoryResultList                 trajectoryResultList_;
 

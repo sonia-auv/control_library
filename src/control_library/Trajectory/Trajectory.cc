@@ -9,11 +9,11 @@ namespace control
     Trajectory::Trajectory():
         isTrajectoryComputed_(false)
     {
-        pTrajectoryGenerator_ = std::make_shared<TrajectoryGenerator>(0.02);
-        pspeedTrajectoryGenerator_ = std::make_shared<SpeedTrajectoryGenerator>(0.02);
+        //pTrajectoryGenerator_ = std::make_shared<TrajectoryGenerator>(0.02);
+        pspeedTrajectoryGenerator_ = std::make_shared<SpeedTrajectoryGenerator>(0.2);
     }
 
-    void Trajectory::GenerateTrajectory(TrajectoryGeneratorType &trajectoryGeneratorType)
+    /*void Trajectory::GenerateTrajectory(TrajectoryGeneratorType &trajectoryGeneratorType)
     {
         ResetTrajectory();
 
@@ -24,7 +24,7 @@ namespace control
 
         isTrajectoryComputed_ = true;
         i_ = 0;
-    }
+    }*/
     /**
      * @brief 
      * 
@@ -42,7 +42,7 @@ namespace control
         i_ = 0;
     }
 
-    TrajectoryResult Trajectory::GetTrajectory()
+    /*TrajectoryResult Trajectory::GetTrajectory()
     {
         if (trajectoryResultList_.pose.size() > i_)
         {
@@ -62,7 +62,7 @@ namespace control
         i_++;
 
         return trajectoryResult_;
-    }
+    }*/
     /**
      * @brief 
      * 
@@ -87,7 +87,8 @@ namespace control
 
     void Trajectory::ResetTrajectory()
     {
-        pTrajectoryGenerator_->SetZero();
+        //pTrajectoryGenerator_->SetZero();
+        pspeedTrajectoryGenerator_->SetZero();
         trajectoryResultList_.pose.clear();
         trajectoryResultList_.twist.clear();
         trajectoryResultList_.accel.clear();

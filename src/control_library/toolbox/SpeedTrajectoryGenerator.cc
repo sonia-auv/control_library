@@ -32,10 +32,10 @@ namespace control
             timeStamp_(timeStamp)
     {
         SetZero();
-        amplitude_ = 2.0;
-        maxAngle_ = 25.0;
+        amplitude_ = 5.0;
+        maxAngle_ = 90;
         maxSpeed_ = 0.5;
-        kSpeed_ = 0.18;
+        kSpeed_ = 0.15;
         kAngle_ = 0.02;
     }
 
@@ -53,15 +53,15 @@ namespace control
 
         hermiteXvalues_[0] = startPosition_[0];
         hermiteXvalues_[1] = endPosition_[0];
-        hermiteXvalues_[2] = amplitude_ * sin(startPosition_[5]);
-        hermiteXvalues_[3] = amplitude_ * sin(endPosition_[5]);
+        hermiteXvalues_[2] = amplitude_ * sin(startPosition_[5]*DEGREE_TO_RAD);
+        hermiteXvalues_[3] = amplitude_ * sin(endPosition_[5]*DEGREE_TO_RAD);
         
         hermiteYvalues_[0] = startPosition_[1];
         hermiteYvalues_[1] = endPosition_[1];
-        hermiteYvalues_[2] = amplitude_ * cos(startPosition_[5]);
-        hermiteYvalues_[3] = amplitude_ * cos(endPosition_[5]);
+        hermiteYvalues_[2] = amplitude_ * cos(startPosition_[5]*DEGREE_TO_RAD);
+        hermiteYvalues_[3] = amplitude_ * cos(endPosition_[5]*DEGREE_TO_RAD);
 
-        while (time <= 1)
+        while (time <= 1.0)
         {
             poseTrajectory_.push_back(HermitePositionTrajectory(time));
             twistTrajectory_.push_back(HermiteSpeedTrajectory());
@@ -105,7 +105,7 @@ namespace control
         }
 
         twist[0] = speed;
-        twist[5] = kAngle_ * poseTemp[5];
+        twist[5] = poseTemp[5];
 
         return twist;
     }
@@ -160,7 +160,7 @@ namespace control
      */
     double SpeedTrajectoryGenerator::AngleYaw(Eigen::VectorXd &pose)
     {
-        double angle = atan2(endPosition_[1]-pose[1],endPosition_[0]-pose[0]);
+        double angle = atan2(endPosition_[1]-pose[1],endPosition_[0]-pose[0])*RAD_TO_DEGREE;
 
         if(angle <= -maxAngle_)
         {
