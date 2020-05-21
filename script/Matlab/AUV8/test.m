@@ -18,6 +18,7 @@ t2.force = -32;
 
 disp("----------------------------------");
 disp("Thruster 1");
+disp("----------------------------------");
 disp("Force: " + t1.force + " N");
 disp("Pwm: " + t1.pwm + " micro sec");
 disp("Power: " + t1.power + " W");
@@ -27,6 +28,7 @@ disp("Efficiency: " + t1.efficiency + " g/W");
 
 disp("----------------------------------");
 disp("Thruster 2");
+disp("----------------------------------");
 disp("Force: " + t2.force + " N");
 disp("Pwm: " + t2.pwm + " micro sec");
 disp("Power: " + t2.power + " W");
