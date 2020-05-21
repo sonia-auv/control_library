@@ -10,12 +10,24 @@ t1 = T200Thruster(N, A, W, P, R, E);
 t2 = T200Thruster(N, A, W, P, R, E);
 
 disp("Test T200Thruster class...");
+disp("----------------------------------");
 t1.force = 40;
-t2.force = 80;
-disp(t1.force);
-disp(t2.force);
-disp(t1.forceToPwm(40));
-disp(t1.forceToCurrent(40));
-disp(t1.forceToEfficiency(40));
-disp(t1.forceToRPM(40));
-disp(t1.forceToPower(40));
+t2.force = 12;
+
+disp("----------------------------------");
+disp("Thruster 1");
+disp("Force: " + t1.force + " N");
+disp("Pwm: " + t1.pwm + " micro sec");
+disp("Power: " + t1.power + " W");
+disp("Current:  " + t1.current + " A");
+disp("RPM: " + t1.rpm + " rpm");
+disp("Efficiency: " + t1.efficiency + " g/W");
+
+disp("----------------------------------");
+disp("Thruster 2");
+disp("Force: " + t2.force + " N");
+disp("Pwm: " + t2.pwm + " micro sec");
+disp("Power: " + t2.power + " W");
+disp("Current:  " + t2.current + " A");
+disp("RPM: " + t2.rpm + " rpm");
+disp("Efficiency: " + t2.efficiency + " g/W");

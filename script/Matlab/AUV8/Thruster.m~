@@ -17,12 +17,21 @@ classdef Thruster < matlab.mixin.Heterogeneous
         end
         
         function this = set.force(this, f)
+           disp("Setter");
            this.force = f; 
            this.pwm = this.forceToPwm(this.force);
-           this.current = this.forceToCurrent(this.force);
-           this.efficiency = this.forceToEfficiency(this.force);
-           this.rpm = this.forceToRPM(this.force);
-           this.power = this.forceToPower(this.force);
+           this.forceToCurrent(this.force);
+           this.forceToEfficiency(this.force);
+           this.forceToRPM(this.force);
+           this.forceToPower(this.force);
+        end
+        
+        function SetProp(this, pr)
+            
+        end
+        
+        function this = set.pwm(this, p)
+           this.pwm = p; 
         end
     end
         
