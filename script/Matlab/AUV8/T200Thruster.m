@@ -23,23 +23,23 @@ classdef T200Thruster < Thruster
     
     methods(Access=public)      
         function pwm = forceToPwm(this, force)
-            pwm = interpol1(this.newtons, this.pwms, force, "linear");
+            pwm = interp1(this.newtons, this.pwms, force, "linear");
         end
                 
         function current = forceToCurrent(this, force)
-            current = interpol1(this.newtons, this.amps, force, "linear");
+            current = interp1(this.newtons, this.amps, force, "linear");
         end
                 
         function eff = forceToEfficiency(this, force)
-            eff = interpol1(this.newtons, this.efficiencies, force, "linear");
+            eff = interp1(this.newtons, this.efficiencies, force, "linear");
         end
         
         function rpm = forceToRPM(this, force)
-            rpm = interpol1(this.newtons, this.rpms, force, "linear");
+            rpm = interp1(this.newtons, this.rpms, force, "linear");
         end
              
         function power = forceToPower(this, force)
-            power = interpol1(this.newtons, this.watts, force, "linear");
+            power = interp1(this.newtons, this.watts, force, "linear");
         end
     end
 end
