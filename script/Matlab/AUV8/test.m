@@ -1,3 +1,5 @@
+clc;
+clear;
 load('T200-Spec-16V.mat');
 N=T200Spec16V{:,6};
 A=T200Spec16V{:,3};
@@ -12,7 +14,7 @@ t2 = T200Thruster(N, A, W, P, R, E);
 disp("Test T200Thruster class...");
 disp("----------------------------------");
 t1.force = 40;
-t2.force = 12;
+t2.force = -32;
 
 disp("----------------------------------");
 disp("Thruster 1");
