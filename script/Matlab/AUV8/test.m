@@ -11,6 +11,7 @@ R=T200Spec16V{:,2};
 t1 = T200Thruster(N, A, W, P, R, E);
 t2 = T200Thruster(N, A, W, P, R, E);
 
+disp("----------------------------------");
 disp("Test T200Thruster class...");
 disp("----------------------------------");
 t1.force = 40;
@@ -35,3 +36,16 @@ disp("Power: " + t2.power + " W");
 disp("Current:  " + t2.current + " A");
 disp("RPM: " + t2.rpm + " rpm");
 disp("Efficiency: " + t2.efficiency + " g/W");
+
+disp("----------------------------------");
+disp("Test Config class...");
+disp("----------------------------------");
+disp("----------------------------------");
+
+config = Config('config_AUV8.json');
+disp(config.z);
+disp(config.dz);
+disp(config.d14);
+disp(config.a14);
+disp(config.d58);
+disp(config.psl);
