@@ -23,7 +23,7 @@ classdef T200Thruster < Thruster
     
     methods(Access=public)      
         function pwm = forceToPwm(this, force)
-            pwm = interp1(this.newtons, this.pwms, force, "linear");
+            pwm = round(interp1(this.newtons, this.pwms, force, "linear"));
         end
                 
         function current = forceToCurrent(this, force)
