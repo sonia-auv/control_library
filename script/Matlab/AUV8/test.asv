@@ -10,14 +10,9 @@ disp("----------------------------------");
 
 
 disp("----------------------------------");
-disp("limitation de la  force des moteurs (%)");
+disp("limitation force des moteurs");
 disp("----------------------------------");
 disp(M.fl);
-
-disp("----------------------------------");
-disp("Matrice des coefficients des thruster");
-disp("----------------------------------");
-disp(M.L);
 
 disp("----------------------------------");
 disp("Matrice de défault thruster");
@@ -49,9 +44,9 @@ disp(M.MLDR);
 % disp("----------------------------------");
 % disp("----------------------------------");
 
-% disp(config.z);
-% disp(config.dz);
-% disp(config.d14);
-% disp(config.a14);
-% disp(config.d58);
-% disp(config.psl);
+disp(config.z);
+disp(config.dz);
+disp(config.d14);
+disp(config.a14);
+disp(config.d58);
+disp(config.psl);
