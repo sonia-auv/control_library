@@ -1,4 +1,16 @@
-t = T200Thruster(EQNW);
+load('T200-Spec-16V.mat');
+N=T200Spec16V{:,6};
+A=T200Spec16V{:,3};
+W=T200Spec16V{:,7};
+P=T200Spec16V{:,1};
+E=T200Spec16V{:,8};
+R=T200Spec16V{:,2};
+
+t1 = T200Thruster(N, A, W, P, E, R);
+t2 = T200Thruster(N, A, W, P, E, R);
 
 disp("Test T200Thruster class...");
-disp("40 N to power -> " + t.forceToPower(40) + " W");
+t1.force = 40;
+t2.force = 80;
+disp(t1.force);
+disp(t2.force);

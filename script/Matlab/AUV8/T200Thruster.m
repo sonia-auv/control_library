@@ -2,47 +2,44 @@ classdef T200Thruster < Thruster
     % T200THRUSTER class.
     
     properties
-        eqNewtonsWatts;
-        eqPwmNewtons;
-        eqPwmCurrent;
-        eqPwmEfficiency;
-        eqPwmRpm;
+        newtons;
+        amps;
+        watts;
+        pwms;
+        rpms;
+        efficiencies;
     end
     
     methods
-        function this = T200Thruster(eqNewtonsWatts)
-            this.eqNewtonsWatts = eqNewtonsWatts;
-            %this.eqPwmNewtons = ;
-            %this.eqPwmCurrent = ;
-            %this.eqPwmEfficiency = ;
-            %this.eqPwmRpm = ;
+        function this = T200Thruster(n, a, w, p, r, e)
+            this.newtons = n;
+            this.amps = a;
+            this.watts = w;
+            this.pwms = p;
+            this.rpms = r;
+            this.efficiencies = e;
         end
     end
     
-    methods(Access=public)
-        % Function to convert pwm (micro s) to force (N).
-        function force = pwmToForce(this, pwm)
-            force = this.eqPwmNewtons(pwm);
+    methods(Access=public)      
+        function pwm = forceToPwm(this, force)
+            pwm = interpol1(this.newtons, this.pwms, force, "linear");
+        end
+                
+        function current = forceToCurrent(this, force)
+            current = interpol1(this.newtons, this.amps, force, "linear");
+        end
+                
+        function eff = forceToEfficiency(this, force)
+            eff = interpol1(this.newtons, this.efficiencies, force, "linear");
         end
         
-        % Function to convert pwm (micro s) to current (A).
-        function current = pwmToCurrent(this, pwm)
-            current = this.eqPwmCurrent(pwm);
+        function rpm = forceToRPM(this, force)
+            rpm = interpol1(this.newtons, this.rpms, force, "linear");
         end
-        
-        % Function to convert pwm (micro s) to efficiency (g/W).
-        function efficiency = pwmToEfficiency(this, pwm)
-            efficiency = this.eqPwmEfficiency(pwm);
-        end
-        
-        % Function to convert pwm (micro s) to rpm.
-        function rpm = pwmToRPM(this, pwm)
-            rpm = this.eqPwmRpm(pwm);
-        end
-        
-        % Function to convert thrust (Kg f) to power (W).
+             
         function power = forceToPower(this, force)
-            power = this.eqNewtonsWatts(force);
+            power = interpol1(this.newtons, this.watts, force, "linear");
         end
     end
 end

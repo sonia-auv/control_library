@@ -14,22 +14,21 @@ classdef Thruster < matlab.mixin.Heterogeneous
         function obj = Thruster()
            
         end
+        
+        function this = set.force(this, f)
+           this.force = f; 
+        end
     end
         
     methods(Abstract, Access=public)
-        % Function to convert pwm to thrust (Kg f).
-        pwmToForce(this, pwm);
+        forceToPwm(this, pwm);
                
-        % Function to convert pwm (micro s) to current (A).
-        pwmToCurrent(this, pwm);
+        forceToCurrent(this, pwm);
         
-        % Function to convert pwm (micro s) to efficiency (g/W).
-        pwmToEfficiency(this, pwm);
+        forceToEfficiency(this, pwm);
         
-        % Function to convert pwm (micro s) to rpm.
-        pwmToRPM(this, pwm);
+        forceToRPM(this, pwm);
         
-        % Function to convert thrust (Kg f) to power (W).
         forceToPower(this, thrust);
     end
 end
