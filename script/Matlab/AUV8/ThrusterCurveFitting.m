@@ -8,9 +8,27 @@ N=T200Spec16V{:,6};% Force en Newton
 W=T200Spec16V{:,7};% puissance watt
 E=T200Spec16V{:,3};% efficiency
 
-plot([N,PWM]);
+%plot([N,PWM]);
 
-T=interp1(N,PWM,25,'linear');
+limit=.5;
+PN=T200Spec16V{108:end,6};
+NN=T200Spec16V{1:94,6};
+PW=T200Spec16V{108:end,7};
+NW=T200Spec16V{1:94,7};
+MW= GetMinMax(W);
+MN=GetMinMax(N);
+T=GetRelation(PW,PN);
+LIM1=T(MW(1)*limit);
+ML=LIM1/MN(1);
+T2=GetRelation(NW,NN);
+LIM2=T2(MW(2)*limit);
+ML2=LIM2/MN(2);
+
+%plot([PW,PN]);
+
+
+T=interp1(N,RPM,40,'linear');
+disp(T);
 tf=GetMinMax(N);
 
 % =========================================================================

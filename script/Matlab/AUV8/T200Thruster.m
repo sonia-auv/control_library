@@ -8,22 +8,24 @@ classdef T200Thruster < Thruster
         pwms;
         rpms;
         efficiencies;
+        id;
     end
     
     methods
-        function this = T200Thruster(n, a, w, p, r, e)
-            this.newtons = n;
-            this.amps = a;
-            this.watts = w;
-            this.pwms = p;
-            this.rpms = r;
-            this.efficiencies = e;
+        function this = T200Thruster(T,id)
+            this.newtons = T{:,6};
+            this.amps = T{:,3};
+            this.watts = T{:,7};
+            this.pwms = T{:,1};
+            this.rpms = T{:,2};
+            this.efficiencies = T{:,8};
+            this.id=id;
         end
     end
     
     methods(Access=public)      
         function pwm = forceToPwm(this, force)
-            pwm = interp1(this.newtons, this.pwms, force, "linear");
+            pwm = round(interp1(this.newtons, this.pwms, force, "linear"));
         end
                 
         function current = forceToCurrent(this, force)
