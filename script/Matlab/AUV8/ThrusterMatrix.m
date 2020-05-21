@@ -22,10 +22,20 @@ d58 =[0.1815,0.159,0.082];
 
 %power supply limitation
 psl =.50; 
-run('ThrusterCurveFitting.m');
+
+
+
 L=GetMappingMatrix(d14,a14,d58,z,dz);
-disp(L);
-disp(GetMinMaxForceLimit(EQNW,TW,psl));
+D=[1,1,1,1,1,1,1,1];
+def= diag(D);
+%disp(def);
+
+run('ThrusterCurveFitting.m');
+
+
+%disp(L);
+disp(L*def);
+%disp(GetMinMaxForceLimit(EQNW,TW,psl));
 disp(GetMaxLoadAllAxis(L,tf));
 
 %U = [t1,t2,t3,t4,t5,t6,t7,t8];
