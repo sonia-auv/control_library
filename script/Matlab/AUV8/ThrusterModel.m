@@ -29,8 +29,7 @@ classdef ThrusterModel
            this.T = this.GetThrusterMatrix();
            this.FT = this.GetMinMax(this.TSPEC{:,6});
            this.fl =this.EleMecRatio();
-           this.D= diag([this.fl,this.fl,this.fl,this.fl,...
-                         this.fl,this.fl,this.fl,this.fl]);
+           this.D= diag(repmat(this.fl,1,this.C.nbt));
                      
            this.MLDT = this.GetMaxLoadAllAxis(this.L);
            this.MLDR = this.GetMaxLoadAllAxis(this.L*this.D);
@@ -40,7 +39,7 @@ classdef ThrusterModel
         function T = GetThrusterMatrix(this)
          % Crée le vecteur de class thruster.
          % Arguments : NA.
-         T=T200Thruster.empty(8,0);
+         T=T200Thruster.empty(this.C.nbt,0);
           for i=1:8
                 T(i)=T200Thruster(this.TSPEC,i);
            end
@@ -165,6 +164,42 @@ classdef ThrusterModel
         f=fit(x,y,'poly5',opt);
         end
 %==========================================================================
+    function OT = optimiseThrusterOutput(this,command)
+    % optimise la sortie des thrusters pour limiter la force total
+    % Arguments : input,vecteur résultant
+  
+    ub=repmat(this.FT(1),1,this.C.nbt);
+    lb=repmat(this.FT(2),1,this.C.nbt);
+    f=ones(1,this.C.nbt);
+    OT= linprog(f,[],[],this.L,command,lb,ub);
+    
+    end
+    
+%==========================================================================   
+    function OT = NLoptimiseThrusterOutput(this,command)
+    % optimise la sortie des thrusters pour limiter la cosomation élé
+    % Arguments : input,vecteur résultant
+        
+        f = @(x) this.NonLinearObjFunc(x);
+        ub=repmat(this.FT(1),1,this.C.nbt);
+        lb=repmat(this.FT(2),1,this.C.nbt);
+        s=repmat(30,1,this.C.nbt);
+        OT=fmincon(f,s,[],[],this.L,command,lb,ub);
+        
+    end
+%==========================================================================
+    function f= NonLinearObjFunc(this,x)
+    % fonction objective pour la minimisation non linéaire. 
+    % retourne la Consomation élé total selon la force des 8 thrusters
+    % Arguments : x, vecteur force des 8 thrusters
+        n=0;
+        for i=1:this.C.nbt
+        n=n+interp1(this.TSPEC{:,6}, this.TSPEC{:,7}, x(i), "linear");
+        end
+        f=n;
+    end
+%==========================================================================
+    
     end
 end
 

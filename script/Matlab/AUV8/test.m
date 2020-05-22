@@ -4,6 +4,7 @@ clear;
 config = Config('config_AUV8.json');
 M= ThrusterModel(config);
 
+
 disp("----------------------------------");
 disp("Test TrusterModel class...");
 disp("----------------------------------");
@@ -32,7 +33,36 @@ disp(M.MLDT);
 disp("----------------------------------");
 disp("Force maximum réel des 6 DLL");
 disp("----------------------------------");
+
 disp(M.MLDR);
+command=[30,5,80,0,0,0];
+% LT=M.optimiseThrusterOutput(command);
+NLT=M.NLoptimiseThrusterOutput(command);
+
+% disp("----------------------------------");
+% disp("Simplex");
+% disp("----------------------------------");
+% disp("Solution");
+% disp(LT);
+% disp("----------------------------------");
+% disp("vecteur résultant");
+% disp(M.L*LT);
+% disp("----------------------------------");
+% disp("W total");
+% disp(M.NonLinearObjFunc(LT));
+
+
+disp("----------------------------------");
+disp("Fmincon");
+disp("----------------------------------");
+disp("Solution");
+disp(NLT.');
+disp("----------------------------------");
+disp("vecteur résultant");
+disp(M.L*NLT.');
+disp("----------------------------------");
+disp("W total");
+disp(M.NonLinearObjFunc(NLT));
 % 
 % disp("----------------------------------");
 % disp("Thruster 2");
@@ -43,7 +73,9 @@ disp(M.MLDR);
 % disp("Current:  " + t2.current + " A");
 % disp("RPM: " + t2.rpm + " rpm");
 % disp("Efficiency: " + t2.efficiency + " g/W");
-% 
+
+
+
 % disp("----------------------------------");
 % disp("Test Config class...");
 % disp("----------------------------------");

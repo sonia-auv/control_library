@@ -21,6 +21,6 @@
         "z" : 0.082
     },
 
-    "ps_limitation" : 0.5,
-    "nb_thrusters" : 8
+    "ps_limitation" : 0.5
+    
 }
