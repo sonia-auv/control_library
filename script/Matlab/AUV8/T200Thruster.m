@@ -8,7 +8,6 @@ classdef T200Thruster < Thruster
         pwms;
         rpms;
         efficiencies;
-        id;
     end
     
     methods

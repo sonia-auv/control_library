@@ -2,6 +2,7 @@ classdef Thruster < matlab.mixin.Heterogeneous
     % THRUSTER class.
     
     properties
+        id;
         force;
         power;
         current;
@@ -27,14 +28,14 @@ classdef Thruster < matlab.mixin.Heterogeneous
     end
         
     methods(Abstract, Access=public)
-        forceToPwm(this, pwm);
+        forceToPwm(this, force);
                
-        forceToCurrent(this, pwm);
+        forceToCurrent(this, force);
         
-        forceToEfficiency(this, pwm);
+        forceToEfficiency(this, force);
         
-        forceToRPM(this, pwm);
+        forceToRPM(this, force);
         
-        forceToPower(this, thrust);
+        forceToPower(this, force);
     end
 end

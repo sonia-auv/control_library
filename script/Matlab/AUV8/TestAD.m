@@ -9,11 +9,13 @@ t2.force = 30;
 disp("----------------------------------");
 disp("Thruster 2");
 disp("----------------------------------");
+disp("Id: " + t2.id);
 disp("Force: " + t2.force + " N");
 disp("Pwm: " + t2.pwm + " micro sec");
 disp("Power: " + t2.power + " W");
 disp("Current:  " + t2.current + " A");disp("RPM: " + t2.rpm + " rpm");
 disp("Efficiency: " + t2.efficiency + " g/W");
+
 
 
 
