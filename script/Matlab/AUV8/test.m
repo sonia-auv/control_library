@@ -63,27 +63,3 @@ disp(M.L*NLT.');
 disp("----------------------------------");
 disp("W total");
 disp(M.NonLinearObjFunc(NLT));
-% 
-% disp("----------------------------------");
-% disp("Thruster 2");
-% disp("----------------------------------");
-% disp("Force: " + t2.force + " N");
-% disp("Pwm: " + t2.pwm + " micro sec");
-% disp("Power: " + t2.power + " W");
-% disp("Current:  " + t2.current + " A");
-% disp("RPM: " + t2.rpm + " rpm");
-% disp("Efficiency: " + t2.efficiency + " g/W");
-
-
-
-% disp("----------------------------------");
-% disp("Test Config class...");
-% disp("----------------------------------");
-% disp("----------------------------------");
-
-% disp(config.z);
-% disp(config.dz);
-% disp(config.d14);
-% disp(config.a14);
-% disp(config.d58);
-% disp(config.psl);
