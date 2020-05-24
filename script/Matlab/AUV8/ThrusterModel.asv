@@ -15,6 +15,9 @@ classdef ThrusterModel
         MLDR; % Max load all DOF réel
         C; % Fichier config
         fl; %Limitation mecanique du truster en %.
+        OPT; % optimisation thruster
+        CT; % Commande Truster
+     
     end
 %==========================================================================
 %Methodes
@@ -29,10 +32,13 @@ classdef ThrusterModel
            this.T = this.GetThrusterMatrix();
            this.FT = this.GetMinMax(this.TSPEC{:,6});
            this.fl =this.EleMecRatio();
-           this.D= diag(repmat(this.fl,1,this.C.nbt));
-                     
+           this.D= repmat(this.fl,1,this.C.nbt);
+           
+           this.OPT= TrusterOptimisation(this.L,this.FT,this.D,...
+                               this.TSPEC{:,6},this.TSPEC{:,7},this.C.nbt);
+                           
            this.MLDT = this.GetMaxLoadAllAxis(this.L);
-           this.MLDR = this.GetMaxLoadAllAxis(this.L*this.D);
+           this.MLDR = this.GetMaxLoadAllAxis(this.L*diag(this.D));
            
         end
 %==========================================================================
@@ -167,7 +173,7 @@ classdef ThrusterModel
     function OT = optimiseThrusterOutput(this,command)
     % optimise la sortie des thrusters pour limiter la force total
     % Arguments : input,vecteur résultant
-  
+    n = @(x) this.NonLinearObjFunc(x);
     ub=repmat(this.FT(1),1,this.C.nbt);
     lb=repmat(this.FT(2),1,this.C.nbt);
     f=ones(1,this.C.nbt);
@@ -180,26 +186,21 @@ classdef ThrusterModel
     % optimise la sortie des thrusters pour limiter la cosomation élé
     % Arguments : input,vecteur résultant
         
-        f = @(x) this.NonLinearObjFunc(x);
-        ub=repmat(this.FT(1),1,this.C.nbt);
-        lb=repmat(this.FT(2),1,this.C.nbt);
-        s=repmat(30,1,this.C.nbt);
-        OT=fmincon(f,s,[],[],this.L,command,lb,ub);
-        
+    this.CT=this.OPT.NLoptimiseThrusterOutput(command);
+   
     end
 %==========================================================================
     function f= NonLinearObjFunc(this,x)
     % fonction objective pour la minimisation non linéaire. 
     % retourne la Consomation élé total selon la force des 8 thrusters
     % Arguments : x, vecteur force des 8 thrusters
-        n=1;
+        n=0;
         for i=1:this.C.nbt
-        n=n+interp1(this.TSPEC{:,6}, this.TSPEC{:,7}, x(i), "linear");
+        n=n+interp1(this.NN, this.WW, x(i), "nearest");
         end
         f=n;
     end
-%==========================================================================
-    
+
     end
 end
 

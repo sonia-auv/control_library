@@ -35,21 +35,25 @@ disp("Force maximum réel des 6 DLL");
 disp("----------------------------------");
 
 disp(M.MLDR);
-command=[30,5,80,0,0,0];
-% LT=M.optimiseThrusterOutput(command);
-NLT=M.NLoptimiseThrusterOutput(command);
+command=[-10,30,80,0,0,0];
+tic;
+ LT=M.GetThrusterOutput(command);
+ toc;
+tic;
+NLT=M.GetNlThrusterOutput(command);
+toc;
 
-% disp("----------------------------------");
-% disp("Simplex");
-% disp("----------------------------------");
-% disp("Solution");
-% disp(LT);
-% disp("----------------------------------");
-% disp("vecteur résultant");
-% disp(M.L*LT);
-% disp("----------------------------------");
-% disp("W total");
-% disp(M.NonLinearObjFunc(LT));
+disp("----------------------------------");
+disp("Simplex");
+disp("----------------------------------");
+disp("Solution");
+disp(LT);
+disp("----------------------------------");
+disp("vecteur résultant");
+disp(M.L*LT);
+disp("----------------------------------");
+disp("W total");
+disp(M.OPT.RealNonLinearObjFunc(LT));
 
 
 disp("----------------------------------");
@@ -62,7 +66,9 @@ disp("vecteur résultant");
 disp(M.L*NLT.');
 disp("----------------------------------");
 disp("W total");
-disp(M.NonLinearObjFunc(NLT));
+disp(M.OPT.RealNonLinearObjFunc(NLT));
+
+%disp(M.NonLinearObjFunc([0,21.02134,0,21.02134,0,-11.738,-14.5171,-10.77]));
 % 
 % disp("----------------------------------");
 % disp("Thruster 2");

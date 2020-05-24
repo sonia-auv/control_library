@@ -1,0 +1,98 @@
+classdef TrusterOptimisation
+    %TRUSTEROPTIMISATION Summary of this class goes here
+    %   Detailed explanation goes here
+    
+    properties
+        ub; % Upper bound
+        lb; % Lower bound
+        FT; % truster force
+        L;  % Maping Matrix
+        D;  % Damping matrix
+        f;  % Objective function
+        N;  % Newton array
+        W;  % Watt array
+        SN; % simplify Newton array
+        SW; % simplify Watt array
+        nbt;
+
+    end
+%==========================================================================
+%Methodes
+%==========================================================================   
+    methods
+        
+%==========================================================================
+        function this = TrusterOptimisation(L,FT,D,N,W,nbt)
+        % Constructeur
+            this.L=L;
+            this.FT=FT;
+            this.N=N;
+            this.W=W;
+            this.nbt=nbt;
+            this = this.SetUpBound(D);
+            this = this.ReduceArray();
+            this.f = @(x) this.OptNonLinearObjFunc(x);
+            
+        end
+%==========================================================================
+    function this = SetUpBound(this,D)
+    % calcule la plage de force de chaque T selon la matrice D
+    % Arguments : D, La matrice de défaut
+       this.ub= D*this.FT(1);
+       this.lb= D*this.FT(2); 
+       this.D=D;
+    end
+    
+%==========================================================================
+    function this= ReduceArray(this)
+    % réduit les tableau N et W pour réduire le temps de l'optimisation. 
+   this.SN=this.N(2:2:end,:);
+   this.SW=this.W(2:2:end,:);
+
+    end
+%==========================================================================
+         function OT = optimiseThrusterOutput(this,command)
+    % optimise la sortie des thrusters pour limiter la force total
+    % Arguments : input,vecteur résultant
+    lf=ones(1,this.nbt);
+    OT= linprog(lf,[],[],this.L,command,this.lb,this.ub);
+    
+    end
+    
+%==========================================================================   
+    function OT = NLoptimiseThrusterOutput(this,command)
+    % optimise la sortie des thrusters pour limiter la cosomation élé
+    % Arguments : input,vecteur résultant
+        
+     s=repmat(0,1,this.nbt);
+     op=optimoptions('fmincon','Algorithm','sqp','ConstraintTolerance',.2);
+     OT=fmincon(this.f,s,[],[],this.L,command,this.lb,this.ub,[],op);
+   
+    end
+%==========================================================================
+    function f= OptNonLinearObjFunc(this,x)
+    % fonction objective optimisé pour la minimisation non linéaire. 
+    % retourne la Consomation élé total selon la force des 8 thrusters
+    % Arguments : x, vecteur force des 8 thrusters
+        n=0;
+        for i=1:this.nbt
+            n=n+interp1(this.SN, this.SW, x(i), "nearest");
+        end
+        f=n;
+    end
+%==========================================================================
+function f= RealNonLinearObjFunc(this,x)
+    % fonction objective réel pour la minimisation non linéaire. 
+    % retourne la Consomation élé total selon la force des 8 thrusters
+    % Arguments : x, vecteur force des 8 thrusters
+        n=0;
+        for i=1:this.nbt
+        n=n+interp1(this.SN, this.SW, x(i), "spline");
+        end
+        f=n;
+    end
+%==========================================================================
+       
+  end
+end
+
