@@ -1,6 +1,8 @@
 classdef T200Thruster < Thruster
-    % T200THRUSTER class.
-    
+    % T200THRUSTER class
+%==========================================================================
+%Proprietes
+%==========================================================================
     properties
         newtons;
         amps;
@@ -9,9 +11,12 @@ classdef T200Thruster < Thruster
         rpms;
         efficiencies;
     end
-    
+%==========================================================================
+%Methodes
+%==========================================================================    
     methods
         function this = T200Thruster(T,id)
+            % Constructor
             this.newtons = T{:,6};
             this.amps = T{:,3};
             this.watts = T{:,7};
@@ -21,7 +26,9 @@ classdef T200Thruster < Thruster
             this.id=id;
         end
     end
-    
+%==========================================================================
+%Methodes publiques
+%==========================================================================
     methods(Access=public)      
         function pwm = forceToPwm(this, force)
             pwm = round(interp1(this.newtons, this.pwms, force, "nearest"));
