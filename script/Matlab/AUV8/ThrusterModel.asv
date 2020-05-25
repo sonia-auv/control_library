@@ -102,9 +102,9 @@ classdef ThrusterModel < handle
       
          for i=1:rows(1)
             V = L(i,:);
-            vml(i,:)= this.GetMaxLoadOneAxis(V);
+            vml(i;:)= [vml;this.GetMaxLoadOneAxis(V)];
          end
-         lax=vml;
+         lax=vml.';
 
         end
 
@@ -119,7 +119,7 @@ classdef ThrusterModel < handle
             pf=pf+this.GetThrusterMaxLoad(V(i),1);
             nf=nf+this.GetThrusterMaxLoad(V(i),-1);  
          end
-         lxx=[pf,-nf];
+         lxx=[pf,nf];
         end
 
 %==========================================================================
@@ -128,10 +128,10 @@ classdef ThrusterModel < handle
         % Arguments : c, la composante du thruster, 
         %             tf, matrice de force thruster horraire, antihorraire.
         %             sens, le sens de laxe exemple x+ ou x-
-            if (c>0 && sens>0) || (c<0 && sens<0)
-               mt = abs(c*this.FT(1));
+            if c>0 && sens>0
+               mt = c*this.FT(1);
             else
-               mt = abs(c*this.FT(2));
+               mt = c*this.FT(2);
             end
         end
 %==========================================================================

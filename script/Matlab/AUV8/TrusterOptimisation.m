@@ -1,4 +1,4 @@
-classdef TrusterOptimisation
+classdef TrusterOptimisation < handle
     %TRUSTEROPTIMISATION Summary of this class goes here
     %   Detailed explanation goes here
     
@@ -20,8 +20,7 @@ classdef TrusterOptimisation
 %Methodes
 %==========================================================================   
     methods
-        
-%==========================================================================
+
         function this = TrusterOptimisation(L,FT,D,N,W,nbt)
         % Constructeur
             this.L=L;
@@ -29,13 +28,13 @@ classdef TrusterOptimisation
             this.N=N;
             this.W=W;
             this.nbt=nbt;
-            this = this.SetUpBound(D);
-            this = this.ReduceArray();
+            this.SetUpBound(D);
+            this.ReduceArray();
             this.f = @(x) this.OptNonLinearObjFunc(x);
             
         end
 %==========================================================================
-    function this = SetUpBound(this,D)
+    function SetUpBound(this,D)
     % calcule la plage de force de chaque T selon la matrice D
     % Arguments : D, La matrice de défaut
        this.ub= D*this.FT(1);
@@ -44,7 +43,7 @@ classdef TrusterOptimisation
     end
     
 %==========================================================================
-    function this= ReduceArray(this)
+    function ReduceArray(this)
     % réduit les tableau N et W pour réduire le temps de l'optimisation. 
    this.SN=this.N(2:2:end,:);
    this.SW=this.W(2:2:end,:);
@@ -63,8 +62,8 @@ classdef TrusterOptimisation
     function OT = NLoptimiseThrusterOutput(this,command)
     % optimise la sortie des thrusters pour limiter la cosomation élé
     % Arguments : input,vecteur résultant
-        
-     s=repmat(0,1,this.nbt);
+     s=this.ComputeFeasibleSolution(command);   
+     %s=repmat(0,1,this.nbt);
      op=optimoptions('fmincon','Algorithm','sqp','ConstraintTolerance',.2);
      OT=fmincon(this.f,s,[],[],this.L,command,this.lb,this.ub,[],op);
    
@@ -76,23 +75,32 @@ classdef TrusterOptimisation
     % Arguments : x, vecteur force des 8 thrusters
         n=0;
         for i=1:this.nbt
-            n=n+interp1(this.SN, this.SW, x(i), "nearest");
+            n=n+interp1(this.SN, this.SW, x(i), "next");
         end
         f=n;
     end
 %==========================================================================
-function f= RealNonLinearObjFunc(this,x)
+    function f= RealNonLinearObjFunc(this,x)
     % fonction objective réel pour la minimisation non linéaire. 
     % retourne la Consomation élé total selon la force des 8 thrusters
     % Arguments : x, vecteur force des 8 thrusters
         n=0;
         for i=1:this.nbt
-        n=n+interp1(this.SN, this.SW, x(i), "spline");
+        n=n+interp1(this.N, this.W, x(i), "spline");
         end
         f=n;
     end
 %==========================================================================
-       
-  end
+    function s=ComputeFeasibleSolution(this,command)
+    % Calcule un solution fesable non optimal pour donnée les point de 
+    % départ au solveur. ceci réduit le temps d'optimisation
+    % Arguments: command, le vecteur résultant.
+        c1=[1,0,-1,0,0,0,0,0];
+        c2=[0,0,0,0,0,1,0,1];
+        RM= [this.L;c1;c2];
+        FC= [command,0,0].';
+        s=RM\FC;     
+    end
+    end
 end
 

@@ -35,7 +35,7 @@ disp("Force maximum réel des 6 DLL");
 disp("----------------------------------");
 
 disp(M.MLDR);
-command=[-10,30,40,2,5,0];
+command=[-10,30,40,0,2,0];
 tic;
  LT=M.GetThrusterOutput(command);
  toc;
@@ -63,7 +63,7 @@ disp("Solution");
 disp(NLT.');
 disp("----------------------------------");
 disp("vecteur résultant");
-disp(M.L*NLT);
+disp(M.L*NLT.');
 disp("----------------------------------");
 disp("W total");
 disp(M.OPT.RealNonLinearObjFunc(NLT));
