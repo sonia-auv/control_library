@@ -1,6 +1,7 @@
 clc;
 clear;
 
+
 config = Config('config_AUV8.json');
 M= ThrusterModel(config);
 
@@ -13,7 +14,7 @@ disp("----------------------------------");
 disp("----------------------------------");
 disp("limitation de la  force des moteurs (%)");
 disp("----------------------------------");
-disp(M.fl);
+disp(M.fl());
 
 disp("----------------------------------");
 disp("Matrice des coefficients des thruster");
@@ -35,13 +36,15 @@ disp("Force maximum réel des 6 DLL");
 disp("----------------------------------");
 
 disp(M.MLDR);
-command=[-10,30,40,2,5,0];
+M.UpdateDampingMatrix([-1,-1,-1,-1,-1,0,-1,-1]);
+disp(M.D);
+command=[94,20,50,0,0,0];
 tic;
  LT=M.GetThrusterOutput(command);
  toc;
-tic;
+
 NLT=M.GetNlThrusterOutput(command);
-toc;
+
 
 disp("----------------------------------");
 disp("Simplex");
@@ -50,10 +53,10 @@ disp("Solution");
 disp(LT);
 disp("----------------------------------");
 disp("vecteur résultant");
-disp(M.L*LT);
+%disp(M.L*LT);
 disp("----------------------------------");
 disp("W total");
-disp(M.OPT.RealNonLinearObjFunc(LT));
+%disp(M.OPT.RealNonLinearObjFunc(LT));
 
 
 disp("----------------------------------");

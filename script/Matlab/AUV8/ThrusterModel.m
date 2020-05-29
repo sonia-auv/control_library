@@ -4,8 +4,8 @@ classdef ThrusterModel < handle
 %==========================================================================
 %Propriétés.
 %==========================================================================
-   
-    properties
+ properties (Access= public)
+     
         L; %Mapping Matrix
         D; %Fault Matrix
         TSPEC; %T200 Spec table
@@ -18,11 +18,51 @@ classdef ThrusterModel < handle
         OPT; % optimisation thruster
         CT; % Commande Truster
      
-    end
+ end
 %==========================================================================
-%Methodes
+%Accesseur/mutateur
 %==========================================================================
-    methods
+methods 
+        function value =get.L(this)
+               value = this.L; 
+        end
+
+        function value =get.D(this)
+               value = this.D; 
+        end
+
+        function value =get.fl(this)
+               value = this.fl; 
+        end
+
+        function value =get.MLDT(this)
+               value = this.MLDT; 
+        end
+
+        function value =get.MLDR(this)
+               value = this.MLDR; 
+        end
+        
+        function set.D(this,input)
+         [l,c] = size(input);  
+             if l==1 && c== this.C.nbt %vérifier la dimention de la matrice
+                 for i=1:this.C.nbt
+                    if input(i)>=0
+                        if input(i)>this.fl
+                            this.D(i)= this.fl;
+                        else
+                            this.D(i)= input(i);
+                        end
+                    end
+                 end
+            end
+        end
+        
+end
+%==========================================================================
+%Methodes publique 
+%==========================================================================
+    methods (Access= public)
         function this = ThrusterModel(Config)
             %THRUSTERMODEL Construct an instance of this class
             %   Detailed explanation goes here
@@ -41,16 +81,49 @@ classdef ThrusterModel < handle
            this.MLDR = this.GetMaxLoadAllAxis(this.L*diag(this.D));
            
         end
+
+        function UpdateDampingMatrix(this, input)
+             % Update la matrice defaut et recalcule les force max.
+             % Arguments : changerment matrice defaut
+            this.D = input;
+            this.MLDR = this.GetMaxLoadAllAxis(this.L*diag(this.D));
+            this.OPT.SetUpBound(this.D);
+        end
+        
+        function OT = GetThrusterOutput(this,command)
+        % optimise la sortie des thrusters pour limiter la force total
+        % Arguments : input,vecteur résultant
+        OT=this.OPT.optimiseThrusterOutput(command);
+    
+    end  
+ 
+        function OT = GetNlThrusterOutput(this,command)
+        % optimise la sortie des thrusters pour limiter la cosomation élé
+        % Arguments : input,vecteur résultant    
+        OT=this.OPT.NLoptimiseThrusterOutput(command);
+        tic;
+        for i=1:this.C.nbt
+            this.T(i).force=OT(i);
+        end
+        toc;
+  
+    end
+
+    end
 %==========================================================================
+%Methodes privées
+%==========================================================================
+ methods(Access= private)
+
         function GetThrusterMatrix(this)
          % Crée le vecteur de class thruster.
          % Arguments : NA.
          this.T=T200Thruster.empty(this.C.nbt,0);
-          for i=1:8
+          for i=1:this.C.nbt
                 this.T(i)=T200Thruster(this.TSPEC,i);
            end
-        end
-%==========================================================================        
+        end 
+        
         function GetMappingMatrix(this)
             % Calcule la matrice de componsates des thruster sur les 6DDL.
             % Arguments : d14, Matrice Distance x y z  des trusters 1 - 4.
@@ -91,8 +164,7 @@ classdef ThrusterModel < handle
 
             this.L= [l1.', l2.', l3.', l4.', l5.' l6.', l7.', l8.'];
         end
-
-%==========================================================================
+        
         function lax= GetMaxLoadAllAxis(this,L)
         % Calcule la force Maximum déployer sur les thrusters pur les 6DDL.
         % Arguments : V matrice de composantes des thrusters (6DDL)
@@ -107,8 +179,7 @@ classdef ThrusterModel < handle
          lax=vml;
 
         end
-
-%==========================================================================
+        
         function lxx= GetMaxLoadOneAxis(this,V)
         % Calcule la force Maximum déployer sur les thrusters sur 1 DDL.
         % Arguments : V matrice de composantes des thrusters pour 1 DDL
@@ -121,8 +192,7 @@ classdef ThrusterModel < handle
          end
          lxx=[pf,-nf];
         end
-
-%==========================================================================
+        
         function mt = GetThrusterMaxLoad(this,c,sens)
         % Retourne la force de la composante selon le sens du thruster
         % Arguments : c, la composante du thruster, 
@@ -134,13 +204,13 @@ classdef ThrusterModel < handle
                mt = abs(c*this.FT(2));
             end
         end
-%==========================================================================
+        
         function mm= GetMinMax(this,A)
         % trouve la valeur maximum et minimum d'une matrice.
         % Arguments : N, Matrice data.
         mm=[A(end),A(1)];
         end
-%==========================================================================
+        
         function EleMecRatio(this)
         % transforme le % de limitation élé(A) en % limitation mec (N).
    
@@ -165,7 +235,7 @@ classdef ThrusterModel < handle
             %retourner la valeur min.
             this.fl= min(MLP,MLN);
         end
-%==========================================================================
+        
         function f= GetRelation(this,x,y)
         % trouve une équoition d'orde 6 pour un nuage de point donnée.
         % Arguments : x, Matrice des composante x.
@@ -173,28 +243,8 @@ classdef ThrusterModel < handle
         opt = fitoptions('poly2','Normalize', 'on', 'Robust', 'Bisquare');
         f=fit(x,y,'poly5',opt);
         end
-%==========================================================================
-    function OT = GetThrusterOutput(this,command)
-    % optimise la sortie des thrusters pour limiter la force total
-    % Arguments : input,vecteur résultant
-        OT=this.OPT.optimiseThrusterOutput(command);
-    
-    end
-    
-%==========================================================================   
-    function OT = GetNlThrusterOutput(this,command)
-    % optimise la sortie des thrusters pour limiter la cosomation élé
-    % Arguments : input,vecteur résultant    
-        OT=this.OPT.NLoptimiseThrusterOutput(command);
         
-        for i=1:this.C.nbt
-            this.T(i).force=OT(i);
-        end
-  
-    end
-%==========================================================================
-
-
-    end
+      
+ end
 end
 

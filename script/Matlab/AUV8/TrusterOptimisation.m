@@ -64,9 +64,16 @@ classdef TrusterOptimisation < handle
     % Arguments : input,vecteur résultant
      s=this.ComputeFeasibleSolution(command);   
      %s=repmat(0,1,this.nbt);
-     op=optimoptions('fmincon','Algorithm','sqp','ConstraintTolerance',.2);
-     OT=fmincon(this.f,s,[],[],this.L,command,this.lb,this.ub,[],op);
+     op=optimoptions('fmincon','Algorithm','sqp','UseParallel',true,...
+         'ScaleProblem', true);
+     
+     [SOL, min, flag, outs]=...
+         fmincon(this.f,s,[],[],this.L,command,this.lb,this.ub,[],op);
+     
+     v=this.L*SOL;
+    % CosTheta = atan2(norm(cross(v,command.')),dot(v,command.'));
    
+    OT= SOL;
     end
 %==========================================================================
     function f= OptNonLinearObjFunc(this,x)
