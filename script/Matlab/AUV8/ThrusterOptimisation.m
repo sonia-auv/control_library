@@ -1,48 +1,36 @@
-classdef TrusterOptimisation < handle
+classdef ThrusterOptimisation < handle
     %TRUSTEROPTIMISATION Summary of this class goes here
     %   Detailed explanation goes here
     
     properties
-        ub; % Upper bound
-        lb; % Lower bound
-        FT; % truster force
-        L;  % Maping Matrix
-        D;  % Damping matrix
+      
         f;  % Objective function
         N;  % Newton array
         W;  % Watt array
         SN; % simplify Newton array
         SW; % simplify Watt array
         nbt;
-
+        ef; % extrapole du tableau N/W
+        FT; % Force min max truster
     end
 %==========================================================================
 %Methodes
 %==========================================================================   
     methods
 
-        function this = TrusterOptimisation(L,FT,D,N,W,nbt)
+        function this = ThrusterOptimisation(N,W,nbt,ef,FT)
         % Constructeur
-            this.L=L;
-            this.FT=FT;
             this.N=N;
             this.W=W;
+            this.ef=ef;
+            this.FT=FT;
             this.nbt=nbt;
-            this.SetUpBound(D);
             this.ReduceArray();
             this.f = @(x) this.OptNonLinearObjFunc(x);
             
         end
 %==========================================================================
-    function SetUpBound(this,D)
-    % calcule la plage de force de chaque T selon la matrice D
-    % Arguments : D, La matrice de défaut
-       this.ub= D*this.FT(1);
-       this.lb= D*this.FT(2); 
-       this.D=D;
-    end
-    
-%==========================================================================
+
     function ReduceArray(this)
     % réduit les tableau N et W pour réduire le temps de l'optimisation. 
    this.SN=this.N(2:2:end,:);
@@ -50,28 +38,28 @@ classdef TrusterOptimisation < handle
 
     end
 %==========================================================================
-         function OT = optimiseThrusterOutput(this,command)
-    % optimise la sortie des thrusters pour limiter la force total
+
+    function OT = NLoptimiseThrusterOutput(this,LD,command)
+   % optimise la sortie des thrusters pour limiter la cosomation élé
     % Arguments : input,vecteur résultant
-    lf=ones(1,this.nbt);
-    OT= linprog(lf,[],[],this.L,command,this.lb,this.ub);
+    %           : LD, M=matrice L X matrice D
     
-    end
-    
-%==========================================================================   
-    function OT = NLoptimiseThrusterOutput(this,command)
-    % optimise la sortie des thrusters pour limiter la cosomation élé
-    % Arguments : input,vecteur résultant
-     s=this.ComputeFeasibleSolution(command);   
-     %s=repmat(0,1,this.nbt);
-     op=optimoptions('fmincon','Algorithm','sqp','UseParallel',true,...
-         'ScaleProblem', true);
-     
+       
+       s=zeros(1,this.nbt);
+       % s=this.ComputeFeasibleSolution(LD,command);
+     %op=optimoptions('fmincon','Algorithm','sqp','UseParallel',true...
+       %  );
+
+     op=optimoptions('fmincon','Algorithm','sqp');
+  
      [SOL, min, flag, outs]=...
-         fmincon(this.f,s,[],[],this.L,command,this.lb,this.ub,[],op);
-     
-     v=this.L*SOL;
-    % CosTheta = atan2(norm(cross(v,command.')),dot(v,command.'));
+           fmincon(this.f,s,[],[],LD,command,[],[],[],op);
+          
+     if flag ==-2
+         %approx=(this.L*SOL).';
+         %he=this.GetHeadingError(command, approx);
+     end
+   
    
     OT= SOL;
     end
@@ -82,7 +70,12 @@ classdef TrusterOptimisation < handle
     % Arguments : x, vecteur force des 8 thrusters
         n=0;
         for i=1:this.nbt
-            n=n+interp1(this.SN, this.SW, x(i), "next");
+            if(x(i)>=this.FT(2) && x(i)<=this.FT(1))
+                n=n+interp1(this.SN, this.SW, x(i), "next");   
+            else
+                n=n+1500;
+               % n=n+this.ef(x);
+            end
         end
         f=n;
     end
@@ -98,15 +91,21 @@ classdef TrusterOptimisation < handle
         f=n;
     end
 %==========================================================================
-    function s=ComputeFeasibleSolution(this,command)
+    function s=ComputeFeasibleSolution(this,LD,command)
     % Calcule un solution fesable non optimal pour donnée les point de 
     % départ au solveur. ceci réduit le temps d'optimisation
     % Arguments: command, le vecteur résultant.
         c1=[1,0,-1,0,0,0,0,0];
         c2=[0,0,0,0,0,1,0,1];
-        RM= [this.L;c1;c2];
+        RM= [LD;c1;c2];
         FC= [command,0,0].';
         s=RM\FC;     
+    end
+    
+    function he= GetHeadingError(this,command,approx)
+        c=command(:,1:3);
+        a=approx(:,1:3);
+        he = rad2deg(atan2(norm(cross(a,c)),dot(a,c)));
     end
     end
 end

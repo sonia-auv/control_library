@@ -3,7 +3,7 @@ clear;
 
 
 config = Config('config_AUV8.json');
-M= ThrusterModel(config);
+M= ThrusterAllocator(config);
 
 
 disp("----------------------------------");
@@ -36,12 +36,10 @@ disp("Force maximum réel des 6 DLL");
 disp("----------------------------------");
 
 disp(M.MLDR);
-M.UpdateDampingMatrix([-1,-1,-1,-1,-1,0,-1,-1]);
+M.UpdateDampingMatrix([.5,-1,-1,-1,-1,-1,-1,-1]);
 disp(M.D);
-command=[94,20,50,0,0,0];
-tic;
- LT=M.GetThrusterOutput(command);
- toc;
+command=[60,0,50,3,5,0];
+
 
 NLT=M.GetNlThrusterOutput(command);
 
