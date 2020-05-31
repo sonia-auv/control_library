@@ -33,8 +33,8 @@ classdef ThrusterOptimisation < handle
 
     function ReduceArray(this)
     % réduit les tableau N et W pour réduire le temps de l'optimisation. 
-   this.SN=this.N(2:2:end,:);
-   this.SW=this.W(2:2:end,:);
+        this.SN=this.N(2:2:end,:);
+        this.SW=this.W(2:2:end,:);
 
     end
 %==========================================================================
@@ -44,7 +44,6 @@ classdef ThrusterOptimisation < handle
     % Arguments : input,vecteur résultant
     %           : LD, M=matrice L X matrice D
     
-       
        s=zeros(1,this.nbt);
        % s=this.ComputeFeasibleSolution(LD,command);
      %op=optimoptions('fmincon','Algorithm','sqp','UseParallel',true...

@@ -67,9 +67,10 @@ end
             %THRUSTERMODEL Construct an instance of this class
             %   Detailed explanation goes here
             
+           % Charger le fichier de config et les spec thrusters
            this.C=Config;
            this.TSPEC= load('T200-Spec-16V.mat').T200Spec16V ;
-       
+            
            this.GetMappingMatrix();
            this.GetThrusterMatrix();
            this.FT = this.GetMinMax(this.TSPEC{:,6});
@@ -93,12 +94,19 @@ end
         
  
         function OT = GetNlThrusterOutput(this,command)
-        % optimise la sortie des thrusters pour limiter la cosomation élé
+        % Détermine la force de chaque thruster selon le vecteur résultant.
         % Arguments : input,vecteur résultant   
         
         tic;
         LD=this.L*diag(this.D);
+        %Optimise la force de chaque
         OT=this.OPT.NLoptimiseThrusterOutput(LD,command);
+        [b, ER] = this.CheckFesability(OT);
+        
+         if b
+         disp("rip");
+             
+         end
        toc;
         for i=1:this.C.nbt
             this.T(i).force=OT(i);
@@ -196,7 +204,7 @@ end
         % Arguments : c, la composante du thruster, 
         %             tf, matrice de force thruster horraire, antihorraire.
         %             sens, le sens de laxe exemple x+ ou x-
-            if (c>0 && sens>0) || (c<0 && sens<0)
+            if (c>0 && sens>=0) || (c<0 && sens<0)
                mt = abs(c*this.FT(1));
             else
                mt = abs(c*this.FT(2));
@@ -242,7 +250,29 @@ end
         f=fit(x,y,'poly5',opt);
         end
         
-   
+        function [b, ER] = CheckFesability(this,output)
+        % Vérifie si les thruster ne dépasse pas leurs limite maximum
+        % Arguments : output, la matrice des forces de chaques thrusters  
+            EffRatio=zeros(1,this.C.nbt);
+            f=false;
+    
+            for i=1:this.C.nbt
+                % Empêche la divison par 0 si le Thruster est desactivé
+                if this.D(i)== 0 
+                    EffRatio(i)=0;
+                else
+                    % Calcule en % la force du thruster
+                    EffRatio(i)= abs(output(i))/this.GetThrusterMaxLoad...
+                                    (this.D(i)*this.fl,output(i));
+                    % Si le thruster dépasse sa capacité maximum           
+                    if EffRatio(i)>1
+                        f=true;
+                    end                 
+                end
+            end    
+            b=f;
+            ER=EffRatio;
+        end
 
  end
 end

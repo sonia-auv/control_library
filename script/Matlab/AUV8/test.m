@@ -8,6 +8,7 @@ M= ThrusterAllocator(config);
 
 disp("----------------------------------");
 disp("Test TrusterModel class...");
+
 disp("----------------------------------");
 
 
@@ -36,9 +37,9 @@ disp("Force maximum réel des 6 DLL");
 disp("----------------------------------");
 
 disp(M.MLDR);
-M.UpdateDampingMatrix([.5,-1,-1,-1,-1,-1,-1,-1]);
+M.UpdateDampingMatrix([0,-1,-1,-1,-1,-1,-1,-1]);
 disp(M.D);
-command=[60,0,50,3,5,0];
+command=[50,0,50,3,5,0];
 
 
 NLT=M.GetNlThrusterOutput(command);
