@@ -1,15 +1,11 @@
-clc;
-clear;
+function main()
+    nh = ros.Node('/proc_control_matlab');
+    rate = ros.Rate(nh, 1);
 
-%rosshutdown
-%rosinit();
+    node = ProcControlNode(nh);
 
-rate = rosrate(1);
-
-node = ProcControlNode();
-
-while(true)
-   node.spinOnce();
-   waitfor(rate);
+    while(true)
+       node.spinOnce();
+       waitfor(rate);
+    end
 end
-

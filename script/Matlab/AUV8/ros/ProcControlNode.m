@@ -7,12 +7,12 @@ classdef ProcControlNode
     end
     
     methods
-        function this = ProcControlNode()
-            this.node = ros.Node('/proc_control_matlab');
+        function this = ProcControlNode(nh)
+            this.node = nh;
         end
         
         function spinOnce(this)
-            disp("Hello");
+            disp("Ça marche Alex!!!!");
         end
     end
 end
