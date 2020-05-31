@@ -1,6 +1,6 @@
-classdef ThrusterModel < handle
+classdef ThrusterAllocator < handle
     %THRUSTERMODEL Summary of this class goes here
-    %   Detailed explanation goes here
+    %  Detailed explanation goes here
 %==========================================================================
 %Propriétés.
 %==========================================================================
@@ -15,9 +15,9 @@ classdef ThrusterModel < handle
         MLDR; % Max load all DOF réel
         C; % Fichier config
         fl; %Limitation mecanique du truster en %.
-        OPT; % optimisation thruster
         CT; % Commande Truster
-     
+        OPT; % instance TrusterOptimisation
+      
  end
 %==========================================================================
 %Accesseur/mutateur
@@ -48,8 +48,8 @@ methods
              if l==1 && c== this.C.nbt %vérifier la dimention de la matrice
                  for i=1:this.C.nbt
                     if input(i)>=0
-                        if input(i)>this.fl
-                            this.D(i)= this.fl;
+                        if input(i)>1
+                            this.D(i)= 1;
                         else
                             this.D(i)= input(i);
                         end
@@ -63,23 +63,25 @@ end
 %Methodes publique 
 %==========================================================================
     methods (Access= public)
-        function this = ThrusterModel(Config)
+        function this = ThrusterAllocator(Config)
             %THRUSTERMODEL Construct an instance of this class
             %   Detailed explanation goes here
+            
            this.C=Config;
            this.TSPEC= load('T200-Spec-16V.mat').T200Spec16V ;
+       
            this.GetMappingMatrix();
            this.GetThrusterMatrix();
            this.FT = this.GetMinMax(this.TSPEC{:,6});
            this.EleMecRatio();
-           this.D= repmat(this.fl,1,this.C.nbt);
-           
-           this.OPT= TrusterOptimisation(this.L,this.FT,this.D,...
-                               this.TSPEC{:,6},this.TSPEC{:,7},this.C.nbt);
-                           
+           this.D= ones(1,this.C.nbt);                  
            this.MLDT = this.GetMaxLoadAllAxis(this.L);
            this.MLDR = this.GetMaxLoadAllAxis(this.L*diag(this.D));
            
+           ep= this.GetRelation(this.TSPEC{:,6},this.TSPEC{:,7});
+           
+           this.OPT= ThrusterOptimisation...
+               (this.TSPEC{:,6},this.TSPEC{:,7},this.C.nbt,ep,this.FT);
         end
 
         function UpdateDampingMatrix(this, input)
@@ -87,21 +89,17 @@ end
              % Arguments : changerment matrice defaut
             this.D = input;
             this.MLDR = this.GetMaxLoadAllAxis(this.L*diag(this.D));
-            this.OPT.SetUpBound(this.D);
         end
         
-        function OT = GetThrusterOutput(this,command)
-        % optimise la sortie des thrusters pour limiter la force total
-        % Arguments : input,vecteur résultant
-        OT=this.OPT.optimiseThrusterOutput(command);
-    
-    end  
  
         function OT = GetNlThrusterOutput(this,command)
         % optimise la sortie des thrusters pour limiter la cosomation élé
-        % Arguments : input,vecteur résultant    
-        OT=this.OPT.NLoptimiseThrusterOutput(command);
+        % Arguments : input,vecteur résultant   
+        
         tic;
+        LD=this.L*diag(this.D);
+        OT=this.OPT.NLoptimiseThrusterOutput(LD,command);
+       toc;
         for i=1:this.C.nbt
             this.T(i).force=OT(i);
         end
@@ -204,7 +202,7 @@ end
                mt = abs(c*this.FT(2));
             end
         end
-        
+            
         function mm= GetMinMax(this,A)
         % trouve la valeur maximum et minimum d'une matrice.
         % Arguments : N, Matrice data.
@@ -244,7 +242,8 @@ end
         f=fit(x,y,'poly5',opt);
         end
         
-      
+   
+
  end
 end
 
