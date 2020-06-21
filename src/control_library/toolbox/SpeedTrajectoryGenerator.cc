@@ -52,13 +52,13 @@ namespace control
 
         hermiteXvalues_[0] = startPosition_[0];
         hermiteXvalues_[1] = endPosition_[0];
-        hermiteXvalues_[2] = amplitude_ * sin(startPosition_[5]*DEGREE_TO_RAD) + startPosition_[0];
-        hermiteXvalues_[3] = amplitude_ * sin(endPosition_[5]*DEGREE_TO_RAD) + endPosition_[0];
+        hermiteXvalues_[2] = amplitude_ * sin(startPosition_[5]) + startPosition_[0];
+        hermiteXvalues_[3] = amplitude_ * sin(endPosition_[5]) + endPosition_[0];
         
         hermiteYvalues_[0] = startPosition_[1];
         hermiteYvalues_[1] = endPosition_[1];
-        hermiteYvalues_[2] = amplitude_ * cos(startPosition_[5]*DEGREE_TO_RAD) + startPosition_[1];
-        hermiteYvalues_[3] = amplitude_ * cos(endPosition_[5]*DEGREE_TO_RAD) + startPosition_[1];
+        hermiteYvalues_[2] = amplitude_ * cos(startPosition_[5]) + startPosition_[1];
+        hermiteYvalues_[3] = amplitude_ * cos(endPosition_[5]) + startPosition_[1];
 
         while (time <= 1.0)
         {
@@ -80,10 +80,11 @@ namespace control
         posePosition[0] = HermiteX(time);
         posePosition[1] = HermiteY(time);
         posePosition[2] = endPosition_[2];
-        posePosition[3] = endPosition_[3];
-        posePosition[4] = endPosition_[4];
-        posePosition[5] = AngleYaw(posePosition);
+        //posePosition[3] = endPosition_[3];
+        //posePosition[4] = endPosition_[4];
+        //posePosition[5] = AngleYaw(posePosition);
 
+        posePosition << posePosition[0], posePosition[1], posePosition[2], Interpolation(1.0);
         return posePosition;
     }
     /**
