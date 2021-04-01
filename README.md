@@ -11,8 +11,6 @@ Java Version: Java 1.8.0_202-b08 with Oracle Corporation Java HotSpot(TM) 64-Bit
 
 - MATLAB                                                Version 9.8         (R2020a)
 - Simulink                                              Version 10.1        (R2020a)
-- Aerospace Blockset                                    Version 4.3         (R2020a)
-- Aerospace Toolbox                                     Version 3.3         (R2020a)
 - Control System Toolbox                                Version 10.8        (R2020a)
 - DSP System Toolbox                                    Version 9.10        (R2020a)
 - Embedded Coder                                        Version 7.4         (R2020a)
@@ -24,7 +22,6 @@ Java Version: Java 1.8.0_202-b08 with Oracle Corporation Java HotSpot(TM) 64-Bit
 - Robotics System Toolbox                               Version 3.1         (R2020a)
 - Signal Processing Toolbox                             Version 8.4         (R2020a)
 - Simulink Coder                                        Version 9.3         (R2020a)
-- Statistics and Machine Learning Toolbox               Version 11.7        (R2020a)
 - Symbolic Math Toolbox                                 Version 8.5         (R2020a)
 - Vehicle Dynamics Blockset                             Version 1.4         (R2020a)
 
