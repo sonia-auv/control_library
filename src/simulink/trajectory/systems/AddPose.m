@@ -84,7 +84,10 @@ classdef AddPose < matlab.System
             
             
             % rp = quatrotate(quatinv(lq),wpt(1:3)) + lp;
-            rp = rotatepoint(quatinv(lq),wpt(1:3)) + lp;
+            %rp = rotatepoint(quatinv(lq),wpt(1:3)) + lp;
+             qs = lq(1);   % quaternion partie scalaire
+             qu = lq(2:4); % quaternion partie vectoriel
+             rp=2*dot(qu,wpt(1:3))*qu +(qs^2-dot(qu,qu))*wpt(1:3) + 2*qs*cross(qu,wpt(1:3));
             
             if dot(lq,q)<1
                 rq= quatmultiply(lq,quatinv(quatconj(q)));

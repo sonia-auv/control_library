@@ -13,19 +13,19 @@ class TrajectoryTest():
         self.clear_trajectory_pub = rospy.Publisher("/proc_control_matlab/clear_waypoints", Bool, queue_size=10)
         self.compute_trajectory_pub = rospy.Publisher("/proc_control_matlab/compute_trajectory", Bool, queue_size=10)
         self.add_pose_pub = rospy.Publisher("/proc_control_matlab/add_pose", AddPose, queue_size=10)
-        self.waypoints = [ [Point(0, 0, 1.5), Vector3(0, 0, 0), 1, 1, 0],
-                           [Point(0.5, 0, 2), Vector3(0, 0, 0), 1, 1, 0],
-                           [Point(8.072, 0, 2), Vector3(0, 0, 0), 1, 1, 0],
-                           [Point(11.921, -1.364, 1.696), Vector3(0, 0, -39.23), 1, 1, 0],
-                           [Point(13, -1.75, 1.5), Vector3(0, 0, 0), 1, 1, 0],
-                           [Point(14.217, -1.237, 1.278), Vector3(0, 0, 45), 1, 1, 0],
-                           [Point(14.721, 0, 1.186), Vector3(0, 0, 90), 1, 1, 0],
-                           [Point(14.217, 1.237, 1.278), Vector3(0, 0, 135), 1, 1, 0],
-                           [Point(13, 1.75, 1.5), Vector3(0, 0, 180), 1, 1, 0],
-                           [Point(11.921, 1.364, 1.696), Vector3(0, 0, (180+39.23)), 1, 1, 0],
-                           [Point(8.072, 0, 2), Vector3(0, 0, 180), 1, 1, 0],
-                           [Point(0.5, 0, 2), Vector3(0, 0, 180), 1, 1, 0],
-                           [Point(0, 0, 2), Vector3(0, 0, 180), 1, 1, 0]]
+        self.waypoints = [ [Point(0, 0, 1.5), Vector3(0, 0, 0), 0, 1, 0],
+                           [Point(0.5, 0, 2), Vector3(0, 0, 0), 0, 1, 0],
+                           [Point(8.072, 0, 2), Vector3(0, 0, 0), 0, 1, 0],
+                           [Point(11.921, -1.364, 1.696), Vector3(0, 0, -39.23), 0, 1, 0],
+                           [Point(13, -1.75, 1.5), Vector3(0, 0, 0), 0, 1, 0],
+                           [Point(14.217, -1.237, 1.278), Vector3(0, 0, 45), 0, 1, 0],
+                           [Point(14.721, 0, 1.186), Vector3(0, 0, 90), 0, 1, 0],
+                           [Point(14.217, 1.237, 1.278), Vector3(0, 0, 135), 0, 1, 0],
+                           [Point(13, 1.75, 1.5), Vector3(0, 0, 180), 0, 1, 0],
+                           [Point(11.921, 1.364, 1.696), Vector3(0, 0, (180+39.23)), 0, 1, 0],
+                           [Point(8.072, 0, 2), Vector3(0, 0, 180), 0, 1, 0],
+                           [Point(0.5, 0, 2), Vector3(0, 0, 180), 0, 1, 0],
+                           [Point(0, 0, 2), Vector3(0, 0, 180), 0, 1, 0]]
         time.sleep(1)
         
 
@@ -45,4 +45,4 @@ class TrajectoryTest():
 
 if __name__ == '__main__':
     traj = TrajectoryTest()
-    traj.send(2)
+    traj.send(.3)
