@@ -83,7 +83,8 @@ classdef AddPose < matlab.System
             lq = this.poseList(this.i-1,4:7);
             
             
-            rp = quatrotate(quatinv(lq),wpt(1:3)) + lp
+            % rp = quatrotate(quatinv(lq),wpt(1:3)) + lp;
+            rp = rotatepoint(quatinv(lq),wpt(1:3)) + lp;
             
             if dot(lq,q)<1
                 rq= quatmultiply(lq,quatinv(quatconj(q)));
