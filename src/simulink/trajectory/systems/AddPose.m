@@ -76,6 +76,10 @@ classdef AddPose < matlab.System
             twpt = zeros(1, this.elementSize);
             twpt(8)=wpt(8);
             
+            % Weird unity vs realitée besoin test piscine !!
+            p= wpt(1:3);
+            p(2)=-p(2);
+            
             % Pre calculs
             q = eul2quat(deg2rad(wpt(4:6)),'ZYX');
             
@@ -87,7 +91,7 @@ classdef AddPose < matlab.System
             %rp = rotatepoint(quatinv(lq),wpt(1:3)) + lp;
              qs = lq(1);   % quaternion partie scalaire
              qu = lq(2:4); % quaternion partie vectoriel
-             rp=2*dot(qu,wpt(1:3))*qu +(qs^2-dot(qu,qu))*wpt(1:3) + 2*qs*cross(qu,wpt(1:3));
+             rp=lp+2*dot(qu,p)*qu +(qs^2-dot(qu,qu))*p + 2*qs*cross(qu,p);
             
             if dot(lq,q)<1
                 rq= quatmultiply(lq,quatinv(quatconj(q)));

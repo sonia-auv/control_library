@@ -23,16 +23,16 @@ cf = ConfigAUV8();
     wfZ=pi/2;         % Frequence
     wpZ=pi;         % Phase
     %Vages RX (Roll)
-    waPhi= 1;      % Amplitude
-    wfPhi= pi/2;      % Frequence
+    waPhi= .5;      % Amplitude
+    wfPhi= pi/3;      % Frequence
     wpPhi=0;        % Phase
     %Vages Ry (Pitch)
-    waTheta=1;    % Amplitude
-    wfTheta=pi/2;     % Frequence
+    waTheta=.5;    % Amplitude
+    wfTheta=pi/3;     % Frequence
     wpTheta=pi/2;   % Phase
     %Vages Rz (Yaw)
-    waPsi=1;       % Amplitude
-    wfPsi=pi/2;       % Frequence
+    waPsi=.5;       % Amplitude
+    wfPsi=pi/3;       % Frequence
     wpPsi=pi;       % Phase
     
 % Perturbation Drift
