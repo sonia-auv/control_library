@@ -1,13 +1,7 @@
 classdef ConfigAUV8
     %CONFIGAUV8 class.
     properties
-        z               %Position des truster sur le frame.
-                        %(0 = milieu, 1= position bas, -1= postion haut)(t15,t26,t37,t48)
-                        
-        dz              % Distance entre les postions du frame.
-        d14             % Distance x y z / angles des trusters 1 - 4. 
-        a14      
-        d58             % Distance x y z des trusters 5 - 8.
+        
         psl             % Power supply limitation
         nbt             % nombre de thrusters
         RG              % Centre de masse
@@ -26,28 +20,16 @@ classdef ConfigAUV8
         AF              % Aire de la surface
         referenceFrame  % Constante du frame pour Gazebo 
         modelName       % Nom du model Gazebo.
+        
+        AddedMass       % Masse ajoutée
+        ThrusterConfig  % Configuration thrusters
     end
     methods
         function this = ConfigAUV8()
             % Constructor
-            this.z = [0, ...
-                      0, ...
-                      0, ...
-                      0];
-                  
+                             
             this.referenceFrame = uint8('world');
             this.modelName = uint8('auv8');
-                  
-            this.dz = 0.015;
-            
-            this.d14 = [0.292, ...
-                        0.173, ...   
-                        0.082];
-            this.a14 = deg2rad(45);
-            
-            this.d58 = [0.1815, ...
-                        0.159, ...   
-                        0.082];
                     
             this.psl = 0.5;
             this.nbt = 8;
@@ -77,6 +59,17 @@ classdef ConfigAUV8
            this.height=.3;
            
            this.AF = [0.12, 0.22, 0.292];
+           
+           this.AddedMass=[0,0,0,0,0,0];
+           
+           this.ThrusterConfig=[ 0.292, 0.173, 0.082,-45,-90, 0;    % T1
+                                -0.292, 0.173, 0.082, 45,-90, 0;    % T2
+                                -0.292,-0.173, 0.082,-45,-90, 0;    % T3
+                                 0.292,-0.173, 0.082, 45,-90, 0;    % T4
+                                 0.181, 0.159, 0.082,  0,  0, 0;    % T5
+                                -0.181, 0.159, 0.082,  0,180, 0;    % T6
+                                -0.181,-0.159, 0.082,  0,  0, 0;    % T7
+                                 0.181,-0.159, 0.082,  0,180, 0];   % T8
         end
     end
 end
