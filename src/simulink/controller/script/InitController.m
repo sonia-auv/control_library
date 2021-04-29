@@ -25,11 +25,32 @@
     VMAX ={ 2; 2; 2; 2; 2; 2; 2; 2; 2; 2; 2; 2};
 
 % Poids du controleur initiales
-    OV =[ 70 60 70 50 50 50 50 0 0 0 0 0 0 ];  %OutputVariables 
-    MV =[.2 .2 0.2 .2 0.2 0.2 0.2 0.2]; %ManipulatedVariables
-    MVR=[.1,.1 .1 .1 .3 .3 .3 .3]; %.ManipulatedVariablesRates
+    dOV =[ 70 60 70 50 50 50 50 0 0 0 0 0 0 ];  %OutputVariables 
+    dMV =[.2 .2 0.2 .2 0.2 0.2 0.2 0.2]; %ManipulatedVariables
+    dMVR=[.1,.1 .1 .1 .3 .3 .3 .3]; %.ManipulatedVariablesRates
+    
 
 
+%% Définitions des modes 
+    % controlleur
+        mpcMode = [10 19];
+        openLoopMode = [20 21];
+    
+    % Trajectory
+        trajMode = [10];
+        SpaceMouseMode = [19 20 21];
+    
+    % Gain pour MPC mode trajectoire 10
+        OV10 = [70 60 70 50 50 50 50 0 0 0 0 0 0];
+        MV10 = [.2 .2 0.2 .2 0.2 0.2 0.2 0.2];
+        MVR10 = [.1,.1 .1 .1 .3 .3 .3 .3];
+        Config10=[OV10,MV10,MVR10];
+    
+    % Gain pour MPC mode spacemouse 19
+        OV19 = [ 0 0 0 0 0 0 0 70 60 70  50 50 50];
+        MV19 = dMV;
+        MVR19 = dMVR;
+        Config19=[OV19,MV19,MVR19];
 %% Initialiser le comtrolleur MPC non lineaire
 
 % conditions initial
@@ -49,9 +70,9 @@ nlobj.PredictionHorizon = p;
 nlobj.ControlHorizon = m;
 
 nlobj.MV = struct('Min',TMIN,'Max',TMAX);%,'Target',MvTarget);
-nlobj.Weights.OutputVariables = OV;
-nlobj.Weights.ManipulatedVariables = MV;
-nlobj.Weights.ManipulatedVariablesRate = MVR;
+nlobj.Weights.OutputVariables = dOV;
+nlobj.Weights.ManipulatedVariables = dMV;
+nlobj.Weights.ManipulatedVariablesRate = dMVR;
 
 % Parametre du solveur
 nlobj.Optimization.SolverOptions.ConstraintTolerance = 0.02;
