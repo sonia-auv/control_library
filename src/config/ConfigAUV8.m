@@ -1,76 +1,62 @@
-classdef ConfigAUV8
-    %CONFIGAUV8 class.
-    properties
+function [simulation, physics, thrusters, mpc] = ConfigAUV8()
+       % Simulation
+       simulation.reference_frame = uint8('world');
+       simulation.model_name = uint8('auv8');
         
-        psl             % Power supply limitation
-        nbt             % nombre de thrusters
-        RG              % Centre de masse
-        RB              % Centre de flotaison
-        dvlCenterDist   % Distance entre le dvl et le centre geometrique(z)
-        I               % Inertie
-        mass            % Masse du sous marin
-        volume          % Volume du sous marin
-        rho             % Densite de l'eau
-        g               % Masse du sous marin
+       % Physics
+       physics.mass = 33.95;
+       physics.volume = 0.037;
+       physics.rho = 998;
+       physics.g = 9.81;
+       physics.dvlCenterDist =0.1435;
+       physics.height=.3;
+
+       physics.I = [1.5, 0.001, 0.01;... Ixx Ixy Ixz 0.5358
+                 0.002, 1.8, 0.005;... Iyx Iyy Iyz 1.47
+                 0.01, 0.005,1.45]; % Izx Izy Izz1.68
+             
+       physics.RG =[0.001,... x
+                 -0.003,... y
+                 0.027]; % z
+
+       physics.RB =[0.00,... x
+                 0.00,... y
+                 -0.1]; % z
+             
+       physics.CDL=[45, 60, 70, 10, 7, 15];
+
+       physics.CDQ=[1.17, 0.82, 0.756, 0.167, 0.1, 0.102];
+
+       physics.AF = [0.12, 0.22, 0.292];
+
+       physics.AddedMass=[0,0,0,0,0,0];
         
-        CDL             % Coefficient de drag linéaire
-        CDQ             % Coefficient de drag Quadratique
-        
-        height          % hauteur sous marin
-        AF              % Aire de la surface
-        referenceFrame  % Constante du frame pour Gazebo 
-        modelName       % Nom du model Gazebo.
-        
-        AddedMass       % Masse ajoutée
-        ThrusterConfig  % Configuration thrusters
-    end
-    methods
-        function this = ConfigAUV8()
-            % Constructor
-                             
-            this.referenceFrame = uint8('world');
-            this.modelName = uint8('auv8');
-                    
-            this.psl = 0.5;
-            this.nbt = 8;
-            
-            this.RG =[0.001,... x
-                     -0.003,... y
-                      0.027]; % z
-                  
-            this.RB =[0.00,... x
-                      0.00,... y
-                      -0.1]; % z
-                  
-           this.mass = 33.95;
-           this.volume = 0.037;
-           
-           this.I = [1.5, 0.001, 0.01;... Ixx Ixy Ixz 0.5358
-                     0.002, 1.8, 0.005;... Iyx Iyy Iyz 1.47
-                     0.01, 0.005,1.45]; % Izx Izy Izz1.68
-           this.rho = 998;
-           this.g = 9.81;
-           
-           this.CDL=[45, 60, 70, 10, 7, 15];
-           
-           this.CDQ=[1.17, 0.82, 0.756, 0.167, 0.1, 0.102];
-                
-           this.dvlCenterDist =0.1435;
-           this.height=.3;
-           
-           this.AF = [0.12, 0.22, 0.292];
-           
-           this.AddedMass=[0,0,0,0,0,0];
-           
-           this.ThrusterConfig=[ 0.292, 0.173, 0.082,-45,-90, 0;    % T1
-                                -0.292, 0.173, 0.082, 45,-90, 0;    % T2
-                                -0.292,-0.173, 0.082,-45,-90, 0;    % T3
-                                 0.292,-0.173, 0.082, 45,-90, 0;    % T4
-                                 0.181, 0.159, 0.082,  0,  0, 0;    % T5
-                                -0.181, 0.159, 0.082,  0,180, 0;    % T6
-                                -0.181,-0.159, 0.082,  0,  0, 0;    % T7
-                                 0.181,-0.159, 0.082,  0,180, 0];   % T8
-        end
-    end
+       % Thrusters
+       thrusters.T=[ 0.292, 0.173, 0.082,-45,-90, 0;    % T1
+                            -0.292, 0.173, 0.082, 45,-90, 0;    % T2
+                            -0.292,-0.173, 0.082,-45,-90, 0;    % T3
+                             0.292,-0.173, 0.082, 45,-90, 0;    % T4
+                             0.181, 0.159, 0.082,  0,  0, 0;    % T5
+                            -0.181, 0.159, 0.082,  0,180, 0;    % T6
+                            -0.181,-0.159, 0.082,  0,  0, 0;    % T7
+                             0.181,-0.159, 0.082,  0,180, 0];   % T8
+       % MPC
+       mpc.nx = 13;
+       mpc.ny = 13;
+       mpc.nu = 8;
+       mpc.Ts = 0.25;
+       mpc.p = 4;
+       mpc.m =  2;
+       mpc.tmax = 29;
+       mpc.tmin = -24;
+       mpc.gains.default.OV = [ 70, 60, 70, 50, 50, 50, 50, 0, 0, 0, 0, 0, 0 ];
+       mpc.gains.default.MV = [ 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2 ];
+       mpc.gains.default.MVR = [ 0.1, 0.1, 0.1, 0.1, 0.3, 0.3, 0.3, 0.3 ];
+       mpc.gains.c10.OV = [ 70, 60, 70, 50, 50, 50, 50, 0, 0, 0, 0, 0, 0 ];
+       mpc.gains.c10.MV = [ 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2 ];
+       mpc.gains.c10.MVR = [ 0.1, 0.1, 0.1, 0.1, 0.3, 0.3, 0.3, 0.3 ];
+       mpc.gains.c19.OV = [ 0, 0, 0, 0, 0, 0, 0, 70, 60, 70, 50, 50, 50];
+       mpc.gains.c19.MV = [ 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2 ];
+       mpc.gains.c19.MVR = [ 0.1, 0.1, 0.1, 0.1, 0.3, 0.3, 0.3, 0.3 ];                    
 end
 

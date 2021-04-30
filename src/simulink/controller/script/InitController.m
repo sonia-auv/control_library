@@ -1,4 +1,4 @@
-[simulation, physics, thrusters, mpc] = getRosparam();
+[simulation, physics, thrusters, mpc] = ConfigAUV8();
 % Modèle du thruster
     %load('T200_Identification.mat');
     load('T200-Spec-16V.mat');
