@@ -1,7 +1,7 @@
 function [simulation,physics, thrusters, mpc] = getRosparam()
     % ROSparams
-    rosinit;
-    try
+    %rosinit;
+    %try
         % Paramètres pour la simulation.
         simulation.reference_frame = uint8(get(rosparam, '/control/simulation/reference_frame'));
         simulation.model_name = uint8(get(rosparam, '/control/simulation/model_name'));
@@ -73,11 +73,11 @@ function [simulation,physics, thrusters, mpc] = getRosparam()
         mpc.gains.c19.MVR = double([buffer{:}]);
 
         clear buffer V temp;
-    catch exception
+    %catch exception
         disp('Missing parameter');
         rosshutdown;
         return;
-    end
-    rosshutdown;
+   % end
+   % rosshutdown;
 end
 

@@ -12,6 +12,8 @@ classdef mpcManager < matlab.System
         
         Tmin= -ones(1,8) % Force min moteur
         Tmax= ones(1,8) % Force max moteur
+        
+        MecConst = ones(1,41) % Constantes Modèle physique
     end
     properties(DiscreteState)
 
@@ -25,6 +27,7 @@ classdef mpcManager < matlab.System
     methods(Access = protected)
         function setupImpl(this,mode)
             % Perform one-time calculations, such as computing constants
+            
         end
 
         function [mvmin,mvmax,ywt,mvwt,dmwwt] = stepImpl(this,mode)

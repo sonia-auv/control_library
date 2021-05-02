@@ -30,6 +30,44 @@
     % Gain pour MPC mode spacemouse 19
         Config19=[mpc.gains.c19.OV, mpc.gains.c19.MV, mpc.gains.c19.MVR];
         
+ %% Définire le vecteur constante mec
+    constValues = [
+                 physics.mass ...
+                 physics.volume ...
+                 physics.height...
+                 physics.AF ...
+                 physics.I(1,:) ...
+                 physics.I(2,:) ...
+                 physics.I(3,:) ...
+                 physics.RG ...
+                 physics.RB ...
+                 physics.CDL...
+                 physics.CDQ...
+                 physics.AddedMass...
+                 physics.rho ...
+                 physics.g];
+             
+%% Crée la matrice thrusters 
+    Tm=zeros(6,size(thrusters.T,1));   
+    
+    for i=1:size(thrusters.T,1)
+        
+       qt= eul2quat(deg2rad(thrusters.T(i,4:6)),'ZYX');% convertir les angle d'euler en uaternion
+       Tm(:,i)=ThrusterVector(thrusters.T(i,1:3),qt);  % Calculer le vecteur thrusters     
+    end
+    
+    % crée la matrice inverse 
+    binv=pinv(Tm);
+%% Calcules des gains pour filtre ordre 2 space mouse.
+
+xi_l = 1; % dépassement null
+
+Tr = 5; 
+wn_l = (0.9257/Tr)*exp(1.6341*xi_l);
+
+Z2_l = 1;
+Z1_l = -2*exp(-xi_l*wn_l*mpc.Ts)*cos(wn_l*mpc.Ts*sqrt(1-xi_l^2));
+Z0_l = exp(-2*xi_l*wn_l*mpc.Ts);
 %% Initialiser le comtrolleur MPC non lineaire
 
 % conditions initial
