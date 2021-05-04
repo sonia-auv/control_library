@@ -85,9 +85,9 @@ nlobj.PredictionHorizon = mpc.p;
 nlobj.ControlHorizon = mpc.m;
 
 nlobj.MV = struct('Min',TMIN,'Max',TMAX);%,'Target',MvTarget);
-nlobj.Weights.OutputVariables = mpc.gains.default.OV;
-nlobj.Weights.ManipulatedVariables = mpc.gains.default.MV;
-nlobj.Weights.ManipulatedVariablesRate = mpc.gains.default.MVR;
+nlobj.Weights.OutputVariables = mpc.gains.defaut.OV;
+nlobj.Weights.ManipulatedVariables = mpc.gains.defaut.MV;
+nlobj.Weights.ManipulatedVariablesRate = mpc.gains.defaut.MVR;
 
 % Parametre du solveur
 nlobj.Optimization.SolverOptions.ConstraintTolerance = 0.02;
