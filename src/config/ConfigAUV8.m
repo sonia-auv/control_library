@@ -11,17 +11,17 @@ function [simulation, physics, thrusters, mpc] = ConfigAUV8()
        physics.dvlCenterDist =0.1435;
        physics.height=.3;
 
-       physics.I = [1.5, 0.001, 0.01;... Ixx Ixy Ixz 0.5358
-                 0.002, 1.8, 0.005;... Iyx Iyy Iyz 1.47
-                 0.01, 0.005,1.45]; % Izx Izy Izz1.68
+       physics.I = [0.4756, 0.008, 0.004;... Ixx Ixy Ixz 0.5358
+                   0.008, 1.3735, -0.001;... Iyx Iyy Iyz 1.47
+                   0.004, -0.001, 1.5371]; % Izx Izy Izz1.68
              
        physics.RG =[0.001,... x
-                 -0.003,... y
-                 0.027]; % z
+                    0.002,... y
+                    0.018]; % z
 
        physics.RB =[0.00,... x
-                 0.00,... y
-                 -0.1]; % z
+                    0.00,... y
+                    -0.1]; % z
              
        physics.CDL=[45, 60, 70, 10, 7, 15];
 
@@ -29,7 +29,7 @@ function [simulation, physics, thrusters, mpc] = ConfigAUV8()
 
        physics.AF = [0.12, 0.22, 0.292];
 
-       physics.AddedMass=[0,0,0,0,0,0];
+       physics.AddedMass=[1.4648, 12.6156, 15.7695, 0.1164, 0.3493, 0.3493];
         
        % Thrusters
        thrusters.T=[ 0.292, 0.173, 0.082,-45,-90, 0;    % T1
