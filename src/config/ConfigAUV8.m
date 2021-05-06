@@ -29,7 +29,7 @@ function [simulation, physics, thrusters, mpc] = ConfigAUV8()
 
        physics.AF = [0.12, 0.22, 0.292];
 
-       physics.AddedMass=[1.4648, 12.6156, 15.7695, 0.1164, 0.3493, 0.3493];
+       physics.AddedMass=-[1.4648, 12.6156, 15.7695, 0.1164, 0.3493, 0.3493];
         
        % Thrusters
        thrusters.T=[ 0.292, 0.173, 0.082,-45,-90, 0;    % T1

@@ -60,14 +60,21 @@
     binv=pinv(Tm);
 %% Calcules des gains pour filtre ordre 2 space mouse.
 
-xi_l = 1; % dépassement null
+zeta_l = .99; % dépassement null
 
-Tr = 5; 
-wn_l = (0.9257/Tr)*exp(1.6341*xi_l);
+Tr = 3; 
+wn_l = (0.9257/Tr)*exp(1.6341*zeta_l);
 
+
+
+% transforme en z
+gain_l = wn_l/(sqrt(1-zeta_l^2));
+
+num_l = exp(-zeta_l*wn_l*mpc.Ts) * sin(wn_l*sqrt(1-zeta_l^2)*mpc.Ts);
 Z2_l = 1;
-Z1_l = -2*exp(-xi_l*wn_l*mpc.Ts)*cos(wn_l*mpc.Ts*sqrt(1-xi_l^2));
-Z0_l = exp(-2*xi_l*wn_l*mpc.Ts);
+Z1_l = -2*exp(-zeta_l*wn_l*mpc.Ts)*cos(wn_l*mpc.Ts*sqrt(1-zeta_l^2));
+Z0_l = exp(-2*zeta_l*wn_l*mpc.Ts);
+
 %% Initialiser le comtrolleur MPC non lineaire
 
 % conditions initial
