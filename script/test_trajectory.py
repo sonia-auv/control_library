@@ -10,9 +10,9 @@ import time
 class TrajectoryTest():
     def __init__(self):
         rospy.init_node('trajectory_test', anonymous=True)
-        self.clear_trajectory_pub = rospy.Publisher("/proc_control_matlab/clear_waypoints", Bool, queue_size=10)
-        self.compute_trajectory_pub = rospy.Publisher("/proc_control_matlab/compute_trajectory", Bool, queue_size=10)
-        self.add_pose_pub = rospy.Publisher("/proc_control_matlab/add_pose", AddPose, queue_size=10)
+        self.clear_trajectory_pub = rospy.Publisher("/proc_control/clear_waypoints", Bool, queue_size=10)
+        self.compute_trajectory_pub = rospy.Publisher("/proc_control/compute_trajectory", Bool, queue_size=10)
+        self.add_pose_pub = rospy.Publisher("/proc_control/add_pose", AddPose, queue_size=10)
         self.waypoints = [ [Point(0, 0, 1.5), Vector3(0, 0, 0), 0, 1, 0],
                            [Point(0.5, 0, 2), Vector3(0, 0, 0), 0, 1, 0],
                            [Point(8.072, 0, 2), Vector3(0, 0, 0), 0, 1, 0],

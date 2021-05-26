@@ -119,7 +119,7 @@ classdef TrajectoryManager < matlab.System
             end
                 
             % Ne pas supprimer le point si c'est le dernier.
-            if not(this.poseBuffer(2,:) == this.emptyArray)
+            if not(this.poseBuffer(5,:) == this.emptyArray)
                this.poseBuffer=[this.poseBuffer(2:end,:); this.emptyArray];
                this.bufferCount = this.bufferCount - 1;
                this.done=false;
@@ -185,6 +185,8 @@ end
           if reset == 1
               this.poseBuffer=repmat(this.dummy, this.bufferSize, 13);
               this.poseBuffer(1,:)= [mesuredPose,0,0,0,0,0,0];
+              %this.poseBuffer(1:this.prediction,:)= repmat([mesuredPose,0,0,0,0,0,0],this.prediction,1);
+              %this.bufferCount=4;
           end
           
       end

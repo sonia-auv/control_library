@@ -14,6 +14,10 @@ classdef mpcManager < matlab.System
         Tmax= ones(1,8) % Force max moteur
         
         MecConst = ones(1,41) % Constantes Modèle physique
+        
+        xInit = zeros(1,13);
+        mvInit = zeros(1,8);
+        eInit = 0;
     end
     properties(DiscreteState)
 
@@ -30,13 +34,18 @@ classdef mpcManager < matlab.System
             
         end
 
-        function [mvmin,mvmax,ywt,mvwt,dmwwt] = stepImpl(this,mode)
+        function [mvmin,mvmax,ywt,mvwt,dmwwt,mvInit,xInit, eInit] = stepImpl(this,mode)
 
             mvmin = this.Tmin;
             mvmax = this.Tmax;
             
             [ywt,mvwt,dmwwt] = this.getMpcWeigth(mode);
-          
+            
+          % Conditions initial
+            xInit = this.xInit;
+            mvInit = this.mvInit;
+            eInit = this.eInit;
+            
         end
         %% Fonction qui détermine les gain
         function [OV, MV, MVR]= getMpcWeigth(this,mode)
@@ -59,36 +68,52 @@ classdef mpcManager < matlab.System
                 
         end
       %% Definire outputs       
-      function [mvmin,mvmax,ywt,mvwt,dmwwt] = getOutputSizeImpl(this)
+      function [mvmin,mvmax,ywt,mvwt,dmwwt,mvInit, xInit, eInit] = getOutputSizeImpl(this)
           mvmin = [1,8];
           mvmax = [1,8];
           ywt = [1,13];
           mvwt = [1,8];
           dmwwt = [1,8];
+          
+          xInit = [1,13];
+          mvInit = [1,8];
+          eInit = 1;
       end 
       
-      function [mvmin,mvmax,ywt,mvwt,dmwwt] = isOutputFixedSizeImpl(this)
+      function [mvmin,mvmax,ywt,mvwt,dmwwt,mvInit,xInit, eInit] = isOutputFixedSizeImpl(this)
           mvmin = true;
           mvmax = true;
           ywt = true;
           mvwt = true;
           dmwwt = true;
+          
+          xInit = true;
+          mvInit = true;
+          eInit = true;
       end
       
-      function [mvmin,mvmax,ywt,mvwt,dmwwt] = getOutputDataTypeImpl(this)
+      function [mvmin,mvmax,ywt,mvwt,dmwwt,mvInit,xInit, eInit] = getOutputDataTypeImpl(this)
           mvmin = "double";
           mvmax = "double";
           ywt = "double";
           mvwt = "double";
           dmwwt = "double";
+          
+          xInit = "double";
+          mvInit = "double";
+          eInit = "double";
       end
       
-     function [mvmin,mvmax,ywt,mvwt,dmwwt] = isOutputComplexImpl(this)
+     function [mvmin,mvmax,ywt,mvwt,dmwwt,mvInit,xInit, eInit] = isOutputComplexImpl(this)
          mvmin = false;
          mvmax = false;
          ywt = false;
          mvwt = false;
          dmwwt =false;
+         
+         xInit = false;
+         mvInit = false;
+         eInit = false;
      end
      
       
