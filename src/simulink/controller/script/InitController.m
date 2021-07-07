@@ -17,11 +17,12 @@
 
 %% Définitions des modes 
     % controlleur
-        mpcMode = [10 19];
+        mpcMode = [10 11 19];
         openLoopMode = [20 21];
     
     % Trajectory
         trajMode = [10];
+        singleWpts = [11];
         SpaceMouseMode = [19 20 21];
     
     % Gain pour MPC mode trajectoire 10

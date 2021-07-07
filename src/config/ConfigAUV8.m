@@ -4,8 +4,8 @@ function [simulation, physics, thrusters, mpc] = ConfigAUV8()
        simulation.model_name = uint8('auv8');
         
        % Physics
-       physics.mass = 33.95;
-       physics.volume = 0.037;
+       physics.mass = 31;
+       physics.volume = 0.0315;
        physics.rho = 998;
        physics.g = 9.81;
        physics.dvlCenterDist =0.1435;
@@ -55,7 +55,8 @@ function [simulation, physics, thrusters, mpc] = ConfigAUV8()
        mpc.gains.c10.OV = [ 70, 60, 70, 50, 50, 50, 50, 0, 0, 0, 0, 0, 0 ];
        mpc.gains.c10.MV = [ 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2 ];
        mpc.gains.c10.MVR = [ 0.1, 0.1, 0.1, 0.1, 0.3, 0.3, 0.3, 0.3 ];
-       mpc.gains.c19.OV = [ 0, 0, 0, 0, 0, 0, 0, 70, 60, 70, 50, 50, 50];
+       %mpc.gains.c19.OV = [ 0, 0, 0, 0, 0, 0, 0, 70, 60, 70, 50, 50, 50];
+       mpc.gains.c19.OV = [ 0, 0, 0, 50, 50, 50, 50, 0, 0, 0, 20, 20, 20];
        mpc.gains.c19.MV = [ 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2 ];
        mpc.gains.c19.MVR = [ 0.1, 0.1, 0.1, 0.1, 0.3, 0.3, 0.3, 0.3 ];                    
 end

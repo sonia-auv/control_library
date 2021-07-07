@@ -65,8 +65,8 @@ classdef OpenLoopController < matlab.System
                          this.AddedMass...
                          this.rho ...
                          this.g];
-                   % construire le vecteur state avec la imu et spaceNAV
-                    state = [0;0;0;1;0;0;0;ref.'];%[0;0;0;mo(4:7);ref.'];
+                   %construire le vecteur state avec la imu et spaceNAV
+                    state = [0;0;0;1;0;0;0;ref.'];%[0;0;0;mo(4:7);ref.'];;
                     
                    % Déterminer les matrices du modèle physique
                    

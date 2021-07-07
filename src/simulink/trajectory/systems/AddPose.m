@@ -41,11 +41,6 @@ classdef AddPose < matlab.System
         
         function CheckEvent(this,compute, clearBuffer, isNew,waypoint,initCond, reset )
         
-            if   compute == 1
-                this.poseList(1,:)= this.poseList(this.i-1,:);
-                this.poseList(2:end,:) = repmat(999, this.buffSize-1, this.elementSize);
-                this.i = 2;
-            end
             
             if clearBuffer == 1
 
@@ -55,16 +50,23 @@ classdef AddPose < matlab.System
             end
             % Ajout d'un waypoint provenant de ROS.
             if isNew == 1
-               if this.i < this.buffSize
+               if this.i <= this.buffSize
 
                         this.poseList(this.i,:) = this.processWpt(waypoint.').';
                         this.i = this.i + 1;
                end
-            end   
-        
+            end 
+            
+           if   compute == 1
+                this.poseList(1,:)= this.poseList(this.i-1,:);
+                this.poseList(2:end,:) = repmat(999, this.buffSize-1, this.elementSize);
+                this.i = 2;
+            end
+            
             if reset == 1
                 this.poseList(2:end,:) = repmat(999, this.buffSize-1, this.elementSize);
                 this.poseList(1,:) = [initCond,0];
+                this.poseList(2,:) = [initCond,1];
                 this.i = 2;
             end
         end
