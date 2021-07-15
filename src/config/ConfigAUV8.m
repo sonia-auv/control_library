@@ -21,7 +21,7 @@ function [simulation, physics, thrusters, mpc] = ConfigAUV8()
 
        physics.RB =[0.00,... x
                     0.00,... y
-                    -0.1]; % z
+                    -0.006]; % z
              
        physics.CDL=[45, 60, 70, 10, 7, 15];
 
@@ -49,12 +49,12 @@ function [simulation, physics, thrusters, mpc] = ConfigAUV8()
        mpc.m =  2;
        mpc.tmax = 29;
        mpc.tmin = -24;
-       mpc.gains.defaut.OV = [ 70, 60, 70, 50, 50, 50, 50, 0, 0, 0, 0, 0, 0 ];
+       mpc.gains.defaut.OV = [ 7, 6, 7, 9, 9, 9, 9, 0, 0, 0, 0, 0, 0 ];
        mpc.gains.defaut.MV = [ 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2 ];
        mpc.gains.defaut.MVR = [ 0.1, 0.1, 0.1, 0.1, 0.3, 0.3, 0.3, 0.3 ];
-       mpc.gains.c10.OV = [ 70, 60, 70, 50, 50, 50, 50, 0, 0, 0, 0, 0, 0 ];
+       mpc.gains.c10.OV = [ 14, 12, 14, 18, 18, 18, 18, 0, 0, 0, 0, 0, 0 ];
        mpc.gains.c10.MV = [ 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2 ];
-       mpc.gains.c10.MVR = [ 0.1, 0.1, 0.1, 0.1, 0.3, 0.3, 0.3, 0.3 ];
+       mpc.gains.c10.MVR = [ 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3 ];
        %mpc.gains.c19.OV = [ 0, 0, 0, 0, 0, 0, 0, 70, 60, 70, 50, 50, 50];
        mpc.gains.c19.OV = [ 0, 0, 0, 50, 50, 50, 50, 0, 0, 0, 20, 20, 20];
        mpc.gains.c19.MV = [ 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2 ];
