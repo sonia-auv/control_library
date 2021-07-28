@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Copyright 2014-2018 The MathWorks, Inc.
+# Copyright 2014-2020 The MathWorks, Inc.
 
 ARCHIVE="$1"
 CATKIN_WS="$2"
@@ -101,11 +101,12 @@ if [ $VALID_ZIP -ne 0 ] ; then
    exit 1   
 fi
 
-# Check for one of the standard files generated from Simulink
-# (ert_main.cpp)
-tar ztf "$ARCHIVE" | grep -q ert_main.cpp 2> /dev/null
-VALID_SIMULINK_ARCHIVE=$?
-if [ $VALID_SIMULINK_ARCHIVE -ne 0 ] ; then
+# Check for one of the standard files generated from Simulink or MATLAB
+# (rosnodeinterface.cpp or main.cpp)
+tar ztf "$ARCHIVE" | grep -q -E -- 'rosnodeinterface|main'.cpp 2> /dev/null
+VALID_ARCHIVE=$?
+
+if [ $VALID_ARCHIVE -ne 0 ] ; then
    echo "The archive, "$ARCHIVE", is not a valid Simulink model archive (.tgz file)."
    echo ""
    commandUsage

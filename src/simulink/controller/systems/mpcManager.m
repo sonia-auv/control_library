@@ -15,12 +15,13 @@ classdef mpcManager < matlab.System
         
         MecConst = ones(1,41) % Constantes Modèle physique
         
-        xInit = zeros(1,13);
         mvInit = zeros(1,8);
         eInit = 0;
     end
+    
     properties(DiscreteState)
-
+    init;
+    xInit;
     end
 
     % Pre-computed constants
@@ -29,24 +30,37 @@ classdef mpcManager < matlab.System
     end
    
     methods(Access = protected)
-        function setupImpl(this,mode)
+        function setupImpl(this,mode,x0)
             % Perform one-time calculations, such as computing constants
-            
+            this.init=0;
+            this.xInit=zeros(1,13);
         end
 
-        function [mvmin,mvmax,ywt,mvwt,dmwwt,mvInit,xInit, eInit] = stepImpl(this,mode)
+        function [mvmin,mvmax,ywt,mvwt,dmwwt,mvInit,xInit, eInit] = stepImpl(this,x0,mode)
 
-            mvmin = this.Tmin;
-            mvmax = this.Tmax;
-            
+          
             [ywt,mvwt,dmwwt] = this.getMpcWeigth(mode);
+            initMPCManager(this, x0);
             
-          % Conditions initial
+            
+            mvmin = this.Tmin;
+            mvmax = this.Tmax;    
             xInit = this.xInit;
             mvInit = this.mvInit;
             eInit = this.eInit;
             
         end
+        
+        %% Fonction D'initialisation
+        function initMPCManager(this, x0)
+            
+          % Conditions initial
+            if this.init==0
+                this.xInit=x0.';
+                this.init =1;
+            end  
+        end
+        
         %% Fonction qui détermine les gain
         function [OV, MV, MVR]= getMpcWeigth(this,mode)
             switch mode
@@ -115,9 +129,19 @@ classdef mpcManager < matlab.System
          mvInit = false;
          eInit = false;
      end
-     
+     function [sz,dt,cp] = getDiscreteStateSpecificationImpl(this,name)
+         if strcmp(name,'init')
+              sz = [1 1];
+              dt = "double";
+              cp = false;
+         elseif strcmp(name,'xInit')
+              sz = [1 13];
+              dt = "double";
+              cp = false;
+         end
+     end 
       
-        function resetImpl(obj)
+        function resetImpl(this)
             % Initialize / reset discrete-state properties
         end
     end

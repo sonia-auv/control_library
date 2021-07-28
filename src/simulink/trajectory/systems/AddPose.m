@@ -51,7 +51,7 @@ classdef AddPose < matlab.System
             % Ajout d'un waypoint provenant de ROS.
             if isNew == 1
                if this.i <= this.buffSize
-
+                        this.poseList(this.i-1,:) = this.processWpt(waypoint.').';
                         this.poseList(this.i,:) = this.processWpt(waypoint.').';
                         this.i = this.i + 1;
                end
@@ -78,9 +78,8 @@ classdef AddPose < matlab.System
             twpt = zeros(1, this.elementSize);
             twpt(8)=wpt(8);
             
-            % Weird unity vs realitée besoin test piscine !!
             p= wpt(1:3);
-            p(2)=-p(2);
+          
             
             % Pre calculs
             q = eul2quat(deg2rad(wpt(4:6)),'ZYX');
@@ -95,10 +94,18 @@ classdef AddPose < matlab.System
              qu = lq(2:4); % quaternion partie vectoriel
              rp=lp+2*dot(qu,p)*qu +(qs^2-dot(qu,qu))*p + 2*qs*cross(qu,p);
             
-            if dot(lq,q)<1
-                rq= quatmultiply(lq,quatinv(quatconj(q)));
+             
+            % Prendre le quaternion le plus cours
+            if dot(lq,q)>1
+               
+               rq= quatmultiply(lq,quatinv(quatconj(q)));
+              % rq= quatmultiply(quatinv(lq),quatconj(q));
+            
             else
+             
                 rq = quatmultiply(lq,quatinv(q));
+               % rq = quatmultiply(quatinv(lq),q);
+               
             end
             
             % transformer le point en fonction du frame
@@ -110,6 +117,7 @@ classdef AddPose < matlab.System
                     
                 case 1 % position et angle relatif
                     twpt(1:3)= rp;
+                    twpt(3)= lp(3);
                     twpt(4:7)= rq;
                     
                 case 2 % position relatif et angle absolue
