@@ -42,7 +42,7 @@ classdef AddPose < matlab.System
         function CheckEvent(this,compute, clearBuffer, isNew,waypoint,initCond, reset )
         
             
-            if clearBuffer == 1
+            if clearBuffer == 1 % supprimer le buffer de way points
 
                     this.poseList(2:end,:) = repmat(999, this.buffSize-1, this.elementSize);
                     this.i = 2;
