@@ -21,6 +21,9 @@ classdef AddPose < matlab.System
     end
 
     methods(Access = protected)
+%==========================================================================
+% Fonctions Principales
+%==========================================================================
 %% Fonction appeler a l'initialisation
         function setupImpl(this, compute, clearBuffer, isNew, waypoint,initCond, reset)
             % Perform one-time calculations, such as computing constants   
@@ -37,6 +40,9 @@ classdef AddPose < matlab.System
             count = this.i;
             waypoints = this.poseList;
         end
+%% ========================================================================
+% Sous Routines
+%==========================================================================        
 %% Fonction qui interprete les message ROS
         
         function CheckEvent(this,compute, clearBuffer, isNew,waypoint,initCond, reset )
@@ -51,7 +57,7 @@ classdef AddPose < matlab.System
             % Ajout d'un waypoint provenant de ROS.
             if isNew == 1
                if this.i <= this.buffSize
-                        this.poseList(this.i-1,:) = this.processWpt(waypoint.').';
+                        %this.poseList(this.i-1,:) = this.processWpt(waypoint.').';
                         this.poseList(this.i,:) = this.processWpt(waypoint.').';
                         this.i = this.i + 1;
                end
@@ -92,7 +98,7 @@ classdef AddPose < matlab.System
             %rp = rotatepoint(quatinv(lq),wpt(1:3)) + lp;
              qs = lq(1);   % quaternion partie scalaire
              qu = lq(2:4); % quaternion partie vectoriel
-             rp=lp+2*dot(qu,p)*qu +(qs^2-dot(qu,qu))*p + 2*qs*cross(qu,p);
+             rp=lp + (2*dot(qu,p)*qu +(qs^2-dot(qu,qu))*p + 2*qs*cross(qu,p));
             
              
             % Prendre le quaternion le plus cours
@@ -117,7 +123,6 @@ classdef AddPose < matlab.System
                     
                 case 1 % position et angle relatif
                     twpt(1:3)= rp;
-                    twpt(3)= lp(3);
                     twpt(4:7)= rq;
                     
                 case 2 % position relatif et angle absolue

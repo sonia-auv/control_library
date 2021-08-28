@@ -31,6 +31,7 @@ classdef TrajectoryManager < matlab.System
     %pMax;
     done;
     targetReachedCount;
+    init;
     end
 
     % Pre-computed constants
@@ -49,23 +50,31 @@ classdef TrajectoryManager < matlab.System
            this.targetReachedCount=0;
            % Buffer trajectoire
            this.poseBuffer=repmat(this.dummy, this.bufferSize, 13);
-           this.bufferCount =1;
+           this.bufferCount =0;
            this.done=false;
+           this.init=0;
            
-           % Conditions Initiales
-           this.poseBuffer(1,:)=[0,0,0,1,0,0,0,0,0,0,0,0,0];%InitCond;
            
            
         end
 %% Main execute a chaque iteration.
-        function [currentPose, isReached] = stepImpl(this,mesuredPose, poses, isNew, reset)
+        function [currentPose, isReached] = stepImpl(this, poses, isNew, reset,x0,mesuredPose)
             % Implement algorithm. Calculate y as a function of input u and
             new = isNew(1);
             count = isNew(2);
             mp =zeros(1,7);
-            mp=mesuredPose;
+            mp=mesuredPose(1:7);
             
-            this.BufferReset(reset,mp);
+%             
+             if this.init==0
+                 % Conditions Initiales
+                 this.poseBuffer(1,:)=[x0,0,0,0,0,0,0];%InitCond;
+                 this.bufferCount =1;
+                 this.init=1;
+             end
+            
+            
+            %this.BufferReset(reset,mp);
             this.processNewPoses(poses,count,new);
             
             currentPose=this.SendCurrentPoses();
@@ -83,10 +92,13 @@ classdef TrajectoryManager < matlab.System
 %% Fonction qui traites les nouveau poses.
         function processNewPoses(this,pose,count,new)
            % Insertion des nouveaux points.
-            if new > this.generationNumber
+           
+             if new == 1
+            %if new == this.generationNumber %new>
                 
                 if count + this.bufferCount < this.bufferSize
-                   this.poseBuffer(this.bufferCount:count + this.bufferCount,:) = pose(1:count+1,:);
+                   this.poseBuffer(count + this.bufferCount,:) = pose();
+                   %this.poseBuffer(this.bufferCount:count + this.bufferCount,:) = pose(1:count+1,:)
                    this.bufferCount = count + this.bufferCount;
                    this.generationNumber = this.generationNumber+1; 
                 else
@@ -119,7 +131,7 @@ classdef TrajectoryManager < matlab.System
             end
                 
             % Ne pas supprimer le point si c'est le dernier.
-            if not(this.poseBuffer(5,:) == this.emptyArray)
+            if not(this.poseBuffer(this.prediction+1,:) == this.emptyArray)
                this.poseBuffer=[this.poseBuffer(2:end,:); this.emptyArray];
                this.bufferCount = this.bufferCount - 1;
                this.done=false;
