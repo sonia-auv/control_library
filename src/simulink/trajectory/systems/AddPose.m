@@ -103,13 +103,13 @@ classdef AddPose < matlab.System
              
             % Prendre le quaternion le plus cours
             if dot(lq,q)>1
-               
-               rq= quatmultiply(lq,quatconj(q));
+                rq= quatmultiply(lq,quatconj(q));
+               %rq= quatmultiply(lq,quatconj(q));
               % rq= quatmultiply(quatinv(lq),quatconj(q));
             
             else
-             
-                rq = quatmultiply(lq,quatinv(quatinv(q)));
+                 rq = quatmultiply(lq,((q)));
+                %rq = quatmultiply(lq,quatinv(quatinv(q)));
                % rq = quatmultiply(quatinv(lq),q);
                
             end
