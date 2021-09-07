@@ -108,8 +108,9 @@ nlobj.Optimization.RunAsLinearMPC='adaptive';%'timevarying';
 
 %nlobj.Optimization.MVInterpolationOrder=1;cell
 %nlobj.Optimization.SolverOptions.HessianApproximation='finite-difference';
-%nlobj.Optimization.UseSuboptimalSolution=true();
+nlobj.Optimization.UseSuboptimalSolution=true();
 %nlobj.Optimization.SolverOptions.SubproblemAlgorithm='direct';
-%nlobj.Optimization.SolverOptions.MaxIterations=2
+nlobj.Optimization.SolverOptions.MaxIterations=5;
+
 
 validateFcns(nlobj,Xi,Ui);
