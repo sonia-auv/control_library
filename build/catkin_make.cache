@@ -1,0 +1,2 @@
+
+-DCATKIN_DEVEL_PREFIX=/home/lamarre/Documents/SONIA/catkin_ws/src/control_library/devel -DCMAKE_INSTALL_PREFIX=/home/lamarre/Documents/SONIA/catkin_ws/src/control_library/install -G Unix Makefiles

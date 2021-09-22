@@ -17,16 +17,18 @@ classdef mpcManager < matlab.System
         
         mvInit = zeros(1,8);
         eInit = 0;
+       
     end
     
     properties(DiscreteState)
     init;
     xInit;
+    
     end
 
     % Pre-computed constants
     properties(Access = private)
-
+     EKF;  
     end
    
     methods(Access = protected)
@@ -34,6 +36,7 @@ classdef mpcManager < matlab.System
             % Perform one-time calculations, such as computing constants
             this.init=0;
             this.xInit=zeros(1,13);
+ 
         end
 
         function [mvmin,mvmax,ywt,mvwt,dmwwt,mvInit,xInit, eInit] = stepImpl(this,x0,mode)

@@ -41,7 +41,7 @@ Ui= [0;0;0;0;0;0;0;0];%repmat(0.0,nu,1);   % Commande initials
 % Generate discrete-time model
 nx = size(Ac,1);
 nu = size(Bc,2);
-M = expm([[Ac Bc]*Ts; zeros(nu,nu+nx)]);
+M = expm([[Ac Bc]*mpc.Ts; zeros(nu,nu+nx)]);
 A = M(1:nx,1:nx);
 B = M(1:nx,nx+1:nx+nu);
 C = Cc;
