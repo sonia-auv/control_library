@@ -2,12 +2,7 @@
 % Initialiser le seed du random
 rng shuffle
 
-% Retrouver le paramètre de AUV8
-% cf = ConfigAUV8();
-
- 
-
-% Perturbations des vages
+%% Perturbations des vagues
     %Vages X
     waX=1;          % Amplitude
     wfX=pi/2;         % Frequence
@@ -33,7 +28,17 @@ rng shuffle
     wfPsi=pi/3;       % Frequence
     wpPsi=pi;       % Phase
     
-% Perturbation Drift
+%% Damping des vagues en fonction de la profondeur
+    
+% On suppose un ratio linéaire Ax +B
+    dampA = -0.4;
+    dampB = 1;
+    
+    ratioMax =1;
+    ratioMin =0.2;
+
+
+%% Perturbation Drift
 
     dts=5; % Temp d'échantillionage des perturbation
     

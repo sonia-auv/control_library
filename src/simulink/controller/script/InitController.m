@@ -17,12 +17,12 @@
 
 %% Définitions des modes 
     % controlleur
-        mpcMode = [10 11 19];
+        NlmpcMode = [10 11 19];
         openLoopMode = [20 21];
-    
+        adapMpcMode = [31];
     % Trajectory
         trajMode = [10];
-        singleWpts = [11];
+        singleWpts = [11,31];
         SpaceMouseMode = [19 20 21];
     
     % Gain pour MPC mode trajectoire 10
@@ -93,23 +93,23 @@ A = M(1:nx,1:nx);
 B = M(1:nx,nx+1:nx+nu);
 C = Cc;
 D = Dc;
-dplant= c2d(ss(Ac,Bc,Cc,Dc),MPC.Ts);
+
 IntitalPlant=ss(A,B,C,D,MPC.Ts);
+%IntitalPlant = setmpcsignals(IntitalPlant,'UD',[1:8]);
 pole(IntitalPlant)
 
 % Création du controleur MPC.
-mpcobj =mpc(dplant);
+mpcobj =mpc(IntitalPlant);
 mpcobj.PredictionHorizon =MPC.p;
-mpcobj.ControlHorizon=2;%MPC.m;
+mpcobj.ControlHorizon=MPC.m;
 
 mpcobj.Model.Nominal.X =Xi;
 mpcobj.Model.Nominal.Y=Xi;
-
 %Ajout des poids et gains
 mpcobj.Weights.OutputVariables = [ 20, 20, 20,30, 30, 30, 0, 0, 0, 0, 0, 0 ];
 mpcobj.Weights.ManipulatedVariables = [ 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2 ];
 mpcobj.Weights.ManipulatedVariablesRate = [ 0.3, 0.3, 0.3, 0.3, 0.6, 0.6, 0.6, 0.6];
-mpcobj.MV = struct('Min',TMIN,'Max',TMAX);
+%mpcobj.MV = struct('Min',TMIN,'Max',TMAX);
 % mpcobj.OutputVariables=struct('Min',VMIN,'Max',VMAX);
 setEstimator(mpcobj,'custom');
 mpcobj.Optimizer.ActiveSetOptions.ConstraintTolerance=0.01;
@@ -157,7 +157,7 @@ nlobj.Optimization.SolverOptions.MaxIterations=1;
 
 
 validateFcns(nlobj,Xi,Ui);
-tic;
-mv = nlmpcmove(nlobj,Xi,Ui,Xi.')
-toc;
+% tic;
+% mv = nlmpcmove(nlobj,Xi,Ui,Xi.')
+% toc;
 %test = convertToMPC(nlobj,Xi.',Ui);
