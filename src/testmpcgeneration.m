@@ -1,4 +1,10 @@
 clear
+test= [0.1 11 0.1];
+if max(test) > 10
+    disp("good")
+end
+
+
 [simulation, physics, thrusters, MPC] = ConfigAUV8();
 
 %Forces Minmax Thrusters initailes
