@@ -89,7 +89,7 @@ classdef AddPose < matlab.System
         % Reel
         twpt = zeros(1, this.elementSize);
         twpt(8)=wpt(8);
-
+        % twpt(9)=wpt(9);
         p= wpt(1:3);
         dir= wpt(9);
     
