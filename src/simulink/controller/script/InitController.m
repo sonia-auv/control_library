@@ -123,13 +123,13 @@ mpcobj.Optimizer.ActiveSetOptions.ConstraintTolerance=0.01;
 % 
 % % conditions initial
 Ui =[0 0 0 0 0 0 0 0];
-Xi=[0;0;0.4;1;0;0;0;0;0;0;0;0;0];
+Xi=[0;0;0.3;1;0;0;0;0;0;0;0;0;0];
 
 nlobj = nlmpc(MPC.nx, MPC.ny, MPC.nu);
 % Definire les fonctions différentielles et les matrices jacobienne
 nlobj.Model.StateFcn = "AUVQuatSimFcn";
 nlobj.Jacobian.OutputFcn="AUVQuatSimFcn";
-nlobj.Optimization.CustomSolverFcn = @LinearNlMpcSolver;
+%nlobj.Optimization.CustomSolverFcn = @LinearNlMpcSolver;
 nlobj.Jacobian.StateFcn = @AUVQuatJacobianMatrix;
 
 nlobj.Ts = MPC.Ts;
