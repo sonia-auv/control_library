@@ -5,7 +5,7 @@ function [simulation, physics, thrusters, MPC] = ConfigAUV8()
         
        % Physics
        physics.mass = 31;
-       physics.volume = 0.032;
+       physics.volume = 0.0315;
        physics.rho = 998;
        physics.g = 9.81;
        physics.dvlCenterDist =0.1435;
@@ -21,16 +21,18 @@ function [simulation, physics, thrusters, MPC] = ConfigAUV8()
 
        physics.RB =[0.00,... x
                     0.00,... y
-                    0.006]; % z
+                    -0.006]; % z
              
-       physics.CDL=[45, 60, 70, 10, 7, 15]/2;
+       physics.CDL=[45, 60, 70, 10, 7, 15]/3;
 
        physics.CDQ=[1.17, 0.82, 0.756, 0.167, 0.1, 0.102];
 
        physics.AF = [0.12, 0.22, 0.292];
 
        physics.AddedMass=-[1.4648, 12.6156, 15.7695, 0.1164, 0.3493, 0.3493];
-        
+       
+       physics.DepthPose = [0 -136 178]*10^-3;
+       
        % Thrusters     x      y      z    yaw  roll pitch
        thrusters.T=[ 0.292, 0.173, 0.082, -45,-90, 0;   % T1
                     -0.292, 0.173, 0.082, 45,-90, 0;    % T2
@@ -46,13 +48,13 @@ function [simulation, physics, thrusters, MPC] = ConfigAUV8()
        MPC.nu = 8;
        MPC.Ts = 0.1;
        MPC.p = 10;
-       MPC.m =  4;
+       MPC.m =  2;
        MPC.tmax = 40;%29;
        MPC.tmin = -30;%-24;
        MPC.gains.defaut.OV = [ 70, 60, 70, 90, 90, 90, 90, 0, 0, 0, 0, 0, 0 ];
        MPC.gains.defaut.MV = [ 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2 ];
        MPC.gains.defaut.MVR = [ 0.1, 0.1, 0.1, 0.1, 0.3, 0.3, 0.3, 0.3 ];
-       MPC.gains.c10.OV = [ 45, 45, 45, 45, 45, 45, 45, 0, 0, 0, 0, 0, 0 ];
+       MPC.gains.c10.OV = [ 30, 30, 30, 40, 40, 40, 40, 0, 0, 0, 0, 0, 0 ];
        MPC.gains.c10.MV = [ 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2 ];
        MPC.gains.c10.MVR = [ 0.4, 0.4, 0.4, 0.4, 0.6, 0.6, 0.6, 0.6 ];
        %mpc.gains.c19.OV = [ 0, 0, 0, 0, 0, 0, 0, 70, 60, 70, 50, 50, 50];

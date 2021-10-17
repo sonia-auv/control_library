@@ -110,7 +110,7 @@ mpcobj.Weights.OutputVariables = [ 20, 20, 20,30, 30, 30, 0, 0, 0, 0, 0, 0 ];
 mpcobj.Weights.ManipulatedVariables = [ 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2 ];
 mpcobj.Weights.ManipulatedVariablesRate = [ 0.3, 0.3, 0.3, 0.3, 0.6, 0.6, 0.6, 0.6];
 %mpcobj.MV = struct('Min',TMIN,'Max',TMAX);
-% mpcobj.OutputVariables=struct('Min',VMIN,'Max',VMAX);
+% mpcobj.OutputVariables=struct('Min',VMIN,'Max',VMAX);%
 setEstimator(mpcobj,'custom');
 mpcobj.Optimizer.ActiveSetOptions.ConstraintTolerance=0.01;
 %options = mpcmoveopt;
@@ -118,12 +118,11 @@ mpcobj.Optimizer.ActiveSetOptions.ConstraintTolerance=0.01;
 %results = review(mpcobj);
 %options.MVTarget = [0 0 0 0 -4 4 -4 4]; 
 
-
 %% Initialiser le comtrolleur MPC non lineaire
 % 
 % % conditions initial
 Ui =[0 0 0 0 0 0 0 0];
-Xi=[0;0;0.3;1;0;0;0;0;0;0;0;0;0];
+Xi=[0;0;-0.3;1;0;0;0;0;0;0;0;0;0];
 
 nlobj = nlmpc(MPC.nx, MPC.ny, MPC.nu);
 % Definire les fonctions différentielles et les matrices jacobienne
@@ -153,7 +152,7 @@ nlobj.Optimization.RunAsLinearMPC='adaptive';%'timevarying';
 %nlobj.Optimization.SolverOptions.HessianApproximation='finite-difference';
 
 %nlobj.Optimization.SolverOptions.SubproblemAlgorithm='direct';
-nlobj.Optimization.SolverOptions.MaxIterations=1;
+%nlobj.Optimization.SolverOptions.MaxIterations=1;
 
 
 validateFcns(nlobj,Xi,Ui);
