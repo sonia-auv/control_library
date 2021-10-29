@@ -16,15 +16,15 @@ rng shuffle
     wfZ=pi/2;         % Frequence
     wpZ=pi;         % Phase
     %Vages RX (Roll)
-    waPhi= .5;      % Amplitude
+    waPhi= .25;      % Amplitude
     wfPhi= pi/3;      % Frequence
     wpPhi=0;        % Phase
     %Vages Ry (Pitch)
-    waTheta=.5;    % Amplitude
+    waTheta=.25;    % Amplitude
     wfTheta=pi/3;     % Frequence
     wpTheta=pi/2;   % Phase
     %Vages Rz (Yaw)
-    waPsi=.5;       % Amplitude
+    waPsi=.25;       % Amplitude
     wfPsi=pi/3;       % Frequence
     wpPsi=pi;       % Phase
     

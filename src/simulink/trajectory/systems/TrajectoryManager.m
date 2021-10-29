@@ -58,10 +58,10 @@ classdef TrajectoryManager < matlab.System
            
         end
 %% Main execute a chaque iteration.
-        function [currentPose, isReached] = stepImpl(this, poses, isNew, reset,x0,mesuredPose)
+        function [currentPose, isReached] = stepImpl(this, poses, target, reset,x0,mesuredPose)
             % Implement algorithm. Calculate y as a function of input u and
-            new = isNew(1);
-            count = isNew(2);
+            new = 1;
+            count = 1;
             mp =zeros(1,7);
             mp=mesuredPose(1:7);
             
@@ -79,7 +79,7 @@ classdef TrajectoryManager < matlab.System
             
             currentPose=this.SendCurrentPoses();
             
-            isReached= this.targetReached(mp);
+            isReached= this.targetReached(mp, target);
            
         end
 
@@ -141,19 +141,19 @@ classdef TrajectoryManager < matlab.System
     end
 %% Fonction qui verifie le target reached
 
-function isReached= targetReached(this, mesuredPose)
+function isReached= targetReached(this, mesuredPose, target)
     
     isReached = false;
     
     % vérifier le traget reached si la trajectoire est terminé
-    if this.done
+    if ~this.done
         
          % calcule de l'erreur de langle en 3D avec le quaternion
-         qRel = quatmultiply(quatconj(this.poseBuffer(1,4:7)),mesuredPose(4:7));
+         qRel = quatmultiply(quatconj(target(4:7)),mesuredPose(4:7));
          errAngle = 2 * atan2(norm(qRel(2:4)),qRel(1));
         
         % vérifier si le sub est dans la zone de convergence (sphérique / conique)
-        if norm(this.poseBuffer(1,1:3) - mesuredPose(1:3)) < this.linearConvergence ...
+        if norm(target(1:3) - mesuredPose(1:3)) < this.linearConvergence ...
            &&  errAngle < this.quaternionConvergence
        
            this.targetReachedCount = this.targetReachedCount+1;
@@ -161,12 +161,10 @@ function isReached= targetReached(this, mesuredPose)
            if this.targetReachedCount * this.SampleTime >= this.TargetThreshold
                 isReached = true;    
            end
-            
-       end    
            
-           
-    else
-        this.targetReachedCount = 0;
+        else
+        this.targetReachedCount = 0;     
+       end     
   
     end
 end
