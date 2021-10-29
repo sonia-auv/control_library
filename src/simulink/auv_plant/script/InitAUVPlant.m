@@ -4,15 +4,15 @@ rng shuffle
 
 %% Perturbations des vagues
     %Vages X
-    waX=1;          % Amplitude
+    waX=.5;          % Amplitude
     wfX=pi/2;         % Frequence
     wpX=0;          % Phase
     %Vages Y
-    waY=2;          % Amplitude
+    waY=1;          % Amplitude
     wfY=pi/2;         % Frequence
     wpY=pi/2;       % Phase
     %Vages Z
-    waZ= 3 ;         % Amplitude
+    waZ= 1.5 ;         % Amplitude
     wfZ=pi/2;         % Frequence
     wpZ=pi;         % Phase
     %Vages RX (Roll)
@@ -43,11 +43,11 @@ rng shuffle
     dts=5; % Temp d'échantillionage des perturbation
     
     % Perturbation x
-    dMinX=-1*rand(); % Valeur minimum x
-    dMaxX=1*rand();  % Valeur maximum x
+    dMinX=-0.5*rand(); % Valeur minimum x
+    dMaxX=0.5*rand();  % Valeur maximum x
     dSeedX=round(rand*10);
     
     % Perturbation y
-    dMinY=-3*rand(); % Valeur minimum  y
-    dMaxY=3*rand();  % Valeur maximumx y
+    dMinY=-1.5*rand(); % Valeur minimum  y
+    dMaxY=1.5*rand();  % Valeur maximumx y
     dSeedY=round(rand*10);

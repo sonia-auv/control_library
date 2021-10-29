@@ -97,6 +97,7 @@ D = Dc;
 IntitalPlant=ss(A,B,C,D,MPC.Ts);
 %IntitalPlant = setmpcsignals(IntitalPlant,'UD',[1:8]);
 pole(IntitalPlant)
+%pzplot(IntitalPlant)
 
 % Création du controleur MPC.
 mpcobj =mpc(IntitalPlant);
@@ -106,10 +107,10 @@ mpcobj.ControlHorizon=MPC.m;
 mpcobj.Model.Nominal.X =Xi;
 mpcobj.Model.Nominal.Y=Xi;
 %Ajout des poids et gains
-mpcobj.Weights.OutputVariables = [ 20, 20, 20,30, 30, 30, 0, 0, 0, 0, 0, 0 ];
+mpcobj.Weights.OutputVariables = [ 30, 30, 30,45, 45, 45, 0, 0, 0, 0, 0, 0 ];
 mpcobj.Weights.ManipulatedVariables = [ 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2 ];
-mpcobj.Weights.ManipulatedVariablesRate = [ 0.3, 0.3, 0.3, 0.3, 0.6, 0.6, 0.6, 0.6];
-%mpcobj.MV = struct('Min',TMIN,'Max',TMAX);
+mpcobj.Weights.ManipulatedVariablesRate = [ 0.4, 0.4, 0.4, 0.4, 0.6, 0.6, 0.6, 0.6];
+mpcobj.MV = struct('Min',TMIN,'Max',TMAX);
 % mpcobj.OutputVariables=struct('Min',VMIN,'Max',VMAX);%
 setEstimator(mpcobj,'custom');
 mpcobj.Optimizer.ActiveSetOptions.ConstraintTolerance=0.01;
