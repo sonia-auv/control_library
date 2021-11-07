@@ -17,12 +17,13 @@
 
 %% Définitions des modes 
     % controlleur
-        NlmpcMode = [10 11 19];
+        NlmpcMode = [10 11 19]; % Non linear mpc
         openLoopMode = [20 21];
-        adapMpcMode = [31];
+        adapEMpcMode = [31]; % Adaptive MPC EULER
+        adapQMpcMode = [32]; % Adaptive MPC QUAT
     % Trajectory
         trajMode = [10];
-        singleWpts = [11,31];
+        singleWpts = [11,31,32];
         SpaceMouseMode = [19 20 21];
     
     % Gain pour MPC mode trajectoire 10
@@ -76,88 +77,120 @@ Z2_l = 1;
 Z1_l = -2*exp(-zeta_l*wn_l*MPC.Ts)*cos(wn_l*MPC.Ts*sqrt(1-zeta_l^2));
 Z0_l = exp(-2*zeta_l*wn_l*MPC.Ts);
 
-%% Initialiser le comtrolleur MPC
+%% Initialiser le comtrolleur MPC EULER
 % Conditions initiales
-Xi=[0;0;0.3;0;0;0;0;0;0;0;0;0];%repmat(0.01,nx,1); % états initials
-Ui= [0;0;0;0;0;0;0;0];%repmat(0.0,nu,1);   % Commande initials
+    Xi=[0;0;0.3;0;0;0;0;0;0;0;0;0]; % états initials
+    Ui= [0;0;0;0;0;0;0;0];%  % Commande initials
 
 %liniéarisation du modèle aux conditions initales.
-[Ac,Bc,Cc,Dc] = AUVEULJacobianMatrix(Xi,Ui);   
+    [Aec,Bec,Cec,Dec] = AUVEULJacobianMatrix(Xi,Ui);   
 
 % création de l'objet state space.
 % Generate discrete-time model
-nx = size(Ac,1);
-nu = size(Bc,2);
-M = expm([[Ac Bc]*MPC.Ts; zeros(nu,nu+nx)]);
-A = M(1:nx,1:nx);
-B = M(1:nx,nx+1:nx+nu);
-C = Cc;
-D = Dc;
+    nx = size(Aec,1);
+    nu = size(Bec,2);
+    M = expm([[Aec Bec]*MPC.Ts; zeros(nu,nu+nx)]);
+    Ae = M(1:nx,1:nx);
+    Be = M(1:nx,nx+1:nx+nu);
+    %BT = Ac(7:12,7:12)\(A(7:12,7:12)-eye(6))*Bc(7:12,1:8)
+    Ce = Cec;
+    De = Dec;
 
-IntitalPlant=ss(A,B,C,D,MPC.Ts);
+    IntitalPlant=ss(Ae,Be,Ce,De,MPC.Ts);
 %IntitalPlant = setmpcsignals(IntitalPlant,'UD',[1:8]);
-pole(IntitalPlant)
-%pzplot(IntitalPlant)
+    pole(IntitalPlant)
 
 % Création du controleur MPC.
-mpcobj =mpc(IntitalPlant);
-mpcobj.PredictionHorizon =MPC.p;
-mpcobj.ControlHorizon=MPC.m;
+    Empcobj =mpc(IntitalPlant);
+    Empcobj.PredictionHorizon =MPC.p;
+    Empcobj.ControlHorizon=MPC.m;
 
-mpcobj.Model.Nominal.X =Xi;
-mpcobj.Model.Nominal.Y=Xi;
+    Empcobj.Model.Nominal.X =Xi;
+    Empcobj.Model.Nominal.Y=Xi;
 %Ajout des poids et gains
-mpcobj.Weights.OutputVariables = [ 30, 30, 30,45, 45, 45, 0, 0, 0, 0, 0, 0 ];
-mpcobj.Weights.ManipulatedVariables = [ 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2 ];
-mpcobj.Weights.ManipulatedVariablesRate = [ 0.4, 0.4, 0.4, 0.4, 0.6, 0.6, 0.6, 0.6];
-mpcobj.MV = struct('Min',TMIN,'Max',TMAX);
-% mpcobj.OutputVariables=struct('Min',VMIN,'Max',VMAX);%
-setEstimator(mpcobj,'custom');
-mpcobj.Optimizer.ActiveSetOptions.ConstraintTolerance=0.01;
-%options = mpcmoveopt;
-%xss=mpcstate(mpcobj);
-%results = review(mpcobj);
-%options.MVTarget = [0 0 0 0 -4 4 -4 4]; 
+    Empcobj.Weights.OutputVariables = [ 30, 30, 30,45, 45, 45, 0, 0, 0, 0, 0, 0 ];
+    Empcobj.Weights.ManipulatedVariables = [ 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2 ];
+    Empcobj.Weights.ManipulatedVariablesRate = [ 0.4, 0.4, 0.4, 0.4, 0.6, 0.6, 0.6, 0.6];
+    Empcobj.MV = struct('Min',TMIN,'Max',TMAX);
+    % mpcobj.OutputVariables=struct('Min',VMIN,'Max',VMAX);%
+    setEstimator(Empcobj,'custom');
+    Empcobj.Optimizer.ActiveSetOptions.ConstraintTolerance=0.01;
+    %xss=mpcstate(mpcobj);
+    %results = review(mpcobj);
+    
+%% Initialiser le comtrolleur MPC quaternion
 
+% Conditions initiales
+    Xi=[0;0;0.3;1;0;0;0;0;0;0;0;0;0]; % états initials
+    Ui= [0;0;0;0;0;0;0;0];%  % Commande initials
+
+%liniéarisation du modèle aux conditions initales.
+    [Aqc,Bqc,Cqc,Dqc] = AUVQuatJacobianMatrix(Xi,Ui);   
+
+% création de l'objet state space.
+% Generate discrete-time model
+    nx = size(Aqc,1);
+    nu = size(Bqc,2);
+    M = expm([[Aqc Bqc]*MPC.Ts; zeros(nu,nu+nx)]);
+    Aq = M(1:nx,1:nx);
+    Bq = M(1:nx,nx+1:nx+nu)
+    %BT = Ac(7:12,7:12)\(A(7:12,7:12)-eye(6))*Bc(7:12,1:8)
+    Cq = Cqc;
+    Dq = Dqc;
+
+    IntitalPlant=ss(Aq,Bq,Cq,Dq,MPC.Ts);
+%IntitalPlant = setmpcsignals(IntitalPlant,'UD',[1:8]);
+    pole(IntitalPlant)
+
+% Création du controleur MPC.
+    Qmpcobj =mpc(IntitalPlant);
+    Qmpcobj.PredictionHorizon =MPC.p;
+    Qmpcobj.ControlHorizon=MPC.m;
+
+    Qmpcobj.Model.Nominal.X =Xi;
+    Qmpcobj.Model.Nominal.Y=Xi;
+%Ajout des poids et gains
+    Qmpcobj.Weights.OutputVariables = MPC.gains.c10.OV;
+    Qmpcobj.Weights.ManipulatedVariables = MPC.gains.c10.MV;
+    Qmpcobj.Weights.ManipulatedVariablesRate = MPC.gains.c10.MVR;
+    Qmpcobj.MV = struct('Min',TMIN,'Max',TMAX);
+    % mpcobj.OutputVariables=struct('Min',VMIN,'Max',VMAX);%
+    setEstimator(Qmpcobj,'custom');
+    Qmpcobj.Optimizer.ActiveSetOptions.ConstraintTolerance=0.01;
+    %xss=mpcstate(mpcobj);
+    %results = review(mpcobj);
 %% Initialiser le comtrolleur MPC non lineaire
 % 
 % % conditions initial
-Ui =[0 0 0 0 0 0 0 0];
-Xi=[0;0;-0.3;1;0;0;0;0;0;0;0;0;0];
+    Ui =[0 0 0 0 0 0 0 0];
+    Xi=[0;0;-0.3;1;0;0;0;0;0;0;0;0;0];
 
-nlobj = nlmpc(MPC.nx, MPC.ny, MPC.nu);
+    nlobj = nlmpc(MPC.nx, MPC.ny, MPC.nu);
 % Definire les fonctions différentielles et les matrices jacobienne
-nlobj.Model.StateFcn = "AUVQuatSimFcn";
-nlobj.Jacobian.OutputFcn="AUVQuatSimFcn";
-%nlobj.Optimization.CustomSolverFcn = @LinearNlMpcSolver;
-nlobj.Jacobian.StateFcn = @AUVQuatJacobianMatrix;
+    nlobj.Model.StateFcn = "AUVQuatSimFcn";
+    nlobj.Jacobian.OutputFcn="AUVQuatSimFcn";
+    %nlobj.Optimization.CustomSolverFcn = @LinearNlMpcSolver;
+    nlobj.Jacobian.StateFcn = @AUVQuatJacobianMatrix;
 
-nlobj.Ts = MPC.Ts;
-nlobj.PredictionHorizon = MPC.p;
-nlobj.ControlHorizon = MPC.m;
+    nlobj.Ts = MPC.Ts;
+    nlobj.PredictionHorizon = MPC.p;
+    nlobj.ControlHorizon = MPC.m;
 
-nlobj.MV = struct('Min',TMIN,'Max',TMAX);%,'Target',MvTarget);
-nlobj.Weights.OutputVariables = MPC.gains.defaut.OV;
-nlobj.Weights.ManipulatedVariables = MPC.gains.defaut.MV;
-nlobj.Weights.ManipulatedVariablesRate = MPC.gains.defaut.MVR;
+    nlobj.MV = struct('Min',TMIN,'Max',TMAX);%,'Target',MvTarget);
+    nlobj.Weights.OutputVariables = MPC.gains.defaut.OV;
+    nlobj.Weights.ManipulatedVariables = MPC.gains.defaut.MV;
+    nlobj.Weights.ManipulatedVariablesRate = MPC.gains.defaut.MVR;
 % Parametre du solveur
- nlobj.Optimization.SolverOptions.ConstraintTolerance = 0.02;
- nlobj.Optimization.SolverOptions.OptimalityTolerance = 0.02;
- nlobj.Optimization.SolverOptions.FunctionTolerance = 0.02;
- nlobj.Optimization.SolverOptions.StepTolerance=0.1;
- nlobj.Optimization.SolverOptions.UseParallel=true();
- nlobj.Optimization.SolverOptions.Algorithm='sqp'; 
-nlobj.Optimization.RunAsLinearMPC='adaptive';%'timevarying';
-%nlobj.Optimization.UseSuboptimalSolution=true();
-%nlobj.Optimization.MVInterpolationOrder=1;cell
-%nlobj.Optimization.SolverOptions.HessianApproximation='finite-difference';
-
-%nlobj.Optimization.SolverOptions.SubproblemAlgorithm='direct';
-%nlobj.Optimization.SolverOptions.MaxIterations=1;
-
-
-validateFcns(nlobj,Xi,Ui);
-% tic;
-% mv = nlmpcmove(nlobj,Xi,Ui,Xi.')
-% toc;
-%test = convertToMPC(nlobj,Xi.',Ui);
+    nlobj.Optimization.SolverOptions.ConstraintTolerance = 0.02;
+    nlobj.Optimization.SolverOptions.OptimalityTolerance = 0.02;
+    nlobj.Optimization.SolverOptions.FunctionTolerance = 0.02;
+    nlobj.Optimization.SolverOptions.StepTolerance=0.1;
+    nlobj.Optimization.SolverOptions.UseParallel=true();
+    nlobj.Optimization.SolverOptions.Algorithm='sqp'; 
+    nlobj.Optimization.RunAsLinearMPC='adaptive';%'timevarying';
+    %nlobj.Optimization.UseSuboptimalSolution=true();
+    %nlobj.Optimization.MVInterpolationOrder=1;cell
+    %nlobj.Optimization.SolverOptions.HessianApproximation='finite-difference';
+    %nlobj.Optimization.SolverOptions.SubproblemAlgorithm='direct';
+    %nlobj.Optimization.SolverOptions.MaxIterations=1;
+    validateFcns(nlobj,Xi,Ui);

@@ -37,16 +37,16 @@ classdef rosCommandManager < matlab.System
             this.m_trajClear = 0;
             
         end
-        function setupImpl(this,newSetmode, setMode, NewReset, reset, newKill, kill, newIC, ic)
+        function setupImpl(this,newSetmode, setMode, NewReset, reset, newKill, kill, newIC, ic,sensorOn)
             % Perform one-time calculations, such as computing constants
             
         end
 
         function [initQuat, initPos, simEnable, reset, mode trajClear] = stepImpl...
-                (this,newSetMode, setMode, newReset, reset, newKill, kill, newIc, ic)
+                (this,newSetMode, setMode, newReset, reset, newKill, kill, newIc, ic,sensorOn)
 
           this.getIC(newIc, ic);
-          this.getMode(newSetMode, setMode,newKill, kill);
+          this.getMode(newSetMode, setMode,newKill, kill, sensorOn);
           this.getReset(newReset, newIc);
           this.getTrajClear(newReset, newSetMode, newIc);
           
@@ -63,14 +63,16 @@ classdef rosCommandManager < matlab.System
  
        
         %% Fonction qui détermine le mode
-        function getMode(this,newSetMode, setMode,newKill, kill)
+        function getMode(this,newSetMode, setMode,newKill, kill,sensorOn)
            
             this.getKill(newKill, kill); % regarder l'états de la kill
             
-            if (newSetMode && ~this.m_killStatus)
+            if (newSetMode && ~this.m_killStatus &&  sensorOn)
                this.m_mode = cast(setMode,"double");
            
             end
+            
+            
             
             if this.m_killStatus
                this.m_mode =0;
@@ -136,6 +138,7 @@ classdef rosCommandManager < matlab.System
           reset = [1,1];
           mode = [1,1];
           trajClear = [1,1];
+          sensorOn = [1,1];
     
       end 
       
@@ -146,6 +149,7 @@ classdef rosCommandManager < matlab.System
           reset = true;
           mode = true;
           trajClear = true;
+          sensorOn = true;
           
       end
       
@@ -156,6 +160,7 @@ classdef rosCommandManager < matlab.System
           reset = "double";
           mode = "double";
           trajClear = "double";
+          sensorOn = "double";
           
       end
       
@@ -166,6 +171,7 @@ classdef rosCommandManager < matlab.System
           reset = false;
           mode = false;
           trajClear = false;
+          sensorOn = false;
           
      end
      function [sz,dt,cp] = getDiscreteStateSpecificationImpl(this,name)
