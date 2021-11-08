@@ -3,7 +3,7 @@ function [simulation, physics, thrusters, MPC] = ConfigAUV8()
        simulation.reference_frame = uint8('world');
        simulation.model_name = uint8('auv8');
         
-       % Physics
+%% Physics
        physics.mass = 31;
        physics.volume = 0.0315;
        physics.rho = 998;
@@ -15,10 +15,12 @@ function [simulation, physics, thrusters, MPC] = ConfigAUV8()
                    0.008, 1.3735, -0.001;... Iyx Iyy Iyz 1.47
                    0.004, -0.001, 1.5371]; % Izx Izy Izz1.68
              
+       % Center of mass      
        physics.RG =[0.001,... x
                     0.002,... y
                     0.018]; % z
-
+                
+       % CEnter of boyency
        physics.RB =[0.00,... x
                     0.00,... y
                     -0.006]; % z
@@ -31,7 +33,8 @@ function [simulation, physics, thrusters, MPC] = ConfigAUV8()
 
        physics.AddedMass=-[1.4648, 12.6156, 15.7695, 0.1164, 0.3493, 0.3493];
        
-       physics.DepthPose = [0 -136 178]*10^-3;
+       % distance of depth sensor to RG
+       physics.DepthPose = [0 -136 178]*10^-3; 
        
        % Thrusters     x      y      z    yaw  roll pitch
        thrusters.T=[ 0.292, 0.173, 0.082, -45,-90, 0;   % T1
@@ -42,13 +45,14 @@ function [simulation, physics, thrusters, MPC] = ConfigAUV8()
                     -0.181, 0.159, 0.082,  0,180, 0;    % T6
                     -0.181,-0.159, 0.082,  0,  0, 0;    % T7
                      0.181,-0.159, 0.082,  0,180, 0];   % T8
-       % MPC
-       MPC.nx = 13;
-       MPC.ny = 13;
-       MPC.nu = 8;
-       MPC.Ts = 0.1;
-       MPC.p = 10;
-       MPC.m =  2;
+ %% MPC
+       MPC.nx = 13; % Number of states
+       MPC.ny = 13; % NUmber of outputs
+       MPC.nu = 8;  % Number of inputs
+       MPC.Ts = 0.1;% Sample time
+       MPC.p = 10; % Prediction horizon (in sample)
+       MPC.m =  2; % control horizon (in sample)
+       MPC.dts =10; % Sample time divider
        MPC.tmax = 40;%29;
        MPC.tmin = -30;%-24;
        MPC.gains.defaut.OV = [ 70, 60, 70, 90, 90, 90, 90, 0, 0, 0, 0, 0, 0 ];
@@ -57,7 +61,6 @@ function [simulation, physics, thrusters, MPC] = ConfigAUV8()
        MPC.gains.c10.OV = [ 30, 30, 30, 40, 40, 40, 40, 0, 0, 0, 0, 0, 0 ];
        MPC.gains.c10.MV = [ 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2 ];
        MPC.gains.c10.MVR = [ 0.4, 0.4, 0.4, 0.4, 0.6, 0.6, 0.6, 0.6 ];
-       %mpc.gains.c19.OV = [ 0, 0, 0, 0, 0, 0, 0, 70, 60, 70, 50, 50, 50];
        MPC.gains.c19.OV = [ 0, 0, 0, 0, 0, 0, 0, 20, 20, 20, 20, 20, 20];
        MPC.gains.c19.MV = [ 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2 ];
        MPC.gains.c19.MVR = [ 0.1, 0.1, 0.1, 0.1, 0.3, 0.3, 0.3, 0.3 ];                    
