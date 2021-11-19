@@ -37,18 +37,18 @@ classdef rosCommandManager < matlab.System
             this.m_trajClear = 0;
             
         end
-        function setupImpl(this,newSetmode, setMode, NewReset, reset, newKill, kill, newIC, ic,sensorOn)
+        function setupImpl(this,newSetmode, setMode, NewReset, reset, newKill, kill, newIC, ic,newTrajreset,sensorOn)
             % Perform one-time calculations, such as computing constants
             
         end
 
         function [initQuat, initPos, simEnable, reset, mode trajClear] = stepImpl...
-                (this,newSetMode, setMode, newReset, reset, newKill, kill, newIc, ic,sensorOn)
+                (this,newSetMode, setMode, newReset, reset, newKill, kill, newIc, ic,newTrajreset ,sensorOn)
 
           this.getIC(newIc, ic);
           this.getMode(newSetMode, setMode,newKill, kill, sensorOn);
           this.getReset(newReset, newIc);
-          this.getTrajClear(newReset, newSetMode, newIc);
+          this.getTrajClear(newReset, newSetMode, newIc,newTrajreset);
           
           initPos = this.m_initCond(1:3).';
           initQuat = this.m_initCond(4:7).';
@@ -109,9 +109,9 @@ classdef rosCommandManager < matlab.System
         end
        
          %% Fonction qui détermine si on clear la trajectoire
-        function getTrajClear(this,newReset, newMode, newIc)
+        function getTrajClear(this,newReset, newMode, newIc,newTrajreset)
            
-            if (newReset || newIc || newMode)
+            if (newReset || newIc || newMode ||newTrajreset)
                 this.m_trajClear = 1; 
             else
                 this.m_trajClear = 0;

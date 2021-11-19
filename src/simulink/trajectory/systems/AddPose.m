@@ -13,6 +13,7 @@ classdef AddPose < matlab.System
     properties(DiscreteState)
         i;
         poseList;
+        initcond;
     end
 
     % Pre-computed constants
@@ -30,13 +31,14 @@ classdef AddPose < matlab.System
 
         this.poseList = repmat(999, this.buffSize, this.elementSize);
         this.poseList(1,:)=[0,0,0,1,0,0,0,0,0];%initCond(1,1:7);
+        this.initcond = [0,0,0,1,0,0,0];
         this.i = 2;
     end
 %% Main appeller à chaque exécution
-    function [waypoints, count] = stepImpl(this, compute, clearBuffer, isNew, waypoint,initCond, reset)
+    function [waypoints, count, initCond] = stepImpl(this, compute, clearBuffer, isNew, waypoint,xk, reset)
         % Suppression du buffer.
-        this.CheckEvent(compute, clearBuffer, isNew,waypoint, initCond, reset);
-
+        this.CheckEvent(compute, clearBuffer, isNew,waypoint, xk, reset);
+        initCond = this.initcond;
         count = this.i;
         waypoints = this.poseList;
     end
@@ -49,7 +51,7 @@ classdef AddPose < matlab.System
 %==========================================================================        
 % Fonction qui interprete les message ROS
         
-    function CheckEvent(this,compute, clearBuffer, isNew,waypoint,initCond, reset )
+    function CheckEvent(this,compute, clearBuffer, isNew,waypoint,xk, reset )
 
 
         if clearBuffer == 1 % supprimer le buffer de way points
@@ -74,10 +76,8 @@ classdef AddPose < matlab.System
         end
 
         if reset
-            this.poseList(2:end,:) = repmat(999, this.buffSize-1, this.elementSize);
-            this.poseList(1,:) = [initCond,0,0];
-            this.poseList(2,:) = [initCond,1,0];
-            this.i = 2;
+            this.resetTrajectory(xk);
+
         end
     end
     
@@ -163,27 +163,50 @@ classdef AddPose < matlab.System
         
         rq = quatmultiply(lq,q);
      end
+%==========================================================================   
+ % Fonction qui reset la trajectoire
+ 
+ function resetTrajectory(this, initcond)
+     
+     % remove roll and pitch from initial condition
+     eul = quat2eul(initcond(4:7).','XYZ').*[0,0,1];
+     
+     % Retransformer en quaternion
+     initcond(4:7) = eul2quat(eul,'XYZ').';
+     
+     this.initcond = initcond.';
+     % definir les conditions initiaux
+     this.poseList(2:end,:) = repmat(999, this.buffSize-1, this.elementSize);
+            this.poseList(1,:) = [this.initcond,0,0];
+            this.poseList(2,:) = [this.initcond,1,0];
+            this.i = 2;
+ end
+ 
  
 %%=========================================================================          
  % Definire outputs   
 %==========================================================================    
-      function [waypoints, count] = getOutputSizeImpl(this)
+      function [waypoints, count, initCond] = getOutputSizeImpl(this)
       waypoints = [this.buffSize this.elementSize];
       count = [1 1];
+      initCond =[1 7];
       end 
       
-      function [waypoints, count] = isOutputFixedSizeImpl(this)
+      function [waypoints, count, initCond] = isOutputFixedSizeImpl(this)
           waypoints = true;
           count = true;
+          initCond=true;
       end
-      function [waypoints, count] = getOutputDataTypeImpl(this)
+      function [waypoints, count, initCond] = getOutputDataTypeImpl(this)
           waypoints = "double";
           count = "double";
+          initCond = "double";
       end
       
-     function [waypoints, count] = isOutputComplexImpl(this)
+     function [waypoints, count, initCond] = isOutputComplexImpl(this)
          waypoints = false;
          count = false;
+         initCond = false;
      end
      
      function [sz,dt,cp] = getDiscreteStateSpecificationImpl(this,name)
@@ -194,6 +217,11 @@ classdef AddPose < matlab.System
          
          elseif strcmp(name,'poseList')
              sz = [this.buffSize this.elementSize];
+             dt = "double";
+             cp = false;
+             
+         elseif strcmp(name,'initcond')
+             sz = [1 7];
              dt = "double";
              cp = false;
          end
