@@ -16,7 +16,8 @@ classdef rosCommandManager < matlab.System
         m_killStatus;
         m_simulation;
         m_reset;
-        m_trajClear
+        m_trajClear;
+        m_notDryRun;
     
     end
 
@@ -35,20 +36,23 @@ classdef rosCommandManager < matlab.System
             this.m_simulation = 0;
             this.m_reset = 0;
             this.m_trajClear = 0;
+            this.m_notDryRun = 1;
             
         end
-        function setupImpl(this,newSetmode, setMode, NewReset, reset, newKill, kill, newIC, ic,newTrajreset,sensorOn)
+        function setupImpl(this,newSetmode, setMode, NewReset, reset, newKill, kill, newIC, ic,newDryRun,Dryrun, newTrajreset,sensorOn)
             % Perform one-time calculations, such as computing constants
             
         end
 
-        function [initQuat, initPos, simEnable, reset, mode trajClear] = stepImpl...
-                (this,newSetMode, setMode, newReset, reset, newKill, kill, newIc, ic,newTrajreset ,sensorOn)
-
+        function [initQuat, initPos, simEnable, reset, mode trajClear, notDryRun] = stepImpl...
+                (this,newSetMode, setMode, newReset, reset, newKill, kill, newIc, ic,newDryRun,Dryrun,newTrajreset ,sensorOn)
+            
+          this.getDryRun(newDryRun,Dryrun);
           this.getIC(newIc, ic);
           this.getMode(newSetMode, setMode,newKill, kill, sensorOn);
           this.getReset(newReset, newIc);
           this.getTrajClear(newReset, newSetMode, newIc,newTrajreset);
+          
           
           initPos = this.m_initCond(1:3).';
           initQuat = this.m_initCond(4:7).';
@@ -56,7 +60,7 @@ classdef rosCommandManager < matlab.System
           simEnable = this.m_simulation;
           reset = this.m_reset;
           trajClear = this.m_trajClear;
-          
+          notDryRun = this.m_notDryRun;
             
         end
         
@@ -74,7 +78,7 @@ classdef rosCommandManager < matlab.System
             
             
             
-            if this.m_killStatus
+            if this.m_killStatus || ~this.m_notDryRun
                this.m_mode =0;
             end
         end
@@ -118,6 +122,18 @@ classdef rosCommandManager < matlab.System
             end
         end
         
+        %% Fonction qui détermine si on est mode dry_run
+        function getDryRun(this,newDryrun,dryrun)
+            
+            if newDryrun
+                
+                if dryrun ==1
+                    this.m_notDryRun = 0;
+                else
+                    this.m_notDryRun = 1;
+                end
+            end
+        end
         
         %% Fonction qui vérifie si le quaternion est unitaire
         function q = checkQuaternion(this,u)
@@ -131,7 +147,7 @@ classdef rosCommandManager < matlab.System
         end
         
       %% Definire outputs       
-      function [initQuat, initPos, simEnable, reset, mode, trajClear] = getOutputSizeImpl(this)
+      function [initQuat, initPos, simEnable, reset, mode, trajClear, sensorOn, notDryRun] = getOutputSizeImpl(this)
           initQuat = [4,1];
           initPos = [3,1];
           simEnable = [1,1];
@@ -139,10 +155,11 @@ classdef rosCommandManager < matlab.System
           mode = [1,1];
           trajClear = [1,1];
           sensorOn = [1,1];
+          notDryRun = [1,1];
     
       end 
       
-      function [initQuat, initPos, simEnable, reset, mode, trajClear] = isOutputFixedSizeImpl(this)
+      function [initQuat, initPos, simEnable, reset, mode, trajClear,sensorOn, notDryRun] = isOutputFixedSizeImpl(this)
           initQuat = true;
           initPos = true;
           simEnable = true;
@@ -150,10 +167,11 @@ classdef rosCommandManager < matlab.System
           mode = true;
           trajClear = true;
           sensorOn = true;
+          notDryRun = true;    
           
       end
       
-      function [initQuat, initPos, simEnable, reset, mode, trajClear] = getOutputDataTypeImpl(this)
+      function [initQuat, initPos, simEnable, reset, mode, trajClear, sensorOn, notDryRun] = getOutputDataTypeImpl(this)
           initQuat = "double";
           initPos = "double";
           simEnable = "double";
@@ -161,10 +179,10 @@ classdef rosCommandManager < matlab.System
           mode = "double";
           trajClear = "double";
           sensorOn = "double";
-          
+          notDryRun = "double";
       end
       
-     function [initQuat, initPos, simEnable, reset, mode, trajClear] = isOutputComplexImpl(this)
+     function [initQuat, initPos, simEnable, reset, mode, trajClear, sensorOn] = isOutputComplexImpl(this)
           initQuat = false;
           initPos = false;
           simEnable = false;
@@ -172,6 +190,7 @@ classdef rosCommandManager < matlab.System
           mode = false;
           trajClear = false;
           sensorOn = false;
+          notDryRun = false;
           
      end
      function [sz,dt,cp] = getDiscreteStateSpecificationImpl(this,name)
@@ -196,6 +215,10 @@ classdef rosCommandManager < matlab.System
               dt = "double";
               cp = false;
          elseif strcmp(name,'m_trajClear')
+              sz = [1 1];
+              dt = "double";
+              cp = false;
+         elseif strcmp(name,'m_notDryRun')
               sz = [1 1];
               dt = "double";
               cp = false;
