@@ -113,7 +113,7 @@ Z0_l = exp(-2*zeta_l*wn_l*MPC.Ts);
     Empcobj.Weights.ManipulatedVariablesRate = [ 0.4, 0.4, 0.4, 0.4, 0.6, 0.6, 0.6, 0.6];
     Empcobj.MV = struct('Min',TMIN,'Max',TMAX);
     % mpcobj.OutputVariables=struct('Min',VMIN,'Max',VMAX);%
-    setEstimator(Empcobj,'custom');
+   % setEstimator(Empcobj,'custom');
     Empcobj.Optimizer.ActiveSetOptions.ConstraintTolerance=0.01;
     %xss=mpcstate(mpcobj);
     %results = review(mpcobj);
