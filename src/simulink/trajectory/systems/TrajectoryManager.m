@@ -65,10 +65,13 @@ classdef TrajectoryManager < matlab.System
             mp =zeros(1,7);
             mp=mesuredPose(1:7);
             
-%             
-             if this.init==0
+            if reset == 1
+                this.init = 0;
+            end
+
+             if this.init==0 
                  % Conditions Initiales
-                 this.poseBuffer(1,:)=[x0,0,0,0,0,0,0];%InitCond;
+                 this.poseBuffer(1:this.prediction,:)=repmat([x0,0,0,0,0,0,0],this.prediction,1);%InitCond;
                  this.bufferCount =1;
                  this.init=1;
              end

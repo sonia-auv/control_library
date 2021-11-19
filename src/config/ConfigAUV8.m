@@ -21,11 +21,11 @@ function [simulation, physics, thrusters, MPC] = ConfigAUV8()
                     0.018]; % z
                 
        % CEnter of boyency
-       physics.RB =[0.00,... x
-                    0.00,... y
+       physics.RB =[0.002,... x
+                    0.001,... y
                     -0.006]; % z
              
-       physics.CDL=[45, 60, 70, 10, 7, 15]/3;
+       physics.CDL=[45, 60, 70, 10, 7, 15];%/3;
 
        physics.CDQ=[1.17, 0.82, 0.756, 0.167, 0.1, 0.102];
 
