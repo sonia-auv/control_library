@@ -8,6 +8,7 @@
 
 # modified environment variables
 export CMAKE_PREFIX_PATH='/home/lamarre/Documents/SONIA/catkin_ws/src/control_library/devel:/home/lamarre/Documents/SONIA/catkin_ws/devel:/opt/ros/melodic:/opt/cmake-3.21.0-rc3-linux-x86_64/bin:/opt/cmake-3.21.0-rc3-linux-x86_64/bin'
+export LD_LIBRARY_PATH="/home/lamarre/Documents/SONIA/catkin_ws/src/control_library/devel/lib:$LD_LIBRARY_PATH"
 export PATH='/opt/ros/melodic/bin:/opt/cmake-3.21.0-rc3-linux-x86_64/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin'
 export PWD='/home/lamarre/Documents/SONIA/catkin_ws/src/control_library/build'
 export ROSLISP_PACKAGE_DIRECTORIES="/home/lamarre/Documents/SONIA/catkin_ws/src/control_library/devel/share/common-lisp:$ROSLISP_PACKAGE_DIRECTORIES"

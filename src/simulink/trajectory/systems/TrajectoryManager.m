@@ -82,7 +82,7 @@ classdef TrajectoryManager < matlab.System
             
             currentPose=this.SendCurrentPoses();
             
-            isReached= this.targetReached(mp, target);
+            isReached= this.targetReached(mp,poses, target);
            
         end
 
@@ -144,12 +144,18 @@ classdef TrajectoryManager < matlab.System
     end
 %% Fonction qui verifie le target reached
 
-function isReached= targetReached(this, mesuredPose, target)
+function isReached= targetReached(this, mesuredPose, poses, target)
     
+    % vérifier si la trajectoire est fini
+    if abs(poses(1:7) - target(1:7)) < 0.001
+       this.done = true;
+    else
+        this.done = false;
+    end   
     isReached = false;
     
     % vérifier le traget reached si la trajectoire est terminé
-    if ~this.done
+    if this.done
         
          % calcule de l'erreur de langle en 3D avec le quaternion
          qRel = quatmultiply(quatconj(target(4:7)),mesuredPose(4:7));

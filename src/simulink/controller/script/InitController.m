@@ -116,7 +116,8 @@ Z0_l = exp(-2*zeta_l*wn_l*MPC.Ts);
     setEstimator(Empcobj,'custom');
     Empcobj.Optimizer.ActiveSetOptions.ConstraintTolerance=0.01;
     %xss=mpcstate(mpcobj);
-    %results = review(mpcobj);
+    %results = review(Qmpcobj);
+    %disp(results);
     
 %% Initialiser le comtrolleur MPC quaternion
 
