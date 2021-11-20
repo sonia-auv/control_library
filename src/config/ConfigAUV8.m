@@ -21,11 +21,11 @@ function [simulation, physics, thrusters, MPC] = ConfigAUV8()
                     0.018]; % z
                 
        % CEnter of boyency
-       physics.RB =[0.002,... x
-                    0.001,... y
+       physics.RB =[0.000,... x
+                    0.000,... y
                     -0.006]; % z
              
-       physics.CDL=[45, 60, 70, 10, 7, 15];%/3;
+       physics.CDL=[45, 60, 70, 10, 7, 15]/3;
 
        physics.CDQ=[1.17, 0.82, 0.756, 0.167, 0.1, 0.102];
 
@@ -51,16 +51,16 @@ function [simulation, physics, thrusters, MPC] = ConfigAUV8()
        MPC.nu = 8;  % Number of inputs
        MPC.Ts = 0.1;% Sample time
        MPC.p = 10; % Prediction horizon (in sample)
-       MPC.m =  3; % control horizon (in sample)
+       MPC.m =  2; % control horizon (in sample)
        MPC.dts =10; % Sample time divider
        MPC.tmax = 40;%29;
        MPC.tmin = -30;%-24;
        MPC.gains.defaut.OV = [ 70, 60, 70, 90, 90, 90, 90, 0, 0, 0, 0, 0, 0 ];
        MPC.gains.defaut.MV = [ 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2 ];
        MPC.gains.defaut.MVR = [ 0.1, 0.1, 0.1, 0.1, 0.3, 0.3, 0.3, 0.3 ];
-       MPC.gains.c10.OV = [ 30, 30, 30, 30, 30, 30, 30, 0, 0, 0, 0, 0, 0 ];
+       MPC.gains.c10.OV = [ 30, 30, 30, 45, 45, 45, 45, 0, 0, 0, 0, 0, 0 ];
        MPC.gains.c10.MV = [ 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2 ];
-       MPC.gains.c10.MVR = [ 0.4, 0.4, 0.4, 0.4, 0.6, 0.6, 0.6, 0.6 ];
+       MPC.gains.c10.MVR = [ 0.4, 0.4, 0.4, 0.4, 0.5, 0.5, 0.5, 0.5 ];
        MPC.gains.c19.OV = [ 0, 0, 0, 0, 0, 0, 0, 20, 20, 20, 20, 20, 20];
        MPC.gains.c19.MV = [ 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2 ];
        MPC.gains.c19.MVR = [ 0.1, 0.1, 0.1, 0.1, 0.3, 0.3, 0.3, 0.3 ];                    
