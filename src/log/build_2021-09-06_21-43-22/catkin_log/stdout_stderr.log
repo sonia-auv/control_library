@@ -1,0 +1,3 @@
+Base path: /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src
+Source space: /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/src
+The specified base path "/home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src" contains a CMakeLists.txt but "catkin_make" must be invoked in the root of workspace
