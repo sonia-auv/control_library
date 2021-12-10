@@ -4,6 +4,7 @@
     load('T200-Spec-16V.mat');
 % Données pour lookup table.
     N = T200Spec16V{:,6};% Force en Newton
+    A = T200Spec16V{:,3};% curents A
     PWM = T200Spec16V{:,1};% PWM
     RPM = T200Spec16V{:,2}; % RPM
 
@@ -21,9 +22,10 @@
         openLoopMode = [20 21];
         adapEMpcMode = [31]; % Adaptive MPC EULER
         adapQMpcMode = [32]; % Adaptive MPC QUAT
+        LtvQMpcMode = [33]; % LTV MPC QUAT
     % Trajectory
         trajMode = [10];
-        singleWpts = [11,31,32];
+        singleWpts = [11,31,32,33];
         SpaceMouseMode = [19 20 21];
     
     % Gain pour MPC mode trajectoire 10
@@ -132,6 +134,7 @@ Z0_l = exp(-2*zeta_l*wn_l*MPC.Ts);
 % Generate discrete-time model
     nx = size(Aqc,1);
     nu = size(Bqc,2);
+    
     M = expm([[Aqc Bqc]*MPC.Ts; zeros(nu,nu+nx)]);
     Aq = M(1:nx,1:nx);
     Bq = M(1:nx,nx+1:nx+nu);
@@ -163,7 +166,7 @@ Z0_l = exp(-2*zeta_l*wn_l*MPC.Ts);
 % 
 % % conditions initial
     Ui =[0 0 0 0 0 0 0 0];
-    Xi=[0;0;-0.3;1;0;0;0;0;0;0;0;0;0];
+    Xi=[0;0;0.3;1;0;0;0;0;0;0;0;0;0];
 
     nlobj = nlmpc(MPC.nx, MPC.ny, MPC.nu);
 % Definire les fonctions différentielles et les matrices jacobienne
