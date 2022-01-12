@@ -1,4 +1,7 @@
 
+% Parametre et constantes  
+    [simulink, simulation, physics, thrusters, MPC, mode] = ConfigAUV8();
+    
 % Initialiser le seed du random
 rng shuffle
 

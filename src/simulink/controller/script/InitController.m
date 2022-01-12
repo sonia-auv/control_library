@@ -1,7 +1,11 @@
-[simulation, physics, thrusters, MPC] = ConfigAUV8();
+% Ce sript initialise les controlleurs du sous-marin.
+
+% Parametre et constantes  
+    [simulink, simulation, physics, thrusters, MPC, mode] = ConfigAUV8();
+    
 % Modèle du thruster
-    %load('T200_Identification.mat');
     load('T200-Spec-16V.mat');
+    
 % Données pour lookup table.
     N = T200Spec16V{:,6};% Force en Newton
     A = T200Spec16V{:,3};% curents A
@@ -16,23 +20,7 @@
     VMIN ={-2;-2;-2;-2;-2;-2;-2;-2;-2;-2;-2;-2};
     VMAX ={ 2; 2; 2; 2; 2; 2; 2; 2; 2; 2; 2; 2};
 
-%% Définitions des modes 
-    % controlleur
-        NlmpcMode = [10 11 19]; % Non linear mpc
-        openLoopMode = [20 21];
-        adapEMpcMode = [31]; % Adaptive MPC EULER
-        adapQMpcMode = [32]; % Adaptive MPC QUAT
-        LtvQMpcMode = [33]; % LTV MPC QUAT
-    % Trajectory
-        trajMode = [10];
-        singleWpts = [11,31,32,33];
-        SpaceMouseMode = [19 20 21];
-    
-    % Gain pour MPC mode trajectoire 10
-        Config10=[MPC.gains.c10.OV, MPC.gains.c10.MV, MPC.gains.c10.MVR];
-    
-    % Gain pour MPC mode spacemouse 19
-        Config19=[MPC.gains.c19.OV, MPC.gains.c19.MV, MPC.gains.c19.MVR];
+   
         
  %% Définire le vecteur constante mec
     constValues = [
@@ -121,7 +109,7 @@ Z0_l = exp(-2*zeta_l*wn_l*MPC.Ts);
     %results = review(Qmpcobj);
     %disp(results);
     
-%% Initialiser le comtrolleur MPC quaternion
+%% Initialiser le controlleur MPC quaternion
 
 % Conditions initiales
     Xi=[0;0;0.3;1;0;0;0;0;0;0;0;0;0]; % états initials
@@ -129,7 +117,7 @@ Z0_l = exp(-2*zeta_l*wn_l*MPC.Ts);
 
 %liniéarisation du modèle aux conditions initales.
     [Aqc,Bqc,Cqc,Dqc] = AUVQuatJacobianMatrix(Xi,Ui);   
-
+    
 % création de l'objet state space.
 % Generate discrete-time model
     nx = size(Aqc,1);

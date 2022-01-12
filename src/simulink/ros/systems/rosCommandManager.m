@@ -87,7 +87,7 @@ classdef rosCommandManager < matlab.System
         function getKill(this,newKill, kill)
            
             if (newKill)
-               this.m_killStatus = cast(kill,"double");
+               this.m_killStatus = cast(~kill,"double");
                
             end
         end

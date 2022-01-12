@@ -28,11 +28,6 @@ classdef AddPose < matlab.System
 %% Fonction appeler a l'initialisation
     function setupImpl(this, compute, clearBuffer, isNew, waypoint,initCond, reset)
         % Perform one-time calculations, such as computing constants   
-
-        this.poseList = repmat(999, this.buffSize, this.elementSize);
-        this.poseList(1,:)=[0,0,0,1,0,0,0,0,0];%initCond(1,1:7);
-        this.initcond = [0,0,0,1,0,0,0];
-        this.i = 2;
     end
 %% Main appeller à chaque exécution
     function [waypoints, count, initCond] = stepImpl(this, compute, clearBuffer, isNew, waypoint,xk, reset)
@@ -45,6 +40,10 @@ classdef AddPose < matlab.System
 %% Fonction Reset
     function resetImpl(this)
         % Initialize / reset discrete-state properties
+        this.poseList = repmat(999, this.buffSize, this.elementSize);
+        this.poseList(1,:)=[0,0,0,1,0,0,0,0,0];%initCond(1,1:7);
+        this.initcond = [0,0,0,1,0,0,0];
+        this.i = 2;
     end
 %% ========================================================================
 % Sous Routines
@@ -58,26 +57,30 @@ classdef AddPose < matlab.System
 
                 this.poseList(2:end,:) = repmat(999, this.buffSize-1, this.elementSize);
                 this.i = 2;
-
         end
+        
         % Ajout d'un waypoint provenant de ROS.
         if isNew == 1
+            
            if this.i <= this.buffSize
-                    %this.poseList(this.i-1,:) = this.processWpt(waypoint.').';
+        
                     this.poseList(this.i,:) = this.processWpt(waypoint.').';
                     this.i = this.i + 1;
            end
-        end 
-
+        end
+        
+        % Générer la trajectoire
        if   compute == 1
+           
             this.poseList(1,:)= this.poseList(this.i-1,:);
             this.poseList(2:end,:) = repmat(999, this.buffSize-1, this.elementSize);
             this.i = 2;
-        end
+       end
 
+        % Reset Trajectoire
         if reset
+            
             this.resetTrajectory(xk);
-
         end
     end
     
@@ -87,39 +90,28 @@ classdef AddPose < matlab.System
         % Determiner le quaternion en fonction des angles d'euler.
         % Orde de rotation : ZYX.
         % Reel
-        twpt = zeros(1, this.elementSize);
-        twpt(8)=wpt(8);
-        % twpt(9)=wpt(9);
-        p= wpt(1:3);
-        dir= wpt(9);
-    
-        % Pre calculs
-        q = eul2quat(deg2rad(wpt(4:6)),'ZYX');
-
-        lp = this.poseList(this.i-1,1:3);
-        lq = this.poseList(this.i-1,4:7);
-
-
-        % rp = quatrotate(quatinv(lq),wpt(1:3)) + lp;
-        %rp = rotatepoint(quatinv(lq),wpt(1:3)) + lp;
+        
+        % Information sur le nouveau waypoints
+            twpt = zeros(1, this.elementSize);
+            twpt(8)=wpt(8);
+            p= wpt(1:3);
+            dir= wpt(9);
+        
+        % Information de la pose précédente
+            lp = this.poseList(this.i-1,1:3); % LastPosition
+            lq = this.poseList(this.i-1,4:7); % LastQuaternion
+        
+        % transformer les angle d'euler quaternions
+            q = eul2quat(deg2rad(wpt(4:6)),'ZYX');
+        
+       % calculer
          qs = lq(1);   % quaternion partie scalaire
          qu = lq(2:4); % quaternion partie vectoriel
-         rp= lp + (2*dot(qu,p)*qu +(qs^2-dot(qu,qu))*p + 2*qs*cross(qu,p));
+         rp= lp + (2*dot(qu,p)*qu +(qs^2-dot(qu,qu))*p + 2*qs*cross(qu,p)); % QuatRotate n'est pas compilable
 
 
         % choisir sens du quaternion
         rq =  this.getQuatDir(lq,q,dir);
-%         if dot(lq,q)>1
-%             rq= quatmultiply(lq,quatconj(q));
-%            %rq= quatmultiply(lq,quatconj(q));
-%           % rq= quatmultiply(quatinv(lq),quatconj(q));
-% 
-%         else
-%              rq = quatmultiply(lq,((q)));
-%             %rq = quatmultiply(lq,quatinv(quatinv(q)));
-%            % rq = quatmultiply(quatinv(lq),q);
-% 
-%         end
 
         % transformer le point en fonction du frame
         switch cast(wpt(7),'uint8')
@@ -163,6 +155,9 @@ classdef AddPose < matlab.System
         
         rq = quatmultiply(lq,q);
      end
+     
+%==========================================================================
+
 %==========================================================================   
  % Fonction qui reset la trajectoire
  
