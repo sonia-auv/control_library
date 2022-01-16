@@ -158,7 +158,7 @@ touch "$PROJECT_DIR"/*.cpp
 # Build the Simulink model as a catkin project
 CURR_DIR=`pwd`
 cd "$CATKIN_WS"
-catkin_make "$MODEL_NAME"_node
+catkin_make "$MODEL_NAME"
 cd "$CURR_DIR"
 
 exit 0
