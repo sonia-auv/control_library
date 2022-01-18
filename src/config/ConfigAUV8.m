@@ -126,7 +126,11 @@ function [simulink, simulation, physics, thrusters, MPC, mode] = ConfigAUV8()
         
    % Sensors
         simulation.sensors.imu.sampletime = 1/50;
-        
+        simulation.sensors.imu.sampletime = 1/50;
+        simulation.sensors.imu.gyro.noisePower = 0.00000002;
+        simulation.sensors.imu.acc.noisePower = 0.000002;
+        simulation.sensors.imu.acc.bias = [0,0,-9.59066];
+
         simulation.sensors.dvl.sampletime = 1/5;
         simulation.sensors.dvl.maxSpeedThres = 10;
         simulation.sensors.dvl.resolution = 0.001;
@@ -137,7 +141,7 @@ function [simulink, simulation, physics, thrusters, MPC, mode] = ConfigAUV8()
         simulation.sensors.depth.noise.power = 0.0000000004;
         
   % White noise      
-        simulation.sensors.noise.sampletime = 1/25;
+        simulation.sensors.noise.sampletime = 1/50;
         simulation.sensors.noise.power =0.0000000004;
     end
 
