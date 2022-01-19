@@ -1,7 +1,17 @@
-% Ce sript initialise les controlleurs du sous-marin.
+% Ce script initialise les controlleurs du sous-marin.
 
-% Parametre et constantes  
-    [simulink, simulation, physics, thrusters, MPC, mode] = ConfigAUV8();
+% Obtenir la variable d'environement du sub
+    auv = getenv("AUV");
+
+% Parametre et constantes
+    switch auv
+        case 'AUV8'
+            [simulink, simulation, physics, thrusters, MPC, mode] = ConfigAUV8();
+        case 'AUV7'
+            % [simulink, simulation, physics, thrusters, MPC, mode] = ConfigAUV7();
+        otherwise
+            exit;
+    end
     
 % Modèle du thruster
     load('T200-Spec-16V.mat');
