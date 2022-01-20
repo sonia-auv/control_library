@@ -8,10 +8,12 @@
         case 'AUV8'
             [simulink, simulation, physics, thrusters, MPC, mode] = ConfigAUV8();
         case 'AUV7'
-            % [simulink, simulation, physics, thrusters, MPC, mode] = ConfigAUV7();
+            [simulink, simulation, physics, thrusters, MPC, mode] = ConfigAUV7();
         otherwise
             exit;
     end
+
+    ptree = rosparam;
     
 % Modèle du thruster
     load('T200-Spec-16V.mat');

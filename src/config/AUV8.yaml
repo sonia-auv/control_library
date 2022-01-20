@@ -1,0 +1,4 @@
+# Control parameters
+
+/proc_control/mpc/tmax : 40.0
+/proc_control/mpc/tmin : -30.0
