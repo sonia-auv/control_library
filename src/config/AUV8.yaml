@@ -2,3 +2,7 @@
 
 /proc_control/mpc/tmax : 40.0
 /proc_control/mpc/tmin : -30.0
+
+/proc_control/mpc/gains/default/ov : "70,60,70,90,90,90,90,0,0,0,0,0,0"
+/proc_control/mpc/gains/default/mv : "0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2"
+/proc_control/mpc/gains/default/mvr : "0.1,0.1,0.1,0.1,0.3,0.3,0.3,0.3"

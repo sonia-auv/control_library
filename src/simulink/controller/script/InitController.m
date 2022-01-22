@@ -10,10 +10,27 @@
         case 'AUV7'
             [simulink, simulation, physics, thrusters, MPC, mode] = ConfigAUV7();
         otherwise
-            exit;
+            return;
     end
 
-    ptree = rosparam;
+% Load Rosparam
+    obtainRosparam = RosparamClass(rosparam);
+
+    [mpc.ov, state.ov] = obtainRosparam.getgainArray("default", "ov", 13);
+    [mpc.mv, state.mv] = obtainRosparam.getgainArray("default", "mv", 8);
+    [mpc.mvr, state.mvr] = obtainRosparam.getgainArray("default", "mvr", 8);
+    
+    if state.ov && state.mv && state.mvr
+        MPC.ConfigDefaut = [mpc.ov, mpc.mv, mpc.mvr];
+    end
+
+    [mpc.tmax, state.tmax] = obtainRosparam.getValue("tmax");
+    [mpc.tmin, state. tmin] = obtainRosparam.getValue("tmin");
+
+    if state.tmax && state.tmin
+        MPC.tmax = mpc.tmax;
+        MPC.tmin = mpc.tmin;
+    end
     
 % Modèle du thruster
     load('T200-Spec-16V.mat');
