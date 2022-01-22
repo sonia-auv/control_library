@@ -16,9 +16,9 @@
 % Load Rosparam
     obtainRosparam = RosparamClass(rosparam);
 
-    [mpc.ov, state.ov] = obtainRosparam.getgainArray("default", "ov", 13);
-    [mpc.mv, state.mv] = obtainRosparam.getgainArray("default", "mv", 8);
-    [mpc.mvr, state.mvr] = obtainRosparam.getgainArray("default", "mvr", 8);
+    [mpc.ov, state.ov] = obtainRosparam.getgainArray("default", "ov", MPC.nx);
+    [mpc.mv, state.mv] = obtainRosparam.getgainArray("default", "mv", MPC.nu);
+    [mpc.mvr, state.mvr] = obtainRosparam.getgainArray("default", "mvr", MPC.nu);
     
     if state.ov && state.mv && state.mvr
         MPC.ConfigDefaut = [mpc.ov, mpc.mv, mpc.mvr];
