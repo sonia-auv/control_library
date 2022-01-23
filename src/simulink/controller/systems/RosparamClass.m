@@ -1,4 +1,4 @@
-classdef RosparamClass
+classdef RosparamClass < matlab.System
     %ROSPARAM Summary of this class goes here
     %   Detailed explanation goes here
     
@@ -6,11 +6,11 @@ classdef RosparamClass
         ptree
     end
     
-    methods
-        function obj = RosparamClass(ptree)
+    methods (Access = public)
+        function setParameterTree(obj, ptree_ros)
             %ROSPARAM Construct an instance of this class
             %   Detailed explanation goes here
-            obj.ptree = ptree;
+            obj.ptree = ptree_ros;
         end
         
         function [gainRequested, state] = getgainArray(obj, mode, gain, nbGains)
