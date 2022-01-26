@@ -7,41 +7,44 @@ classdef RosparamClass < matlab.System
     end
     
     methods (Access = public)
-        function setParameterTree(obj, ptree_ros)
+        function setParameterTree(this, ptree_ros)
             %ROSPARAM Construct an instance of this class
             %   Detailed explanation goes here
-            obj.ptree = ptree_ros;
+            this.ptree = ptree_ros;
         end
         
-        function [gainRequested, state] = getgainArray(obj, mode, gain, nbGains)
+        function gainRequested = getgainArray(this, mode, gain, nbGains, actualGain)
             %METHOD1 Summary of this method goes here
             %   Detailed explanation goes here
-            gains = get(obj.ptree, "/proc_control/mpc/gains");
+            if sum(contains(this.ptree.AvailableParameters, "/proc_control/mpc/gains")) == 0
+                gainRequested = actualGain;
+                return;
+            end
+            gains = get(this.ptree, "/proc_control/mpc/gains");
             fields = fieldnames(gains);
             if sum(strcmp(fields, mode)) == 1
                 fields = fieldnames(gains.(mode));
                 if sum(strcmp(fields, gain)) == 1
-                    gainRequested = extractionArray(obj, gains.(mode).(gain), nbGains);
-                    state = true;
+                    gainRequested = extractionArray(this, gains.(mode).(gain), nbGains);
                 else
-                    gainRequested = zeros(1, nbGains);
-                    state = false;
+                    gainRequested = actualGain;
                 end
             else
-                gainRequested = zeros(1, nbGains);
-                state = false;
+                gainRequested = actualGain;
             end
         end
 
-        function [valueRequested, state] = getValue(obj, value)
-            valueOut = get(obj.ptree, "/proc_control/mpc");
+        function valueRequested = getValue(this, value, actualValue)
+            if sum(contains(this.ptree.AvailableParameters, "/proc_control/mpc")) == 0
+                valueRequested = actualValue;
+                return;
+            end
+            valueOut = get(this.ptree, "/proc_control/mpc");
             fields = fieldnames(valueOut);
             if sum(strcmp(fields, value)) == 1
-                valueRequested = valueOut.(value);
-                state = true;
+                valueRequested = valueOut.(value)
             else
-                valueRequested = 0;
-                state = false;
+                valueRequested = actualValue;
             end
         end
     end
