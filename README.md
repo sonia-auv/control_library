@@ -60,7 +60,7 @@ All the custom ROS message used by sonia are located in the sonia common repo. Y
 
 You need to generate the ros message in matlab to be able to use it. To do so, navigate to your src folder in the matlab file explorer than run the next command and follow the instruction.
 
-`rosgenmsg('/.')`
+`rosgenmsg('./')`
 
 
 
