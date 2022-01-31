@@ -12,37 +12,20 @@ classdef RosparamClass < matlab.System
             %   Detailed explanation goes here
             this.ptree = ptree_ros;
         end
-        
-        function gainRequested = getgainArray(this, mode, gain, nbGains, actualGain)
-            %METHOD1 Summary of this method goes here
-            %   Detailed explanation goes here
-            if sum(contains(this.ptree.AvailableParameters, "/proc_control/mpc/gains")) == 0
-                gainRequested = actualGain;
-                return;
-            end
-            gains = get(this.ptree, "/proc_control/mpc/gains");
-            fields = fieldnames(gains);
-            if sum(strcmp(fields, mode)) == 1
-                fields = fieldnames(gains.(mode));
-                if sum(strcmp(fields, gain)) == 1
-                    gainRequested = extractionArray(this, gains.(mode).(gain), nbGains);
-                else
-                    gainRequested = actualGain;
-                end
+
+        function gainRequested = getArray(this, gain, nbGains, actualGain)
+            if has(this.ptree, gain)
+                gains = get(this.ptree, gain);
+                gainRequested = extractionArray(this, gains, nbGains);
             else
                 gainRequested = actualGain;
             end
         end
 
         function valueRequested = getValue(this, value, actualValue)
-            if sum(contains(this.ptree.AvailableParameters, "/proc_control/mpc")) == 0
-                valueRequested = actualValue;
-                return;
-            end
-            valueOut = get(this.ptree, "/proc_control/mpc");
-            fields = fieldnames(valueOut);
-            if sum(strcmp(fields, value)) == 1
-                valueRequested = valueOut.(value)
+
+            if has(this.ptree, value)
+                valueRequested = get(this.ptree, value);
             else
                 valueRequested = actualValue;
             end

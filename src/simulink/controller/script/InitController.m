@@ -16,26 +16,26 @@
 %% Load Rosparam
     obtainRosparam = RosparamClass;
     obtainRosparam.setParameterTree(rosparam);
-    
+
     % Load MPC Gain Default
-    MPC.gains.defaut.OV = obtainRosparam.getgainArray("default", "ov", MPC.nx, MPC.gains.defaut.OV);
-    MPC.gains.defaut.MV = obtainRosparam.getgainArray("default", "mv", MPC.nu, MPC.gains.defaut.MV);
-    MPC.gains.defaut.MVR = obtainRosparam.getgainArray("default", "mvr", MPC.nu, MPC.gains.defaut.MVR);
+    MPC.gains.defaut.OV = obtainRosparam.getArray("/proc_control/mpc/gains/default/ov", MPC.nx, MPC.gains.defaut.OV);
+    MPC.gains.defaut.MV = obtainRosparam.getArray("/proc_control/mpc/gains/default/mv", MPC.nu, MPC.gains.defaut.MV);
+    MPC.gains.defaut.MVR = obtainRosparam.getArray("/proc_control/mpc/gains/default/mvr", MPC.nu, MPC.gains.defaut.MVR);
     
     % Load MPC Gain Mode 10
-    MPC.gains.c10.OV = obtainRosparam.getgainArray("c10", "ov", MPC.nx, MPC.gains.c10.OV);
-    MPC.gains.c10.MV = obtainRosparam.getgainArray("c10", "mv", MPC.nu, MPC.gains.c10.MV);
-    MPC.gains.c10.MVR = obtainRosparam.getgainArray("c10", "mvr", MPC.nu, MPC.gains.c10.MVR);
+    MPC.gains.c10.OV = obtainRosparam.getArray("/proc_control/mpc/gains/c10/ov", MPC.nx, MPC.gains.c10.OV);
+    MPC.gains.c10.MV = obtainRosparam.getArray("/proc_control/mpc/gains/c10/mv", MPC.nu, MPC.gains.c10.MV);
+    MPC.gains.c10.MVR = obtainRosparam.getArray("/proc_control/mpc/gains/c10/mvr", MPC.nu, MPC.gains.c10.MVR);
 
     % Load MPC Gain Mode 11
-    MPC.gains.c11.OV = obtainRosparam.getgainArray("c11", "ov", MPC.nx, MPC.gains.c11.OV);
-    MPC.gains.c11.MV = obtainRosparam.getgainArray("c11", "mv", MPC.nu, MPC.gains.c11.MV);
-    MPC.gains.c11.MVR = obtainRosparam.getgainArray("c11", "mvr", MPC.nu, MPC.gains.c11.MVR);
+    MPC.gains.c11.OV = obtainRosparam.getArray("/proc_control/mpc/gains/c11/ov", MPC.nx, MPC.gains.c11.OV);
+    MPC.gains.c11.MV = obtainRosparam.getArray("/proc_control/mpc/gains/c11/mv", MPC.nu, MPC.gains.c11.MV);
+    MPC.gains.c11.MVR = obtainRosparam.getArray("/proc_control/mpc/gains/c11/mvr", MPC.nu, MPC.gains.c11.MVR);
     
     % Load MPC Gain Mode 19
-    MPC.gains.c19.OV = obtainRosparam.getgainArray("c19", "ov", MPC.nx, MPC.gains.c19.OV);
-    MPC.gains.c19.MV = obtainRosparam.getgainArray("c19", "mv", MPC.nu, MPC.gains.c19.MV);
-    MPC.gains.c19.MVR = obtainRosparam.getgainArray("c19", "mvr", MPC.nu, MPC.gains.c19.MVR);
+    MPC.gains.c19.OV = obtainRosparam.getArray("/proc_control/mpc/gains/c19/ov", MPC.nx, MPC.gains.c19.OV);
+    MPC.gains.c19.MV = obtainRosparam.getArray("/proc_control/mpc/gains/c19/mv", MPC.nu, MPC.gains.c19.MV);
+    MPC.gains.c19.MVR = obtainRosparam.getArray("/proc_control/mpc/gains/c19/mvr", MPC.nu, MPC.gains.c19.MVR);
 
     % Insére les gains dans la liste des gains
     MPC.gainsList = [ 10, MPC.gains.c10.OV, MPC.gains.c10.MV, MPC.gains.c10.MVR;
@@ -43,8 +43,8 @@
                       19, MPC.gains.c19.OV, MPC.gains.c19.MV, MPC.gains.c19.MVR];
 
     % Load Thruster min & max
-    MPC.tmax = obtainRosparam.getValue("tmax", MPC.tmax);
-    MPC.tmin = obtainRosparam.getValue("tmin", MPC.tmin);
+    MPC.tmax = obtainRosparam.getValue("/proc_control/mpc/tmax", MPC.tmax);
+    MPC.tmin = obtainRosparam.getValue("/proc_control/mpc/tmin", MPC.tmin);
     
 %% Modèle du thruster
     load('T200-Spec-16V.mat');
