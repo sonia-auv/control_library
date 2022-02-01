@@ -1,4 +1,4 @@
-classdef RosparamClass < matlab.System
+classdef RosparamClass < handle
     %ROSPARAM Summary of this class goes here
     %   Detailed explanation goes here
     

@@ -66,27 +66,18 @@ function [simulink, simulation, physics, thrusters, MPC, mode] = ConfigAUV8()
        MPC.gains.defaut.OV = [ 70, 60, 70, 90, 90, 90, 90, 0, 0, 0, 0, 0, 0 ];
        MPC.gains.defaut.MV = [ 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2 ];
        MPC.gains.defaut.MVR = [ 0.1, 0.1, 0.1, 0.1, 0.3, 0.3, 0.3, 0.3 ];
-       MPC.ConfigDefaut = [ MPC.gains.defaut.OV, MPC.gains.defaut.MV, MPC.gains.defaut.MVR ];
        
        MPC.gains.c10.OV = [ 30, 30, 30, 45, 45, 45, 45, 0, 0, 0, 0, 0, 0 ];
        MPC.gains.c10.MV = [ 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2 ];
        MPC.gains.c10.MVR = [ 0.4, 0.4, 0.4, 0.4, 0.5, 0.5, 0.5, 0.5 ];
-       MPC.Config10 = [MPC.gains.c10.OV, MPC.gains.c10.MV, MPC.gains.c10.MVR];
        
        MPC.gains.c11.OV = MPC.gains.c10.OV;
        MPC.gains.c11.MV = MPC.gains.c10.MV;
        MPC.gains.c11.MVR = MPC.gains.c10.MVR;
-       MPC.Config11 = [MPC.gains.c11.OV, MPC.gains.c11.MV, MPC.gains.c11.MVR];
        
        MPC.gains.c19.OV = [ 0, 0, 0, 0, 0, 0, 0, 20, 20, 20, 20, 20, 20];
        MPC.gains.c19.MV = [ 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2 ];
        MPC.gains.c19.MVR = [ 0.1, 0.1, 0.1, 0.1, 0.3, 0.3, 0.3, 0.3 ];
-       MPC.Config19 = [MPC.gains.c19.OV, MPC.gains.c19.MV, MPC.gains.c19.MVR];
-       
-       MPC.gainsList = [-1, MPC.ConfigDefaut;
-                        10, MPC.Config10;
-                        11, MPC.Config11;
-                        19, MPC.Config19];
        
    %% Définitions des modes
    
