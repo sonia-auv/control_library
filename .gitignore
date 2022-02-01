@@ -30,3 +30,14 @@ codegen/
 # Octave session info
 octave-workspace
 
+#Generated msgtoBus and bustoMsg from Matlab
++bus_conv_fcns/
+
+#Proc_Control_node and sonia_common for code generation
+src/src/
+src/proc_control_node/
+proc_control_node/
+
+#Build files from Simulink
+*.sh
+*.tgz
