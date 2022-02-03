@@ -1,5 +1,17 @@
 % Ce script initialise les controlleurs du sous-marin.
 
+% Si on roule en simulation
+    if coder.target('MATLAB')
+        
+        if ~ ros.internal.Global.isNodeActive
+            % partir le node ros matlab 
+            rosinit;
+        end
+
+        % Definir AUV8
+        setenv("AUV","AUV8");
+    end
+
 % Obtenir la variable d'environement du sub
     auv = getenv("AUV");
 
@@ -14,6 +26,7 @@
     end
 
 %% Load Rosparam
+
     obtainRosparam = RosparamClass;
     obtainRosparam.setParameterTree(rosparam);
 

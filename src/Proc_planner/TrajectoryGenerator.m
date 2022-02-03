@@ -1,0 +1,307 @@
+classdef TrajectoryGenerator < handle
+    %TRAJECTORYGENERATOR Summary of this class goes here
+    %   Detailed explanation goes here
+    
+    properties
+        status = 1;
+    end
+
+    properties (Access = private)
+
+        % Parametres
+        n;         % Nombre de waypoints
+        pointList; % liste de position.
+        quatList;  % liste de quaternion.
+        timeList;  % liste de temp
+        nbPoint = 1;   % Nombre de points dans la trajectoire
+
+        % Structures
+            MAPM; % Multi Add Pose Msg
+            param % paramètre de trajectoire
+
+        % ROS message
+            icMsg = rosmessage('geometry_msgs/Pose',"DataFormat","struct"); % IC topic
+
+        % Ros Subscriber
+            icSub ;
+            
+
+    end
+    
+    methods
+        %==================================================================
+        % Constructeur
+        function this = TrajectoryGenerator(multiAddposeMsg, param)
+            
+            this.MAPM =multiAddposeMsg;
+
+            % nombre de waypoints + iC
+            this.n = size(multiAddposeMsg.Pose,2)+2; 
+            
+            % Initialiser les tableaux
+            this.pointList = zeros(this.n,3);
+            this.quatList = zeros(this.n,4);
+            this.timeList = zeros(this.n,1);
+
+            % Initialiser les parametres
+            this.param = param;
+
+            this.icSub = rossubscriber("proc_planner/initial_pose","geometry_msgs/Pose","DataFormat","struct");
+            
+
+            % trouver le waypoint initial 
+            if ~this.getInitialWaypoint()
+                this.status = 0;
+                return;
+            end
+
+            % Process le message addpose
+            if ~this.processWpt()
+                this.status = 0;
+                return;
+            end
+            
+            % Calculer les temps entre chaque waypoints
+            this.computetimeArrival();
+
+            % Déterminer le nombre de points
+            this.nbPoint = floor(this.timeList(end) / this.param.ts);
+          
+           
+        end
+        %==================================================================
+        % Fonction Main qui génère les waypoints
+        function status = Compute(this,trajpub)
+
+            % Interpoler les waypoints
+            status = this.interpolateWaypoints(trajpub);  
+            
+        end
+            
+    end
+
+%% ========================================================================
+    % Private function
+
+    methods (Access = private)
+
+        %==================================================================
+        % Fonction qui interprete les waypoints reçu par ROS
+        function status = processWpt(this)
+            
+            
+
+            for i = 1 : this.n - 2 % pour chaques waypoints
+
+                % transformer les angle d'euler quaternions
+                q = eul2quat(deg2rad([this.MAPM.Pose(i).Orientation.Z,...
+                                      this.MAPM.Pose(i).Orientation.Y,...
+                                      this.MAPM.Pose(i).Orientation.X]),'ZYX');
+
+                % cree le vecteur pose 
+                p = [this.MAPM.Pose(i).Position.X,...
+                     this.MAPM.Pose(i).Position.Y,...
+                     this.MAPM.Pose(i).Position.Z];
+
+                % transformer le point en fonction du frame
+                switch this.MAPM.Pose(i).Frame
+
+                    case 0 % position et angle absolue
+                        this.pointList(i+1,:) = p; 
+                        this.quatList(i+1,:) = q;
+        
+                    case 1 % position et angle relatif
+                        this.pointList(i+1,:) = this.pointList(i,:) + this.quatrotation(p,q);
+                        this.quatList(i+1,:) = this.getQuatDir(this.quatList(i,:), q, this.MAPM.Pose(i).Rotation);
+        
+                    case 2 % position relatif et angle absolue
+                        this.pointList(i+1,:) = this.pointList(i,:) + this.quatrotation(p,q);
+                        this.quatList(i+1,:) = q;
+        
+                    case 3 % position absolue et angle relatif
+                        this.pointList(i+1,:) = p; 
+                        this.quatList(i+1,:) = this.getQuatDir(this.quatList(i,:), q, this.MAPM.Pose(i).Rotation);
+        
+                    otherwise % Le referentiel n'est pas valide
+                        status = 0;
+                        return
+                end
+            end
+
+            % Copier le dernier waypoint 2 fois pour éviter un comportement
+            % du generateur de trajecteur
+            this.pointList(end,:) = this.pointList(end-1,:); 
+            this.quatList(end,:) = this.quatList(end-1,:);
+            
+            status = 1;
+        end
+
+        %================================================================== 
+        % Fonnction qui retoure le quaternion le plus court/long selon
+        % l'utilisateur
+     
+         function rq =  getQuatDir(this,lq,q,dir)    
+             
+            norm = dot(lq,q);
+            
+            % conjuger le quaternion au besoin
+            if  norm > 1 && dir == 0 || norm < 1 && dir == 1
+                q = quatconj(q);      
+            end
+             
+            rq = quatmultiply(lq,q);
+         end
+         %=================================================================
+         % Fonction qui tourne un vecteur selon un quaternion.
+         function rp = quatrotation(this,p,q)
+
+             qs = q(1);   % quaternion partie scalaire
+             qu = q(2:4); % quaternion partie vectoriel
+
+             % QuatRotate n'est pas compilable
+             rp= (2*dot(qu,p)*qu +(qs^2-dot(qu,qu))*p + 2*qs*cross(qu,p)); 
+         end
+        
+
+        %================================================================== 
+        % Fonnction qui calcul le temps entre chaque waypoint
+
+        function  computetimeArrival(this)
+
+            for i = 2 : this.n % pour chaques waypoints
+
+                % Trouver la distance Eucledienne entre 2 points
+                d = norm( this.pointList(i,:) - this.pointList(i-1,:));
+
+                % Déterminer le temps selon aMax
+                tl = (4 * sqrt(3 * d)) / (3 * sqrt(this.param.amax));
+
+                % Déterminer la vitesse maximum de la trajectoire
+                vl = (this.param.amax * tl) / 4;
+
+                % Si la vitesse est plus grande que la vitesse maximum
+                if vl > this.param.vlmax
+                    % Calculer le temps selon vmax
+                    tl = (4 * d) / (3 * this.param.vlmax);
+                end
+
+                % Déterminer l'angle entre les 2 quaternions
+                qRel = quatmultiply( quatconj( this.quatList(i-1,:)), this.quatList(i,:));
+                travelAngle = 2 * atan2(norm(qRel(2:4)),qRel(1));
+
+                % Déterminer le temps angulaire
+                ta = travelAngle/this.param.vamax;
+
+                this.timeList(i) = this.timeList(i-1) + max([tl,ta,this.param.ts]);
+            end
+        end
+        %================================================================== 
+        % Fonnction qui interpole les waypoints
+
+        function info = interpolateWaypoints(this, trajpub)  
+
+            % Crée l'objet waypoint trajectory
+            trajObj = waypointTrajectory(this.pointList, this.timeList,...
+                                         'SampleRate', 1/this.param.ts,...
+                                         'SamplesPerFrame',1,...
+                                         'Orientation', quaternion(this.quatList));
+
+            % Initialiser le message trajectoire.
+            trajMsg = rosmessage('trajectory_msgs/MultiDOFJointTrajectoryPoint',"DataFormat","struct"); % message point
+            transformBuff  = rosmessage('geometry_msgs/Transform.msg',"DataFormat","struct"); % trajectoire
+            twistBuff = rosmessage('geometry_msgs/Twist.msg',"DataFormat","struct"); % trajectoire
+
+           % initialiser la dimention vecteur de points 
+            trajMsg.Transforms = repelem(transformBuff,this.nbPoint).';
+            trajMsg.Velocities = repelem(twistBuff,this.nbPoint).';
+            trajMsg.Accelerations = repelem(twistBuff,this.nbPoint).';
+
+         
+            % Générer les points de la trajectoire
+            for i=1 : this.nbPoint
+                [BufferPose, bufferQuat, bufferVelocity ,bufferAcc ,bufferAngRate] = trajObj();
+
+                % Remplire le message Transform.
+                transformBuff.Translation.X = BufferPose(1);
+                transformBuff.Translation.Y = BufferPose(2);
+                transformBuff.Translation.Z = BufferPose(3);
+                
+                % Convertir l'objet quaternion en vecteur
+                bufferQuat = compact(bufferQuat);
+                transformBuff.Rotation.W = bufferQuat(1);
+                transformBuff.Rotation.X = bufferQuat(2);
+                transformBuff.Rotation.Y = bufferQuat(3);
+                transformBuff.Rotation.Z = bufferQuat(4);
+
+                trajMsg.Transforms(i) = transformBuff;
+                
+                % Convertir les vitesse dans le ref sub
+                bufferVelocity = this.quatrotation(bufferVelocity, bufferQuat);
+
+                % Remplire les vitesse
+                twistBuff.Linear.X = bufferVelocity(1);
+                twistBuff.Linear.Y = bufferVelocity(2);
+                twistBuff.Linear.Z = bufferVelocity(3);
+
+                twistBuff.Angular.X = -bufferAngRate(1); % (-) pour convertir les vitesse angulaire dans le ref sub
+                twistBuff.Angular.Y = -bufferAngRate(2);
+                twistBuff.Angular.Z = -bufferAngRate(3);
+                
+                trajMsg.Velocities(i) = twistBuff;
+                % Ecrire le point dans le message
+                
+                % Convertir les accels dans le ref sub
+                bufferAcc = this.quatrotation(bufferAcc,bufferQuat);
+
+               % Remplire les acceleration
+                twistBuff.Linear.X = bufferAcc(1);
+                twistBuff.Linear.Y = bufferAcc(2);
+                twistBuff.Linear.Z = bufferAcc(3);
+
+                twistBuff.Angular.X = 0;
+                twistBuff.Angular.Y = 0;
+                twistBuff.Angular.Z = 0;
+                trajMsg.Accelerations(i) = twistBuff;
+
+            end
+            % Envoyer le message
+            send(trajpub,trajMsg);
+            
+            % Si on roule en simulation
+            if coder.target('MATLAB')
+                % Retourner la trajectoire
+                info = trajMsg;
+            else
+                % Retourner true (sucess)
+                info = 1;
+            end
+        end
+        %================================================================== 
+        % Fonnction qui retoure le waypoint initial
+        function status = getInitialWaypoint(this)
+
+            % lire la position initale
+              [this.icMsg, status] = receive(this.icSub,5);
+%             this.icMsg = this.icSub.LatestMessage;
+% 
+%             status = ~isempty(this.icMsg);
+            
+            if status
+                % Replire les listes.
+                 this.pointList(1,:) = [this.icMsg.Position.X,...
+                                        this.icMsg.Position.Y,...
+                                        this.icMsg.Position.Z];
+    
+                 this.quatList(1,:) = [this.icMsg.Orientation.W,...
+                                       this.icMsg.Orientation.X...
+                                       this.icMsg.Orientation.Y...
+                                       this.icMsg.Orientation.Z];
+
+                 this.timeList(1) = 0;
+            end
+        end
+
+
+    end
+end
+
