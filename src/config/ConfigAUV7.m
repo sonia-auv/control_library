@@ -1,4 +1,4 @@
-function [simulink, simulation, physics, thrusters, MPC, mode] = ConfigAUV8()
+function [simulink, simulation, physics, thrusters, MPC, mode] = ConfigAUV7()
 
 %% Paramètre simulink
     simulink.sampletime = 1/50;
@@ -70,7 +70,7 @@ function [simulink, simulation, physics, thrusters, MPC, mode] = ConfigAUV8()
        MPC.gains.c10.OV = [ 30, 30, 30, 45, 45, 45, 45, 0, 0, 0, 0, 0, 0 ];
        MPC.gains.c10.MV = [ 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2 ];
        MPC.gains.c10.MVR = [ 0.4, 0.4, 0.4, 0.4, 0.5, 0.5, 0.5, 0.5 ];
-       
+
        MPC.gains.c11.OV = MPC.gains.c10.OV;
        MPC.gains.c11.MV = MPC.gains.c10.MV;
        MPC.gains.c11.MVR = MPC.gains.c10.MVR;
@@ -110,7 +110,7 @@ function [simulink, simulation, physics, thrusters, MPC, mode] = ConfigAUV8()
    % Gazebo
        simulation.gazebo.sampletime = simulink.sampletime;
        simulation.gazebo.reference_frame = uint8('world');
-       simulation.gazebo.model_name = uint8('auv8');
+       simulation.gazebo.model_name = uint8('auv7');
     
    % Unity
         simulation.unity.sampletime = simulink.sampletime;

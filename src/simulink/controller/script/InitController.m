@@ -1,9 +1,52 @@
-% Ce sript initialise les controlleurs du sous-marin.
+% Ce script initialise les controlleurs du sous-marin.
 
-% Parametre et constantes  
-    [simulink, simulation, physics, thrusters, MPC, mode] = ConfigAUV8();
+% Obtenir la variable d'environement du sub
+    auv = getenv("AUV");
+
+% Parametre et constantes
+    switch auv
+        case 'AUV8'
+            [simulink, simulation, physics, thrusters, MPC, mode] = ConfigAUV8();
+        case 'AUV7'
+            [simulink, simulation, physics, thrusters, MPC, mode] = ConfigAUV7();
+        otherwise
+            return;
+    end
+
+%% Load Rosparam
+    obtainRosparam = RosparamClass;
+    obtainRosparam.setParameterTree(rosparam);
+
+    % Load MPC Gain Default
+    MPC.gains.defaut.OV = obtainRosparam.getArray("/proc_control/mpc/gains/default/ov", MPC.nx, MPC.gains.defaut.OV);
+    MPC.gains.defaut.MV = obtainRosparam.getArray("/proc_control/mpc/gains/default/mv", MPC.nu, MPC.gains.defaut.MV);
+    MPC.gains.defaut.MVR = obtainRosparam.getArray("/proc_control/mpc/gains/default/mvr", MPC.nu, MPC.gains.defaut.MVR);
     
-% Modèle du thruster
+    % Load MPC Gain Mode 10
+    MPC.gains.c10.OV = obtainRosparam.getArray("/proc_control/mpc/gains/c10/ov", MPC.nx, MPC.gains.c10.OV);
+    MPC.gains.c10.MV = obtainRosparam.getArray("/proc_control/mpc/gains/c10/mv", MPC.nu, MPC.gains.c10.MV);
+    MPC.gains.c10.MVR = obtainRosparam.getArray("/proc_control/mpc/gains/c10/mvr", MPC.nu, MPC.gains.c10.MVR);
+
+    % Load MPC Gain Mode 11
+    MPC.gains.c11.OV = obtainRosparam.getArray("/proc_control/mpc/gains/c11/ov", MPC.nx, MPC.gains.c11.OV);
+    MPC.gains.c11.MV = obtainRosparam.getArray("/proc_control/mpc/gains/c11/mv", MPC.nu, MPC.gains.c11.MV);
+    MPC.gains.c11.MVR = obtainRosparam.getArray("/proc_control/mpc/gains/c11/mvr", MPC.nu, MPC.gains.c11.MVR);
+    
+    % Load MPC Gain Mode 19
+    MPC.gains.c19.OV = obtainRosparam.getArray("/proc_control/mpc/gains/c19/ov", MPC.nx, MPC.gains.c19.OV);
+    MPC.gains.c19.MV = obtainRosparam.getArray("/proc_control/mpc/gains/c19/mv", MPC.nu, MPC.gains.c19.MV);
+    MPC.gains.c19.MVR = obtainRosparam.getArray("/proc_control/mpc/gains/c19/mvr", MPC.nu, MPC.gains.c19.MVR);
+
+    % Insére les gains dans la liste des gains
+    MPC.gainsList = [ 10, MPC.gains.c10.OV, MPC.gains.c10.MV, MPC.gains.c10.MVR;
+                      11, MPC.gains.c11.OV, MPC.gains.c11.MV, MPC.gains.c11.MVR;
+                      19, MPC.gains.c19.OV, MPC.gains.c19.MV, MPC.gains.c19.MVR];
+
+    % Load Thruster min & max
+    MPC.tmax = obtainRosparam.getValue("/proc_control/mpc/tmax", MPC.tmax);
+    MPC.tmin = obtainRosparam.getValue("/proc_control/mpc/tmin", MPC.tmin);
+    
+%% Modèle du thruster
     load('T200-Spec-16V.mat');
     
 % Données pour lookup table.

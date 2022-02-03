@@ -1,0 +1,25 @@
+# Control parameters
+
+#Thrusters
+/proc_control/mpc/tmax : 40.0
+/proc_control/mpc/tmin : -30.0
+
+#MPC Gains Default
+/proc_control/mpc/gains/default/ov : "70,60,70,90,90,90,90,0,0,0,0,0,0"
+/proc_control/mpc/gains/default/mv : "0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2"
+/proc_control/mpc/gains/default/mvr : "0.1,0.1,0.1,0.1,0.3,0.3,0.3,0.3"
+
+#MPC Gain Mode 10
+/proc_control/mpc/gains/c10/ov : "30,30,30,45,45,45,45,0,0,0,0,0,0" 
+/proc_control/mpc/gains/c10/mv : "0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2"
+/proc_control/mpc/gains/c10/mvr : "0.4,0.4,0.4,0.4,0.5,0.5,0.5,0.5"
+
+#MPC Gain Mode 11
+/proc_control/mpc/gains/c11/ov : "30,30,30,45,45,45,45,0,0,0,0,0,0" 
+/proc_control/mpc/gains/c11/mv : "0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2"
+/proc_control/mpc/gains/c11/mvr : "0.4,0.4,0.4,0.4,0.5,0.5,0.5,0.5"
+
+#MPC Gain Mode 19
+/proc_control/mpc/gains/c19/ov : "0,0,0,0,0,0,0,20,20,20,20,20,20"
+/proc_control/mpc/gains/c19/mv : "0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2"
+/proc_control/mpc/gains/c19/mvr : "0.1,0.1,0.1,0.1,0.3,0.3,0.3,0.3"
