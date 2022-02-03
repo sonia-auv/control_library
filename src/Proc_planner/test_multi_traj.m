@@ -4,7 +4,7 @@ trajpub = rospublisher('/proc_planner/send_trajectory_list','trajectory_msgs/Mul
 addposemsg = rosmessage('sonia_common/AddPose',"DataFormat","struct");
 Maddposemsg = rosmessage('sonia_common/MultiAddPose',"DataFormat","struct");
 rMaddposemsg = rosmessage('sonia_common/MultiAddPose',"DataFormat","struct");
-pospub = rospublisher('/proc_planner/madpos','sonia_common/MultiAddPose',"DataFormat","struct");
+pospub = rospublisher('/proc_planner/send_multi_addpose','sonia_common/MultiAddPose',"DataFormat","struct");
 
 mapSub = rossubscriber('/proc_planner/madpos','sonia_common/MultiAddPose',"DataFormat","struct");
 
@@ -148,6 +148,8 @@ addposemsg.Orientation.Z = 180 ;
 addposemsg.Frame = uint8(0);
 addposemsg.Speed = uint8(2);
 Maddposemsg.Pose = [Maddposemsg.Pose, addposemsg];
+
+send(pospub,Maddposemsg);
 % for i=1 : size(trajMsg.Transforms,1)
 %     pose(i,1) = trajMsg.Transforms(i).Translation.X
 %     pose(i,2) = trajMsg.Transforms(i).Translation.Y

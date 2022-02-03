@@ -3,7 +3,7 @@ classdef TrajectoryGenerator < handle
     %   Detailed explanation goes here
     
     properties
-        status = 1;
+        status = true;
     end
 
     properties (Access = private)
@@ -20,10 +20,10 @@ classdef TrajectoryGenerator < handle
             param % paramètre de trajectoire
 
         % ROS message
-            icMsg = rosmessage('geometry_msgs/Pose',"DataFormat","struct"); % IC topic
+            %icMsg = rosmessage('geometry_msgs/Pose',"DataFormat","struct"); % IC topic
 
         % Ros Subscriber
-            icSub ;
+            %icSub ;
             
 
     end
@@ -31,7 +31,7 @@ classdef TrajectoryGenerator < handle
     methods
         %==================================================================
         % Constructeur
-        function this = TrajectoryGenerator(multiAddposeMsg, param)
+        function this = TrajectoryGenerator(multiAddposeMsg, param, icMsg)
             
             this.MAPM =multiAddposeMsg;
 
@@ -46,18 +46,16 @@ classdef TrajectoryGenerator < handle
             % Initialiser les parametres
             this.param = param;
 
-            this.icSub = rossubscriber("proc_planner/initial_pose","geometry_msgs/Pose","DataFormat","struct");
-            
-
             % trouver le waypoint initial 
-            if ~this.getInitialWaypoint()
-                this.status = 0;
+            if ~this.getInitialWaypoint(icMsg)
+                this.status = false;
+                fprintf('proc planner : initial waypoint not received \n');
                 return;
             end
 
             % Process le message addpose
             if ~this.processWpt()
-                this.status = 0;
+                this.status = false;
                 return;
             end
             
@@ -189,7 +187,7 @@ classdef TrajectoryGenerator < handle
                 qRel = quatmultiply( quatconj( this.quatList(i-1,:)), this.quatList(i,:));
                 travelAngle = 2 * atan2(norm(qRel(2:4)),qRel(1));
 
-                % Déterminer le temps angulaire
+                % Déterminer le temps angulaire 
                 ta = travelAngle/this.param.vamax;
 
                 this.timeList(i) = this.timeList(i-1) + max([tl,ta,this.param.ts]);
@@ -278,24 +276,24 @@ classdef TrajectoryGenerator < handle
         end
         %================================================================== 
         % Fonnction qui retoure le waypoint initial
-        function status = getInitialWaypoint(this)
+        function status = getInitialWaypoint(this,icMsg)
 
             % lire la position initale
-              [this.icMsg, status] = receive(this.icSub,5);
-%             this.icMsg = this.icSub.LatestMessage;
-% 
-%             status = ~isempty(this.icMsg);
+            % [this.icMsg, status] = receive(this.icSub,5);
+            %this.icMsg = this.icSub.LatestMessage;
+            status =1;
+            %status = ~isempty(this.icMsg);
             
             if status
                 % Replire les listes.
-                 this.pointList(1,:) = [this.icMsg.Position.X,...
-                                        this.icMsg.Position.Y,...
-                                        this.icMsg.Position.Z];
+                 this.pointList(1,:) = [icMsg.Position.X,...
+                                        icMsg.Position.Y,...
+                                        icMsg.Position.Z];
     
-                 this.quatList(1,:) = [this.icMsg.Orientation.W,...
-                                       this.icMsg.Orientation.X...
-                                       this.icMsg.Orientation.Y...
-                                       this.icMsg.Orientation.Z];
+                 this.quatList(1,:) = [icMsg.Orientation.W,...
+                                       icMsg.Orientation.X...
+                                       icMsg.Orientation.Y...
+                                       icMsg.Orientation.Z];
 
                  this.timeList(1) = 0;
             end
