@@ -7,7 +7,8 @@ rMaddposemsg = rosmessage('sonia_common/MultiAddPose',"DataFormat","struct");
 pospub = rospublisher('/proc_planner/send_multi_addpose','sonia_common/MultiAddPose',"DataFormat","struct");
 
 mapSub = rossubscriber('/proc_planner/madpos','sonia_common/MultiAddPose',"DataFormat","struct");
-
+icMsg = rosmessage('geometry_msgs/Pose',"DataFormat","struct"); % IC topic
+icMsg.Orientation.W = 1;
 param.ts = 0.1;
 param.amax = 0.15;
 param.vlmax = 0.8;
@@ -158,7 +159,7 @@ send(pospub,Maddposemsg);
 
 % pose = [trajMsg.Transforms(:).Translation.X, trajMsg.Transforms(:).Translation.Y, trajMsg.Transforms(:).Translation.Z];
 
-TG = TrajectoryGenerator(Maddposemsg,param);
+TG = TrajectoryGenerator(Maddposemsg,param,icMsg);
 if TG.status
     test= TG.Compute(trajpub);
 end

@@ -36,7 +36,7 @@ classdef TrajectoryGenerator < handle
             this.MAPM =multiAddposeMsg;
 
             % nombre de waypoints + iC
-            this.n = size(multiAddposeMsg.Pose,2)+2; 
+            this.n = max(size(multiAddposeMsg.Pose))+2; % matlab and cpp dont use same index. return max instead
             
             % Initialiser les tableaux
             this.pointList = zeros(this.n,3);
@@ -46,25 +46,27 @@ classdef TrajectoryGenerator < handle
             % Initialiser les parametres
             this.param = param;
 
-            % trouver le waypoint initial 
+            % trouver le waypoint initial
             if ~this.getInitialWaypoint(icMsg)
                 this.status = false;
-                fprintf('proc planner : initial waypoint not received \n');
-                return;
+                fprintf('INFO : proc planner : initial waypoint not received \n');
+                
             end
 
             % Process le message addpose
-            if ~this.processWpt()
+            if ~logical(this.processWpt())
                 this.status = false;
-                return;
+                fprintf('INFO : proc planner : Waypoints are not valid  \n');
+              
             end
             
-            % Calculer les temps entre chaque waypoints
-            this.computetimeArrival();
-
-            % Déterminer le nombre de points
-            this.nbPoint = floor(this.timeList(end) / this.param.ts);
-          
+            if this.status
+                % Calculer les temps entre chaque waypoints
+                this.computetimeArrival();
+    
+                % Déterminer le nombre de points
+                this.nbPoint = floor(this.timeList(end) / this.param.ts);
+            end
            
         end
         %==================================================================
@@ -87,7 +89,7 @@ classdef TrajectoryGenerator < handle
         % Fonction qui interprete les waypoints reçu par ROS
         function status = processWpt(this)
             
-            
+           states = true; 
 
             for i = 1 : this.n - 2 % pour chaques waypoints
 
@@ -121,7 +123,8 @@ classdef TrajectoryGenerator < handle
                         this.quatList(i+1,:) = this.getQuatDir(this.quatList(i,:), q, this.MAPM.Pose(i).Rotation);
         
                     otherwise % Le referentiel n'est pas valide
-                        status = 0;
+                        states = false;
+                        status = states;
                         return
                 end
             end
@@ -130,8 +133,7 @@ classdef TrajectoryGenerator < handle
             % du generateur de trajecteur
             this.pointList(end,:) = this.pointList(end-1,:); 
             this.quatList(end,:) = this.quatList(end-1,:);
-            
-            status = 1;
+            status = states;
         end
 
         %================================================================== 
@@ -264,7 +266,7 @@ classdef TrajectoryGenerator < handle
             end
             % Envoyer le message
             send(trajpub,trajMsg);
-            
+            fprintf('INFO : proc planner : Trajectory generation succeded with %d points. \n',int16(this.nbPoint));
             % Si on roule en simulation
             if coder.target('MATLAB')
                 % Retourner la trajectoire
@@ -281,10 +283,10 @@ classdef TrajectoryGenerator < handle
             % lire la position initale
             % [this.icMsg, status] = receive(this.icSub,5);
             %this.icMsg = this.icSub.LatestMessage;
-            status =1;
+            
             %status = ~isempty(this.icMsg);
             
-            if status
+         
                 % Replire les listes.
                  this.pointList(1,:) = [icMsg.Position.X,...
                                         icMsg.Position.Y,...
@@ -296,9 +298,10 @@ classdef TrajectoryGenerator < handle
                                        icMsg.Orientation.Z];
 
                  this.timeList(1) = 0;
-            end
+          
+            status = true;
         end
-
+        
 
     end
 end

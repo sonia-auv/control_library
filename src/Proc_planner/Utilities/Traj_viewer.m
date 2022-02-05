@@ -32,4 +32,4 @@ angularRate = zeros(n,3);
  plot(tvec,angularRate.');
  plot(tvec, pose.');
 
- plotTransforms(pose(1:100:end,:),quat(1:100:end,:),'InertialZDirection','Down')
+ plotTransforms(pose(1:10:end,:),quat(1:10:end,:),'InertialZDirection','Down')
