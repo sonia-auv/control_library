@@ -61,6 +61,14 @@ function [simulink, simulation, physics, thrusters, MPC, mode] = ConfigAUV8()
        MPC.tmin = -30;% minimum thrust in N
        MPC.thrusters.faultThres = .10; %  % Pourcentage de fautes pour moteurs
        MPC.thrusters.faultSample = 20; %  fault Sample
+
+   % Trajectory Parameters    
+       MPC.trajectory.bufferSize = 6000;
+
+   % Target Reached parameters
+       MPC.targetReached.linearTol = 0.2; % meters
+       MPC.targetReached.angularTol = 0.1; % radians
+       MPC.targetReached.timeInTol = 3; % Seconds
        
    % MPC gains
        MPC.gains.defaut.OV = [ 70, 60, 70, 90, 90, 90, 90, 0, 0, 0, 0, 0, 0 ];
