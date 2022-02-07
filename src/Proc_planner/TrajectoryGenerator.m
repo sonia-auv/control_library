@@ -145,8 +145,9 @@ classdef TrajectoryGenerator < handle
             norm = dot(lq,q);
             
             % conjuger le quaternion au besoin
-            if  norm > 1 && dir == 0 || norm < 1 && dir == 1
-                q = quatconj(q);      
+            %if  norm > 1 && dir == 0 || norm < 1 && dir == 1
+             if  norm < 0  && dir == 0 || norm >= 0 && dir == 1
+                q = -q;      
             end
              
             rq = quatmultiply(lq,q);
@@ -216,7 +217,8 @@ classdef TrajectoryGenerator < handle
             trajMsg.Velocities = repelem(twistBuff,this.nbPoint).';
             trajMsg.Accelerations = repelem(twistBuff,this.nbPoint).';
 
-         
+            lastQuat =zeros(1,4);
+
             % Générer les points de la trajectoire
             for i=1 : this.nbPoint
                 [BufferPose, bufferQuat, bufferVelocity ,bufferAcc ,bufferAngRate] = trajObj();
@@ -228,6 +230,13 @@ classdef TrajectoryGenerator < handle
                 
                 % Convertir l'objet quaternion en vecteur
                 bufferQuat = compact(bufferQuat);
+                
+                % Verifier de retourner la rotation la plus petite
+                if i > 1 && dot(lastQuat,bufferQuat) < 0
+                    bufferQuat = -bufferQuat;
+                end
+                lastQuat = bufferQuat;
+
                 transformBuff.Rotation.W = bufferQuat(1);
                 transformBuff.Rotation.X = bufferQuat(2);
                 transformBuff.Rotation.Y = bufferQuat(3);
@@ -237,7 +246,7 @@ classdef TrajectoryGenerator < handle
                 
                 % Convertir les vitesse dans le ref sub
                 bufferVelocity = this.quatrotation(bufferVelocity, bufferQuat);
-
+               
                 % Remplire les vitesse
                 twistBuff.Linear.X = bufferVelocity(1);
                 twistBuff.Linear.Y = bufferVelocity(2);
