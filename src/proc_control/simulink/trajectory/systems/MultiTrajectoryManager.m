@@ -36,7 +36,7 @@ classdef MultiTrajectoryManager < matlab.System
            this.poseBuffer=repmat(this.dummy, this.mpcParam.trajectory.bufferSize, this.mpcParam.nx);
            this.bufferCount = 0 ;
            this.done = false;
-           this.init = 0;
+           this.init = false;
            
            
            
@@ -44,23 +44,16 @@ classdef MultiTrajectoryManager < matlab.System
 
         %% ================================================================
         % Main execute a chaque iteration.
-        function [currentPose, isReached, isTrajDone initWpt] = stepImpl(this, isNew, trajMsg, reset,mesuredPose)
+        function [currentPose, isReached, isTrajDone, initWpt] = stepImpl(this, isNew, trajMsg, reset,mesuredPose)
    
             
             if reset || ~this.init
 
                 this.resetImpl();
                 this.resetTrajectory(mesuredPose);
-                this.init = 1;
-            end
-    
-%              if this.init==0 
-%                  % Conditions Initiales
-%                  this.poseBuffer(1:this.mpcParam.p,:)=repmat([x0,0,0,0,0,0,0],this.mpcParam.p,1);%InitCond;
-%                  this.bufferCount =1;
-%                  this.init=1;
-%              end
-            
+                this.init = true;
+                isNew = false;
+            end           
             
             % Add new pose if new arrive
             this.processNewPoses(trajMsg, isNew);
@@ -138,7 +131,7 @@ classdef MultiTrajectoryManager < matlab.System
                 end
             end
             
-            currPose = zeros(this.mpcParam.p, 13);
+            currPose = zeros(this.mpcParam.p, this.mpcParam.nx);
             
             currPose(1:index,:) = this.poseBuffer(1:index,:);
             
@@ -174,9 +167,10 @@ classdef MultiTrajectoryManager < matlab.System
                  % calcule de l'angle entre les 2 quaternions
                  qRel = quatmultiply(quatconj(target(4:7)),mesuredPose(4:7).');
                  errAngle = 2 * atan2(norm(qRel(2:4)),qRel(1));
-                
+                 errDist = norm(target(1:3) - mesuredPose(1:3).');
+
                 % vérifier si le sub est dans la zone de convergence (sphérique / conique)
-                if norm(target(1:3) - mesuredPose(1:3)) < this.mpcParam.targetReached.linearTol &&  errAngle < this.mpcParam.targetReached.angularTol
+                if errDist < this.mpcParam.targetReached.linearTol &&  errAngle < this.mpcParam.targetReached.angularTol
                    
                    this.targetReachedCount = this.targetReachedCount + 1;
                    
@@ -187,10 +181,11 @@ classdef MultiTrajectoryManager < matlab.System
                    end
                    
                 else
-                % Remettre le compteur a 0 si le sub n'est pas dans la zone
-                this.targetReachedCount = 0;     
-               end     
-          
+                    % Remettre le compteur a 0 si le sub n'est pas dans la zone
+                    this.targetReachedCount = 0;     
+                end 
+            else
+                this.targetReachedCount = 0;
             end
         end
 
@@ -215,6 +210,64 @@ classdef MultiTrajectoryManager < matlab.System
          end
           
         
+
+         %% Definire outputs       
+          function [currentPose, isReached, isTrajDone, initWpt] = getOutputSizeImpl(this)
+              currentPose = [this.mpcParam.p, this.mpcParam.nx];
+              isReached = [1,1];
+              isTrajDone = [1,1];
+              initWpt = [1,7]; 
+          end 
       
-    end    
+          function [currentPose, isReached, isTrajDone, initWpt] = isOutputFixedSizeImpl(this)
+              currentPose = true;
+              isReached = true;
+              isTrajDone = true;
+              initWpt = true; 
+              
+          end
+          
+          function [currentPose, isReached, isTrajDone, initWpt] = getOutputDataTypeImpl(this)
+              currentPose = "double";
+              isReached = "logical";
+              isTrajDone = "logical";
+              initWpt = "double"; 
+    
+          end
+       
+         function [currentPose, isReached, isTrajDone, initWpt] = isOutputComplexImpl(this)
+              currentPose = false;
+              isReached = false;
+              isTrajDone = false;
+              initWpt = false; 
+             
+         end
+         function [sz,dt,cp] = getDiscreteStateSpecificationImpl(this,name)
+             if strcmp(name,'poseBuffer')
+                  sz = [this.mpcParam.trajectory.bufferSize, this.mpcParam.nx];
+                  dt = "double";
+                  cp = false;
+             elseif strcmp(name,'bufferCount')
+                  sz = [1 1];
+                  dt = "double";
+                  cp = false;
+             elseif strcmp(name,'done')
+                  sz = [1 1];
+                  dt = "logical";
+                  cp = false;
+             elseif strcmp(name,'targetReachedCount')
+                  sz = [1 1];
+                  dt = "double";
+                  cp = false;
+             elseif strcmp(name,'initialPose')
+                  sz = [1 7];
+                  dt = "double";
+                  cp = false;
+             elseif strcmp(name,'init')
+                  sz = [1 1];
+                  dt = "logical";
+                  cp = false;
+             end
+         end
+    end
 end

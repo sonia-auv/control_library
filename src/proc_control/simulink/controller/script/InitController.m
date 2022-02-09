@@ -25,11 +25,13 @@
             return;
     end
 
+  fprintf('INFO : proc control : Load model of %s. \n', auv);
+
 %% Load Rosparam
 
-    obtainRosparam = RosparamClass;
-    obtainRosparam.setParameterTree(rosparam);
-
+     obtainRosparam = RosparamClass;
+     obtainRosparam.setParameterTree(rosparam);
+ 
     % Load MPC Gain Default
     MPC.gains.defaut.OV = obtainRosparam.getArray("/proc_control/mpc/gains/default/ov", MPC.nx, MPC.gains.defaut.OV);
     MPC.gains.defaut.MV = obtainRosparam.getArray("/proc_control/mpc/gains/default/mv", MPC.nu, MPC.gains.defaut.MV);
@@ -49,7 +51,7 @@
     MPC.gains.c19.OV = obtainRosparam.getArray("/proc_control/mpc/gains/c19/ov", MPC.nx, MPC.gains.c19.OV);
     MPC.gains.c19.MV = obtainRosparam.getArray("/proc_control/mpc/gains/c19/mv", MPC.nu, MPC.gains.c19.MV);
     MPC.gains.c19.MVR = obtainRosparam.getArray("/proc_control/mpc/gains/c19/mvr", MPC.nu, MPC.gains.c19.MVR);
-
+ 
     % Insére les gains dans la liste des gains
     MPC.gainsList = [ 10, MPC.gains.c10.OV, MPC.gains.c10.MV, MPC.gains.c10.MVR;
                       11, MPC.gains.c11.OV, MPC.gains.c11.MV, MPC.gains.c11.MVR;
@@ -58,6 +60,11 @@
     % Load Thruster min & max
     MPC.tmax = obtainRosparam.getValue("/proc_control/mpc/tmax", MPC.tmax);
     MPC.tmin = obtainRosparam.getValue("/proc_control/mpc/tmin", MPC.tmin);
+
+    % Param du target reached
+    MPC.targetReached.linearTol = obtainRosparam.getValue("/proc_control/target_reached/linear_tolerance", MPC.targetReached.linearTol);
+    MPC.targetReached.angularTol = obtainRosparam.getValue("/proc_control/target_reached/angular_tolerance",  MPC.targetReached.angularTol);
+    MPC.targetReached.timeInTol = obtainRosparam.getValue("/proc_control/target_reached/time_in_tolerance",  MPC.targetReached.timeInTol);
     
 %% Modèle du thruster
     load('T200-Spec-16V.mat');
@@ -194,16 +201,17 @@ Z0_l = exp(-2*zeta_l*wn_l*MPC.Ts);
     Qmpcobj.PredictionHorizon =MPC.p;
     Qmpcobj.ControlHorizon=MPC.m;
 
-    Qmpcobj.Model.Nominal.X =Xi;
-    Qmpcobj.Model.Nominal.Y=Xi;
+    Qmpcobj.Model.Nominal.X = Xi;
+    Qmpcobj.Model.Nominal.Y= Xi;
 %Ajout des poids et gains
-    Qmpcobj.Weights.OutputVariables = MPC.gains.c10.OV;
-    Qmpcobj.Weights.ManipulatedVariables = MPC.gains.c10.MV;
-    Qmpcobj.Weights.ManipulatedVariablesRate = MPC.gains.c10.MVR;
+    Qmpcobj.Weights.OutputVariables = MPC.gains.defaut.OV;
+    Qmpcobj.Weights.ManipulatedVariables = MPC.gains.defaut.MV;
+    Qmpcobj.Weights.ManipulatedVariablesRate = MPC.gains.defaut.MVR;
     Qmpcobj.MV = struct('Min',TMIN,'Max',TMAX);
     % mpcobj.OutputVariables=struct('Min',VMIN,'Max',VMAX);%
     setEstimator(Qmpcobj,'custom');
-    Qmpcobj.Optimizer.ActiveSetOptions.ConstraintTolerance=0.01;
+    setCustomSolver(Qmpcobj,'quadprog');
+    %Qmpcobj.Optimizer.ActiveSetOptions.ConstraintTolerance=0.01;
     %qxss=mpcstate(Qmpcobj);
     %results = review(Qmpcobj);
 %% Initialiser le comtrolleur MPC non lineaire

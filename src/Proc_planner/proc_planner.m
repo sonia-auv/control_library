@@ -19,13 +19,13 @@ function proc_planner
 
     % Definir les publisher ROS
     trajpub = rospublisher('/proc_planner/send_trajectory_list','trajectory_msgs/MultiDOFJointTrajectoryPoint',"DataFormat","struct");
-    validPub = rospublisher("/proc_planner/is_waypoint_valid","std_msgs/Bool","DataFormat","struct");
+    validPub = rospublisher("/proc_planner/is_waypoints_valid","std_msgs/Bool","DataFormat","struct");
     mapPub = rospublisher('/proc_planner/send_multi_addpose','sonia_common/MultiAddPose',"DataFormat","struct");
     icPub = rospublisher("proc_planner/initial_pose","geometry_msgs/Pose","DataFormat","struct");
     % Definir les parametre de trajectoire
     param.ts = 0.1;
-    param.amax = 0.15;
-    param.vlmax = 0.8;
+    param.amax = 0.10;
+    param.vlmax = 0.5;
     param.vamax = deg2rad(45);
     
     % Initialiser les topics
@@ -45,12 +45,12 @@ function proc_planner
 
             Maddposemsg = mapSub.LatestMessage;
             newMaddPose = true;
-            fprintf('proc planner : Poses received \n');
+            fprintf('INFO : proc planner : Poses received \n');
             fprintf('INFO : proc planner : Wait for initial pose \n');
         end
 
         % Si Recois un nouveau message initial waypoint
-        if ~isequaln(icMsg, icSub.LatestMessage) && newMaddPose
+        if (~isequaln(icMsg, icSub.LatestMessage)) && newMaddPose
 
             icMsg = icSub.LatestMessage;
             newInitalPose = true;

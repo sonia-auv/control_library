@@ -7,6 +7,8 @@ rMaddposemsg = rosmessage('sonia_common/MultiAddPose',"DataFormat","struct");
 pospub = rospublisher('/proc_planner/send_multi_addpose','sonia_common/MultiAddPose',"DataFormat","struct");
 
 mapSub = rossubscriber('/proc_planner/madpos','sonia_common/MultiAddPose',"DataFormat","struct");
+
+tt= mapSub.LatestMessage;
 icMsg = rosmessage('geometry_msgs/Pose',"DataFormat","struct"); % IC topic
 icMsg.Orientation.W = 1;
 param.ts = 0.1;

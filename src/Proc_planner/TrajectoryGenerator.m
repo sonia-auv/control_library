@@ -19,13 +19,6 @@ classdef TrajectoryGenerator < handle
             MAPM; % Multi Add Pose Msg
             param % paramètre de trajectoire
 
-        % ROS message
-            %icMsg = rosmessage('geometry_msgs/Pose',"DataFormat","struct"); % IC topic
-
-        % Ros Subscriber
-            %icSub ;
-            
-
     end
     
     methods
@@ -36,7 +29,7 @@ classdef TrajectoryGenerator < handle
             this.MAPM =multiAddposeMsg;
 
             % nombre de waypoints + iC
-            this.n = max(size(multiAddposeMsg.Pose))+2; % matlab and cpp dont use same index. return max instead
+            this.n = max(size(multiAddposeMsg.Pose))+3; % matlab and cpp dont use same index. return max instead
             
             % Initialiser les tableaux
             this.pointList = zeros(this.n,3);
@@ -91,7 +84,7 @@ classdef TrajectoryGenerator < handle
             
            states = true; 
 
-            for i = 1 : this.n - 2 % pour chaques waypoints
+            for i = 1 : this.n - 3 % pour chaques waypoints
 
                 % transformer les angle d'euler quaternions
                 q = eul2quat(deg2rad([this.MAPM.Pose(i).Orientation.Z,...
@@ -107,20 +100,20 @@ classdef TrajectoryGenerator < handle
                 switch this.MAPM.Pose(i).Frame
 
                     case 0 % position et angle absolue
-                        this.pointList(i+1,:) = p; 
-                        this.quatList(i+1,:) = q;
+                        this.pointList(i+2,:) = p; 
+                        this.quatList(i+2,:) = q;
         
                     case 1 % position et angle relatif
-                        this.pointList(i+1,:) = this.pointList(i,:) + this.quatrotation(p,q);
-                        this.quatList(i+1,:) = this.getQuatDir(this.quatList(i,:), q, this.MAPM.Pose(i).Rotation);
+                        this.pointList(i+2,:) = this.pointList(i,:) + this.quatrotation(p,q);
+                        this.quatList(i+2,:) = this.getQuatDir(this.quatList(i,:), q, this.MAPM.Pose(i).Rotation);
         
                     case 2 % position relatif et angle absolue
-                        this.pointList(i+1,:) = this.pointList(i,:) + this.quatrotation(p,q);
-                        this.quatList(i+1,:) = q;
+                        this.pointList(i+2,:) = this.pointList(i,:) + this.quatrotation(p,q);
+                        this.quatList(i+2,:) = q;
         
                     case 3 % position absolue et angle relatif
-                        this.pointList(i+1,:) = p; 
-                        this.quatList(i+1,:) = this.getQuatDir(this.quatList(i,:), q, this.MAPM.Pose(i).Rotation);
+                        this.pointList(i+2,:) = p; 
+                        this.quatList(i+2,:) = this.getQuatDir(this.quatList(i,:), q, this.MAPM.Pose(i).Rotation);
         
                     otherwise % Le referentiel n'est pas valide
                         states = false;
@@ -307,8 +300,13 @@ classdef TrajectoryGenerator < handle
                                        icMsg.Orientation.Z];
 
                  this.timeList(1) = 0;
-          
-            status = true;
+                 
+                % Copier le point 2 fois pour forcé accInit a 0.
+                 this.pointList(2,:) = this.pointList(1,:);
+                 this.quatList(2,:) = this.quatList(1,:);
+                 this.timeList(2) = this.param.ts;
+
+                 status = true;
         end
         
 
