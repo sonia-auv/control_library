@@ -1,4 +1,14 @@
 function proc_planner
+
+    % Si on roule en simulation
+    if coder.target('MATLAB')
+        
+        if ~ ros.internal.Global.isNodeActive
+            % partir le node ros matlab 
+            rosinit;
+        end
+    end
+
     % definir le node
     rosSpin = 1;
     r = rosrate(rosSpin);
@@ -9,6 +19,7 @@ function proc_planner
     % Definir les message ros
     Maddposemsg = rosmessage('sonia_common/MultiAddPose',"DataFormat","struct");
     emptyMAddPoseMsg = rosmessage('sonia_common/MultiAddPose',"DataFormat","struct");
+    emptyMAddPoseMsg.Pose = rosmessage('sonia_common/AddPose',"DataFormat","struct");
     validMsg = rosmessage("std_msgs/Bool","DataFormat","struct");
     icMsg = rosmessage('geometry_msgs/Pose',"DataFormat","struct"); % IC topic
     emptyIcMsg = rosmessage('geometry_msgs/Pose',"DataFormat","struct");
@@ -27,7 +38,19 @@ function proc_planner
     param.amax = 0.10;
     param.vlmax = 0.5;
     param.vamax = deg2rad(45);
+
+    % Obtenir les rosparams
+    obtainRosparam = RosparamClass;
+    obtainRosparam.setParameterTree(rosparam);
+
+    param.amax = obtainRosparam.getValue("/proc_planner/maximum_acceleration",param.amax);
+    param.vlmax = obtainRosparam.getValue("/proc_planner/maximum_velocity",param.vlmax);
+    param.vamax = obtainRosparam.getValue("/proc_planner/maximum_angular_rate",param.vamax);
     
+    fprintf('INFO : proc planner : Maximum acceleration is %f m/s^2. \n', param.amax);
+    fprintf('INFO : proc planner : Maximum velocity is %f m/s. \n', param.vlmax);
+    fprintf('INFO : proc planner : Maximum angular rate is %f rad/s. \n', param.vamax);
+
     % Initialiser les topics
     Maddposemsg = mapSub.LatestMessage;
     icMsg = icSub.LatestMessage;
