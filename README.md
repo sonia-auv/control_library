@@ -65,7 +65,52 @@ You need to generate the ros message in matlab to be able to use it. To do so, n
 
 
 # Use the control
-You can now send messages to the control using a rostopic command.
+There are multiple mode available:
+
+ 0: Kill 
+
+ 1-9: special (reserved) 
+
+ 
+ 10-19:  Quaternion Adaptive MPC 
+
+ - 10 :Multi waypoints planning 
+
+ - 11 : single waypoint trajectory 
+
+ - 12 : Hydrophone Mode. 
+
+ - 13 : Alignement vision Front 
+
+ - 14 : Alignement vision bottom  
+
+ - 19 : Space mouse (Semi-manual) 
+
+ 
+
+ 20-29 : Open Loop 
+
+ - 20 : space mouse Model Base Open loop 
+
+ - 21 : space mouse direct B Matrix 
+
+ 
+
+ 30-39: Develop  
+
+ - 30 : LTV MPC - single waypoint 
+
+ 
+
+ 40 – 49 : Legacy 
+
+ - 40 : NLMPC single waypoints (Non compilable) 
+
+ - 41 : Adaptive MPC Euler single waypoints 
+
+You can use the following message to set mode
+
+`rostopic pub /proc_control/setmode std_msgs/uin32 "data: <mode>"`
 
 # Example 
 ### Add pose
