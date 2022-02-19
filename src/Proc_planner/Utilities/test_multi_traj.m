@@ -41,16 +41,17 @@ addposemsg.Speed = uint8(2);
 
 Maddposemsg.Pose = [Maddposemsg.Pose, addposemsg];
 
+
 % WayPts 4
-addposemsg.Position.X = 6 ;
-addposemsg.Position.Y = 0;
-addposemsg.Position.Z = 2;
-addposemsg.Orientation.X =0 ;
-addposemsg.Orientation.Y =0 ;
-addposemsg.Orientation.Z = 0 ;
-addposemsg.Frame = uint8(0);
-addposemsg.Speed = uint8(2);
-Maddposemsg.Pose = [Maddposemsg.Pose, addposemsg];
+% addposemsg.Position.X = 6 ;
+% addposemsg.Position.Y = 0;
+% addposemsg.Position.Z = 2;
+% addposemsg.Orientation.X =0 ;
+% addposemsg.Orientation.Y =0 ;
+% addposemsg.Orientation.Z = 0 ;
+% addposemsg.Frame = uint8(0);
+% addposemsg.Speed = uint8(2);
+% Maddposemsg.Pose = [Maddposemsg.Pose, addposemsg];
 
 % WayPts 4
 addposemsg.Position.X = 8.072 ;
@@ -115,7 +116,7 @@ addposemsg.Position.Y = 1.364;
 addposemsg.Position.Z = 1.696;
 addposemsg.Orientation.X = 0 ;
 addposemsg.Orientation.Y = 0 ;
-addposemsg.Orientation.Z = -(180-45) ;
+addposemsg.Orientation.Z = -(180-39.23) ;
 addposemsg.Frame = uint8(0);
 addposemsg.Speed = uint8(2);
 Maddposemsg.Pose = [Maddposemsg.Pose, addposemsg];
@@ -130,17 +131,27 @@ addposemsg.Orientation.Z = 180;
 addposemsg.Frame = uint8(0);
 addposemsg.Speed = uint8(2);
 Maddposemsg.Pose = [Maddposemsg.Pose, addposemsg];
+% % WayPts 12
+% addposemsg.Position.X = 8.072 ;
+% addposemsg.Position.Y = 0;
+% addposemsg.Position.Z = 2;
+% addposemsg.Orientation.X =0 ;
+% addposemsg.Orientation.Y =0 ;
+% addposemsg.Orientation.Z = 180;
+% addposemsg.Frame = uint8(0);
+% addposemsg.Speed = uint8(2);
+% Maddposemsg.Pose = [Maddposemsg.Pose, addposemsg];
 
 % WayPts 12
-addposemsg.Position.X = 6 ;
-addposemsg.Position.Y = 0;
-addposemsg.Position.Z = 2;
-addposemsg.Orientation.X =0 ;
-addposemsg.Orientation.Y =0 ;
-addposemsg.Orientation.Z = 180;
-addposemsg.Frame = uint8(0);
-addposemsg.Speed = uint8(2);
-Maddposemsg.Pose = [Maddposemsg.Pose, addposemsg];
+% addposemsg.Position.X = 6 ;
+% addposemsg.Position.Y = 0;
+% addposemsg.Position.Z = 2;
+% addposemsg.Orientation.X =0 ;
+% addposemsg.Orientation.Y =0 ;
+% addposemsg.Orientation.Z = 180;
+% addposemsg.Frame = uint8(0);
+% addposemsg.Speed = uint8(2);
+% Maddposemsg.Pose = [Maddposemsg.Pose, addposemsg];
 % WayPts 14
 addposemsg.Position.X = 0 ;
 addposemsg.Position.Y = 0;

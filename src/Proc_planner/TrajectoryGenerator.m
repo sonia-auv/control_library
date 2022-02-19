@@ -14,7 +14,7 @@ classdef TrajectoryGenerator < handle
         quatList;  % liste de quaternion.
         timeList;  % liste de temp
         nbPoint = 1;   % Nombre de points dans la trajectoire
-
+       lastConj = false;
         % Structures
             MAPM; % Multi Add Pose Msg
             param % paramètre de trajectoire
@@ -100,20 +100,21 @@ classdef TrajectoryGenerator < handle
                 switch this.MAPM.Pose(i).Frame
 
                     case 0 % position et angle absolue
-                        this.pointList(i+2,:) = p; 
                         this.quatList(i+2,:) = q;
+                        this.pointList(i+2,:) = p; 
         
                     case 1 % position et angle relatif
-                        this.pointList(i+2,:) = this.pointList(i,:) + this.quatrotation(p,q);
-                        this.quatList(i+2,:) = this.getQuatDir(this.quatList(i,:), q, this.MAPM.Pose(i).Rotation);
+                        this.quatList(i+2,:) = this.getQuatDir(this.quatList(i+1,:), q, this.MAPM.Pose(i).Rotation);
+                        this.pointList(i+2,:) = this.pointList(i+1,:) + this.quatrotation(p,this.quatList(i+2,:));
+                        
         
-                    case 2 % position relatif et angle absolue
-                        this.pointList(i+2,:) = this.pointList(i,:) + this.quatrotation(p,q);
+                    case 2 % position relatif et angle absolue             
                         this.quatList(i+2,:) = q;
+                        this.pointList(i+2,:) = this.pointList(i+1,:) + this.quatrotation(p,q);
         
                     case 3 % position absolue et angle relatif
-                        this.pointList(i+2,:) = p; 
-                        this.quatList(i+2,:) = this.getQuatDir(this.quatList(i,:), q, this.MAPM.Pose(i).Rotation);
+                        this.quatList(i+2,:) = this.getQuatDir(this.quatList(i+1,:), q, this.MAPM.Pose(i).Rotation);
+                        this.pointList(i+2,:) = p;
         
                     otherwise % Le referentiel n'est pas valide
                         states = false;
@@ -135,14 +136,27 @@ classdef TrajectoryGenerator < handle
      
          function rq =  getQuatDir(this,lq,q,dir)    
              
-            norm = dot(lq,q);
             
+            
+            norm = dot(lq,q);
+            if this.lastConj
+                lq = quatconj(lq);
+                this.lastConj =false;
+            
+            
+
             % conjuger le quaternion au besoin
             %if  norm > 1 && dir == 0 || norm < 1 && dir == 1
-             if  norm < 0  && dir == 0 || norm >= 0 && dir == 1
-                q = -q;      
+
+
+            elseif  norm < 0  && dir == 0 || norm >= 0 && dir == 1
+                q = quatconj(q);    
+                this.lastConj =true;
+
             end
-             
+            
+            
+
             rq = quatmultiply(lq,q);
          end
          %=================================================================
