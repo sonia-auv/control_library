@@ -13,6 +13,7 @@ classdef TrajectoryGenerator < handle
         pointList; % liste de position.
         quatList;  % liste de quaternion.
         timeList;  % liste de temp
+        courseList; % Liste de courbe
         nbPoint = 1;   % Nombre de points dans la trajectoire
        lastConj = false;
         % Structures
@@ -35,6 +36,7 @@ classdef TrajectoryGenerator < handle
             this.pointList = zeros(this.n,3);
             this.quatList = zeros(this.n,4);
             this.timeList = zeros(this.n,1);
+            this.courseList = zeros(1, this.n);
 
             % Initialiser les parametres
             this.param = param;
@@ -105,12 +107,12 @@ classdef TrajectoryGenerator < handle
         
                     case 1 % position et angle relatif
                         this.quatList(i+2,:) = this.getQuatDir(this.quatList(i+1,:), q, this.MAPM.Pose(i).Rotation);
-                        this.pointList(i+2,:) = this.pointList(i+1,:) + this.quatrotation(p,this.quatList(i+2,:));
+                        this.pointList(i+2,:) = this.pointList(i+1,:) + this.quatrotation(p,this.quatList(i+1,:));
                         
         
                     case 2 % position relatif et angle absolue             
                         this.quatList(i+2,:) = q;
-                        this.pointList(i+2,:) = this.pointList(i+1,:) + this.quatrotation(p,q);
+                        this.pointList(i+2,:) = this.pointList(i+1,:) + this.quatrotation(p,this.quatList(i+1,:));
         
                     case 3 % position absolue et angle relatif
                         this.quatList(i+2,:) = this.getQuatDir(this.quatList(i+1,:), q, this.MAPM.Pose(i).Rotation);
@@ -121,12 +123,21 @@ classdef TrajectoryGenerator < handle
                         status = states;
                         return
                 end
+
+            % determiner le yaw pour le vecteur course
+            eul = rad2deg(quat2eul(this.quatList(i+2,:),"ZYX")); 
+            if eul(1)<0
+                eul(1)= 360+eul(1);
+            end
+            this.courseList(i+2) = eul(1);
             end
 
+           
             % Copier le dernier waypoint 2 fois pour éviter un comportement
             % du generateur de trajecteur
             this.pointList(end,:) = this.pointList(end-1,:); 
             this.quatList(end,:) = this.quatList(end-1,:);
+            this.courseList(end) = this.courseList(end-1);
             status = states;
         end
 
@@ -135,25 +146,16 @@ classdef TrajectoryGenerator < handle
         % l'utilisateur
      
          function rq =  getQuatDir(this,lq,q,dir)    
-             
-            
-            
-            norm = dot(lq,q);
-            if this.lastConj
-                lq = quatconj(lq);
-                this.lastConj =false;
-            
-            
-
-            % conjuger le quaternion au besoin
-            %if  norm > 1 && dir == 0 || norm < 1 && dir == 1
 
 
-            elseif  norm < 0  && dir == 0 || norm >= 0 && dir == 1
-                q = quatconj(q);    
-                this.lastConj =true;
-
-            end
+%           norm = dot(lq,q);
+%             % conjuger le quaternion au besoin
+%             %if  norm > 1 && dir == 0 || norm < 1 && dir == 1
+%            if  norm < 0  && dir == 0 || norm >= 0 && dir == 1
+%                 q = quatconj(q);    
+%                 this.lastConj =true;
+% 
+%             end
             
             
 
@@ -208,11 +210,13 @@ classdef TrajectoryGenerator < handle
 
         function info = interpolateWaypoints(this, trajpub)  
 
+           
             % Crée l'objet waypoint trajectory
             trajObj = waypointTrajectory(this.pointList, this.timeList,...
                                          'SampleRate', 1/this.param.ts,...
                                          'SamplesPerFrame',1,...
-                                         'Orientation', quaternion(this.quatList));
+                                         'Orientation', quaternion(this.quatList), ...
+                                         'Course',this.courseList);
 
             % Initialiser le message trajectoire.
             trajMsg = rosmessage('trajectory_msgs/MultiDOFJointTrajectoryPoint',"DataFormat","struct"); % message point
@@ -315,10 +319,14 @@ classdef TrajectoryGenerator < handle
 
                  this.timeList(1) = 0;
                  
+                 eul = rad2deg(quat2eul(this.quatList(1,:),"ZYX")); 
+                 this.courseList(1) = eul(1);
+
                 % Copier le point 2 fois pour forcé accInit a 0.
                  this.pointList(2,:) = this.pointList(1,:);
                  this.quatList(2,:) = this.quatList(1,:);
                  this.timeList(2) = this.param.ts;
+                 this.courseList(2) = eul(1);
 
                  status = true;
         end

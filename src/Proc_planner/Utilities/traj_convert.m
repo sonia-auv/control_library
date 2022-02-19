@@ -17,7 +17,7 @@
 %      if rot<-180
 %          rot = -(360+rot);
 %      end
-%      rot
+%      
 %      newmsg.Pose(i).Orientation.Z = rot;
 % 
 %     transPose = quatrotate((eul2quat([deg2rad(Maddposemsg.Pose(i).Orientation.Z),0,0],"ZYX")),pose);
@@ -28,10 +28,14 @@
 % 
 %     
 %     newmsg.Pose(i).Frame = 1;
-% 
+%     fprintf("X: %d Y: %d Z: %d   yam : %d \n",transPose(1),transPose(2),transPose(3),rot)
 % end
 
-iquat= eul2quat(deg2rad([0,0,0]),"ZYX");
+for i =1 : max(size(newmsg.Pose))
+fprintf("WPTS # %d :: Position { X: %d Y: %d Z: %d } Orientation { yaw : %d } \n",i, newmsg.Pose(i).Position.X,newmsg.Pose(i).Position.Y,newmsg.Pose(i).Position.Z,newmsg.Pose(i).Orientation.Z)
+end
+
+iquat= eul2quat(deg2rad([45,0,0]),"ZYX");
 icMsg = rosmessage('geometry_msgs/Pose',"DataFormat","struct"); % IC topic
 
 
