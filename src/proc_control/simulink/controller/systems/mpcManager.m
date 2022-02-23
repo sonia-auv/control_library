@@ -107,6 +107,7 @@
               
                if newReadCurrent
                     temps=zeros(1,8);
+                    readCurrent(8) =0;
                 % regarder si le courant est en dessou du seuil
                     temp = readCurrent(1:this.MPC.nu) < (estimatedCurrent .* this.MPC.thrusters.faultThres);           
                 % Rénitialiser le compteur si thruster est bon

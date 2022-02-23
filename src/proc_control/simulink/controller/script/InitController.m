@@ -210,7 +210,7 @@ Z0_l = exp(-2*zeta_l*wn_l*MPC.Ts);
     Qmpcobj.MV = struct('Min',TMIN,'Max',TMAX);
     % mpcobj.OutputVariables=struct('Min',VMIN,'Max',VMAX);%
     setEstimator(Qmpcobj,'custom');
-    setCustomSolver(Qmpcobj,'quadprog');
+    %setCustomSolver(Qmpcobj,'quadprog');
     %Qmpcobj.Optimizer.ActiveSetOptions.ConstraintTolerance=0.01;
     %qxss=mpcstate(Qmpcobj);
     %results = review(Qmpcobj);

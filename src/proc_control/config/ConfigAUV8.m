@@ -26,7 +26,7 @@ function [simulink, simulation, physics, thrusters, MPC, mode] = ConfigAUV8()
    % Center of boyency
    physics.RB =[0.000,... x
                 0.000,... y
-                -0.006]; % z
+               -0.006]; % z
    % Drag
    physics.CDL=[45, 60, 70, 10, 7, 15]/3;
 
@@ -36,9 +36,11 @@ function [simulink, simulation, physics, thrusters, MPC, mode] = ConfigAUV8()
 
    physics.AddedMass=-[1.4648, 12.6156, 15.7695, 0.1164, 0.3493, 0.3493];
 
-   % distance of depth sensor to RG
-   physics.DepthPose = [0 -136 178]*10^-3; 
+   % distance of depth sensor acording to auv center
+   physics.DepthPose = [0 -136 178]*10^-3; % m
 
+   % distance of hydrophones acording to auv center
+   physics.hydroPose = [160 0 155]*10^-3; % m
    % Thrusters     x      y      z    yaw  roll pitch
    thrusters.T=[ 0.292, 0.173, 0.082, -45,-90, 0;   % T1
                 -0.292, 0.173, 0.082, 45,-90, 0;    % T2
