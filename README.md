@@ -1,32 +1,116 @@
 ## Control Library
 This constains our Matlab/Simulink projects to develop the control for AUVs.
-
+# prerequisites
+You need to have ROS installed and have a catkin workspace.
 # Installation
-Here's the information about the Matlab used for this project.
-You must at least install these toolbox:
+Here's the step to flow to execute the current project.
 
-MATLAB Version: 9.8.0.1451342 (R2020a) Update 5
-Operating System: Linux 4.15.0-76-generic #86-Ubuntu SMP Fri Jan 17 17:24:28 UTC 2020 x86_64
-Java Version: Java 1.8.0_202-b08 with Oracle Corporation Java HotSpot(TM) 64-Bit Server VM mixed mode
+First you need to have Matlab 2021b installed. You can get your copy here
 
-- MATLAB                                                Version 9.8         (R2020a)
-- Simulink                                              Version 10.1        (R2020a)
-- Control System Toolbox                                Version 10.8        (R2020a)
-- DSP System Toolbox                                    Version 9.10        (R2020a)
-- Embedded Coder                                        Version 7.4         (R2020a)
-- MATLAB Coder                                          Version 5.0         (R2020a)
-- Model Predictive Control Toolbox                      Version 6.4         (R2020a)
-- Navigation Toolbox                                    Version 1.1         (R2020a)
-- Optimization Toolbox                                  Version 8.5         (R2020a)
-- ROS Toolbox                                           Version 1.1         (R2020a)
-- Robotics System Toolbox                               Version 3.1         (R2020a)
-- Signal Processing Toolbox                             Version 8.4         (R2020a)
-- Simulink Coder                                        Version 9.3         (R2020a)
-- Symbolic Math Toolbox                                 Version 8.5         (R2020a)
-- Vehicle Dynamics Blockset                             Version 1.4         (R2020a)
+> https://www.mathworks.com/products/new_products/latest_features.html.
+
+You need to unzip the package and add the execution permission to the install script:
+
+` sudo chmod 666 install`
+
+Run the install script.
+
+If the matlab installer doesn't show up. Run this command and rerun the install scipt:
+
+`xhost +SI:localuser:root`
+
+Durning the setup you will have to add an username. Make sure you enter your linux username to avoid liscence mismatch.
+
+The control Library project use servial toolbox. Here the list of the used toolbox:
+
+> - MATLAB                                                
+> - Simulink  
+> - Areospace Blockset
+> - Areospace toolbox                                          
+> - Control System Toolbox                               
+> - Embedded Coder    
+> - lidar Toolbox
+> - Mapping Toolbox                                   
+> - MATLAB Coder
+> - MATLAB Compiler
+> - Model Predictive Control Toolbox                      
+> - Navigation Toolbox                                    
+> - Optimization Toolbox  
+> - phased Array Toolbox
+> - robotoc system toolbox                             
+> - ROS Toolbox       
+> - Sensor usion and tracking toolbox
+> - simscape
+> - simscape electrical
+> - Simulink Coder          
+> - Simulink compiler
+> - Symbolic Math Toolbox                             
+> - System Identification                           
+
+Matlab require at least cmake version 3.15 for generate custom ros msg . You can check your cmake version with the following command:
+
+`cmake --version`
+
+If you need to update cmake, you can follow this tutorial.
+> https://www.mathworks.com/matlabcentral/answers/623103-matlab-2020b-rosgenmsg-can-t-find-cmake#answer_753184
+
+All the custom ROS message used by sonia are located in the sonia common repo. You have to clone this repo in your catkin workspace.
+
+> https://github.com/sonia-auv/sonia_common
+
+You need to generate the ros message in matlab to be able to use it. To do so, navigate to your src folder in the matlab file explorer than run the next command and follow the instruction.
+
+`rosgenmsg('./')`
+
+
 
 # Use the control
-You can now send messages to the control using a rostopic command.
+There are multiple mode available:
+
+ 0: Kill 
+
+ 1-9: special (reserved) 
+
+ 
+ 10-19:  Quaternion Adaptive MPC 
+
+ - 10 :Multi waypoints planning 
+
+ - 11 : single waypoint trajectory 
+
+ - 12 : Hydrophone Mode. 
+
+ - 13 : Alignement vision Front 
+
+ - 14 : Alignement vision bottom  
+
+ - 19 : Space mouse (Semi-manual) 
+
+ 
+
+ 20-29 : Open Loop 
+
+ - 20 : space mouse Model Base Open loop 
+
+ - 21 : space mouse direct B Matrix 
+
+ 
+
+ 30-39: Develop  
+
+ - 30 : LTV MPC - single waypoint 
+
+ 
+
+ 40 – 49 : Legacy 
+
+ - 40 : NLMPC single waypoints (Non compilable) 
+
+ - 41 : Adaptive MPC Euler single waypoints 
+
+You can use the following message to set mode
+
+`rostopic pub /proc_control/setmode std_msgs/uin32 "data: <mode>"`
 
 # Example 
 ### Add pose

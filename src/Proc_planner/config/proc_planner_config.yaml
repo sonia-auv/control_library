@@ -1,0 +1,9 @@
+# Control parameters
+
+#Trajectory configuration
+/proc_planner/maximum_acceleration : 0.010
+/proc_planner/maximum_velocity : 0.5
+/proc_planner/maximum_angular_rate : 0.6
+
+
+

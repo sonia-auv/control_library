@@ -1,0 +1,568 @@
+CMake Warning (dev) in CMakeLists.txt:
+  No project() command is present.  The top-level CMakeLists.txt file must
+  contain a literal, direct call to the project() command.  Add a line of
+  code such as
+
+    project(ProjectName)
+
+  near the top of the file, but after cmake_minimum_required().
+
+  CMake is pretending there is a "project(Project)" command on the first
+  line.
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+-- The C compiler identification is GNU 7.5.0
+-- The CXX compiler identification is GNU 7.5.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/bin/cc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+CMake Deprecation Warning at CMakeLists.txt:4 (cmake_minimum_required):
+  Compatibility with CMake < 2.8.12 will be removed from a future version of
+  CMake.
+
+  Update the VERSION argument <min> value or use a ...<max> suffix to tell
+  CMake that the project does not need compatibility with older versions.
+
+
+-- Using CATKIN_DEVEL_PREFIX: /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/devel
+-- Using CMAKE_PREFIX_PATH: /usr/local/MATLAB/R2021b/sys/ros1/glnxa64/ros1;/usr/local/MATLAB/R2021b/toolbox/ros/mlroscpp/custom_messages
+-- This workspace overlays: /usr/local/MATLAB/R2021b/sys/ros1/glnxa64/ros1;/usr/local/MATLAB/R2021b/toolbox/ros/mlroscpp/custom_messages
+-- Found PythonInterp: /home/lamarre/.matlab/R2021b/ros1/glnxa64/venv/bin/python2 (found suitable version "2.7.17", minimum required is "2") 
+-- Using PYTHON_EXECUTABLE: /home/lamarre/.matlab/R2021b/ros1/glnxa64/venv/bin/python2
+-- Using Debian Python package layout
+-- Using empy: /usr/bin/empy
+-- Using CATKIN_ENABLE_TESTING: ON
+-- Call enable_testing()
+-- Using CATKIN_TEST_RESULTS_DIR: /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build/test_results
+-- Found gmock sources under '/usr/src/googletest': gmock will be built
+CMake Deprecation Warning at /usr/src/googletest/CMakeLists.txt:1 (cmake_minimum_required):
+  Compatibility with CMake < 2.8.12 will be removed from a future version of
+  CMake.
+
+  Update the VERSION argument <min> value or use a ...<max> suffix to tell
+  CMake that the project does not need compatibility with older versions.
+
+
+CMake Deprecation Warning at /usr/src/googletest/googlemock/CMakeLists.txt:41 (cmake_minimum_required):
+  Compatibility with CMake < 2.8.12 will be removed from a future version of
+  CMake.
+
+  Update the VERSION argument <min> value or use a ...<max> suffix to tell
+  CMake that the project does not need compatibility with older versions.
+
+
+CMake Deprecation Warning at /usr/src/googletest/googletest/CMakeLists.txt:48 (cmake_minimum_required):
+  Compatibility with CMake < 2.8.12 will be removed from a future version of
+  CMake.
+
+  Update the VERSION argument <min> value or use a ...<max> suffix to tell
+  CMake that the project does not need compatibility with older versions.
+
+
+-- Found PythonInterp: /home/lamarre/.matlab/R2021b/ros1/glnxa64/venv/bin/python2 (found version "2.7.17") 
+-- Looking for pthread.h
+-- Looking for pthread.h - found
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Failed
+-- Looking for pthread_create in pthreads
+-- Looking for pthread_create in pthreads - not found
+-- Looking for pthread_create in pthread
+-- Looking for pthread_create in pthread - found
+-- Found Threads: TRUE  
+-- Found gtest sources under '/usr/src/googletest': gtests will be built
+-- Using Python nosetests: /usr/bin/nosetests-2.7
+-- catkin 0.7.17
+-- BUILD_SHARED_LIBS is on
+-- BUILD_SHARED_LIBS is on
+-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-- ~~  traversing 3 packages in topological order:
+-- ~~  - geometry_msgs
+-- ~~  - sonia_common
+-- ~~  - proc_planner
+-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-- +++ processing catkin package: 'geometry_msgs'
+-- ==> add_subdirectory(geometry_msgs)
+-- Disabling the following message generators: geneus;genlisp;gennodejs
+-- Using these message generators: gencpp;genpy
+-- geometry_msgs: 6 messages, 0 services
+-- +++ processing catkin package: 'sonia_common'
+-- ==> add_subdirectory(sonia_common)
+-- Disabling the following message generators: geneus;genlisp;gennodejs
+-- Using these message generators: gencpp;genpy
+-- sonia_common: 2 messages, 0 services
+-- +++ processing catkin package: 'proc_planner'
+-- ==> add_subdirectory(proc_planner)
+-- Configuring done
+-- Generating done
+CMake Warning:
+  Manually-specified variables were not used by the project:
+
+    Boost_NAMESPACE
+
+
+-- Build files have been written to: /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build
+cd /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build && /opt/cmake-3.21.0-rc3-linux-x86_64/bin/cmake -S/home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/src -B/home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build --check-build-system CMakeFiles/Makefile.cmake 0
+cd /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build && /opt/cmake-3.21.0-rc3-linux-x86_64/bin/cmake -E cmake_progress_start /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build/CMakeFiles /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build/geometry_msgs//CMakeFiles/progress.marks
+cd /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build && make  -f CMakeFiles/Makefile2 geometry_msgs/all
+make[1] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+[  0%] Built target std_msgs_generate_messages_cpp
+[  0%] Built target std_msgs_generate_messages_py
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+[  0%] Built target _geometry_msgs_generate_messages_check_deps_Pose
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+[  0%] Built target _geometry_msgs_generate_messages_check_deps_Quaternion
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+[  0%] Built target _geometry_msgs_generate_messages_check_deps_Vector3
+[  0%] Built target _geometry_msgs_generate_messages_check_deps_Transform
+[  0%] Built target _geometry_msgs_generate_messages_check_deps_Point
+[  0%] Built target _geometry_msgs_generate_messages_check_deps_Twist
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+[ 16%] Generating Python from MSG geometry_msgs/Vector3
+[ 16%] Generating C++ code from geometry_msgs/Vector3.msg
+[ 25%] Generating C++ code from geometry_msgs/Point.msg
+[ 25%] Generating Python from MSG geometry_msgs/Point
+[ 41%] Generating C++ code from geometry_msgs/Twist.msg
+[ 50%] Generating C++ code from geometry_msgs/Quaternion.msg
+[ 50%] Generating Python from MSG geometry_msgs/Quaternion
+[ 58%] Generating Python from MSG geometry_msgs/Twist
+[ 75%] Generating Python from MSG geometry_msgs/Pose
+[ 75%] Generating C++ code from geometry_msgs/Pose.msg
+[ 83%] Generating Python from MSG geometry_msgs/Transform
+[ 91%] Generating C++ code from geometry_msgs/Transform.msg
+[100%] Generating Python msg __init__.py for geometry_msgs
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+[100%] Built target geometry_msgs_generate_messages_cpp
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+[100%] Built target geometry_msgs_generate_messages_py
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+[100%] Built target geometry_msgs_generate_messages
+make[1] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+/opt/cmake-3.21.0-rc3-linux-x86_64/bin/cmake -E cmake_progress_start /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build/CMakeFiles 0
+cd /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build && make  -f CMakeFiles/Makefile2 geometry_msgs/preinstall
+Install the project...
+/opt/cmake-3.21.0-rc3-linux-x86_64/bin/cmake -P cmake_install.cmake
+-- Install configuration: ""
+-- Installing: /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/install/share/geometry_msgs/msg/Point.msg
+-- Installing: /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/install/share/geometry_msgs/msg/Pose.msg
+-- Installing: /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/install/share/geometry_msgs/msg/Quaternion.msg
+-- Installing: /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/install/share/geometry_msgs/msg/Transform.msg
+-- Installing: /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/install/share/geometry_msgs/msg/Twist.msg
+-- Installing: /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/install/share/geometry_msgs/msg/Vector3.msg
+-- Installing: /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/install/share/geometry_msgs/cmake/geometry_msgs-msg-paths.cmake
+-- Installing: /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/install/include/geometry_msgs
+-- Installing: /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/install/include/geometry_msgs/Quaternion.h
+-- Installing: /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/install/include/geometry_msgs/Vector3.h
+-- Installing: /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/install/include/geometry_msgs/Pose.h
+-- Installing: /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/install/include/geometry_msgs/Twist.h
+-- Installing: /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/install/include/geometry_msgs/Transform.h
+-- Installing: /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/install/include/geometry_msgs/Point.h
+Listing /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/devel/lib/python2.7/dist-packages/geometry_msgs ...
+Compiling /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/devel/lib/python2.7/dist-packages/geometry_msgs/__init__.py ...
+Listing /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/devel/lib/python2.7/dist-packages/geometry_msgs/msg ...
+Compiling /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/devel/lib/python2.7/dist-packages/geometry_msgs/msg/_Point.py ...
+Compiling /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/devel/lib/python2.7/dist-packages/geometry_msgs/msg/_Pose.py ...
+Compiling /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/devel/lib/python2.7/dist-packages/geometry_msgs/msg/_Quaternion.py ...
+Compiling /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/devel/lib/python2.7/dist-packages/geometry_msgs/msg/_Transform.py ...
+Compiling /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/devel/lib/python2.7/dist-packages/geometry_msgs/msg/_Twist.py ...
+Compiling /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/devel/lib/python2.7/dist-packages/geometry_msgs/msg/_Vector3.py ...
+Compiling /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/devel/lib/python2.7/dist-packages/geometry_msgs/msg/__init__.py ...
+-- Installing: /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/install/lib/python2.7/dist-packages/geometry_msgs
+-- Installing: /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/install/lib/python2.7/dist-packages/geometry_msgs/__init__.pyc
+-- Installing: /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/install/lib/python2.7/dist-packages/geometry_msgs/__init__.py
+-- Installing: /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/install/lib/python2.7/dist-packages/geometry_msgs/msg
+-- Installing: /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/install/lib/python2.7/dist-packages/geometry_msgs/msg/_Twist.py
+-- Installing: /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/install/lib/python2.7/dist-packages/geometry_msgs/msg/_Point.py
+-- Installing: /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/install/lib/python2.7/dist-packages/geometry_msgs/msg/_Point.pyc
+-- Installing: /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/install/lib/python2.7/dist-packages/geometry_msgs/msg/_Vector3.py
+-- Installing: /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/install/lib/python2.7/dist-packages/geometry_msgs/msg/_Pose.pyc
+-- Installing: /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/install/lib/python2.7/dist-packages/geometry_msgs/msg/_Transform.pyc
+-- Installing: /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/install/lib/python2.7/dist-packages/geometry_msgs/msg/__init__.pyc
+-- Installing: /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/install/lib/python2.7/dist-packages/geometry_msgs/msg/_Pose.py
+-- Installing: /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/install/lib/python2.7/dist-packages/geometry_msgs/msg/_Twist.pyc
+-- Installing: /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/install/lib/python2.7/dist-packages/geometry_msgs/msg/_Quaternion.py
+-- Installing: /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/install/lib/python2.7/dist-packages/geometry_msgs/msg/_Vector3.pyc
+-- Installing: /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/install/lib/python2.7/dist-packages/geometry_msgs/msg/__init__.py
+-- Installing: /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/install/lib/python2.7/dist-packages/geometry_msgs/msg/_Transform.py
+-- Installing: /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/install/lib/python2.7/dist-packages/geometry_msgs/msg/_Quaternion.pyc
+-- Installing: /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/install/lib/pkgconfig/geometry_msgs.pc
+-- Installing: /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/install/share/geometry_msgs/cmake/geometry_msgs-msg-extras.cmake
+-- Installing: /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/install/share/geometry_msgs/cmake/geometry_msgsConfig.cmake
+-- Installing: /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/install/share/geometry_msgs/cmake/geometry_msgsConfig-version.cmake
+-- Installing: /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/install/share/geometry_msgs/package.xml
+cd /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build && /opt/cmake-3.21.0-rc3-linux-x86_64/bin/cmake -S/home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/src -B/home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build --check-build-system CMakeFiles/Makefile.cmake 0
+cd /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build && /opt/cmake-3.21.0-rc3-linux-x86_64/bin/cmake -E cmake_progress_start /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build/CMakeFiles /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build/sonia_common//CMakeFiles/progress.marks
+cd /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build && make  -f CMakeFiles/Makefile2 sonia_common/all
+make[1] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+[  0%] Built target std_msgs_generate_messages_py
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+[  0%] Built target _geometry_msgs_generate_messages_check_deps_Quaternion
+[  0%] Built target _geometry_msgs_generate_messages_check_deps_Point
+[  0%] Built target _sonia_common_generate_messages_check_deps_AddPose
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+[  0%] Built target _geometry_msgs_generate_messages_check_deps_Pose
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+[  0%] Built target _geometry_msgs_generate_messages_check_deps_Vector3
+[  0%] Built target _geometry_msgs_generate_messages_check_deps_Twist
+[  0%] Built target _geometry_msgs_generate_messages_check_deps_Transform
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+[  0%] Built target _sonia_common_generate_messages_check_deps_MultiAddPose
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+[  0%] Built target std_msgs_generate_messages_cpp
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+[ 41%] Built target geometry_msgs_generate_messages_py
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+[ 70%] Built target geometry_msgs_generate_messages_cpp
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+[ 76%] Generating Python from MSG sonia_common/AddPose
+[ 82%] Generating Python from MSG sonia_common/MultiAddPose
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+[ 88%] Generating C++ code from sonia_common/AddPose.msg
+[ 94%] Generating C++ code from sonia_common/MultiAddPose.msg
+[100%] Generating Python msg __init__.py for sonia_common
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+[100%] Built target sonia_common_generate_messages_cpp
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+[100%] Built target sonia_common_generate_messages_py
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+[100%] Built target sonia_common_generate_messages
+make[1] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+/opt/cmake-3.21.0-rc3-linux-x86_64/bin/cmake -E cmake_progress_start /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build/CMakeFiles 0
+cd /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build && make  -f CMakeFiles/Makefile2 sonia_common/preinstall
+Install the project...
+/opt/cmake-3.21.0-rc3-linux-x86_64/bin/cmake -P cmake_install.cmake
+-- Install configuration: ""
+-- Installing: /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/install/share/sonia_common/msg/AddPose.msg
+-- Installing: /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/install/share/sonia_common/msg/MultiAddPose.msg
+-- Installing: /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/install/share/sonia_common/cmake/sonia_common-msg-paths.cmake
+-- Installing: /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/install/include/sonia_common
+-- Installing: /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/install/include/sonia_common/AddPose.h
+-- Installing: /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/install/include/sonia_common/MultiAddPose.h
+Listing /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/devel/lib/python2.7/dist-packages/sonia_common ...
+Compiling /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/devel/lib/python2.7/dist-packages/sonia_common/__init__.py ...
+Listing /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/devel/lib/python2.7/dist-packages/sonia_common/msg ...
+Compiling /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/devel/lib/python2.7/dist-packages/sonia_common/msg/_AddPose.py ...
+Compiling /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/devel/lib/python2.7/dist-packages/sonia_common/msg/_MultiAddPose.py ...
+Compiling /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/devel/lib/python2.7/dist-packages/sonia_common/msg/__init__.py ...
+-- Installing: /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/install/lib/python2.7/dist-packages/sonia_common
+-- Installing: /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/install/lib/python2.7/dist-packages/sonia_common/__init__.pyc
+-- Installing: /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/install/lib/python2.7/dist-packages/sonia_common/__init__.py
+-- Installing: /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/install/lib/python2.7/dist-packages/sonia_common/msg
+-- Installing: /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/install/lib/python2.7/dist-packages/sonia_common/msg/_AddPose.pyc
+-- Installing: /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/install/lib/python2.7/dist-packages/sonia_common/msg/_MultiAddPose.pyc
+-- Installing: /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/install/lib/python2.7/dist-packages/sonia_common/msg/__init__.pyc
+-- Installing: /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/install/lib/python2.7/dist-packages/sonia_common/msg/_AddPose.py
+-- Installing: /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/install/lib/python2.7/dist-packages/sonia_common/msg/_MultiAddPose.py
+-- Installing: /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/install/lib/python2.7/dist-packages/sonia_common/msg/__init__.py
+-- Installing: /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/install/lib/pkgconfig/sonia_common.pc
+-- Installing: /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/install/share/sonia_common/cmake/sonia_common-msg-extras.cmake
+-- Installing: /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/install/share/sonia_common/cmake/sonia_commonConfig.cmake
+-- Installing: /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/install/share/sonia_common/cmake/sonia_commonConfig-version.cmake
+-- Installing: /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/install/share/sonia_common/package.xml
+cd /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build && /opt/cmake-3.21.0-rc3-linux-x86_64/bin/cmake -S/home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/src -B/home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build --check-build-system CMakeFiles/Makefile.cmake 0
+cd /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build && /opt/cmake-3.21.0-rc3-linux-x86_64/bin/cmake -E cmake_progress_start /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build/CMakeFiles /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build/proc_planner//CMakeFiles/progress.marks
+cd /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build && make  -f CMakeFiles/Makefile2 proc_planner/all
+make[1] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+[  0%] Built target trajectory_msgs_generate_messages_cpp
+[  0%] Built target std_msgs_generate_messages_py
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+[  0%] Built target roscpp_generate_messages_py
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+[  0%] Built target std_msgs_generate_messages_cpp
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+[  0%] Built target rosgraph_msgs_generate_messages_eus
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+[  0%] Built target rosgraph_msgs_generate_messages_nodejs
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+[  0%] Built target roscpp_generate_messages_cpp
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+[  0%] Built target rosgraph_msgs_generate_messages_cpp
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+[  0%] Built target rosgraph_msgs_generate_messages_py
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+[  0%] Built target _geometry_msgs_generate_messages_check_deps_Vector3
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+[  0%] Built target _geometry_msgs_generate_messages_check_deps_Quaternion
+[  0%] Built target _geometry_msgs_generate_messages_check_deps_Pose
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+[  0%] Built target rosgraph_msgs_generate_messages_lisp
+[  0%] Built target _geometry_msgs_generate_messages_check_deps_Transform
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+[  0%] Built target _geometry_msgs_generate_messages_check_deps_Point
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+[  0%] Built target _geometry_msgs_generate_messages_check_deps_Twist
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+[  0%] Built target roscpp_generate_messages_nodejs
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+[  0%] Built target std_msgs_generate_messages_nodejs
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+[  0%] Built target roscpp_generate_messages_lisp
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+[  0%] Built target roscpp_generate_messages_eus
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+[  0%] Built target std_msgs_generate_messages_lisp
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+[  0%] Built target std_msgs_generate_messages_eus
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+[  0%] Built target trajectory_msgs_generate_messages_nodejs
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+[  0%] Built target trajectory_msgs_generate_messages_py
+[  0%] Built target trajectory_msgs_generate_messages_eus
+[  0%] Built target trajectory_msgs_generate_messages_lisp
+[  7%] Built target geometry_msgs_generate_messages_py
+[ 13%] Built target geometry_msgs_generate_messages_cpp
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+[ 13%] Built target _sonia_common_generate_messages_check_deps_AddPose
+[ 13%] Built target _sonia_common_generate_messages_check_deps_MultiAddPose
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+[ 19%] Built target sonia_common_generate_messages_cpp
+[ 19%] Built target sonia_common_generate_messages_py
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+make[2] : on entre dans le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+[ 21%] Building CXX object proc_planner/CMakeFiles/proc_planner.dir/src/LMFsolve.cpp.o
+[ 21%] Building CXX object proc_planner/CMakeFiles/proc_planner.dir/src/CoderTimeAPI.cpp.o
+[ 23%] Building CXX object proc_planner/CMakeFiles/proc_planner.dir/src/ParameterTree.cpp.o
+[ 23%] Building CXX object proc_planner/CMakeFiles/proc_planner.dir/src/Publisher.cpp.o
+[ 24%] Building CXX object proc_planner/CMakeFiles/proc_planner.dir/src/Rate.cpp.o
+[ 25%] Building CXX object proc_planner/CMakeFiles/proc_planner.dir/src/Subscriber.cpp.o
+[ 26%] Building CXX object proc_planner/CMakeFiles/proc_planner.dir/src/TrajectoryGenerator.cpp.o
+[ 28%] Building CXX object proc_planner/CMakeFiles/proc_planner.dir/src/accumarray.cpp.o
+[ 29%] Building CXX object proc_planner/CMakeFiles/proc_planner.dir/src/bsearch.cpp.o
+[ 30%] Building CXX object proc_planner/CMakeFiles/proc_planner.dir/src/clothoidG1fit2wp.cpp.o
+[ 31%] Building CXX object proc_planner/CMakeFiles/proc_planner.dir/src/clothoidG2fitMissingCourse.cpp.o
+[ 32%] Building C object proc_planner/CMakeFiles/proc_planner.dir/src/coder_posix_time.c.o
+[ 33%] Building CXX object proc_planner/CMakeFiles/proc_planner.dir/src/colon.cpp.o
+[ 34%] Building CXX object proc_planner/CMakeFiles/proc_planner.dir/src/cross.cpp.o
+[ 35%] Building CXX object proc_planner/CMakeFiles/proc_planner.dir/src/dclothoidwp.cpp.o
+[ 37%] Building CXX object proc_planner/CMakeFiles/proc_planner.dir/src/derivpp.cpp.o
+[ 38%] Building CXX object proc_planner/CMakeFiles/proc_planner.dir/src/diff.cpp.o
+[ 39%] Building CXX object proc_planner/CMakeFiles/proc_planner.dir/src/discretize.cpp.o
+[ 40%] Building CXX object proc_planner/CMakeFiles/proc_planner.dir/src/dot.cpp.o
+[ 41%] Building CXX object proc_planner/CMakeFiles/proc_planner.dir/src/eigStandard.cpp.o
+[ 42%] Building CXX object proc_planner/CMakeFiles/proc_planner.dir/src/find.cpp.o
+[ 43%] Building CXX object proc_planner/CMakeFiles/proc_planner.dir/src/fresnel.cpp.o
+[ 44%] Building CXX object proc_planner/CMakeFiles/proc_planner.dir/src/fresnelg2.cpp.o
+[ 46%] Building CXX object proc_planner/CMakeFiles/proc_planner.dir/src/geometry_msgs_PointStruct.cpp.o
+[ 47%] Building CXX object proc_planner/CMakeFiles/proc_planner.dir/src/geometry_msgs_PoseStruct.cpp.o
+[ 48%] Building CXX object proc_planner/CMakeFiles/proc_planner.dir/src/geometry_msgs_QuaternionStruct.cpp.o
+[ 49%] Building CXX object proc_planner/CMakeFiles/proc_planner.dir/src/geometry_msgs_TransformStruct.cpp.o
+/home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/src/proc_planner/src/Subscriber.cpp: In member function ‘void coder::ros::b_Subscriber::Subscriber_delete() const’:
+/home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/src/proc_planner/src/Subscriber.cpp:32:27: warning: deleting ‘void* const’ is undefined [-Wdelete-incomplete]
+   delete (SubscriberHelper);
+                           ^
+/home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/src/proc_planner/src/Subscriber.cpp: In member function ‘void coder::ros::Subscriber::Subscriber_delete() const’:
+/home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/src/proc_planner/src/Subscriber.cpp:41:27: warning: deleting ‘void* const’ is undefined [-Wdelete-incomplete]
+   delete (SubscriberHelper);
+                           ^
+[ 49%] Building CXX object proc_planner/CMakeFiles/proc_planner.dir/src/geometry_msgs_TwistStruct.cpp.o
+[ 50%] Building CXX object proc_planner/CMakeFiles/proc_planner.dir/src/geometry_msgs_Vector3Struct.cpp.o
+[ 51%] Building CXX object proc_planner/CMakeFiles/proc_planner.dir/src/getOrientationState.cpp.o
+[ 52%] Building CXX object proc_planner/CMakeFiles/proc_planner.dir/src/isequaln.cpp.o
+[ 53%] Building CXX object proc_planner/CMakeFiles/proc_planner.dir/src/main.cpp.o
+[ 55%] Building CXX object proc_planner/CMakeFiles/proc_planner.dir/src/mldivide.cpp.o
+[ 56%] Building CXX object proc_planner/CMakeFiles/proc_planner.dir/src/norm.cpp.o
+[ 57%] Building CXX object proc_planner/CMakeFiles/proc_planner.dir/src/pchip.cpp.o
+[ 58%] Building CXX object proc_planner/CMakeFiles/proc_planner.dir/src/power.cpp.o
+[ 59%] Building CXX object proc_planner/CMakeFiles/proc_planner.dir/src/ppval.cpp.o
+[ 60%] Building CXX object proc_planner/CMakeFiles/proc_planner.dir/src/proc_planner.cpp.o
+[ 61%] Building CXX object proc_planner/CMakeFiles/proc_planner.dir/src/proc_planner_data.cpp.o
+[ 62%] Building CXX object proc_planner/CMakeFiles/proc_planner.dir/src/proc_planner_initialize.cpp.o
+[ 64%] Building CXX object proc_planner/CMakeFiles/proc_planner.dir/src/proc_planner_rtwutil.cpp.o
+[ 65%] Building CXX object proc_planner/CMakeFiles/proc_planner.dir/src/proc_planner_terminate.cpp.o
+[ 66%] Building CXX object proc_planner/CMakeFiles/proc_planner.dir/src/qrsolve.cpp.o
+[ 67%] Building CXX object proc_planner/CMakeFiles/proc_planner.dir/src/quat2eul.cpp.o
+[ 68%] Building CXX object proc_planner/CMakeFiles/proc_planner.dir/src/quaternion.cpp.o
+[ 69%] Building CXX object proc_planner/CMakeFiles/proc_planner.dir/src/quaternionC2fit.cpp.o
+[ 70%] Building CXX object proc_planner/CMakeFiles/proc_planner.dir/src/ros_DurationStruct.cpp.o
+[ 71%] Building CXX object proc_planner/CMakeFiles/proc_planner.dir/src/ros_structmsg_conversion.cpp.o
+[ 73%] Building CXX object proc_planner/CMakeFiles/proc_planner.dir/src/rtGetInf.cpp.o
+[ 74%] Building CXX object proc_planner/CMakeFiles/proc_planner.dir/src/rtGetNaN.cpp.o
+[ 75%] Building CXX object proc_planner/CMakeFiles/proc_planner.dir/src/rt_nonfinite.cpp.o
+[ 76%] Building CXX object proc_planner/CMakeFiles/proc_planner.dir/src/schur.cpp.o
+[ 77%] Building CXX object proc_planner/CMakeFiles/proc_planner.dir/src/sonia_common_AddPoseStruct.cpp.o
+[ 78%] Building CXX object proc_planner/CMakeFiles/proc_planner.dir/src/sonia_common_MultiAddPoseStruct.cpp.o
+[ 79%] Building CXX object proc_planner/CMakeFiles/proc_planner.dir/src/sqrt.cpp.o
+[ 80%] Building CXX object proc_planner/CMakeFiles/proc_planner.dir/src/startsWith.cpp.o
+[ 82%] Building CXX object proc_planner/CMakeFiles/proc_planner.dir/src/std_msgs_BoolStruct.cpp.o
+[ 83%] Building CXX object proc_planner/CMakeFiles/proc_planner.dir/src/sum.cpp.o
+[ 84%] Building CXX object proc_planner/CMakeFiles/proc_planner.dir/src/svd.cpp.o
+[ 85%] Building CXX object proc_planner/CMakeFiles/proc_planner.dir/src/tic.cpp.o
+[ 86%] Building CXX object proc_planner/CMakeFiles/proc_planner.dir/src/toc.cpp.o
+[ 87%] Building CXX object proc_planner/CMakeFiles/proc_planner.dir/src/trajectory_msgs_MultiDOFJointTrajectoryPointStruct.cpp.o
+[ 88%] Building CXX object proc_planner/CMakeFiles/proc_planner.dir/src/waypointTrajectory.cpp.o
+[ 89%] Building CXX object proc_planner/CMakeFiles/proc_planner.dir/src/xdhseqr.cpp.o
+[ 91%] Building CXX object proc_planner/CMakeFiles/proc_planner.dir/src/xdlanv2.cpp.o
+[ 92%] Building CXX object proc_planner/CMakeFiles/proc_planner.dir/src/xgemv.cpp.o
+[ 93%] Building CXX object proc_planner/CMakeFiles/proc_planner.dir/src/xgerc.cpp.o
+[ 94%] Building CXX object proc_planner/CMakeFiles/proc_planner.dir/src/xnrm2.cpp.o
+[ 95%] Building CXX object proc_planner/CMakeFiles/proc_planner.dir/src/xrotg.cpp.o
+[ 96%] Building CXX object proc_planner/CMakeFiles/proc_planner.dir/src/xzhgeqz.cpp.o
+[ 97%] Building CXX object proc_planner/CMakeFiles/proc_planner.dir/src/xzlarfg.cpp.o
+[ 98%] Building CXX object proc_planner/CMakeFiles/proc_planner.dir/src/xzlartg.cpp.o
+[100%] Linking CXX executable /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/devel/lib/proc_planner/proc_planner
+/usr/bin/c++ CMakeFiles/proc_planner.dir/src/CoderTimeAPI.cpp.o CMakeFiles/proc_planner.dir/src/LMFsolve.cpp.o CMakeFiles/proc_planner.dir/src/ParameterTree.cpp.o CMakeFiles/proc_planner.dir/src/Publisher.cpp.o CMakeFiles/proc_planner.dir/src/Rate.cpp.o CMakeFiles/proc_planner.dir/src/Subscriber.cpp.o CMakeFiles/proc_planner.dir/src/TrajectoryGenerator.cpp.o CMakeFiles/proc_planner.dir/src/accumarray.cpp.o CMakeFiles/proc_planner.dir/src/bsearch.cpp.o CMakeFiles/proc_planner.dir/src/clothoidG1fit2wp.cpp.o CMakeFiles/proc_planner.dir/src/clothoidG2fitMissingCourse.cpp.o CMakeFiles/proc_planner.dir/src/coder_posix_time.c.o CMakeFiles/proc_planner.dir/src/colon.cpp.o CMakeFiles/proc_planner.dir/src/cross.cpp.o CMakeFiles/proc_planner.dir/src/dclothoidwp.cpp.o CMakeFiles/proc_planner.dir/src/derivpp.cpp.o CMakeFiles/proc_planner.dir/src/diff.cpp.o CMakeFiles/proc_planner.dir/src/discretize.cpp.o CMakeFiles/proc_planner.dir/src/dot.cpp.o CMakeFiles/proc_planner.dir/src/eigStandard.cpp.o CMakeFiles/proc_planner.dir/src/find.cpp.o CMakeFiles/proc_planner.dir/src/fresnel.cpp.o CMakeFiles/proc_planner.dir/src/fresnelg2.cpp.o CMakeFiles/proc_planner.dir/src/geometry_msgs_PointStruct.cpp.o CMakeFiles/proc_planner.dir/src/geometry_msgs_PoseStruct.cpp.o CMakeFiles/proc_planner.dir/src/geometry_msgs_QuaternionStruct.cpp.o CMakeFiles/proc_planner.dir/src/geometry_msgs_TransformStruct.cpp.o CMakeFiles/proc_planner.dir/src/geometry_msgs_TwistStruct.cpp.o CMakeFiles/proc_planner.dir/src/geometry_msgs_Vector3Struct.cpp.o CMakeFiles/proc_planner.dir/src/getOrientationState.cpp.o CMakeFiles/proc_planner.dir/src/isequaln.cpp.o CMakeFiles/proc_planner.dir/src/main.cpp.o CMakeFiles/proc_planner.dir/src/mldivide.cpp.o CMakeFiles/proc_planner.dir/src/norm.cpp.o CMakeFiles/proc_planner.dir/src/pchip.cpp.o CMakeFiles/proc_planner.dir/src/power.cpp.o CMakeFiles/proc_planner.dir/src/ppval.cpp.o CMakeFiles/proc_planner.dir/src/proc_planner.cpp.o CMakeFiles/proc_planner.dir/src/proc_planner_data.cpp.o CMakeFiles/proc_planner.dir/src/proc_planner_initialize.cpp.o CMakeFiles/proc_planner.dir/src/proc_planner_rtwutil.cpp.o CMakeFiles/proc_planner.dir/src/proc_planner_terminate.cpp.o CMakeFiles/proc_planner.dir/src/qrsolve.cpp.o CMakeFiles/proc_planner.dir/src/quat2eul.cpp.o CMakeFiles/proc_planner.dir/src/quaternion.cpp.o CMakeFiles/proc_planner.dir/src/quaternionC2fit.cpp.o CMakeFiles/proc_planner.dir/src/ros_DurationStruct.cpp.o CMakeFiles/proc_planner.dir/src/ros_structmsg_conversion.cpp.o CMakeFiles/proc_planner.dir/src/rtGetInf.cpp.o CMakeFiles/proc_planner.dir/src/rtGetNaN.cpp.o CMakeFiles/proc_planner.dir/src/rt_nonfinite.cpp.o CMakeFiles/proc_planner.dir/src/schur.cpp.o CMakeFiles/proc_planner.dir/src/sonia_common_AddPoseStruct.cpp.o CMakeFiles/proc_planner.dir/src/sonia_common_MultiAddPoseStruct.cpp.o CMakeFiles/proc_planner.dir/src/sqrt.cpp.o CMakeFiles/proc_planner.dir/src/startsWith.cpp.o CMakeFiles/proc_planner.dir/src/std_msgs_BoolStruct.cpp.o CMakeFiles/proc_planner.dir/src/sum.cpp.o CMakeFiles/proc_planner.dir/src/svd.cpp.o CMakeFiles/proc_planner.dir/src/tic.cpp.o CMakeFiles/proc_planner.dir/src/toc.cpp.o CMakeFiles/proc_planner.dir/src/trajectory_msgs_MultiDOFJointTrajectoryPointStruct.cpp.o CMakeFiles/proc_planner.dir/src/waypointTrajectory.cpp.o CMakeFiles/proc_planner.dir/src/xdhseqr.cpp.o CMakeFiles/proc_planner.dir/src/xdlanv2.cpp.o CMakeFiles/proc_planner.dir/src/xgemv.cpp.o CMakeFiles/proc_planner.dir/src/xgerc.cpp.o CMakeFiles/proc_planner.dir/src/xnrm2.cpp.o CMakeFiles/proc_planner.dir/src/xrotg.cpp.o CMakeFiles/proc_planner.dir/src/xzhgeqz.cpp.o CMakeFiles/proc_planner.dir/src/xzlarfg.cpp.o CMakeFiles/proc_planner.dir/src/xzlartg.cpp.o -o /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/devel/lib/proc_planner/proc_planner  -Wl,-rpath,/home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/install/lib:/usr/local/MATLAB/R2021b/sys/ros1/glnxa64/ros1/lib:/usr/local/MATLAB/R2021b/sys/ros1/glnxa64/ros1/boost/lib:/usr/local/MATLAB/R2021b/sys/ros1/glnxa64/ros1/console_bridge/lib /usr/local/MATLAB/R2021b/sys/ros1/glnxa64/ros1/lib/libroscpp.so -lpthread /usr/local/MATLAB/R2021b/sys/ros1/glnxa64/ros1/boost/lib/libmwboost_filesystem.so /usr/local/MATLAB/R2021b/sys/ros1/glnxa64/ros1/lib/librosconsole.so /usr/local/MATLAB/R2021b/sys/ros1/glnxa64/ros1/lib/librosconsole_print.so /usr/local/MATLAB/R2021b/sys/ros1/glnxa64/ros1/lib/librosconsole_backend_interface.so /usr/local/MATLAB/R2021b/sys/ros1/glnxa64/ros1/boost/lib/libmwboost_regex.so /usr/local/MATLAB/R2021b/sys/ros1/glnxa64/ros1/lib/libxmlrpcpp.so /usr/local/MATLAB/R2021b/sys/ros1/glnxa64/ros1/lib/libroscpp_serialization.so /usr/local/MATLAB/R2021b/sys/ros1/glnxa64/ros1/lib/librostime.so /usr/local/MATLAB/R2021b/sys/ros1/glnxa64/ros1/lib/libcpp_common.so /usr/local/MATLAB/R2021b/sys/ros1/glnxa64/ros1/boost/lib/libmwboost_system.so /usr/local/MATLAB/R2021b/sys/ros1/glnxa64/ros1/boost/lib/libmwboost_thread.so -lpthread /usr/local/MATLAB/R2021b/sys/ros1/glnxa64/ros1/boost/lib/libmwboost_chrono.so /usr/local/MATLAB/R2021b/sys/ros1/glnxa64/ros1/boost/lib/libmwboost_date_time.so /usr/local/MATLAB/R2021b/sys/ros1/glnxa64/ros1/boost/lib/libmwboost_atomic.so /usr/local/MATLAB/R2021b/sys/ros1/glnxa64/ros1/console_bridge/lib/libconsole_bridge.so.0.4 -ldl 
+make[2] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+[100%] Built target proc_planner
+make[1] : on quitte le répertoire « /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build »
+/opt/cmake-3.21.0-rc3-linux-x86_64/bin/cmake -E cmake_progress_start /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build/CMakeFiles 0
+cd /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build && make  -f CMakeFiles/Makefile2 proc_planner/preinstall
+Install the project...
+/opt/cmake-3.21.0-rc3-linux-x86_64/bin/cmake -P cmake_install.cmake
+-- Install configuration: ""
+-- Installing: /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/install/lib/pkgconfig/proc_planner.pc
+-- Installing: /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/install/share/proc_planner/cmake/proc_plannerConfig.cmake
+-- Installing: /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/install/share/proc_planner/cmake/proc_plannerConfig-version.cmake
+-- Installing: /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/install/share/proc_planner/package.xml
+-- Installing: /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/install/lib/proc_planner/proc_planner
+Base path: /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner
+Source space: /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/src
+Build space: /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build
+Devel space: /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/devel
+Install space: /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/install
+Creating symlink "/home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/src/CMakeLists.txt" pointing to "/usr/local/MATLAB/R2021b/sys/ros1/glnxa64/ros1/share/catkin/cmake/toplevel.cmake"
+####
+#### Running command: "cmake /home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/src -DBoost_NAMESPACE=mwboost -DCMAKE_PREFIX_PATH=/usr/local/MATLAB/R2021b/sys/ros1/glnxa64/ros1;/usr/local/MATLAB/R2021b/toolbox/ros/mlroscpp/custom_messages -DCATKIN_DEVEL_PREFIX=/home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/devel -DCMAKE_INSTALL_PREFIX=/home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/install -G Unix Makefiles" in "/home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build"
+####
+####
+#### Running command: "make install -j8 -l8" in "/home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build/geometry_msgs"
+####
+####
+#### Running command: "make install -j8 -l8" in "/home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build/sonia_common"
+####
+####
+#### Running command: "make install -j8 -l8" in "/home/lamarre/Documents/SONIA/catkin_ws/src/control_library/src/Proc_planner/build/proc_planner"
+####
