@@ -1,0 +1,13 @@
+function msg = geometry_msgs_Vector3Struct
+% Message struct definition for geometry_msgs/Vector3
+coder.inline("never")
+msg = struct(...
+    'MessageType','geometry_msgs/Vector3',...
+    'X',ros.internal.ros.messages.ros.default_type('double',1),...
+    'Y',ros.internal.ros.messages.ros.default_type('double',1),...
+    'Z',ros.internal.ros.messages.ros.default_type('double',1));
+coder.cstructname(msg,'geometry_msgs_Vector3Struct_T');
+if ~isempty(coder.target)
+    coder.ceval('//',coder.rref(msg));
+end
+end
