@@ -5,6 +5,7 @@ classdef HydroModel < matlab.System
     % Public, tunable properties
     properties (Nontunable)
     Physics;
+    simulation;
     pingerStartPosition;
 
     end
@@ -15,7 +16,7 @@ classdef HydroModel < matlab.System
 
     % Pre-computed constants
     properties(Access = private)
-       pingerPosition = rosmessage('geometry_msgs/Vector3',"DataFormat","struct");; 
+       pingerPosition = rosmessage('geometry_msgs/Vector3',"DataFormat","struct");
     end
 
     methods(Access = protected)
@@ -28,10 +29,12 @@ classdef HydroModel < matlab.System
             if isNewPosition
                 this.updatePignerPosition(pingerPosition);
             end
+            % Ajout du bruit sur la position du pinger.
             p =[this.pingerPosition.X ;
                 this.pingerPosition.Y ;
-                this.pingerPosition.Z ];
-
+                this.pingerPosition.Z ] + (rand(3,1)  *this.simulation.hydro.maxDeviation);
+            
+            % Calculer les angles des hydros.
             HydroMesurements = pinger2hydroAngles(worldPosition, quaternion.' ,this.Physics.hydroPose.', p);
             pingerPosition = this.pingerPosition;
         end
@@ -39,7 +42,7 @@ classdef HydroModel < matlab.System
         function resetImpl(this)
             % Initialize / reset discrete-state properties
             %this.pingerPosition = this.pingerStartPosition;
-            this.pingerPosition = rosmessage('geometry_msgs/Vector3',"DataFormat","struct");
+            this.pingerPosition = struct('X',0,'Y',0,'Z',0);
             this.pingerPosition.X = this.pingerStartPosition(1);
             this.pingerPosition.Y = this.pingerStartPosition(2);
             this.pingerPosition.Z = this.pingerStartPosition(3);
@@ -50,5 +53,44 @@ classdef HydroModel < matlab.System
             this.pingerPosition.Y = msg.Y;
             this.pingerPosition.Z = msg.Z;
         end
+
+      %% Definire outputs       
+      function [pingerPosition,HydroMesurements] = getOutputSizeImpl(this)
+          pingerPosition = [1,1];
+          HydroMesurements = [3,1];
+          
+      end 
+      
+      function [pingerPosition,HydroMesurements] = isOutputFixedSizeImpl(this)
+          pingerPosition = true;
+          HydroMesurements = true;
+          
+      end
+      
+      function [pingerPosition,HydroMesurements] = getOutputDataTypeImpl(this)
+          pingerPosition = "SL_Bus_proc_control_node_geometry_msgs_Vector3";
+          HydroMesurements = "double";
+
+      end
+      
+     function [pingerPosition,HydroMesurements] = isOutputComplexImpl(this)
+         pingerPosition = false;
+         HydroMesurements = false;
+         
+     end
+     function [sz,dt,cp] = getDiscreteStateSpecificationImpl(this,name)
+         if strcmp(name,'init')
+              sz = [1 1];
+              dt = "double";
+              cp = false;
+      
+         end
+     end 
+     
+     function this = slexBusesMATLABSystemMathOpSysObj(varargin)
+      % Support name-value pair arguments
+      setProperties(this,nargin,varargin{:});
+     end    
+         
     end
 end

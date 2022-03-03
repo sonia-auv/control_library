@@ -144,5 +144,9 @@ function [simulink, simulation, physics, thrusters, MPC, mode] = ConfigAUV8()
   % White noise      
         simulation.sensors.noise.sampletime = 1/50;
         simulation.sensors.noise.power =0.0000000004;
+
+ % Hydro
+        simulation.hydro.maxDeviation = 0.75; %m
+        simulation.hydro.sampletime = 2; %sec
     end
 
