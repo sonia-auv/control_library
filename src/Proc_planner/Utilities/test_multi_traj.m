@@ -42,7 +42,7 @@ addposemsg.Speed = uint8(2);
 Maddposemsg.Pose = [Maddposemsg.Pose, addposemsg];
 
 
-% WayPts 4
+% %WayPts 4
 % addposemsg.Position.X = 6 ;
 % addposemsg.Position.Y = 0;
 % addposemsg.Position.Z = 2;
@@ -52,6 +52,16 @@ Maddposemsg.Pose = [Maddposemsg.Pose, addposemsg];
 % addposemsg.Frame = uint8(0);
 % addposemsg.Speed = uint8(2);
 % Maddposemsg.Pose = [Maddposemsg.Pose, addposemsg];
+% WayPts 4
+addposemsg.Position.X = 8.072 ;
+addposemsg.Position.Y = 0;
+addposemsg.Position.Z = 2;
+addposemsg.Orientation.X =0 ;
+addposemsg.Orientation.Y =0 ;
+addposemsg.Orientation.Z = 0 ;
+addposemsg.Frame = uint8(0);
+addposemsg.Speed = uint8(2);
+Maddposemsg.Pose = [Maddposemsg.Pose, addposemsg];
 
 % WayPts 4
 addposemsg.Position.X = 8.072 ;
@@ -131,18 +141,18 @@ addposemsg.Orientation.Z = 180;
 addposemsg.Frame = uint8(0);
 addposemsg.Speed = uint8(2);
 Maddposemsg.Pose = [Maddposemsg.Pose, addposemsg];
-% % WayPts 12
-% addposemsg.Position.X = 8.072 ;
-% addposemsg.Position.Y = 0;
-% addposemsg.Position.Z = 2;
-% addposemsg.Orientation.X =0 ;
-% addposemsg.Orientation.Y =0 ;
-% addposemsg.Orientation.Z = 180;
-% addposemsg.Frame = uint8(0);
-% addposemsg.Speed = uint8(2);
-% Maddposemsg.Pose = [Maddposemsg.Pose, addposemsg];
-
 % WayPts 12
+addposemsg.Position.X = 8.072 ;
+addposemsg.Position.Y = 0;
+addposemsg.Position.Z = 2;
+addposemsg.Orientation.X =0 ;
+addposemsg.Orientation.Y =0 ;
+addposemsg.Orientation.Z = 180;
+addposemsg.Frame = uint8(0);
+addposemsg.Speed = uint8(2);
+Maddposemsg.Pose = [Maddposemsg.Pose, addposemsg];
+
+% % WayPts 12
 % addposemsg.Position.X = 6 ;
 % addposemsg.Position.Y = 0;
 % addposemsg.Position.Z = 2;
@@ -175,6 +185,7 @@ send(pospub,Maddposemsg);
 TG = TrajectoryGenerator(Maddposemsg,param,icMsg);
 if TG.status
     test= TG.Compute(trajpub);
+    Traj_viewer(test);
 end
 %taille
 size(Maddposemsg.Pose,1);

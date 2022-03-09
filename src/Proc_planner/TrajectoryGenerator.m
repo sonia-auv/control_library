@@ -15,10 +15,11 @@ classdef TrajectoryGenerator < handle
         timeList;  % liste de temp
         courseList; % Liste de courbe
         nbPoint = 1;   % Nombre de points dans la trajectoire
-       lastConj = false;
+        lastConj = false;
+
         % Structures
-            MAPM; % Multi Add Pose Msg
-            param % paramètre de trajectoire
+        MAPM; % Multi Add Pose Msg
+        param % paramètre de trajectoire
 
     end
     
