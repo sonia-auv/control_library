@@ -6,7 +6,7 @@ classdef AuvDifferentialEquation < matlab.System
 
     % Public, tunable properties
     properties (Nontunable)
-        mpc;
+        MPC;
         physics;
     end
 

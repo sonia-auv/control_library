@@ -10,6 +10,8 @@ mapSub = rossubscriber('/proc_planner/madpos','sonia_common/MultiAddPose',"DataF
 
 tt= mapSub.LatestMessage;
 icMsg = rosmessage('geometry_msgs/Pose',"DataFormat","struct"); % IC topic
+icMsg.Position.X =8;
+icMsg.Position.Y =8;
 icMsg.Orientation.W = 1;
 param.ts = 0.1;
 param.amax = 0.15;

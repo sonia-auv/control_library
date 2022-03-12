@@ -1,0 +1,11 @@
+plot3(a(2,:),a(3,:),-a(4,:),a(5,:),a(6,:),-a(7,:),'--');
+ ax = gca;
+ ax.FontSize = 13;
+ xlim([-1 18]);
+ ylim([-9 9]);
+ zlim([-5 0]);
+ title('Position en fonction du temps');
+ xlabel('x en mètre') ;
+ ylabel('y en mètre');
+ zlabel('z en mètre');
+ legend({'Réponse','Reference','distance en z'},'Location','northeast');
