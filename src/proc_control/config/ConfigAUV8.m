@@ -41,6 +41,10 @@ function [simulink, simulation, physics, thrusters, MPC, mode] = ConfigAUV8()
 
    % distance of hydrophones acording to auv center
    physics.hydroPose = [160 0 155]*10^-3; % m
+   
+   % distance of hydrophones acording to auv center
+   physics.sonarPose = [200 0 -155]*10^-3; % m
+
    % Thrusters     x      y      z    yaw  roll pitch
    thrusters.T=[ 0.292, 0.173, 0.082, -45,-90, 0;   % T1
                 -0.292, 0.173, 0.082, 45,-90, 0;    % T2
