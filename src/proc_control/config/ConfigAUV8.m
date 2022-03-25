@@ -45,6 +45,9 @@ function [simulink, simulation, physics, thrusters, MPC, mode] = ConfigAUV8()
    % distance of hydrophones acording to auv center
    physics.sonarPose = [200 0 -155]*10^-3; % m
 
+   % Transformation du frame DVL au frame sous-marin
+   physics.dvlRotation = [0,pi,pi/2]; % Z,Y,X
+
    % Thrusters     x      y      z    yaw  roll pitch
    thrusters.T=[ 0.292, 0.173, 0.082, -45,-90, 0;   % T1
                 -0.292, 0.173, 0.082, 45,-90, 0;    % T2
@@ -54,6 +57,9 @@ function [simulink, simulation, physics, thrusters, MPC, mode] = ConfigAUV8()
                 -0.181, 0.159, 0.082,  0,180, 0;    % T6
                 -0.181,-0.159, 0.082,  0,  0, 0;    % T7
                  0.181,-0.159, 0.082,  0,180, 0];   % T8
+   
+   % Approximate 1st order tansfert function of the thruster 1 / (tau*s + 1)
+   physics.thruster.tau = 0.10;
 %% MPC
    % MPC parameters
        MPC.nx = 13; % Number of states
@@ -67,6 +73,10 @@ function [simulink, simulation, physics, thrusters, MPC, mode] = ConfigAUV8()
        MPC.tmin = -30;% minimum thrust in N
        MPC.thrusters.faultThres = .10; %  % Pourcentage de fautes pour moteurs
        MPC.thrusters.faultSample = 20; %  fault Sample
+
+   % Initial conditions
+       MPC.Xi = [0;0;0.3;1;0;0;0;0;0;0;0;0;0]; % états initials
+       MPC.Ui = [0;0;0;0;0;0;0;0];%  % Commande initials
 
    % Trajectory Parameters    
        MPC.trajectory.bufferSize = 6000;
@@ -152,5 +162,26 @@ function [simulink, simulation, physics, thrusters, MPC, mode] = ConfigAUV8()
  % Hydro
         simulation.hydro.maxDeviation = 0.0; %m
         simulation.hydro.sampletime = 2; %sec
+
+ % Waves Parameters
+        %                             x   y   z    rx    ry     rz               
+        simulation.wave.amplitudes = [.5, 1, 1.5, 0.25, 0.25, 0.25 ];
+        simulation.wave.frequences = [pi/2, pi/2, pi/2, pi/3, pi/3, pi/3];
+        simulation.wave.phases = [0, pi/2, pi, 0, pi/2, pi];
+
+ % Wave Damping according depth
+    % We assume a linear ratio Ax + B
+       simulation.wave.damp.A = -0.4;
+       simulation.wave.damp.B = 1;
+       simulation.wave.damp.max = 0.2;
+       simulation.wave.damp.min = 1;
+
+ % Drift parameters
+        %                            x    y   z  rx ry rz
+        simulation.drift.nominal = [0.5, 1.5, 0.1, 0.1, 0.1, 0.1];
+        simulation.drift.ts = 5;
+
+
+
     end
 

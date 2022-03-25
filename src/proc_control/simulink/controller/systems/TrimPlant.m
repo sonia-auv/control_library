@@ -11,7 +11,7 @@ classdef TrimPlant < matlab.System
     end
 
     properties(DiscreteState)
-
+        lastQuat; % Quaternion of last step
     end
 
     % Pre-computed constants
@@ -25,8 +25,9 @@ classdef TrimPlant < matlab.System
         end
 
         function [A, B, C, D, U, Y, X, DX] = stepImpl(this, u, x)
-            % Implement algorithm. Calculate y as a function of input u and
-            % discrete states.
+            
+            x = this.checkQuatFlip(x);
+
             [A, B, C, D, U, Y, X, DX] = this.trimPlantQuat(u,x);
 
         end
@@ -69,9 +70,19 @@ classdef TrimPlant < matlab.System
 
         end
 
-       
-        function resetImpl(obj)
+        function x = checkQuatFlip(this, x)
+
+            % Verifier de retourner la rotation la plus petite
+            if  dot(this.lastQuat,x(4:7).') < 0
+                x(4:7) = -x(4:7);
+
+            end
+            this.lastQuat = x(4:7).';
+        end
+
+        function resetImpl(this)
             % Initialize / reset discrete-state properties
+            this.lastQuat = this.MPC.Xi(4:7).';
         end
 
          %% Definire outputs       
@@ -120,8 +131,8 @@ classdef TrimPlant < matlab.System
             DX = false;         
         end
         function [sz,dt,cp] = getDiscreteStateSpecificationImpl(this,name)
-            if strcmp(name,'init')
-                sz = [1 1];
+            if strcmp(name,'lastQuat')
+                sz = [1 4];
                 dt = "double";
                 cp = false;
       

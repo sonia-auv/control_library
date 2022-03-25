@@ -68,7 +68,7 @@ classdef HydroModel < matlab.System
       end
       
       function [pingerPosition,HydroMesurements] = getOutputDataTypeImpl(this)
-          pingerPosition = "SL_Bus_proc_control_node_geometry_msgs_Vector3";
+          pingerPosition = "SL_Bus_proc_control_geometry_msgs_Vector3";
           HydroMesurements = "double";
 
       end
