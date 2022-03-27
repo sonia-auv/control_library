@@ -15,10 +15,11 @@ classdef TrajectoryGenerator < handle
         timeList;  % liste de temp
         courseList; % Liste de courbe
         nbPoint = 1;   % Nombre de points dans la trajectoire
-       lastConj = false;
+        lastConj = false;
+
         % Structures
-            MAPM; % Multi Add Pose Msg
-            param % paramètre de trajectoire
+        MAPM; % Multi Add Pose Msg
+        param % paramètre de trajectoire
 
     end
     
@@ -126,9 +127,11 @@ classdef TrajectoryGenerator < handle
 
             % determiner le yaw pour le vecteur course
             eul = rad2deg(quat2eul(this.quatList(i+2,:),"ZYX")); 
+            
             if eul(1)<0
-                eul(1)= 360+eul(1);
+                 eul(1)= 360+eul(1);
             end
+
             this.courseList(i+2) = eul(1);
             end
 
@@ -210,7 +213,7 @@ classdef TrajectoryGenerator < handle
 
         function info = interpolateWaypoints(this, trajpub)  
 
-           
+           this.courseList
             % Crée l'objet waypoint trajectory
             trajObj = waypointTrajectory(this.pointList, this.timeList,...
                                          'SampleRate', 1/this.param.ts,...
