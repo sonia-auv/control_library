@@ -23,7 +23,7 @@
 % Parametre et constantes
     switch auv
         case 'AUV8'
-            [simulink, simulation, physics, thrusters, MPC, mode] = ConfigAUV8();
+            [simulink, simulation, physics, kalman, MPC, mode] = ConfigAUV8();
         case 'AUV7'
             [simulink, simulation, physics, thrusters, MPC, mode] = ConfigAUV7();
         otherwise
@@ -95,12 +95,12 @@
 
 
 %% Crée la matrice thrusters 
-    Tm=zeros(6,size(thrusters.T,1));   
+    Tm=zeros(6,size(physics.thruster.T,1));   
     
-    for i=1:size(thrusters.T,1)
+    for i=1:size(physics.thruster.T,1)
         
-       qt= eul2quat(deg2rad(thrusters.T(i,4:6)),'ZYX');% convertir les angle d'euler en uaternion
-       Tm(:,i)=ThrusterVector(thrusters.T(i,1:3),qt);  % Calculer le vecteur thrusters     
+       qt= eul2quat(deg2rad(physics.thruster.T(i,4:6)),'ZYX');% convertir les angle d'euler en uaternion
+       Tm(:,i)=ThrusterVector(physics.thruster.T(i,1:3),qt);  % Calculer le vecteur thrusters     
     end
     
     % crée la matrice inverse 

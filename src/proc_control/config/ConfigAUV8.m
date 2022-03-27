@@ -1,4 +1,4 @@
-function [simulink, simulation, physics, thrusters, MPC, mode] = ConfigAUV8()
+function [simulink, simulation, physics, kalman, MPC, mode] = ConfigAUV8()
 
 %% Paramètre simulink
     simulink.sampletime = 1/50;
@@ -45,18 +45,18 @@ function [simulink, simulation, physics, thrusters, MPC, mode] = ConfigAUV8()
    % distance of hydrophones acording to auv center
    physics.sonarPose = [200 0 -155]*10^-3; % m
 
-   % Transformation du frame DVL au frame sous-marin
+   % Transformation of the DVL frame to body frame
    physics.dvlRotation = [0,pi,pi/2]; % Z,Y,X
 
-   % Thrusters     x      y      z    yaw  roll pitch
-   thrusters.T=[ 0.292, 0.173, 0.082, -45,-90, 0;   % T1
-                -0.292, 0.173, 0.082, 45,-90, 0;    % T2
-                -0.292,-0.173, 0.082,-45,-90, 0;    % T3
-                 0.292,-0.173, 0.082, 45,-90, 0;    % T4
-                 0.181, 0.159, 0.082,  0,  0, 0;    % T5
-                -0.181, 0.159, 0.082,  0,180, 0;    % T6
-                -0.181,-0.159, 0.082,  0,  0, 0;    % T7
-                 0.181,-0.159, 0.082,  0,180, 0];   % T8
+   % Thrusters            x      y      z    yaw  roll pitch
+   physics.thruster.T= [ 0.292, 0.173, 0.082, -45,-90, 0;   % T1
+                        -0.292, 0.173, 0.082, 45,-90, 0;    % T2
+                        -0.292,-0.173, 0.082,-45,-90, 0;    % T3
+                         0.292,-0.173, 0.082, 45,-90, 0;    % T4
+                         0.181, 0.159, 0.082,  0,  0, 0;    % T5
+                        -0.181, 0.159, 0.082,  0,180, 0;    % T6
+                        -0.181,-0.159, 0.082,  0,  0, 0;    % T7
+                         0.181,-0.159, 0.082,  0,180, 0];   % T8
    
    % Approximate 1st order tansfert function of the thruster 1 / (tau*s + 1)
    physics.thruster.tau = 0.10;
@@ -69,8 +69,8 @@ function [simulink, simulation, physics, thrusters, MPC, mode] = ConfigAUV8()
        MPC.p = 10; % Prediction horizon (in sample)
        MPC.m =  2; % control horizon (in sample)
        MPC.dts =10; % Sample time divider
-       MPC.tmax = 40; % maximum thrust in N
-       MPC.tmin = -30;% minimum thrust in N
+       MPC.tmax = 10; % maximum thrust in N
+       MPC.tmin = -10;% minimum thrust in N
        MPC.thrusters.faultThres = .10; %  % Pourcentage de fautes pour moteurs
        MPC.thrusters.faultSample = 20; %  fault Sample
 
@@ -129,7 +129,20 @@ function [simulink, simulation, physics, thrusters, MPC, mode] = ConfigAUV8()
         mode.traj.trajMode = [10];
         mode.traj.singleWpts = [11,30,31,40,41];
         mode.traj.SpaceMouseMode = [19 20 21];
-        
+
+  %% Paramètre du filtre de kalman
+    % Paramètre initial
+        kalman.Xi = [0,0,0.3,1,0,0,0,0,0,0,0,0,0];
+        kalman.Ci = 10*[1,1,1,1,1,1,1,1,1,1,1,1,1];
+ 
+    % Covariences du modele
+        kalman.stateFnc = 'EkfNavStatesEq';
+        kalman.Cx = 100;
+
+    % Covariences des capteurs
+        kalman.Cimu = [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1];
+        kalman.Cdvl = ones(1,3)*0.01;
+
   %% Paramèetre de Simulation
    % Gazebo
        simulation.gazebo.sampletime = simulink.sampletime;

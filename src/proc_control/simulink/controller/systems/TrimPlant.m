@@ -26,8 +26,10 @@ classdef TrimPlant < matlab.System
 
         function [A, B, C, D, U, Y, X, DX] = stepImpl(this, u, x)
             
+            % Regarder la discontinuité entre le qk et qk-1
             x = this.checkQuatFlip(x);
-
+            
+            % Linéariser le systeme.
             [A, B, C, D, U, Y, X, DX] = this.trimPlantQuat(u,x);
 
         end
@@ -72,7 +74,7 @@ classdef TrimPlant < matlab.System
 
         function x = checkQuatFlip(this, x)
 
-            % Verifier de retourner la rotation la plus petite
+            % Regarder la discontinuité entre le qk et qk-1
             if  dot(this.lastQuat,x(4:7).') < 0
                 x(4:7) = -x(4:7);
 
