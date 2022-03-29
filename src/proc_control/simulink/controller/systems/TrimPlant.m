@@ -7,7 +7,7 @@ classdef TrimPlant < matlab.System
     % Public, tunable properties
     properties(Nontunable)
     MPC;
-
+    
     end
 
     properties(DiscreteState)
@@ -16,10 +16,18 @@ classdef TrimPlant < matlab.System
 
     % Pre-computed constants
     properties(Access = private)
+        J; % Jacobian function 
 
     end
 
     methods(Access = protected)
+
+        function resetImpl(this)
+            % Initialize / reset discrete-state properties
+            this.lastQuat = this.MPC.Xi(4:7).';
+            this.J = str2func(this.MPC.JacobianFnc);
+        end
+
         function setupImpl(this)
             % Perform one-time calculations, such as computing constants
         end
@@ -37,7 +45,7 @@ classdef TrimPlant < matlab.System
         function [A, B, C, D, U, Y, X, DX] = trimPlantQuat(this, u, x)
 
             % Lineariser le système
-            [Ac, Bc, C, D] = AUVQuatJacobianMatrix(x,u);
+            [Ac, Bc, C, D] = this.J(x,u);
     
             % Discrétiser le système.
             A = expm(Ac*this.MPC.Ts); % Fossen Eq B.10/B.9 page 662
@@ -80,11 +88,6 @@ classdef TrimPlant < matlab.System
 
             end
             this.lastQuat = x(4:7).';
-        end
-
-        function resetImpl(this)
-            % Initialize / reset discrete-state properties
-            this.lastQuat = this.MPC.Xi(4:7).';
         end
 
          %% Definire outputs       

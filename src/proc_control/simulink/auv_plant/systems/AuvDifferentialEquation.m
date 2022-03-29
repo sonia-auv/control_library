@@ -6,8 +6,8 @@ classdef AuvDifferentialEquation < matlab.System
 
     % Public, tunable properties
     properties (Nontunable)
-        MPC;
         physics;
+        simulation;
     end
 
     properties(DiscreteState)
@@ -16,10 +16,17 @@ classdef AuvDifferentialEquation < matlab.System
 
     % Pre-computed constants
     properties(Access = private)
+        f; % state function
 
     end
 
     methods(Access = protected)
+
+        function resetImpl(this)
+            % Initialize / reset discrete-state properties
+            this.f = str2func(this.simulation.stateFnc);
+        end
+
         function setupImpl(this)
             % Perform one-time calculations, such as computing constants
         end
@@ -35,9 +42,7 @@ classdef AuvDifferentialEquation < matlab.System
             AngularRates_dot = Dynamics(11:13);
         end
 
-        function resetImpl(this)
-            % Initialize / reset discrete-state properties
-        end
+        
       %% Definire outputs       
         function [Position_dot,Quaternion_dot,BodyVelocity_dot, AngularRates_dot] = getOutputSizeImpl(this)
             Position_dot = [3,1];
@@ -67,6 +72,7 @@ classdef AuvDifferentialEquation < matlab.System
             AngularRates_dot = false;
          
         end
+
         function [sz,dt,cp] = getDiscreteStateSpecificationImpl(this,name)
             if strcmp(name,'init')
                 sz = [1 1];
