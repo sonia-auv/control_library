@@ -8,13 +8,13 @@
         clear; 
 
         % Regarder si le node ros matlab est actif
-        if ~ ros.internal.Global.isNodeActive
+       if ~ ros.internal.Global.isNodeActive
             % partir le node ros matlab 
             rosinit;
         end
 
         % Definir AUV8
-        setenv("AUV","AUV8");
+        setenv("AUV","AUV7");
     end
 
 % Obtenir la variable d'environement du sub
@@ -25,7 +25,7 @@
         case 'AUV8'
             [simulink, simulation, physics, kalman, MPC, mode] = ConfigAUV8();
         case 'AUV7'
-            [simulink, simulation, physics, thrusters, MPC, mode] = ConfigAUV7();
+            [simulink, simulation, physics, kalman, MPC, mode] = ConfigAUV7();
         otherwise
             return;
     end

@@ -7,7 +7,7 @@ classdef TrimPlant < matlab.System
     % Public, tunable properties
     properties(Nontunable)
     MPC;
-    
+    simulation
     end
 
     properties(DiscreteState)
@@ -17,7 +17,7 @@ classdef TrimPlant < matlab.System
     % Pre-computed constants
     properties(Access = private)
         J; % Jacobian function 
-
+        f; % state function
     end
 
     methods(Access = protected)
@@ -26,6 +26,7 @@ classdef TrimPlant < matlab.System
             % Initialize / reset discrete-state properties
             this.lastQuat = this.MPC.Xi(4:7).';
             this.J = str2func(this.MPC.JacobianFnc);
+            this.f = str2func(this.MPC.StateFnc);
         end
 
         function setupImpl(this)
@@ -61,7 +62,7 @@ classdef TrimPlant < matlab.System
         
     
             for i = 1 : this.MPC.dts 
-              x_dot_k = AUVQuatSimFcn(xk,u);
+              x_dot_k = this.f(xk,u);
         
               xk = xk + ((x_dot_k + x_dot_kk)*(this.MPC.Ts/this.MPC.dts ))/2;
         
