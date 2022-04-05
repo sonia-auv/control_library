@@ -47,7 +47,7 @@ The control Library project use servial toolbox. Here the list of the used toolb
 > - Symbolic Math Toolbox                             
 > - System Identification                           
 
-Matlab require at least cmake version 3.15 for generate custom ros msg . You can check your cmake version with the following command:
+Matlab require at least cmake version 3.15 for generate custom ros message. You can check your cmake version with the following command:
 
 `cmake --version`
 
@@ -58,11 +58,21 @@ All the custom ROS message used by sonia are located in the sonia common repo. Y
 
 > https://github.com/sonia-auv/sonia_common
 
-You need to generate the ros message in matlab to be able to use it. To do so, navigate to your src folder in the matlab file explorer than run the next command and follow the instruction.
+You need to generate the ros message in matlab to be able to use it. To do so, navigate to the folder where sonia_common is cloned in with the matlab file explorer than run the next command and follow the instruction.
 
 `rosgenmsg('./')`
 
+If matlab doesn't find python executable, check first if python is install on your machine. Type in a command windows:
 
+`python3 --version`
+
+If you get a version number, you can type the following command to find the path of the python environement.
+
+`which python3`
+
+Then, you have to tell matlab where is your python executable. To do so, type the following command in your matlab console.
+
+`pyenv('Version',<your python executable path>)`
 
 # Use the control
 There are multiple mode available:
