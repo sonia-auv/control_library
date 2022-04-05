@@ -109,7 +109,8 @@
 %% Initialiser le controlleur MPC quaternion
 
 %liniéarisation du modèle aux conditions initales.
-    [Aqc,Bqc,Cqc,Dqc] = AUVQuatJacobianMatrix(MPC.Xi,MPC.Ui);   
+    J = str2func(MPC.JacobianFnc);
+    [Aqc,Bqc,Cqc,Dqc] = J(MPC.Xi,MPC.Ui);   
     
 % création de l'objet state space.
 % Generate discrete-time model
@@ -123,14 +124,14 @@
     Dq = Dqc;
 
     IntitalPlant=ss(Aq,Bq,Cq,Dq,MPC.Ts);
-
+    IntitalPlant = setmpcsignals(IntitalPlant,'MO',[5]);
     pole(IntitalPlant)
 
 % Création du controleur MPC.
     Qmpcobj =mpc(IntitalPlant);
     Qmpcobj.PredictionHorizon =MPC.p;
     Qmpcobj.ControlHorizon=MPC.m;
-
+    
 % Conditions Initials
     Qmpcobj.Model.Nominal.X = MPC.Xi;
     Qmpcobj.Model.Nominal.Y= MPC.Xi;
@@ -154,9 +155,10 @@
     
 % Paramètre de l'estimateur   
     setEstimator(Qmpcobj,'custom');
-
+    getindist(Qmpcobj)
+    getoutdist(Qmpcobj)
 % Keep for future use
-   % IntitalPlant = setmpcsignals(IntitalPlant,'UD',[1:8]);
+    
 
 %% Initialiser le comtrolleur MPC non lineaire
 
@@ -167,9 +169,9 @@
     nlobj.ControlHorizon = MPC.m;
 
 % Definire les fonctions différentielles et les matrices jacobienne
-    nlobj.Model.StateFcn = "AUVQuatSimFcn";
-    nlobj.Jacobian.OutputFcn="AUVQuatSimFcn";
-    nlobj.Jacobian.StateFcn = @AUVQuatJacobianMatrix;
+    nlobj.Model.StateFcn = MPC.StateFnc;
+    nlobj.Jacobian.OutputFcn= MPC.StateFnc;
+    nlobj.Jacobian.StateFcn = MPC.JacobianFnc;
 
 % Définir les poids et gains
     nlobj.Weights.OutputVariables = MPC.gains.defaut.OV;

@@ -75,8 +75,9 @@ function [simulink, simulation, physics, kalman, MPC, mode] = ConfigAUV8()
        MPC.thrusters.faultSample = 20; %  fault Sample
    
    % Jacobian fonction
-       MPC.JacobianFnc = "AUVQuatJacobianMatrix";
-       
+       MPC.JacobianFnc = "AUV8QuatJacobianMatrix";
+       MPC.StateFnc = "AUV8QuatSimFcn";
+
    % Initial conditions
        MPC.Xi = [0;0;0.3;1;0;0;0;0;0;0;0;0;0]; % états initials
        MPC.Ui = [0;0;0;0;0;0;0;0];%  % Commande initials
@@ -153,7 +154,7 @@ function [simulink, simulation, physics, kalman, MPC, mode] = ConfigAUV8()
        simulation.gazebo.model_name = uint8('auv8');
 
    % States equations 
-        simulation.stateFnc = "AUVQuatPerturbedSimFcn";
+        simulation.stateFnc = "AUV8QuatPerturbedSimFcn";
 
    % Unity
         simulation.unity.sampletime = simulink.sampletime;
