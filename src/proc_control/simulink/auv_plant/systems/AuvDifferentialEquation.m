@@ -34,7 +34,7 @@ classdef AuvDifferentialEquation < matlab.System
         function [Position_dot,Quaternion_dot,BodyVelocity_dot, AngularRates_dot] = stepImpl(this,thrust,perturbations, states )
             % Implement algorithm. Calculate y as a function of input u and
             % discrete states.
-            Dynamics = AUVQuatPerturbedSimFcn(states,perturbations,thrust);
+            Dynamics = this.f(states,perturbations,thrust);
 
             Position_dot = Dynamics(1:3);
             Quaternion_dot = Dynamics(4:7);

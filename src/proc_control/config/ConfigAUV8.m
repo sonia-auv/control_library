@@ -92,11 +92,11 @@ function [simulink, simulation, physics, kalman, MPC, mode] = ConfigAUV8()
        
    % MPC gains
        MPC.gains.defaut.OV =  [30, 30, 30, 45, 45, 45, 45, 0, 0, 0, 0, 0, 0 ];
-       MPC.gains.defaut.MV = [ 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2 ];
+       MPC.gains.defaut.MV = [ 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ];
        MPC.gains.defaut.MVR = [ 0.4, 0.4, 0.4, 0.4, 0.5, 0.5, 0.5, 0.5 ];
        
        MPC.gains.c10.OV = [ 30, 30, 30, 45, 45, 45, 45, 0, 0, 0, 0, 0, 0 ];
-       MPC.gains.c10.MV = [ 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2 ];
+       MPC.gains.c10.MV = [ 0.2, 0.2, 0.2, 0.2, 0.0, 0.0, 0.0, 0.0 ];
        MPC.gains.c10.MVR = [ 0.4, 0.4, 0.4, 0.4, 0.5, 0.5, 0.5, 0.5 ];
        
        MPC.gains.c11.OV = MPC.gains.c10.OV;

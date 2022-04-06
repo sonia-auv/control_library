@@ -14,7 +14,7 @@
         end
 
         % Definir AUV8
-        setenv("AUV","AUV7");
+        setenv("AUV","AUV8");
     end
 
 % Obtenir la variable d'environement du sub
@@ -110,25 +110,32 @@
 
 %liniéarisation du modèle aux conditions initales.
     J = str2func(MPC.JacobianFnc);
-    [Aqc,Bqc,Cqc,Dqc] = J(MPC.Xi,MPC.Ui);   
+    [Aqc,Bqc,Cqc,Dqc] = J(MPC.Xi,MPC.Ui);       
     
-% création de l'objet state space.
-% Generate discrete-time model
-    nx = size(Aqc,1);
-    nu = size(Bqc,2);
+% Discrétiser le système.
+    Aq = expm(Aqc*MPC.Ts); % Fossen Eq B.10/B.9 page 662
     
-    M = expm([[Aqc Bqc]*MPC.Ts; zeros(nu,nu+nx)]);
-    Aq = M(1:nx,1:nx);
-    Bq = M(1:nx,nx+1:nx+nu);
+    BT = Aqc(8:13,8:13)\(Aq(8:13,8:13)-eye(6))*Bqc(8:13,1:8); % Fossen Eq B.11 p 662
+    Bq = [zeros(7,8); BT];
+
     Cq = Cqc;
     Dq = Dqc;
 
-    IntitalPlant=ss(Aq,Bq,Cq,Dq,MPC.Ts);
-    IntitalPlant = setmpcsignals(IntitalPlant,'MO',[5]);
-    pole(IntitalPlant)
+    Plant=ss(Aq,Bq,Cq,Dq,MPC.Ts);
+    pole(Plant)
+
+% perturbation externe
+    [Ap, Bp, Cp, Dp ] = WaveModelMatrix(ones(6,1)*0.5, ones(6,1)*5, ones(6,1)*3);
+    
+    
+% Dicrétiser les vagues    
+    Adp = expm(Ap*MPC.Ts);
+    Bdp = Ap\(Adp-eye(12))*Bp;
+
+    noise = ss(Adp,Bdp,Cp,Dp);
 
 % Création du controleur MPC.
-    Qmpcobj =mpc(IntitalPlant);
+    Qmpcobj =mpc(Plant);
     Qmpcobj.PredictionHorizon =MPC.p;
     Qmpcobj.ControlHorizon=MPC.m;
     
@@ -155,8 +162,10 @@
     
 % Paramètre de l'estimateur   
     setEstimator(Qmpcobj,'custom');
-    getindist(Qmpcobj)
-    getoutdist(Qmpcobj)
+  
+    out = getoutdist(Qmpcobj)
+
+    setoutdist(Qmpcobj,'model',noise)
 % Keep for future use
     
 

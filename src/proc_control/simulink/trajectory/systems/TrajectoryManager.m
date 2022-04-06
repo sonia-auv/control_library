@@ -11,10 +11,7 @@ classdef TrajectoryManager < matlab.System
      prediction =4;  % prediction controlleur
      bufferSize=6001; % Taille statique 
     
-     SampleTimeTypeProp (1, 1) {mustBeMember(SampleTimeTypeProp, ...
-            ["Discrete","FixedInMinorStep","Controllable",...
-            "Inherited","InheritedNotControllable",...
-            "InheritedErrorConstant"])} = "Inherited"
+    
     end
     
     properties 
@@ -177,26 +174,8 @@ function isReached= targetReached(this, mesuredPose, poses, target)
   
     end
 end
- %% Fonction qui gere le sample time  
-      function sts = getSampleTimeImpl(obj)
-            switch char(obj.SampleTimeTypeProp)
-                case 'Inherited'
-                    sts = createSampleTime(obj,'Type','Inherited');
-                case 'InheritedNotControllable'
-                    sts = createSampleTime(obj,'Type','Inherited',...
-                        'AlternatePropagation','Controllable');
-                case 'InheritedErrorConstant'
-                    sts = createSampleTime(obj,'Type','Inherited',...
-                        'ErrorOnPropagation','Constant');
-                case 'FixedInMinorStep'
-                    sts = createSampleTime(obj,'Type','Fixed In Minor Step');
-                case 'Discrete'
-                    sts = createSampleTime(obj,'Type','Discrete',...
-                      'SampleTime',obj.SampleTime, ...
-                      'OffsetTime',obj.OffsetTime);
-              
-            end
-      end
+ 
+     
         
 %% Fonction Qui reset le buffer
       function BufferReset(this,reset,mesuredPose)
