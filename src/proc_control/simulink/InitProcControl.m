@@ -19,7 +19,6 @@
 
 % Obtenir la variable d'environement du sub
     auv = getenv("AUV");
-
 % Parametre et constantes
     switch auv
         case 'AUV8'
@@ -85,7 +84,7 @@
     TMAX ={MPC.tmax; MPC.tmax; MPC.tmax; MPC.tmax; MPC.tmax; MPC.tmax; MPC.tmax; MPC.tmax};
 
 % z transform of the thruster 1st order transfert function.
- physics.thruster.b0 = -exp(-(1/physics.thruster.tau)*simulink.sampletime);
+ physics.thruster.b0 = -exp(-(1/physics.thruster.tau) * simulink.sampletime);
  physics.thruster.a1 = 1 + physics.thruster.b0;
 
 
@@ -106,9 +105,7 @@
     % crée la matrice inverse 
     binv=pinv(Tm);
     
-%% Initialiser le controlleur MPC quaternion
-
-%liniéarisation du modèle aux conditions initales.
+%% liniéarisation du modèle aux conditions initales.
     J = str2func(MPC.JacobianFnc);
     [Aqc,Bqc,Cqc,Dqc] = J(MPC.Xi,MPC.Ui);       
     
@@ -127,12 +124,13 @@
 % perturbation externe
     [Ap, Bp, Cp, Dp ] = WaveModelMatrix(ones(6,1)*0.5, ones(6,1)*5, ones(6,1)*3);
     
-    
-% Dicrétiser les vagues    
+% Dicrétiser les perturbations externes    
     Adp = expm(Ap*MPC.Ts);
     Bdp = Ap\(Adp-eye(12))*Bp;
 
-    noise = ss(Adp,Bdp,Cp,Dp);
+    waveDist = ss(Adp,Bdp,Cp,Dp);
+
+%% Initialiser le controlleur MPC quaternion
 
 % Création du controleur MPC.
     Qmpcobj =mpc(Plant);
@@ -162,10 +160,10 @@
     
 % Paramètre de l'estimateur   
     setEstimator(Qmpcobj,'custom');
-  
-    out = getoutdist(Qmpcobj)
 
-    setoutdist(Qmpcobj,'model',noise)
+% Définir le modele de perturbation.
+    setoutdist(Qmpcobj,'model',waveDist);
+    
 % Keep for future use
     
 
@@ -202,8 +200,8 @@
     
     validateFcns(nlobj,MPC.Xi,MPC.Ui);
 
-%% Perturbation Drift
 
+%% Perturbation Drift
 % Initialiser le seed du random
     rng shuffle
 % Temp d'échantillionage des perturbation 

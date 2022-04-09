@@ -1,0 +1,1185 @@
+%implements s175_b0_ziu9e_ModelInitialize "C"
+
+%function ModelInitialize(block, system) Output
+%assign cfgTxt = ""
+%openfile cfgTxt
+%assign localVarDecl = ""
+%openfile localVarDecl
+
+static const real_T tmp_j[33]{ 0.0, 1.0, 0.0, 0.1, 1.0, 0.0, 0.2, 1.0, 0.0, 0.30000000000000004, 1.0, 0.0, 0.4, 1.0, 0.0, 0.5, 1.0, 0.0, 0.6, 1.0, 0.0, 0.7, 1.0, 0.0, 0.8, 1.0, 0.0, 0.9, 1.0, 0.0, 1.0, 1.0, 0.0 };
+static const char_T tmp_1[38]{ '/', 'p', 'r', 'o', 'v', 'i', 'd', 'e', 'r', '_', 'k', 'i', 'l', 'l', '_', 'm', 'i', 's', 's', 'i', 'o', 'n', '/', 'k', 'i', 'l', 'l', '_', 's', 'w', 'i', 't', 'c', 'h', '_', 'm', 's', 'g' };
+static const char_T tmp_q[36]{ '/', 'p', 'r', 'o', 'c', '_', 's', 'i', 'm', 'u', 'l', 'a', 't', 'i', 'o', 'n', '/', 's', 'e', 't', '_', 'p', 'i', 'n', 'g', 'e', 'r', '_', 'l', 'o', 'c', 'a', 't', 'i', 'o', 'n' };
+static const char_T tmp_g[34]{ '/', 'p', 'r', 'o', 'c', '_', 'p', 'l', 'a', 'n', 'n', 'e', 'r', '/', 's', 'e', 'n', 'd', '_', 't', 'r', 'a', 'j', 'e', 'c', 't', 'o', 'r', 'y', '_', 'l', 'i', 's', 't' };
+static const char_T tmp_2[33]{ '/', 'p', 'r', 'o', 'c', '_', 's', 'i', 'm', 'u', 'l', 'a', 't', 'i', 'o', 'n', '/', 's', 't', 'a', 'r', 't', '_', 's', 'i', 'm', 'u', 'l', 'a', 't', 'i', 'o', 'n' };
+static const char_T tmp_b[32]{ '/', 'p', 'r', 'o', 'v', 'i', 'd', 'e', 'r', '_', 'd', 'v', 'l', '/', 'd', 'v', 'l', '_', 'r', 'e', 'l', 'a', 't', 'i', 'v', 'e', '_', 'd', 'e', 'p', 't', 'h' };
+static const char_T tmp_r[32]{ '/', 'p', 'r', 'o', 'c', '_', 's', 'i', 'm', 'u', 'l', 'a', 't', 'i', 'o', 'n', '/', 'p', 'i', 'n', 'g', 'e', 'r', '_', 'l', 'o', 'c', 'a', 't', 'i', 'o', 'n' };
+static const char_T tmp_n[31]{ '/', 'p', 'r', 'o', 'v', 'i', 'd', 'e', 'r', '_', 't', 'h', 'r', 'u', 's', 't', 'e', 'r', '/', 't', 'h', 'r', 'u', 's', 't', 'e', 'r', '_', 'p', 'w', 'm' };
+static const char_T tmp_4[30]{ '/', 'p', 'r', 'o', 'c', '_', 'c', 'o', 'n', 't', 'r', 'o', 'l', '/', 'r', 'e', 's', 'e', 't', '_', 't', 'r', 'a', 'j', 'e', 'c', 't', 'o', 'r', 'y' };
+static const char_T tmp_6[29]{ '/', 'p', 'r', 'o', 'c', '_', 's', 'i', 'm', 'u', 'l', 'a', 't', 'i', 'o', 'n', '/', 'd', 'v', 'l', '_', 'v', 'e', 'l', 'o', 'c', 'i', 't', 'y' };
+static const char_T tmp_p[29]{ '/', 'p', 'r', 'o', 'c', '_', 's', 'i', 'm', 'u', 'l', 'a', 't', 'i', 'o', 'n', '/', 't', 'h', 'r', 'u', 's', 't', 'e', 'r', '_', 'r', 'p', 'm' };
+static const char_T tmp_o[28]{ 'p', 'r', 'o', 'c', '_', 'c', 'o', 'n', 't', 'r', 'o', 'l', '/', 'c', 'o', 'n', 't', 'r', 'o', 'l', 'l', 'e', 'r', '_', 'i', 'n', 'f', 'o' };
+static const char_T tmp_l[27]{ '/', 'p', 'r', 'o', 'c', '_', 'c', 'o', 'n', 't', 'r', 'o', 'l', '/', 's', 'e', 't', '_', 'm', 'p', 'c', '_', 'g', 'a', 'i', 'n', 's' };
+static const char_T tmp_a[26]{ '/', 'p', 'r', 'o', 'v', 'i', 'd', 'e', 'r', '_', 'd', 'v', 'l', '/', 'd', 'v', 'l', '_', 'v', 'e', 'l', 'o', 'c', 'i', 't', 'y' };
+static const char_T tmp_h[26]{ '/', 'p', 'r', 'o', 'c', '_', 'p', 'l', 'a', 'n', 'n', 'e', 'r', '/', 'i', 'n', 'i', 't', 'i', 'a', 'l', '_', 'p', 'o', 's', 'e' };
+static const char_T tmp_5[25]{ '/', 'p', 'r', 'o', 'c', '_', 's', 'i', 'm', 'u', 'l', 'a', 't', 'i', 'o', 'n', '/', 'i', 'm', 'u', '_', 'i', 'n', 'f', 'o' };
+static const char_T tmp_m[23]{ '/', 'p', 'r', 'o', 'v', 'i', 'd', 'e', 'r', '_', 'p', 'o', 'w', 'e', 'r', '/', 'c', 'u', 'r', 'r', 'e', 'n', 't' };
+static const char_T tmp[22]{ '/', 'p', 'r', 'o', 'c', '_', 'c', 'o', 'n', 't', 'r', 'o', 'l', '/', 's', 'e', 't', '_', 'm', 'o', 'd', 'e' };
+static const char_T tmp_7[22]{ '/', 'p', 'r', 'o', 'c', '_', 's', 'i', 'm', 'u', 'l', 'a', 't', 'i', 'o', 'n', '/', 'd', 'e', 'p', 't', 'h' };
+static const char_T tmp_9[22]{ '/', 'p', 'r', 'o', 'v', 'i', 'd', 'e', 'r', '_', 'i', 'm', 'u', '/', 'i', 'm', 'u', '_', 'i', 'n', 'f', 'o' };
+static const char_T tmp_d[22]{ '/', 't', 'e', 'l', 'e', 'm', 'e', 't', 'r', 'y', '/', 'a', 'u', 'v', '_', 's', 't', 'a', 't', 'e', 's', '/' };
+static const char_T tmp_e[22]{ 'p', 'r', 'o', 'c', '_', 'c', 'o', 'n', 't', 'r', 'o', 'l', '/', 's', 'e', 'n', 's', 'o', 'r', '_', 'o', 'n' };
+static const char_T tmp_8[21]{ '/', 'p', 'r', 'o', 'c', '_', 's', 'i', 'm', 'u', 'l', 'a', 't', 'i', 'o', 'n', '/', 'p', 'i', 'n', 'g' };
+static const char_T tmp_i[21]{ 'p', 'r', 'o', 'c', '_', 'c', 'o', 'n', 't', 'r', 'o', 'l', '/', 'a', 'd', 'd', '_', 'p', 'o', 's', 'e' };
+static const char_T tmp_0[19]{ '/', 'p', 'r', 'o', 'c', '_', 'n', 'a', 'v', '/', 'r', 'e', 's', 'e', 't', '_', 'p', 'o', 's' };
+static const char_T tmp_3[18]{ '/', 't', 'e', 'l', 'e', 'm', 'e', 't', 'r', 'y', '/', 'd', 'r', 'y', '_', 'r', 'u', 'n' };
+static const char_T tmp_c[16]{ '/', 'p', 'r', 'o', 'c', '_', 'h', 'y', 'd', 'r', 'o', '/', 'p', 'i', 'n', 'g' };
+static const char_T tmp_f[15]{ '/', 's', 'p', 'a', 'c', 'e', 'n', 'a', 'v', '/', 't', 'w', 'i', 's', 't' };
+static const char_T tmp_s[8]{ '/', 'p', 'o', 's', '_', 'r', 'o', 't' };
+static const int8_T tmp_k[7]{ 0, 0, 0, 1, 0, 0, 0 };
+int32_T i;
+int32_T t;
+uint32_T tseed;
+char_T b_zeroDelimTopic[9];
+%closefile localVarDecl
+%<SLibInsertAsyncTaskInitializeCode(system)>
+%<SLibWriteMachineInitialize()>
+%<SLibCGIRDumpSystemUserCode(175, "Start", "Header")>\
+%<SLibCGIRDumpSystemUserCode(175, "Start", "Body")>\
+/* {S!d1518}Start for SwitchCase: '<S9>/Switch Case' */
+/*@>1b20a4d*/proc_control_DW./*@>1be00b2*/SwitchCase_ActiveSubsystem/*@>118e917*/ = /*@>1bde5d6*/-1;
+%<SLibCGIRDumpSystemUserCode(175, "Start", "Trailer")>\
+proc_control_PrevZCX.Trajectorygenerator_Reset_ZCE = POS_ZCSIG;
+/* {S!d1520}InitializeConditions for Delay: '<S241>/ ' */
+/*@>1a41c55*/std::memcpy(&/*@>1b20a5d*/proc_control_DW./*@>1be00b5*/_DSTATE/*@>19e007a*/[/*@>19e0069*/0], &/*@>1b1df42*/proc_control_P./*@>1bdfeea*/_InitialCondition/*@>19e0082*/[/*@>19e0076*/0], /*@>19e0084*/sizeof(real_T)/*@>1b81d88*/ << /*@>1b81d87*/3U);
+/* {S!d1361}SystemInitialize for Atomic SubSystem: '<Root>/Subsystem1' */
+/* {S!d1522}InitializeConditions for Delay: '<S10>/Delay' */
+/*@>1b20a65*/proc_control_DW./*@>1be00b8*/Delay_DSTATE_e/*@>118ecc6*/ = /*@>1b1df4a*/proc_control_P./*@>1bdfeed*/Delay_InitialCondition_c;
+/* {S!d1362}SystemInitialize for Atomic SubSystem: '<S10>/Subscribe2' */
+/* {S!d1363}SystemInitialize for Enabled SubSystem: '<S316>/Enabled Subsystem' */
+/* {S!d1524}SystemInitialize for SignalConversion generated from: '<S322>/In1' incorporates:
+ *  Outport: '<S322>/Out1'
+ */
+/*@>1b0599d*/proc_control_B./*@>1bdfd22*/In1_i2/*@>118f27f*/ = /*@>1b1df52*/proc_control_P./*@>1bdfef0*/Out1_Y0_kc;
+/* {E!d1363}End of SystemInitialize for SubSystem: '<S316>/Enabled Subsystem' */
+
+/* {S!d1526}Start for MATLABSystem: '<S316>/SourceBlock' */
+/*@>1b20a6d*/proc_control_DW./*@>1be00bb*/obj_mt./*@>1bdfb6f*/matlabCodegenIsDeleted/*@>11916f6*/ = /*@>1695deb*/false;
+/*@>1b20a75*/proc_control_DW./*@>1be00be*/obj_mt./*@>1bdfb72*/isInitialized/*@>1191704*/ = /*@>1bde5d9*/1;
+/*@>150523e*/for (/*@>1bde9e0*/i = /*@>1bde9df*/0; /*@>1bde9ea*/i < /*@>1bde9e8*/22; /*@>1bde9e6*/i/*@>1bde9ee*/++) {
+    /*@>1b059b9*/proc_control_B./*@>1bdfd28*/b_zeroDelimTopic_g/*@>1624768*/[/*@>1873c6d*/i]/*@>1505231*/ = /*@>1ab1dcf*/tmp/*@>1ab1dd1*/[/*@>1ab1dce*/i];
+}
+/*@>1b059b1*/proc_control_B./*@>1bdfd25*/b_zeroDelimTopic_g/*@>1624779*/[/*@>169579d*/22]/*@>1505257*/ = /*@>1695b73*/'\x00';
+/*@>1a284f9*/Sub_proc_control_185_13.createSubscriber(&/*@>1b059c1*/proc_control_B./*@>1bdfd2b*/b_zeroDelimTopic_g/*@>1624780*/[/*@>169579c*/0], /*@>1695c9a*/1);
+/*@>1b20a7d*/proc_control_DW./*@>1be00c1*/obj_mt./*@>1bdfb75*/isSetupComplete/*@>1191716*/ = /*@>1695df0*/true;
+/* {E!d1526}End of Start for MATLABSystem: '<S316>/SourceBlock' */
+/* {E!d1362}End of SystemInitialize for SubSystem: '<S10>/Subscribe2' */
+
+/* {S!d1366}SystemInitialize for Atomic SubSystem: '<S10>/Subscribe3' */
+/* {S!d1528}Start for MATLABSystem: '<S317>/SourceBlock' */
+/*@>1b20a85*/proc_control_DW./*@>1be00c4*/obj_oz./*@>1bdfb78*/matlabCodegenIsDeleted/*@>1191963*/ = /*@>1695dfa*/false;
+/*@>1b20a8d*/proc_control_DW./*@>1be00c7*/obj_oz./*@>1bdfb7b*/isInitialized/*@>1191971*/ = /*@>1bde5dc*/1;
+/*@>15052da*/for (/*@>1bde9cf*/i = /*@>1bde9ce*/0; /*@>1bde9d9*/i < /*@>1bde9d7*/19; /*@>1bde9d5*/i/*@>1bde9ef*/++) {
+    /*@>1b059df*/proc_control_B./*@>1bdfd31*/b_zeroDelimTopic_f1/*@>1624791*/[/*@>1873c7e*/i]/*@>15052cd*/ = /*@>1ab1dd5*/tmp_0/*@>1ab1dd7*/[/*@>1ab1dd4*/i];
+}
+/*@>1b059d7*/proc_control_B./*@>1bdfd2e*/b_zeroDelimTopic_f1/*@>16247a2*/[/*@>169579b*/19]/*@>15052f3*/ = /*@>1695b61*/'\x00';
+/*@>1a284fb*/Sub_proc_control_185_14.createSubscriber(&/*@>1b059e7*/proc_control_B./*@>1bdfd34*/b_zeroDelimTopic_f1/*@>16247a9*/[/*@>169579a*/0], /*@>1695c97*/1);
+/*@>1b20a95*/proc_control_DW./*@>1be00ca*/obj_oz./*@>1bdfb7e*/isSetupComplete/*@>1191983*/ = /*@>1695dff*/true;
+/* {E!d1528}End of Start for MATLABSystem: '<S317>/SourceBlock' */
+/* {E!d1366}End of SystemInitialize for SubSystem: '<S10>/Subscribe3' */
+
+/* {S!d1368}SystemInitialize for Atomic SubSystem: '<S10>/Subscribe1' */
+/* {S!d1369}SystemInitialize for Enabled SubSystem: '<S315>/Enabled Subsystem' */
+/* {S!d1530}SystemInitialize for SignalConversion generated from: '<S321>/In1' incorporates:
+ *  Outport: '<S321>/Out1'
+ */
+/*@>1b059f1*/proc_control_B./*@>1bdfd37*/In1_cx/*@>118f2cb*/ = /*@>1b1df66*/proc_control_P./*@>1bdfef3*/Out1_Y0_h;
+/* {E!d1369}End of SystemInitialize for SubSystem: '<S315>/Enabled Subsystem' */
+
+/* {S!d1532}Start for MATLABSystem: '<S315>/SourceBlock' */
+/*@>1b20a9d*/proc_control_DW./*@>1be00cd*/obj_hb./*@>1bdfb81*/matlabCodegenIsDeleted/*@>1191bd0*/ = /*@>1695e09*/false;
+/*@>1b20aa5*/proc_control_DW./*@>1be00d0*/obj_hb./*@>1bdfb84*/isInitialized/*@>1191bde*/ = /*@>1bde5df*/1;
+/*@>1505377*/for (/*@>1bde9be*/i = /*@>1bde9bd*/0; /*@>1bde9c8*/i < /*@>1bde9c6*/38; /*@>1bde9c4*/i/*@>1bde9f0*/++) {
+    /*@>1b05a0d*/proc_control_B./*@>1bdfd3d*/b_zeroDelimTopic/*@>16247bc*/[/*@>1873c8f*/i]/*@>150536a*/ = /*@>1ab1ddb*/tmp_1/*@>1ab1ddd*/[/*@>1ab1dda*/i];
+}
+/*@>1b05a05*/proc_control_B./*@>1bdfd3a*/b_zeroDelimTopic/*@>16247cd*/[/*@>1695799*/38]/*@>1505390*/ = /*@>1695b4f*/'\x00';
+/*@>1a284fd*/Sub_proc_control_185_12.createSubscriber(&/*@>1b05a15*/proc_control_B./*@>1bdfd40*/b_zeroDelimTopic/*@>16247d4*/[/*@>1695798*/0], /*@>1695c94*/1);
+/*@>1b20aad*/proc_control_DW./*@>1be00d3*/obj_hb./*@>1bdfb87*/isSetupComplete/*@>1191bf0*/ = /*@>1695e0e*/true;
+/* {E!d1532}End of Start for MATLABSystem: '<S315>/SourceBlock' */
+/* {E!d1368}End of SystemInitialize for SubSystem: '<S10>/Subscribe1' */
+
+/* {S!d1372}SystemInitialize for Atomic SubSystem: '<S10>/startSim' */
+/* {S!d1373}SystemInitialize for Enabled SubSystem: '<S320>/Enabled Subsystem' */
+/* {S!d1534}SystemInitialize for SignalConversion generated from: '<S326>/In1' incorporates:
+ *  Outport: '<S326>/Out1'
+ */
+/*@>1b05a1f*/proc_control_B./*@>1bdfd43*/In1_n/*@>118f2f1*/ = /*@>1b1df74*/proc_control_P./*@>1bdfef6*/Out1_Y0_g;
+/* {E!d1373}End of SystemInitialize for SubSystem: '<S320>/Enabled Subsystem' */
+
+/* {S!d1536}Start for MATLABSystem: '<S320>/SourceBlock' */
+/*@>1b20ab5*/proc_control_DW./*@>1be00d6*/obj_bh./*@>1bdfb8a*/matlabCodegenIsDeleted/*@>1191e3d*/ = /*@>1695e18*/false;
+/*@>1b20abd*/proc_control_DW./*@>1be00d9*/obj_bh./*@>1bdfb8d*/isInitialized/*@>1191e4b*/ = /*@>1bde5e2*/1;
+/*@>1505414*/for (/*@>1bde9ad*/i = /*@>1bde9ac*/0; /*@>1bde9b7*/i < /*@>1bde9b5*/33; /*@>1bde9b3*/i/*@>1bde9f1*/++) {
+    /*@>1b05a3b*/proc_control_B./*@>1bdfd49*/b_zeroDelimTopic_c/*@>16247e7*/[/*@>1873ca0*/i]/*@>1505407*/ = /*@>1ab1de1*/tmp_2/*@>1ab1de3*/[/*@>1ab1de0*/i];
+}
+/*@>1b05a33*/proc_control_B./*@>1bdfd46*/b_zeroDelimTopic_c/*@>16247f8*/[/*@>1695797*/33]/*@>150542d*/ = /*@>1695b3d*/'\x00';
+/*@>1a284ff*/Sub_proc_control_185_11.createSubscriber(&/*@>1b05a43*/proc_control_B./*@>1bdfd4c*/b_zeroDelimTopic_c/*@>16247ff*/[/*@>1695796*/0], /*@>1695c91*/1);
+/*@>1b20ac5*/proc_control_DW./*@>1be00dc*/obj_bh./*@>1bdfb90*/isSetupComplete/*@>1191e5d*/ = /*@>1695e1d*/true;
+/* {E!d1536}End of Start for MATLABSystem: '<S320>/SourceBlock' */
+/* {E!d1372}End of SystemInitialize for SubSystem: '<S10>/startSim' */
+
+/* {S!d1376}SystemInitialize for Atomic SubSystem: '<S10>/Subscribe5' */
+/* {S!d1377}SystemInitialize for Enabled SubSystem: '<S319>/Enabled Subsystem' */
+/* {S!d1538}SystemInitialize for SignalConversion generated from: '<S325>/In1' incorporates:
+ *  Outport: '<S325>/Out1'
+ */
+/*@>1b05a4d*/proc_control_B./*@>1bdfd4f*/In1_f1/*@>118f317*/ = /*@>1b1df82*/proc_control_P./*@>1bdfef9*/Out1_Y0_a;
+/* {E!d1377}End of SystemInitialize for SubSystem: '<S319>/Enabled Subsystem' */
+
+/* {S!d1540}Start for MATLABSystem: '<S319>/SourceBlock' */
+/*@>1b20acd*/proc_control_DW./*@>1be00df*/obj_fx./*@>1bdfb93*/matlabCodegenIsDeleted/*@>11920aa*/ = /*@>1695e27*/false;
+/*@>1b20ad5*/proc_control_DW./*@>1be00e2*/obj_fx./*@>1bdfb96*/isInitialized/*@>11920b8*/ = /*@>1bde5e5*/1;
+/*@>15054b1*/for (/*@>1bde99c*/i = /*@>1bde99b*/0; /*@>1bde9a6*/i < /*@>1bde9a4*/18; /*@>1bde9a2*/i/*@>1bde9f2*/++) {
+    /*@>1b05a69*/proc_control_B./*@>1bdfd55*/b_zeroDelimTopic_js/*@>1624810*/[/*@>1873cb1*/i]/*@>15054a4*/ = /*@>1ab1de7*/tmp_3/*@>1ab1de9*/[/*@>1ab1de6*/i];
+}
+/*@>1b05a61*/proc_control_B./*@>1bdfd52*/b_zeroDelimTopic_js/*@>1624821*/[/*@>1695795*/18]/*@>15054ca*/ = /*@>1695b2b*/'\x00';
+/*@>1a28501*/Sub_proc_control_185_270.createSubscriber(&/*@>1b05a71*/proc_control_B./*@>1bdfd58*/b_zeroDelimTopic_js/*@>1624828*/[/*@>1695794*/0], /*@>1695c8e*/1);
+/*@>1b20add*/proc_control_DW./*@>1be00e5*/obj_fx./*@>1bdfb99*/isSetupComplete/*@>11920ca*/ = /*@>1695e2c*/true;
+/* {E!d1540}End of Start for MATLABSystem: '<S319>/SourceBlock' */
+/* {E!d1376}End of SystemInitialize for SubSystem: '<S10>/Subscribe5' */
+
+/* {S!d1380}SystemInitialize for Atomic SubSystem: '<S10>/Subscribe4' */
+/* {S!d1542}Start for MATLABSystem: '<S318>/SourceBlock' */
+/*@>1b20ae5*/proc_control_DW./*@>1be00e8*/obj_h./*@>1bdfb9c*/matlabCodegenIsDeleted/*@>1192317*/ = /*@>1695e36*/false;
+/*@>1b20aed*/proc_control_DW./*@>1be00eb*/obj_h./*@>1bdfb9f*/isInitialized/*@>1192325*/ = /*@>1bde5e8*/1;
+/*@>150554d*/for (/*@>1bde98b*/i = /*@>1bde98a*/0; /*@>1bde995*/i < /*@>1bde993*/30; /*@>1bde991*/i/*@>1bde9f3*/++) {
+    /*@>1b05a8f*/proc_control_B./*@>1bdfd5e*/b_zeroDelimTopic_i3/*@>1624839*/[/*@>1873cc2*/i]/*@>1505540*/ = /*@>1ab1ded*/tmp_4/*@>1ab1def*/[/*@>1ab1dec*/i];
+}
+/*@>1b05a87*/proc_control_B./*@>1bdfd5b*/b_zeroDelimTopic_i3/*@>162484a*/[/*@>1695793*/30]/*@>1505566*/ = /*@>1695b19*/'\x00';
+/*@>1a28503*/Sub_proc_control_185_268.createSubscriber(&/*@>1b05a97*/proc_control_B./*@>1bdfd61*/b_zeroDelimTopic_i3/*@>1624851*/[/*@>1695792*/0], /*@>1695c8b*/1);
+/*@>1b20af5*/proc_control_DW./*@>1be00ee*/obj_h./*@>1bdfba2*/isSetupComplete/*@>1192337*/ = /*@>1695e3b*/true;
+/* {E!d1542}End of Start for MATLABSystem: '<S318>/SourceBlock' */
+/* {E!d1380}End of SystemInitialize for SubSystem: '<S10>/Subscribe4' */
+
+/* {S!d1544}Start for MATLABSystem: '<S10>/MATLAB System' */
+/*@>1b20afd*/proc_control_DW./*@>1be00f1*/obj_mv./*@>1bdfafd*/initial_mode/*@>118fb40*/ = /*@>1b1df96*/proc_control_P./*@>1bdfefc*/mode.init;
+/*@>1b20b05*/proc_control_DW./*@>1be00f4*/obj_mv./*@>1bdfb00*/isInitialized/*@>118fb52*/ = /*@>1bde5eb*/1;
+/* {S!d1546}InitializeConditions for MATLABSystem: '<S10>/MATLAB System' */
+/*  Perform one-time calculations, such as computing constants */
+/*  Initialize / reset discrete-state properties */
+/*@>15055a8*/for (/*@>1bde97a*/i = /*@>1bde979*/0; /*@>1bde984*/i < /*@>1bde982*/7; /*@>1bde980*/i/*@>1bde9f4*/++) {
+    /*@>1b20b1b*/proc_control_DW./*@>1be00fd*/obj_mv./*@>1bdfafa*/m_initCond/*@>162485e*/[/*@>1873cd3*/i]/*@>150559b*/ = /*@>1695b0d*/0.0;
+}
+/*@>1b20b0d*/proc_control_DW./*@>1be00f7*/obj_mv./*@>1bdfb03*/m_mode/*@>118fd21*/ = /*@>1b20b13*/proc_control_DW./*@>1be00fa*/obj_mv.initial_mode;
+/*@>1b20b23*/proc_control_DW./*@>1be0100*/obj_mv./*@>1bdfb06*/m_killStatus/*@>118fd26*/ = /*@>1695d83*/0.0;
+/*@>1b20b2b*/proc_control_DW./*@>1be0103*/obj_mv./*@>1bdfb09*/m_simulation/*@>118fd2b*/ = /*@>1695d85*/0.0;
+/*@>1b20b33*/proc_control_DW./*@>1be0106*/obj_mv./*@>1bdfb0c*/m_reset/*@>118fd30*/ = /*@>1695d87*/0.0;
+/*@>1b20b3b*/proc_control_DW./*@>1be0109*/obj_mv./*@>1bdfb0f*/m_trajClear/*@>118fd35*/ = /*@>1695d89*/0.0;
+/*@>1b20b43*/proc_control_DW./*@>1be010c*/obj_mv./*@>1bdfb12*/m_notDryRun/*@>118fd3a*/ = /*@>1695d8b*/1.0;
+/* {E!d1546}End of InitializeConditions for MATLABSystem: '<S10>/MATLAB System' */
+/* {E!d1361}End of SystemInitialize for SubSystem: '<Root>/Subsystem1' */
+
+/* {S!d1383}SystemInitialize for IfAction SubSystem: '<S3>/Simulation' */
+/* {S!d1384}SystemInitialize for Atomic SubSystem: '<S66>/Subscribe' */
+/* {S!d1385}SystemInitialize for Enabled SubSystem: '<S76>/Enabled Subsystem' */
+/* {S!d1548}SystemInitialize for SignalConversion generated from: '<S80>/In1' incorporates:
+ *  Outport: '<S80>/Out1'
+ */
+/*@>1b05ab3*/proc_control_B./*@>1bdfd64*/In1_pd/*@>118f3ef*/ = /*@>1b1dfae*/proc_control_P./*@>1bdfeff*/Out1_Y0_f;
+/* {E!d1385}End of SystemInitialize for SubSystem: '<S76>/Enabled Subsystem' */
+
+/* {S!d1550}Start for MATLABSystem: '<S76>/SourceBlock' incorporates:
+ *  MATLABSystem: '<S101>/SinkBlock'
+ */
+/*@>1b20b4b*/proc_control_DW./*@>1be010f*/obj_i4./*@>1bdfba5*/matlabCodegenIsDeleted/*@>1192584*/ = /*@>1695e45*/false;
+/*@>1b20b53*/proc_control_DW./*@>1be0112*/obj_i4./*@>1bdfba8*/isInitialized/*@>1192592*/ = /*@>1bde5ee*/1;
+/* {S!d1387}SystemInitialize for Enabled SubSystem: '<Root>/ROS Output' */
+/* {S!d1388}SystemInitialize for Atomic SubSystem: '<S91>/Publish imu_info' */
+/*@>1505633*/for (/*@>1bde969*/i = /*@>1bde968*/0; /*@>1bde973*/i < /*@>1bde971*/25; /*@>1bde96f*/i/*@>1bde9f5*/++) {
+    /*@>1b05acf*/proc_control_B./*@>1bdfd6a*/b_zeroDelimTopic_il/*@>1624877*/[/*@>1873cde*/i]/*@>1505626*/ = /*@>1ab1df3*/tmp_5/*@>1ab1df5*/[/*@>1ab1df2*/i];
+}
+/*@>1b05ac7*/proc_control_B./*@>1bdfd67*/b_zeroDelimTopic_il/*@>1624888*/[/*@>1695791*/25]/*@>150564c*/ = /*@>1695afc*/'\x00';
+/* {E!d1388}End of SystemInitialize for SubSystem: '<S91>/Publish imu_info' */
+/* {E!d1387}End of SystemInitialize for SubSystem: '<Root>/ROS Output' */
+/*@>1505699*/for (/*@>1bde958*/i = /*@>1bde957*/0; /*@>1bde962*/i < /*@>1bde960*/26; /*@>1bde95e*/i/*@>1bde9f6*/++) {
+    /*@>1b05ae7*/proc_control_B./*@>1bdfd70*/b_zeroDelimTopic_a0/*@>1624891*/[/*@>1873cef*/i]/*@>150568c*/ = /*@>1b05aed*/proc_control_B./*@>1bdfd73*/b_zeroDelimTopic_il/*@>1ab1dfb*/[/*@>1ab1df8*/i];
+}
+/*@>1a28505*/Sub_proc_control_31_1241.createSubscriber(&/*@>1b05adf*/proc_control_B./*@>1bdfd6d*/b_zeroDelimTopic_a0/*@>16248a0*/[/*@>1695790*/0], /*@>1695c86*/1);
+/*@>1b20b5b*/proc_control_DW./*@>1be0115*/obj_i4./*@>1bdfbab*/isSetupComplete/*@>11925a4*/ = /*@>1695e4a*/true;
+/* {E!d1550}End of Start for MATLABSystem: '<S76>/SourceBlock' */
+/* {E!d1384}End of SystemInitialize for SubSystem: '<S66>/Subscribe' */
+
+/* {S!d1392}SystemInitialize for Atomic SubSystem: '<S66>/Subscribe1' */
+/* {S!d1393}SystemInitialize for Enabled SubSystem: '<S78>/Enabled Subsystem' */
+/* {S!d1552}SystemInitialize for SignalConversion generated from: '<S82>/In1' incorporates:
+ *  Outport: '<S82>/Out1'
+ */
+/*@>1b05af7*/proc_control_B./*@>1bdfd76*/In1_c/*@>118f415*/ = /*@>1b1dfbc*/proc_control_P./*@>1bdff02*/Out1_Y0_ma;
+/* {E!d1393}End of SystemInitialize for SubSystem: '<S78>/Enabled Subsystem' */
+
+/* {S!d1554}Start for MATLABSystem: '<S78>/SourceBlock' incorporates:
+ *  MATLABSystem: '<S96>/SinkBlock'
+ */
+/*@>1b20b63*/proc_control_DW./*@>1be0118*/obj_bg./*@>1bdfbae*/matlabCodegenIsDeleted/*@>11927f1*/ = /*@>1695e54*/false;
+/*@>1b20b6b*/proc_control_DW./*@>1be011b*/obj_bg./*@>1bdfbb1*/isInitialized/*@>11927ff*/ = /*@>1bde5f1*/1;
+/* {S!d1395}SystemInitialize for Enabled SubSystem: '<Root>/ROS Output' */
+/* {S!d1396}SystemInitialize for Atomic SubSystem: '<S89>/Publish' */
+/*@>1505720*/for (/*@>1bde947*/i = /*@>1bde946*/0; /*@>1bde951*/i < /*@>1bde94f*/29; /*@>1bde94d*/i/*@>1bde9f7*/++) {
+    /*@>1b05b13*/proc_control_B./*@>1bdfd7c*/b_zeroDelimTopic_fc/*@>16248b1*/[/*@>1873d00*/i]/*@>1505713*/ = /*@>1ab1dff*/tmp_6/*@>1ab1e01*/[/*@>1ab1dfe*/i];
+}
+/*@>1b05b0b*/proc_control_B./*@>1bdfd79*/b_zeroDelimTopic_fc/*@>16248c2*/[/*@>169578f*/29]/*@>1505739*/ = /*@>1695adb*/'\x00';
+/* {E!d1396}End of SystemInitialize for SubSystem: '<S89>/Publish' */
+/* {E!d1395}End of SystemInitialize for SubSystem: '<Root>/ROS Output' */
+/*@>1505786*/for (/*@>1bde936*/i = /*@>1bde935*/0; /*@>1bde940*/i < /*@>1bde93e*/30; /*@>1bde93c*/i/*@>1bde9f8*/++) {
+    /*@>1b05b2b*/proc_control_B./*@>1bdfd82*/b_zeroDelimTopic_k/*@>16248cb*/[/*@>1873d11*/i]/*@>1505779*/ = /*@>1b05b31*/proc_control_B./*@>1bdfd85*/b_zeroDelimTopic_fc/*@>1ab1e07*/[/*@>1ab1e04*/i];
+}
+/*@>1a28507*/Sub_proc_control_31_1242.createSubscriber(&/*@>1b05b23*/proc_control_B./*@>1bdfd7f*/b_zeroDelimTopic_k/*@>16248da*/[/*@>169578e*/0], /*@>1695c83*/1);
+/*@>1b20b73*/proc_control_DW./*@>1be011e*/obj_bg./*@>1bdfbb4*/isSetupComplete/*@>1192811*/ = /*@>1695e59*/true;
+/* {E!d1554}End of Start for MATLABSystem: '<S78>/SourceBlock' */
+/* {E!d1392}End of SystemInitialize for SubSystem: '<S66>/Subscribe1' */
+
+/* {S!d1400}SystemInitialize for Atomic SubSystem: '<S66>/Subscribe depth' */
+/* {S!d1401}SystemInitialize for Enabled SubSystem: '<S77>/Enabled Subsystem' */
+/* {S!d1556}SystemInitialize for SignalConversion generated from: '<S81>/In1' incorporates:
+ *  Outport: '<S81>/Out1'
+ */
+/*@>1b05b3b*/proc_control_B./*@>1bdfd88*/In1_om/*@>118f43b*/ = /*@>1b1dfca*/proc_control_P./*@>1bdff05*/Out1_Y0_n;
+/* {E!d1401}End of SystemInitialize for SubSystem: '<S77>/Enabled Subsystem' */
+
+/* {S!d1558}Start for MATLABSystem: '<S77>/SourceBlock' incorporates:
+ *  MATLABSystem: '<S98>/SinkBlock'
+ */
+/*@>1b20b7b*/proc_control_DW./*@>1be0121*/obj_df1./*@>1bdfbb7*/matlabCodegenIsDeleted/*@>1192a5e*/ = /*@>1695e63*/false;
+/*@>1b20b83*/proc_control_DW./*@>1be0124*/obj_df1./*@>1bdfbba*/isInitialized/*@>1192a6c*/ = /*@>1bde5f4*/1;
+/* {S!d1403}SystemInitialize for Enabled SubSystem: '<Root>/ROS Output' */
+/* {S!d1404}SystemInitialize for Atomic SubSystem: '<S90>/Publish Depth' */
+/*@>150580d*/for (/*@>1bde925*/i = /*@>1bde924*/0; /*@>1bde92f*/i < /*@>1bde92d*/22; /*@>1bde92b*/i/*@>1bde9f9*/++) {
+    /*@>1b05b57*/proc_control_B./*@>1bdfd8e*/b_zeroDelimTopic_g/*@>16248eb*/[/*@>1873d22*/i]/*@>1505800*/ = /*@>1ab1e0b*/tmp_7/*@>1ab1e0d*/[/*@>1ab1e0a*/i];
+}
+/*@>1b05b4f*/proc_control_B./*@>1bdfd8b*/b_zeroDelimTopic_g/*@>16248fa*/[/*@>169578d*/22]/*@>1505826*/ = /*@>1695aba*/'\x00';
+/* {E!d1404}End of SystemInitialize for SubSystem: '<S90>/Publish Depth' */
+/* {E!d1403}End of SystemInitialize for SubSystem: '<Root>/ROS Output' */
+/*@>1505873*/for (/*@>1bde914*/i = /*@>1bde913*/0; /*@>1bde91e*/i < /*@>1bde91c*/23; /*@>1bde91a*/i/*@>1bde9fa*/++) {
+    /*@>1b05b6f*/proc_control_B./*@>1bdfd94*/b_zeroDelimTopic_d4/*@>1624903*/[/*@>1873d33*/i]/*@>1505866*/ = /*@>1b05b75*/proc_control_B./*@>1bdfd97*/b_zeroDelimTopic_g/*@>1ab1e13*/[/*@>1ab1e10*/i];
+}
+/*@>1a28509*/Sub_proc_control_31_1305.createSubscriber(&/*@>1b05b67*/proc_control_B./*@>1bdfd91*/b_zeroDelimTopic_d4/*@>1624912*/[/*@>169578c*/0], /*@>1695c80*/1);
+/*@>1b20b8b*/proc_control_DW./*@>1be0127*/obj_df1./*@>1bdfbbd*/isSetupComplete/*@>1192a7e*/ = /*@>1695e68*/true;
+/* {E!d1558}End of Start for MATLABSystem: '<S77>/SourceBlock' */
+/* {E!d1400}End of SystemInitialize for SubSystem: '<S66>/Subscribe depth' */
+
+/* {S!d1408}SystemInitialize for Atomic SubSystem: '<S66>/Subscribe2' */
+/* {S!d1560}Start for MATLABSystem: '<S79>/SourceBlock' incorporates:
+ *  MATLABSystem: '<S103>/SinkBlock'
+ */
+/*@>1b20b93*/proc_control_DW./*@>1be012a*/obj_hx./*@>1bdfbc0*/matlabCodegenIsDeleted/*@>1192ccb*/ = /*@>1695e72*/false;
+/*@>1b20b9b*/proc_control_DW./*@>1be012d*/obj_hx./*@>1bdfbc3*/isInitialized/*@>1192cd9*/ = /*@>1bde5f7*/1;
+/* {S!d1409}SystemInitialize for Enabled SubSystem: '<Root>/ROS Output' */
+/* {S!d1410}SystemInitialize for Atomic SubSystem: '<S92>/Publish Ping' */
+/*@>15058f9*/for (/*@>1bde903*/i = /*@>1bde902*/0; /*@>1bde90d*/i < /*@>1bde90b*/21; /*@>1bde909*/i/*@>1bde9fb*/++) {
+    /*@>1b05b93*/proc_control_B./*@>1bdfd9d*/b_zeroDelimTopic_jo/*@>1624921*/[/*@>1873d44*/i]/*@>15058ec*/ = /*@>1ab1e17*/tmp_8/*@>1ab1e19*/[/*@>1ab1e16*/i];
+}
+/*@>1b05b8b*/proc_control_B./*@>1bdfd9a*/b_zeroDelimTopic_jo/*@>1624932*/[/*@>169578b*/21]/*@>1505912*/ = /*@>1695a99*/'\x00';
+/* {E!d1410}End of SystemInitialize for SubSystem: '<S92>/Publish Ping' */
+/* {E!d1409}End of SystemInitialize for SubSystem: '<Root>/ROS Output' */
+/*@>150595f*/for (/*@>1bde8f2*/i = /*@>1bde8f1*/0; /*@>1bde8fc*/i < /*@>1bde8fa*/22; /*@>1bde8f8*/i/*@>1bde9fc*/++) {
+    /*@>1b05bab*/proc_control_B./*@>1bdfda3*/b_zeroDelimTopic_dv/*@>162493b*/[/*@>1873d55*/i]/*@>1505952*/ = /*@>1b05bb1*/proc_control_B./*@>1bdfda6*/b_zeroDelimTopic_jo/*@>1ab1e1f*/[/*@>1ab1e1c*/i];
+}
+/*@>1a2850b*/Sub_proc_control_31_1318.createSubscriber(&/*@>1b05ba3*/proc_control_B./*@>1bdfda0*/b_zeroDelimTopic_dv/*@>162494a*/[/*@>169578a*/0], /*@>1695c7d*/1);
+/*@>1b20ba3*/proc_control_DW./*@>1be0130*/obj_hx./*@>1bdfbc6*/isSetupComplete/*@>1192ceb*/ = /*@>1695e77*/true;
+/* {E!d1560}End of Start for MATLABSystem: '<S79>/SourceBlock' */
+/* {E!d1408}End of SystemInitialize for SubSystem: '<S66>/Subscribe2' */
+/* {E!d1383}End of SystemInitialize for SubSystem: '<S3>/Simulation' */
+
+/* {S!d1415}SystemInitialize for IfAction SubSystem: '<S3>/AUV8' */
+/* {S!d1416}SystemInitialize for Atomic SubSystem: '<S65>/Subscribe' */
+/* {S!d1417}SystemInitialize for Enabled SubSystem: '<S68>/Enabled Subsystem' */
+/* {S!d1562}SystemInitialize for SignalConversion generated from: '<S72>/In1' incorporates:
+ *  Outport: '<S72>/Out1'
+ */
+/*@>1b05bbb*/proc_control_B./*@>1bdfda9*/In1_p/*@>118f487*/ = /*@>1b1dfde*/proc_control_P./*@>1bdff08*/Out1_Y0_l;
+/* {E!d1417}End of SystemInitialize for SubSystem: '<S68>/Enabled Subsystem' */
+
+/* {S!d1564}Start for MATLABSystem: '<S68>/SourceBlock' */
+/*@>1b20bab*/proc_control_DW./*@>1be0133*/obj_l./*@>1bdfbc9*/matlabCodegenIsDeleted/*@>1192f38*/ = /*@>1695e81*/false;
+/*@>1b20bb3*/proc_control_DW./*@>1be0136*/obj_l./*@>1bdfbcc*/isInitialized/*@>1192f46*/ = /*@>1bde5fa*/1;
+/*@>15059e6*/for (/*@>1bde8e1*/i = /*@>1bde8e0*/0; /*@>1bde8eb*/i < /*@>1bde8e9*/22; /*@>1bde8e7*/i/*@>1bde9fd*/++) {
+    /*@>1b05bd7*/proc_control_B./*@>1bdfdaf*/b_zeroDelimTopic_d4/*@>162495b*/[/*@>1873d66*/i]/*@>15059d9*/ = /*@>1ab1e23*/tmp_9/*@>1ab1e25*/[/*@>1ab1e22*/i];
+}
+/*@>1b05bcf*/proc_control_B./*@>1bdfdac*/b_zeroDelimTopic_d4/*@>162496a*/[/*@>1695789*/22]/*@>15059ff*/ = /*@>1695a78*/'\x00';
+/*@>1a2850d*/Sub_proc_control_31_5.createSubscriber(&/*@>1b05bdf*/proc_control_B./*@>1bdfdb2*/b_zeroDelimTopic_d4/*@>1624971*/[/*@>1695788*/0], /*@>1695c7a*/1);
+/*@>1b20bbb*/proc_control_DW./*@>1be0139*/obj_l./*@>1bdfbcf*/isSetupComplete/*@>1192f58*/ = /*@>1695e86*/true;
+/* {E!d1564}End of Start for MATLABSystem: '<S68>/SourceBlock' */
+/* {E!d1416}End of SystemInitialize for SubSystem: '<S65>/Subscribe' */
+
+/* {S!d1420}SystemInitialize for Atomic SubSystem: '<S65>/Subscribe1' */
+/* {S!d1421}SystemInitialize for Enabled SubSystem: '<S69>/Enabled Subsystem' */
+/* {S!d1566}SystemInitialize for SignalConversion generated from: '<S73>/In1' incorporates:
+ *  Outport: '<S73>/Out1'
+ */
+/*@>1b05be9*/proc_control_B./*@>1bdfdb5*/In1_i/*@>118f4ad*/ = /*@>1b1dfec*/proc_control_P./*@>1bdff0b*/Out1_Y0_p;
+/* {E!d1421}End of SystemInitialize for SubSystem: '<S69>/Enabled Subsystem' */
+
+/* {S!d1568}Start for MATLABSystem: '<S69>/SourceBlock' */
+/*@>1b20bc3*/proc_control_DW./*@>1be013c*/obj_dh./*@>1bdfbd2*/matlabCodegenIsDeleted/*@>11931a5*/ = /*@>1695e90*/false;
+/*@>1b20bcb*/proc_control_DW./*@>1be013f*/obj_dh./*@>1bdfbd5*/isInitialized/*@>11931b3*/ = /*@>1bde5fd*/1;
+/*@>1505a83*/for (/*@>1bde8d0*/i = /*@>1bde8cf*/0; /*@>1bde8da*/i < /*@>1bde8d8*/26; /*@>1bde8d6*/i/*@>1bde9fe*/++) {
+    /*@>1b05c05*/proc_control_B./*@>1bdfdbb*/b_zeroDelimTopic_e/*@>1624984*/[/*@>1873d77*/i]/*@>1505a76*/ = /*@>1ab1e29*/tmp_a/*@>1ab1e2b*/[/*@>1ab1e28*/i];
+}
+/*@>1b05bfd*/proc_control_B./*@>1bdfdb8*/b_zeroDelimTopic_e/*@>1624993*/[/*@>1695787*/26]/*@>1505a9c*/ = /*@>1695a66*/'\x00';
+/*@>1a2850f*/Sub_proc_control_31_1235.createSubscriber(&/*@>1b05c0d*/proc_control_B./*@>1bdfdbe*/b_zeroDelimTopic_e/*@>162499a*/[/*@>1695786*/0], /*@>1695c77*/1);
+/*@>1b20bd3*/proc_control_DW./*@>1be0142*/obj_dh./*@>1bdfbd8*/isSetupComplete/*@>11931c5*/ = /*@>1695e95*/true;
+/* {E!d1568}End of Start for MATLABSystem: '<S69>/SourceBlock' */
+/* {E!d1420}End of SystemInitialize for SubSystem: '<S65>/Subscribe1' */
+
+/* {S!d1424}SystemInitialize for Atomic SubSystem: '<S65>/Subscribe2' */
+/* {S!d1425}SystemInitialize for Enabled SubSystem: '<S70>/Enabled Subsystem' */
+/* {S!d1570}SystemInitialize for SignalConversion generated from: '<S74>/In1' incorporates:
+ *  Outport: '<S74>/Out1'
+ */
+/*@>1b05c17*/proc_control_B./*@>1bdfdc1*/In1_e/*@>118f4d3*/ = /*@>1b1dffa*/proc_control_P./*@>1bdff0e*/Out1_Y0_nb;
+/* {E!d1425}End of SystemInitialize for SubSystem: '<S70>/Enabled Subsystem' */
+
+/* {S!d1572}Start for MATLABSystem: '<S70>/SourceBlock' */
+/*@>1b20bdb*/proc_control_DW./*@>1be0145*/obj_ow./*@>1bdfbdb*/matlabCodegenIsDeleted/*@>1193412*/ = /*@>1695e9f*/false;
+/*@>1b20be3*/proc_control_DW./*@>1be0148*/obj_ow./*@>1bdfbde*/isInitialized/*@>1193420*/ = /*@>1bde600*/1;
+/*@>1505b20*/for (/*@>1bde8bf*/i = /*@>1bde8be*/0; /*@>1bde8c9*/i < /*@>1bde8c7*/32; /*@>1bde8c5*/i/*@>1bde9ff*/++) {
+    /*@>1b05c33*/proc_control_B./*@>1bdfdc7*/b_zeroDelimTopic_fq/*@>16249ab*/[/*@>1873d88*/i]/*@>1505b13*/ = /*@>1ab1e2f*/tmp_b/*@>1ab1e31*/[/*@>1ab1e2e*/i];
+}
+/*@>1b05c2b*/proc_control_B./*@>1bdfdc4*/b_zeroDelimTopic_fq/*@>16249bc*/[/*@>1695785*/32]/*@>1505b39*/ = /*@>1695a54*/'\x00';
+/*@>1a28511*/Sub_proc_control_31_1302.createSubscriber(&/*@>1b05c3b*/proc_control_B./*@>1bdfdca*/b_zeroDelimTopic_fq/*@>16249c3*/[/*@>1695784*/0], /*@>1695c74*/1);
+/*@>1b20beb*/proc_control_DW./*@>1be014b*/obj_ow./*@>1bdfbe1*/isSetupComplete/*@>1193432*/ = /*@>1695ea4*/true;
+/* {E!d1572}End of Start for MATLABSystem: '<S70>/SourceBlock' */
+/* {E!d1424}End of SystemInitialize for SubSystem: '<S65>/Subscribe2' */
+
+/* {S!d1428}SystemInitialize for Atomic SubSystem: '<S65>/Subscribe3' */
+/* {S!d1574}Start for MATLABSystem: '<S71>/SourceBlock' */
+/*@>1b20bf3*/proc_control_DW./*@>1be014e*/obj_p0./*@>1bdfbe4*/matlabCodegenIsDeleted/*@>119367f*/ = /*@>1695eae*/false;
+/*@>1b20bfb*/proc_control_DW./*@>1be0151*/obj_p0./*@>1bdfbe7*/isInitialized/*@>119368d*/ = /*@>1bde603*/1;
+/*@>1505bbc*/for (/*@>1bde8ae*/i = /*@>1bde8ad*/0; /*@>1bde8b8*/i < /*@>1bde8b6*/16; /*@>1bde8b4*/i/*@>1bdea00*/++) {
+    /*@>1b05c59*/proc_control_B./*@>1bdfdd0*/b_zeroDelimTopic_h/*@>16249d4*/[/*@>1873d99*/i]/*@>1505baf*/ = /*@>1ab1e35*/tmp_c/*@>1ab1e37*/[/*@>1ab1e34*/i];
+}
+/*@>1b05c51*/proc_control_B./*@>1bdfdcd*/b_zeroDelimTopic_h/*@>16249e5*/[/*@>1695783*/16]/*@>1505bd5*/ = /*@>1695a42*/'\x00';
+/*@>1a28513*/Sub_proc_control_31_1321.createSubscriber(&/*@>1b05c61*/proc_control_B./*@>1bdfdd3*/b_zeroDelimTopic_h/*@>16249ec*/[/*@>1695782*/0], /*@>1695c71*/1);
+/*@>1b20c03*/proc_control_DW./*@>1be0154*/obj_p0./*@>1bdfbea*/isSetupComplete/*@>119369f*/ = /*@>1695eb3*/true;
+/* {E!d1574}End of Start for MATLABSystem: '<S71>/SourceBlock' */
+/* {E!d1428}End of SystemInitialize for SubSystem: '<S65>/Subscribe3' */
+/* {E!d1415}End of SystemInitialize for SubSystem: '<S3>/AUV8' */
+
+/* {S!d1431}SystemInitialize for Atomic SubSystem: '<S8>/AHRS//Detph Mesurments' */
+/* {S!d1576}InitializeConditions for UnitDelay: '<S243>/UD'
+ *
+ * Block description for '<S243>/UD':
+ *  
+ *  Store in Global RAM
+ */
+/*@>1b20c0b*/proc_control_DW./*@>1be0157*/UD_DSTATE/*@>118ede5*/ = /*@>1b1e00e*/proc_control_P./*@>1bdff11*/DiscreteDerivative_ICPrevScal_m;
+/* {E!d1431}End of SystemInitialize for SubSystem: '<S8>/AHRS//Detph Mesurments' */
+
+/* {S!d1433}SystemInitialize for Enabled SubSystem: '<S8>/DVL Mesurments' */
+/* {S!d1578}InitializeConditions for Delay: '<S269>/Delay' */
+/*@>1b20c13*/proc_control_DW./*@>1be015a*/Delay_DSTATE_i/*@>118edf3*/ = /*@>1b1e016*/proc_control_P./*@>1bdff14*/Delay_InitialCondition_l;
+/* {S!d1434}SystemInitialize for Enabled SubSystem: '<S269>/Subsystem2' */
+/* {S!d1580}SystemInitialize for Fcn: '<S273>/q0' incorporates:
+ *  Outport: '<S272>/Quat'
+ */
+/*@>1b05c6f*/proc_control_B./*@>1bdfdd6*/q0/*@>118edff*/ = /*@>1b1e01e*/proc_control_P./*@>1bdff17*/Quat_Y0;
+/* {S!d1582}SystemInitialize for Fcn: '<S273>/q1' incorporates:
+ *  Outport: '<S272>/Quat'
+ */
+/*@>1b05c77*/proc_control_B./*@>1bdfdd9*/q1/*@>118ee01*/ = /*@>1b1e026*/proc_control_P./*@>1bdff1a*/Quat_Y0;
+/* {S!d1584}SystemInitialize for Fcn: '<S273>/q2' incorporates:
+ *  Outport: '<S272>/Quat'
+ */
+/*@>1b05c7f*/proc_control_B./*@>1bdfddc*/q2/*@>118ee03*/ = /*@>1b1e02e*/proc_control_P./*@>1bdff1d*/Quat_Y0;
+/* {S!d1586}SystemInitialize for Fcn: '<S273>/q3' incorporates:
+ *  Outport: '<S272>/Quat'
+ */
+/*@>1b05c87*/proc_control_B./*@>1bdfddf*/q3/*@>118ee05*/ = /*@>1b1e036*/proc_control_P./*@>1bdff20*/Quat_Y0;
+/* {E!d1434}End of SystemInitialize for SubSystem: '<S269>/Subsystem2' */
+
+/* {S!d1588}SystemInitialize for Outport: '<S237>/enable' */
+/*@>1b05c8f*/proc_control_B./*@>1bdfde2*/enable/*@>118ea21*/ = /*@>1b1e03e*/proc_control_P./*@>1bdff23*/enable_Y0;
+/* {S!d1590}SystemInitialize for Sum: '<S275>/Sum' incorporates:
+ *  Outport: '<S237>/Body Velocity'
+ */
+/*@>1b05c97*/proc_control_B./*@>1bdfde5*/Sum/*@>118ea23*/ = /*@>1b1e046*/proc_control_P./*@>1bdff26*/BodyVelocity_Y0;
+/* {S!d1592}SystemInitialize for Sum: '<S276>/Sum' incorporates:
+ *  Outport: '<S237>/Body Velocity'
+ */
+/*@>1b05c9f*/proc_control_B./*@>1bdfde8*/Sum_o/*@>118ea25*/ = /*@>1b1e04e*/proc_control_P./*@>1bdff29*/BodyVelocity_Y0;
+/* {S!d1594}SystemInitialize for Sum: '<S277>/Sum' incorporates:
+ *  Outport: '<S237>/Body Velocity'
+ */
+/*@>1b05ca7*/proc_control_B./*@>1bdfdeb*/Sum_c/*@>118ea27*/ = /*@>1b1e056*/proc_control_P./*@>1bdff2c*/BodyVelocity_Y0;
+/* {E!d1433}End of SystemInitialize for SubSystem: '<S8>/DVL Mesurments' */
+
+/* {S!d1437}SystemInitialize for Enabled SubSystem: '<S3>/Subsystem' */
+/* {S!d1596}InitializeConditions for Memory: '<S87>/Memory' */
+/*@>1b20c1b*/proc_control_DW./*@>1be015d*/Memory_PreviousInput_i/*@>118ea41*/ = /*@>1b1e05e*/proc_control_P./*@>1bdff2f*/MinMaxRunningResettable_vinit;
+/* {S!d1598}InitializeConditions for Memory: '<S88>/Memory' */
+/*@>1b20c23*/proc_control_DW./*@>1be0160*/Memory_PreviousInput_f/*@>118ea43*/ = /*@>1b1e066*/proc_control_P./*@>1bdff32*/MinMaxRunningResettable1_vinit;
+/* {S!d1600}SystemInitialize for Outport: '<S67>/y' */
+/*@>1b05cb3*/proc_control_B./*@>1bdfdee*/y/*@>118ea54*/ = /*@>1b1e06e*/proc_control_P./*@>1bdff35*/y_Y0;
+/* {E!d1437}End of SystemInitialize for SubSystem: '<S3>/Subsystem' */
+
+/* {S!d1439}SystemInitialize for Enabled SubSystem: '<S8>/Subsystem' */
+/* {S!d1602}Start for DataStoreMemory: '<S283>/DataStoreMemory - P' */
+/*@>1a41c57*/std::memcpy(&/*@>1b20c33*/proc_control_DW./*@>1be0163*/P/*@>19dfba5*/[/*@>19dfb94*/0], &/*@>1b1e078*/proc_control_P./*@>1bdff38*/DataStoreMemoryP_InitialValue/*@>19dfbad*/[/*@>19dfba1*/0], /*@>19dfba3*/169U/*@>19dfbb0*/ * /*@>19dfbaf*/sizeof(real_T));
+/*@>145a053*/for (/*@>1bde89d*/i = /*@>1bde89c*/0; /*@>1bde8a7*/i < /*@>1bde8a5*/13; /*@>1bde8a3*/i/*@>1bdea01*/++) {
+    /* {S!d1604}Start for DataStoreMemory: '<S283>/DataStoreMemory - x' */
+    /*@>1b20c4b*/proc_control_DW./*@>1be0169*/x/*@>1505c4e*/[/*@>1873dbd*/i]/*@>145a045*/ = /*@>1b1e084*/proc_control_P./*@>1bdff3b*/DataStoreMemoryx_InitialValue/*@>1ab1e3d*/[/*@>1ab1e3a*/i];
+    /* {S!d1606}SystemInitialize for DataStoreRead: '<S286>/Data Store Read' incorporates:
+ *  DataStoreMemory: '<S283>/DataStoreMemory - x'
+ *  Outport: '<S240>/xhat'
+ */
+    /*@>1b05ccf*/proc_control_B./*@>1bdfdf1*/DataStoreRead/*@>145a062*/[/*@>1873dc9*/i]/*@>145a061*/ = /*@>1b1e08e*/proc_control_P./*@>1bdff3e*/xhat_Y0;
+}
+/* {E!d1439}End of SystemInitialize for SubSystem: '<S8>/Subsystem' */
+
+/* {S!d1441}SystemInitialize for Enabled SubSystem: '<Root>/Sensor Manager' */
+/* {S!d1442}SystemInitialize for Atomic SubSystem: '<S115>/Publish' */
+/* {S!d1608}Start for MATLABSystem: '<S121>/SinkBlock' */
+/*@>1b20c43*/proc_control_DW./*@>1be0166*/obj_ag./*@>1bdfbed*/matlabCodegenIsDeleted/*@>11938ec*/ = /*@>1695ebd*/false;
+/*@>1b20c53*/proc_control_DW./*@>1be016c*/obj_ag./*@>1bdfbf0*/isInitialized/*@>11938fa*/ = /*@>1bde606*/1;
+/*@>1505cd8*/for (/*@>1bde88c*/i = /*@>1bde88b*/0; /*@>1bde896*/i < /*@>1bde894*/22; /*@>1bde892*/i/*@>1bdea02*/++) {
+    /*@>1b05ce7*/proc_control_B./*@>1bdfdf7*/b_zeroDelimTopic_d4/*@>1624a22*/[/*@>1873dd4*/i]/*@>1505ccb*/ = /*@>1ab1e41*/tmp_d/*@>1ab1e43*/[/*@>1ab1e40*/i];
+}
+/*@>1b05cdf*/proc_control_B./*@>1bdfdf4*/b_zeroDelimTopic_d4/*@>1624a31*/[/*@>1695781*/22]/*@>1505cf1*/ = /*@>1695a20*/'\x00';
+/*@>1a28517*/Pub_proc_control_163.createPublisher(&/*@>1b05cef*/proc_control_B./*@>1bdfdfa*/b_zeroDelimTopic_d4/*@>1624a38*/[/*@>1695780*/0], /*@>1695c6e*/1);
+/*@>1b20c5b*/proc_control_DW./*@>1be016f*/obj_ag./*@>1bdfbf3*/isSetupComplete/*@>119390c*/ = /*@>1695ec2*/true;
+/* {E!d1608}End of Start for MATLABSystem: '<S121>/SinkBlock' */
+/* {E!d1442}End of SystemInitialize for SubSystem: '<S115>/Publish' */
+
+/* {S!d1444}SystemInitialize for Atomic SubSystem: '<S114>/Publish' */
+/* {S!d1610}Start for MATLABSystem: '<S117>/SinkBlock' */
+/*@>1b20c63*/proc_control_DW./*@>1be0172*/obj_e./*@>1bdfbf6*/matlabCodegenIsDeleted/*@>1193b59*/ = /*@>1695ecc*/false;
+/*@>1b20c6b*/proc_control_DW./*@>1be0175*/obj_e./*@>1bdfbf9*/isInitialized/*@>1193b67*/ = /*@>1bde609*/1;
+/*@>1505d74*/for (/*@>1bde87b*/i = /*@>1bde87a*/0; /*@>1bde885*/i < /*@>1bde883*/22; /*@>1bde881*/i/*@>1bdea03*/++) {
+    /*@>1b05d0d*/proc_control_B./*@>1bdfe00*/b_zeroDelimTopic_d4/*@>1624a47*/[/*@>1873de5*/i]/*@>1505d67*/ = /*@>1ab1e47*/tmp_e/*@>1ab1e49*/[/*@>1ab1e46*/i];
+}
+/*@>1b05d05*/proc_control_B./*@>1bdfdfd*/b_zeroDelimTopic_d4/*@>1624a56*/[/*@>169577f*/22]/*@>1505d8d*/ = /*@>1695a0e*/'\x00';
+/*@>1a28519*/Pub_proc_control_116.createPublisher(&/*@>1b05d15*/proc_control_B./*@>1bdfe03*/b_zeroDelimTopic_d4/*@>1624a5d*/[/*@>169577e*/0], /*@>1695c6b*/1);
+/*@>1b20c73*/proc_control_DW./*@>1be0178*/obj_e./*@>1bdfbfc*/isSetupComplete/*@>1193b79*/ = /*@>1695ed1*/true;
+/* {E!d1610}End of Start for MATLABSystem: '<S117>/SinkBlock' */
+/* {E!d1444}End of SystemInitialize for SubSystem: '<S114>/Publish' */
+
+/* {S!d1612}SystemInitialize for SignalConversion generated from: '<S6>/Output' incorporates:
+ *  Outport: '<S6>/Output'
+ */
+/*@>1b05d1f*/proc_control_B./*@>1bdfe06*/WorldPosition/*@>163bc9c*/[/*@>16955de*/0]/*@>163bc9b*/ = /*@>1b1e09e*/proc_control_P./*@>1bdff41*/Output_Y0./*@>1bdfcc2*/WorldPosition/*@>1ab1e52*/[/*@>1ab1e4b*/0];
+/*@>1b05d27*/proc_control_B./*@>1bdfe09*/WorldPosition/*@>163bcac*/[/*@>16955d7*/1]/*@>163bcab*/ = /*@>1b1e0a6*/proc_control_P./*@>1bdff44*/Output_Y0./*@>1bdfcc5*/WorldPosition/*@>1ab1e5b*/[/*@>1ab1e54*/1];
+/*@>1b05d2f*/proc_control_B./*@>1bdfe0c*/WorldPosition/*@>163bcbc*/[/*@>16955d0*/2]/*@>163bcbb*/ = /*@>1b1e0ae*/proc_control_P./*@>1bdff47*/Output_Y0./*@>1bdfcc8*/WorldPosition/*@>1ab1e64*/[/*@>1ab1e5d*/2];
+/* {S!d1614}SystemInitialize for SignalConversion generated from: '<S6>/Output' incorporates:
+ *  Outport: '<S6>/Output'
+ */
+/*@>1b05d37*/proc_control_B./*@>1bdfe0f*/qS2W/*@>163bc54*/[/*@>16955fd*/0]/*@>163bc53*/ = /*@>1b1e0b6*/proc_control_P./*@>1bdff4a*/Output_Y0./*@>1bdfccb*/qS2W/*@>1ab1e6d*/[/*@>1ab1e66*/0];
+/*@>1b05d3f*/proc_control_B./*@>1bdfe12*/qS2W/*@>163bc64*/[/*@>16955f6*/1]/*@>163bc63*/ = /*@>1b1e0be*/proc_control_P./*@>1bdff4d*/Output_Y0./*@>1bdfcce*/qS2W/*@>1ab1e76*/[/*@>1ab1e6f*/1];
+/*@>1b05d47*/proc_control_B./*@>1bdfe15*/qS2W/*@>163bc74*/[/*@>16955ef*/2]/*@>163bc73*/ = /*@>1b1e0c6*/proc_control_P./*@>1bdff50*/Output_Y0./*@>1bdfcd1*/qS2W/*@>1ab1e7f*/[/*@>1ab1e78*/2];
+/*@>1b05d4f*/proc_control_B./*@>1bdfe18*/qS2W/*@>163bc84*/[/*@>16955e8*/3]/*@>163bc83*/ = /*@>1b1e0ce*/proc_control_P./*@>1bdff53*/Output_Y0./*@>1bdfcd4*/qS2W/*@>1ab1e88*/[/*@>1ab1e81*/3];
+/* {E!d1441}End of SystemInitialize for SubSystem: '<Root>/Sensor Manager' */
+
+/* {S!d1447}SystemInitialize for Atomic SubSystem: '<S293>/Subscribe2' */
+/* {S!d1448}SystemInitialize for Enabled SubSystem: '<S299>/Enabled Subsystem' */
+/* {S!d1616}SystemInitialize for SignalConversion generated from: '<S300>/In1' incorporates:
+ *  Outport: '<S300>/Out1'
+ */
+/*@>1b05d57*/proc_control_B./*@>1bdfe1b*/In1_od/*@>118ee56*/ = /*@>1b1e0d6*/proc_control_P./*@>1bdff56*/Out1_Y0_pb;
+/* {E!d1448}End of SystemInitialize for SubSystem: '<S299>/Enabled Subsystem' */
+
+/* {S!d1618}Start for MATLABSystem: '<S299>/SourceBlock' */
+/*@>1b20c7b*/proc_control_DW./*@>1be017b*/obj_cs./*@>1bdfb15*/matlabCodegenIsDeleted/*@>118ff69*/ = /*@>1695d91*/false;
+/*@>1b20c83*/proc_control_DW./*@>1be017e*/obj_cs./*@>1bdfb18*/isInitialized/*@>118ff77*/ = /*@>1bde60c*/1;
+/*@>1505e7f*/for (/*@>1bde86a*/i = /*@>1bde869*/0; /*@>1bde874*/i < /*@>1bde872*/15; /*@>1bde870*/i/*@>1bdea04*/++) {
+    /*@>1b05d73*/proc_control_B./*@>1bdfe21*/b_zeroDelimTopic_cf/*@>1624a86*/[/*@>1873df6*/i]/*@>1505e72*/ = /*@>1ab1e8c*/tmp_f/*@>1ab1e8e*/[/*@>1ab1e8b*/i];
+}
+/*@>1b05d6b*/proc_control_B./*@>1bdfe1e*/b_zeroDelimTopic_cf/*@>1624a97*/[/*@>169577d*/15]/*@>1505e98*/ = /*@>16959fc*/'\x00';
+/*@>1a2851b*/Sub_proc_control_184_1122.createSubscriber(&/*@>1b05d7b*/proc_control_B./*@>1bdfe24*/b_zeroDelimTopic_cf/*@>1624a9e*/[/*@>169577c*/0], /*@>1695c68*/2);
+/*@>1b20c8b*/proc_control_DW./*@>1be0181*/obj_cs./*@>1bdfb1b*/isSetupComplete/*@>118ff89*/ = /*@>1695d96*/true;
+/* {E!d1618}End of Start for MATLABSystem: '<S299>/SourceBlock' */
+/* {E!d1447}End of SystemInitialize for SubSystem: '<S293>/Subscribe2' */
+
+/* {S!d1451}SystemInitialize for Atomic SubSystem: '<S294>/Subscribe' */
+/* {S!d1452}SystemInitialize for Enabled SubSystem: '<S301>/Enabled Subsystem' */
+/* {S!d1620}SystemInitialize for SignalConversion generated from: '<S302>/In1' incorporates:
+ *  Outport: '<S302>/Out1'
+ */
+/*@>1b05d85*/proc_control_B./*@>1bdfe27*/In1/*@>118ee7c*/ = /*@>1b1e0e4*/proc_control_P./*@>1bdff59*/Out1_Y0;
+/* {E!d1452}End of SystemInitialize for SubSystem: '<S301>/Enabled Subsystem' */
+
+/* {S!d1622}Start for MATLABSystem: '<S301>/SourceBlock' */
+/*@>1b20c93*/proc_control_DW./*@>1be0184*/obj_df./*@>1bdfb1e*/matlabCodegenIsDeleted/*@>11901d6*/ = /*@>1695da0*/false;
+/*@>1b20c9b*/proc_control_DW./*@>1be0187*/obj_df./*@>1bdfb21*/isInitialized/*@>11901e4*/ = /*@>1bde60f*/1;
+/*@>1505f1c*/for (/*@>1bde859*/i = /*@>1bde858*/0; /*@>1bde863*/i < /*@>1bde861*/34; /*@>1bde85f*/i/*@>1bdea05*/++) {
+    /*@>1b05da1*/proc_control_B./*@>1bdfe2d*/b_zeroDelimTopic_f/*@>1624ab1*/[/*@>1873e07*/i]/*@>1505f0f*/ = /*@>1ab1e92*/tmp_g/*@>1ab1e94*/[/*@>1ab1e91*/i];
+}
+/*@>1b05d99*/proc_control_B./*@>1bdfe2a*/b_zeroDelimTopic_f/*@>1624ac0*/[/*@>169577b*/34]/*@>1505f35*/ = /*@>16959ea*/'\x00';
+/*@>1a2851d*/Sub_proc_control_184_1581.createSubscriber(&/*@>1b05da9*/proc_control_B./*@>1bdfe30*/b_zeroDelimTopic_f/*@>1624ac7*/[/*@>169577a*/0], /*@>1695c65*/1);
+/*@>1b20ca3*/proc_control_DW./*@>1be018a*/obj_df./*@>1bdfb24*/isSetupComplete/*@>11901f6*/ = /*@>1695da5*/true;
+/* {E!d1622}End of Start for MATLABSystem: '<S301>/SourceBlock' */
+/* {E!d1451}End of SystemInitialize for SubSystem: '<S294>/Subscribe' */
+
+/* {S!d1455}SystemInitialize for IfAction SubSystem: '<S9>/SubsystemAuto' */
+/* {S!d1624}InitializeConditions for UnitDelay: '<S304>/Delay Input1'
+ *
+ * Block description for '<S304>/Delay Input1':
+ *  
+ *  Store in Global RAM
+ */
+/*@>1b20cab*/proc_control_DW./*@>1be018d*/DelayInput1_DSTATE/*@>118eea4*/ = /*@>1b1e0f2*/proc_control_P./*@>1bdff5c*/DetectRisePositive_vinit;
+/* {S!d1456}SystemInitialize for Atomic SubSystem: '<S295>/Publish5' */
+/* {S!d1626}Start for MATLABSystem: '<S306>/SinkBlock' */
+/*@>1b20cb3*/proc_control_DW./*@>1be0190*/obj_i./*@>1bdfbff*/matlabCodegenIsDeleted/*@>1193dc6*/ = /*@>1695edb*/false;
+/*@>1b20cbb*/proc_control_DW./*@>1be0193*/obj_i./*@>1bdfc02*/isInitialized/*@>1193dd4*/ = /*@>1bde612*/1;
+/*@>1505fb9*/for (/*@>1bde848*/i = /*@>1bde847*/0; /*@>1bde852*/i < /*@>1bde850*/26; /*@>1bde84e*/i/*@>1bdea06*/++) {
+    /*@>1b05dc9*/proc_control_B./*@>1bdfe36*/b_zeroDelimTopic_e/*@>1624ad8*/[/*@>1873e18*/i]/*@>1505fac*/ = /*@>1ab1e98*/tmp_h/*@>1ab1e9a*/[/*@>1ab1e97*/i];
+}
+/*@>1b05dc1*/proc_control_B./*@>1bdfe33*/b_zeroDelimTopic_e/*@>1624ae7*/[/*@>1695779*/26]/*@>1505fd2*/ = /*@>16959d8*/'\x00';
+/*@>1a2851f*/Pub_proc_control_184_1596.createPublisher(&/*@>1b05dd1*/proc_control_B./*@>1bdfe39*/b_zeroDelimTopic_e/*@>1624aee*/[/*@>1695778*/0], /*@>1695c62*/1);
+/*@>1b20cc3*/proc_control_DW./*@>1be0196*/obj_i./*@>1bdfc05*/isSetupComplete/*@>1193de6*/ = /*@>1695ee0*/true;
+/* {E!d1626}End of Start for MATLABSystem: '<S306>/SinkBlock' */
+/* {E!d1456}End of SystemInitialize for SubSystem: '<S295>/Publish5' */
+
+/* {S!d1628}Start for MATLABSystem: '<S295>/MATLAB System' */
+/*@>1b20ccb*/proc_control_DW./*@>1be0199*/obj_o./*@>1bdfb27*/isInitialized/*@>119045c*/ = /*@>1bde615*/1;
+/* {S!d1630}InitializeConditions for MATLABSystem: '<S295>/MATLAB System' */
+/*  Perform one-time calculations, such as computing constants */
+/*@>1b20cd3*/proc_control_DW./*@>1be019c*/obj_o./*@>1bdfb2a*/dummy/*@>1190591*/ = /*@>1695daf*/999.0;
+/*  Chiffre NULL */
+/*@>1506017*/for (/*@>1bde837*/i = /*@>1bde836*/0; /*@>1bde841*/i < /*@>1bde83f*/13; /*@>1bde83d*/i/*@>1bdea07*/++) {
+    /*@>1b20cdb*/proc_control_DW./*@>1be019f*/obj_o./*@>1bdfaf7*/emptyArray/*@>1624afa*/[/*@>1873e29*/i]/*@>150600a*/ = /*@>1b20ce1*/proc_control_DW./*@>1be01a2*/obj_o.dummy;
+}
+/*  Vecteur pose NULL */
+/*@>1b20ce9*/proc_control_DW./*@>1be01a5*/obj_o./*@>1bdfb2d*/targetReachedCount/*@>119059e*/ = /*@>1695db1*/0.0;
+/*@>1506058*/for (/*@>1bde826*/i = /*@>1bde825*/0; /*@>1bde830*/i < /*@>1bde82e*/7; /*@>1bde82c*/i/*@>1bdea08*/++) {
+    /*@>1b20cf1*/proc_control_DW./*@>1be01a8*/obj_o./*@>1bdfaf4*/initialPose/*@>1624b04*/[/*@>1873e34*/i]/*@>150604b*/ = /*@>16959bf*/0.0;
+}
+/*  Buffer trajectoire */
+/*@>1506099*/for (/*@>1bde815*/i = /*@>1bde814*/0; /*@>1bde81f*/i < /*@>1bde81d*/78000; /*@>1bde81b*/i/*@>1bdea09*/++) {
+    /*@>1b20d01*/proc_control_DW./*@>1be01ae*/obj_o./*@>1bdfaf1*/poseBuffer/*@>150608b*/[/*@>1873e3f*/i]/*@>150608c*/ = /*@>1b20d07*/proc_control_DW./*@>1be01b1*/obj_o.dummy;
+}
+/*@>1b20cf9*/proc_control_DW./*@>1be01ab*/obj_o./*@>1bdfb30*/bufferCount/*@>11905af*/ = /*@>1695db3*/0.0;
+/*@>1b20d0f*/proc_control_DW./*@>1be01b4*/obj_o./*@>1bdfb33*/done/*@>11905b3*/ = /*@>1695db6*/false;
+/*@>1b20d17*/proc_control_DW./*@>1be01b7*/obj_o./*@>1bdfb36*/init/*@>11905b7*/ = /*@>1695db7*/false;
+/* {E!d1630}End of InitializeConditions for MATLABSystem: '<S295>/MATLAB System' */
+
+/* {S!d1632}SystemInitialize for SignalConversion generated from: '<S295>/MATLAB System' incorporates:
+ *  Outport: '<S295>/isTrajDone'
+ */
+/*@>1b05ded*/proc_control_B./*@>1bdfe3c*/TmpMLSysMemLayoutBufferAtMATLAB/*@>118eaec*/ = /*@>1b1e112*/proc_control_P./*@>1bdff5f*/isTrajDone_Y0;
+/* {E!d1455}End of SystemInitialize for SubSystem: '<S9>/SubsystemAuto' */
+
+/* {S!d1459}SystemInitialize for IfAction SubSystem: '<S9>/singleWpts Trajectory' */
+/* {S!d1634}InitializeConditions for Delay: '<S297>/Delay1' */
+/*@>1b20d1f*/proc_control_DW./*@>1be01ba*/Delay1_DSTATE_c/*@>118eed9*/ = /*@>1b1e11a*/proc_control_P./*@>1bdff62*/Delay1_InitialCondition_k;
+/* {S!d1460}SystemInitialize for Atomic SubSystem: '<S297>/Subscribe' */
+/* {S!d1636}Start for MATLABSystem: '<S310>/SourceBlock' */
+/*@>1b20d27*/proc_control_DW./*@>1be01bd*/obj_hd./*@>1bdfc08*/matlabCodegenIsDeleted/*@>1194033*/ = /*@>1695eea*/false;
+/*@>1b20d2f*/proc_control_DW./*@>1be01c0*/obj_hd./*@>1bdfc0b*/isInitialized/*@>1194041*/ = /*@>1bde618*/1;
+/*@>1506123*/for (/*@>1bde804*/i = /*@>1bde803*/0; /*@>1bde80e*/i < /*@>1bde80c*/21; /*@>1bde80a*/i/*@>1bdea0a*/++) {
+    /*@>1b05e0b*/proc_control_B./*@>1bdfe42*/b_zeroDelimTopic_dv/*@>1624b22*/[/*@>1873e4a*/i]/*@>1506116*/ = /*@>1ab1e9e*/tmp_i/*@>1ab1ea0*/[/*@>1ab1e9d*/i];
+}
+/*@>1b05e03*/proc_control_B./*@>1bdfe3f*/b_zeroDelimTopic_dv/*@>1624b31*/[/*@>1695777*/21]/*@>150613c*/ = /*@>16959a1*/'\x00';
+/*@>1a28521*/Sub_proc_control_184_1168.createSubscriber(&/*@>1b05e13*/proc_control_B./*@>1bdfe45*/b_zeroDelimTopic_dv/*@>1624b38*/[/*@>1695776*/0], /*@>1695c5f*/1);
+/*@>1b20d37*/proc_control_DW./*@>1be01c3*/obj_hd./*@>1bdfc0e*/isSetupComplete/*@>1194053*/ = /*@>1695eef*/true;
+/* {E!d1636}End of Start for MATLABSystem: '<S310>/SourceBlock' */
+/* {E!d1460}End of SystemInitialize for SubSystem: '<S297>/Subscribe' */
+
+/* {S!d1462}SystemInitialize for Enabled SubSystem: '<S297>/Subsystem1' */
+/* {S!d1638}SystemInitialize for DataTypeConversion: '<S311>/Data Type Conversion1' incorporates:
+ *  Outport: '<S311>/Out1'
+ */
+/*@>1b05e1d*/proc_control_B./*@>1bdfe48*/DataTypeConversion1/*@>163bbfc*/[/*@>1695626*/0]/*@>163bbfb*/ = /*@>1b1e128*/proc_control_P./*@>1bdff65*/Out1_Y0_i;
+/*@>1b05e25*/proc_control_B./*@>1bdfe4b*/DataTypeConversion1/*@>163bc06*/[/*@>1695621*/1]/*@>163bc05*/ = /*@>1b1e130*/proc_control_P./*@>1bdff68*/Out1_Y0_i;
+/* {S!d1640}SystemInitialize for DataTypeConversion: '<S311>/Data Type Conversion2' incorporates:
+ *  Outport: '<S311>/Out1'
+ */
+/*@>1b05e2d*/proc_control_B./*@>1bdfe4e*/DataTypeConversion2/*@>118eefd*/ = /*@>1b1e138*/proc_control_P./*@>1bdff6b*/Out1_Y0_i;
+/* {S!d1463}SystemInitialize for Enabled SubSystem: '<S297>/Pre-traitement' */
+/*@>145a0ed*/for (/*@>1bde7f3*/i = /*@>1bde7f2*/0; /*@>1bde7fd*/i < /*@>1bde7fb*/6; /*@>1bde7f9*/i/*@>1bdea0b*/++) {
+    /* {S!d1642}SystemInitialize for DataTypeConversion: '<S311>/Data Type Conversion' incorporates:
+ *  Outport: '<S311>/Out1'
+ */
+    /*@>1b05e4d*/proc_control_B./*@>1bdfe51*/DataTypeConversion/*@>145a0e4*/[/*@>1873e5d*/i]/*@>145a0e3*/ = /*@>1b1e140*/proc_control_P./*@>1bdff6e*/Out1_Y0_i;
+    /* {S!d1644}SystemInitialize for Selector: '<S309>/Selector' incorporates:
+ *  DataTypeConversion: '<S311>/Data Type Conversion'
+ *  Outport: '<S309>/linWpts'
+ *  Outport: '<S311>/Out1'
+ */
+    /*@>1b05e55*/proc_control_B./*@>1bdfe54*/Selector/*@>145a114*/[/*@>1873e63*/i]/*@>145a113*/ = /*@>1b1e148*/proc_control_P./*@>1bdff71*/linWpts_Y0;
+}
+/* {E!d1462}End of SystemInitialize for SubSystem: '<S297>/Subsystem1' */
+/*@>145a135*/for (/*@>1bde7e2*/i = /*@>1bde7e1*/0; /*@>1bde7ec*/i < /*@>1bde7ea*/8; /*@>1bde7e8*/i/*@>1bdea0c*/++) {
+    /* {S!d1646}SystemInitialize for Selector: '<S309>/Selector1' incorporates:
+ *  Outport: '<S309>/RotWpts'
+ */
+    /*@>1b05e65*/proc_control_B./*@>1bdfe5a*/Selector1/*@>145a12c*/[/*@>1873e6e*/i]/*@>145a12b*/ = /*@>1b1e158*/proc_control_P./*@>1bdff77*/RotWpts_Y0;
+}
+/* {S!d1648}SystemInitialize for Concatenate: '<S309>/Matrix Concatenate' incorporates:
+ *  Outport: '<S309>/time'
+ */
+/*@>1b05e5d*/proc_control_B./*@>1bdfe57*/MatrixConcatenate/*@>163bbe0*/[/*@>1695633*/0]/*@>163bbdf*/ = /*@>1b1e150*/proc_control_P./*@>1bdff74*/time_Y0;
+/*@>1b05e6d*/proc_control_B./*@>1bdfe5d*/MatrixConcatenate/*@>163bbea*/[/*@>169562e*/1]/*@>163bbe9*/ = /*@>1b1e160*/proc_control_P./*@>1bdff7a*/time_Y0;
+/*@>145a165*/for (/*@>1bde7d1*/i = /*@>1bde7d0*/0; /*@>1bde7db*/i < /*@>1bde7d9*/7; /*@>1bde7d7*/i/*@>1bdea0d*/++) {
+    /* {S!d1650}SystemInitialize for Selector: '<S309>/Selector4' incorporates:
+ *  Outport: '<S309>/target'
+ */
+    /*@>1b05e7f*/proc_control_B./*@>1bdfe60*/Selector4/*@>145a15c*/[/*@>1873e79*/i]/*@>145a15b*/ = /*@>1b1e170*/proc_control_P./*@>1bdff80*/target_Y0;
+}
+/* {E!d1463}End of SystemInitialize for SubSystem: '<S297>/Pre-traitement' */
+
+/* {S!d1466}SystemInitialize for Resettable SubSystem: '<S297>/Trajectory generator' */
+/* {S!d1652}InitializeConditions for DiscreteIntegrator: '<S312>/Discrete-Time Integrator' */
+/*@>1b20d3f*/proc_control_DW./*@>1be01c6*/DiscreteTimeIntegrator_DSTATE/*@>118ef4a*/ = /*@>1b1e168*/proc_control_P./*@>1bdff7d*/DiscreteTimeIntegrator_IC;
+/* {S!d1654}Start for MATLABSystem: '<S312>/Rotation Trajectory' */
+/*@>1a41c59*/std::memcpy(&/*@>1b20d47*/proc_control_DW./*@>1be01c9*/obj_j./*@>1bdfcbc*/TimeScaling[0], &/*@>19df8c6*/tmp_j/*@>19df8c7*/[/*@>19df8b9*/0], /*@>19df8bb*/33U/*@>19df8ca*/ * /*@>19df8c9*/sizeof(real_T));
+/*@>1b20d4f*/proc_control_DW./*@>1be01cc*/obj_j./*@>1bdfc11*/isInitialized/*@>11942e4*/ = /*@>1bde61b*/1;
+/*@>1b20d57*/proc_control_DW./*@>1be01cf*/obj_j./*@>1bdfc14*/TunablePropsChanged/*@>11942f8*/ = /*@>1695ef6*/false;
+/* {S!d1656}Start for MATLABSystem: '<S314>/Polynomial Trajectory1' */
+/*@>1a41c5b*/std::memset(&/*@>1b20d5f*/proc_control_DW./*@>1be01d2*/obj_jo./*@>1bdfcbf*/AccelerationBoundaryCondition[0], /*@>1bde61e*/0, 10U * sizeof(real_T));
+/*@>1b20d67*/proc_control_DW./*@>1be01d5*/obj_jo./*@>1bdfc1d*/isInitialized/*@>119462f*/ = /*@>1bde621*/0;
+/*@>1506231*/for (/*@>1bde7c0*/i = /*@>1bde7bf*/0; /*@>1bde7ca*/i < /*@>1bde7c8*/6; /*@>1bde7c6*/i/*@>1bdea0e*/++) {
+    /*@>1b20d77*/proc_control_DW./*@>1be01db*/obj_jo./*@>1bdfaee*/VelocityBoundaryCondition/*@>1506223*/[/*@>1873ea0*/i]/*@>1506224*/ = /*@>1b1e184*/proc_control_P./*@>1bdff83*/PolynomialTrajectory1_VelocityB/*@>1ab1ea6*/[/*@>1ab1ea3*/i];
+}
+/*@>1b20d6f*/proc_control_DW./*@>1be01d8*/obj_jo./*@>1bdfc17*/isInitialized/*@>119455a*/ = /*@>1bde624*/1;
+/*@>1b20d7f*/proc_control_DW./*@>1be01de*/obj_jo./*@>1bdfc1a*/TunablePropsChanged/*@>119456e*/ = /*@>1695efc*/false;
+/* {E!d1656}End of Start for MATLABSystem: '<S314>/Polynomial Trajectory1' */
+/* {E!d1466}End of SystemInitialize for SubSystem: '<S297>/Trajectory generator' */
+
+/* {S!d1658}InitializeConditions for MATLABSystem: '<S297>/MATLAB System1' */
+/* ========================================================================== */
+/*  Fonctions Principales */
+/* ========================================================================== */
+/*  Fonction appeler a l'initialisation */
+/*  Perform one-time calculations, such as computing constants    */
+/*  Fonction Reset */
+/*  Initialize / reset discrete-state properties */
+/*@>1506271*/for (/*@>1bde7af*/i = /*@>1bde7ae*/0; /*@>1bde7b9*/i < /*@>1bde7b7*/18; /*@>1bde7b5*/i/*@>1bdea0f*/++) {
+    /*@>1b20d97*/proc_control_DW./*@>1be01e4*/obj_a./*@>1bdfaeb*/poseList/*@>1506263*/[/*@>1873eb1*/i]/*@>1506264*/ = /*@>1695970*/999.0;
+}
+/*@>1b20d8f*/proc_control_DW./*@>1be01e1*/obj_a./*@>1bdfae8*/poseList/*@>1624b71*/[/*@>1695775*/0]/*@>1506339*/ = /*@>1695965*/0.0;
+/*@>1b20d9f*/proc_control_DW./*@>1be01e7*/obj_a./*@>1bdfae5*/poseList/*@>1624b78*/[/*@>1695774*/2]/*@>1506365*/ = /*@>1695964*/0.0;
+/*@>1b20da7*/proc_control_DW./*@>1be01ea*/obj_a./*@>1bdfae2*/poseList/*@>1624b7f*/[/*@>1695773*/4]/*@>1506391*/ = /*@>1695963*/0.0;
+/*@>1b20daf*/proc_control_DW./*@>1be01ed*/obj_a./*@>1bdfadf*/poseList/*@>1624b86*/[/*@>1695772*/6]/*@>15063bd*/ = /*@>1695962*/1.0;
+/*@>1b20db7*/proc_control_DW./*@>1be01f0*/obj_a./*@>1bdfadc*/poseList/*@>1624b8d*/[/*@>1695771*/8]/*@>15063e9*/ = /*@>1695961*/0.0;
+/*@>1b20dbf*/proc_control_DW./*@>1be01f3*/obj_a./*@>1bdfad9*/poseList/*@>1624b94*/[/*@>1695770*/10]/*@>1506415*/ = /*@>1695960*/0.0;
+/*@>1b20dc7*/proc_control_DW./*@>1be01f6*/obj_a./*@>1bdfad6*/poseList/*@>1624b9b*/[/*@>169576f*/12]/*@>1506441*/ = /*@>169595f*/0.0;
+/*@>1b20dcf*/proc_control_DW./*@>1be01f9*/obj_a./*@>1bdfad3*/poseList/*@>1624ba2*/[/*@>169576e*/14]/*@>150646d*/ = /*@>169595e*/0.0;
+/*@>1b20dd7*/proc_control_DW./*@>1be01fc*/obj_a./*@>1bdfad0*/poseList/*@>1624ba9*/[/*@>169576d*/16]/*@>1506499*/ = /*@>169595d*/0.0;
+/* initCond(1,1:7); */
+/*@>15064e8*/for (/*@>1bde79e*/i = /*@>1bde79d*/0; /*@>1bde7a8*/i < /*@>1bde7a6*/7; /*@>1bde7a4*/i/*@>1bdea10*/++) {
+    /*@>1b20de7*/proc_control_DW./*@>1be0202*/obj_a./*@>1bdfacd*/initcond/*@>1624bb1*/[/*@>1873ebc*/i]/*@>15064db*/ = /*@>1ab1eaa*/tmp_k/*@>1ab1eac*/[/*@>1ab1ea9*/i];
+}
+/*@>1b20ddf*/proc_control_DW./*@>1be01ff*/obj_a./*@>1bdfb39*/i/*@>1190899*/ = /*@>1695db9*/2.0;
+/* {E!d1658}End of InitializeConditions for MATLABSystem: '<S297>/MATLAB System1' */
+
+/* {S!d1660}Start for MATLABSystem: '<S297>/MATLAB System' */
+/*@>1b20def*/proc_control_DW./*@>1be0205*/obj./*@>1bdfb3c*/linearConvergence/*@>11909cd*/ = /*@>1b1e1a8*/proc_control_P./*@>1bdff86*/MATLABSystem_linearConvergence;
+/*@>1b20df7*/proc_control_DW./*@>1be0208*/obj./*@>1bdfb3f*/quaternionConvergence/*@>11909d1*/ = /*@>1b1e1b0*/proc_control_P./*@>1bdff89*/MATLABSystem_quaternionConverge;
+/*@>1b20dff*/proc_control_DW./*@>1be020b*/obj./*@>1bdfb42*/TargetThreshold/*@>11909d5*/ = /*@>1b1e1b8*/proc_control_P./*@>1bdff8c*/MATLABSystem_TargetThreshold;
+/*@>1b20e07*/proc_control_DW./*@>1be020e*/obj./*@>1bdfb45*/isInitialized/*@>11909ee*/ = /*@>1bde627*/1;
+/*  Perform one-time calculations, such as computing constants */
+/*@>1b20e0f*/proc_control_DW./*@>1be0211*/obj./*@>1bdfb48*/generationNumber/*@>1190ae5*/ = /*@>1695dc6*/0.0;
+/*@>1b20e17*/proc_control_DW./*@>1be0214*/obj./*@>1bdfb4b*/dummy/*@>1190aea*/ = /*@>1695dc8*/999.0;
+/*  Chiffre NULL */
+/*@>1506533*/for (/*@>1bde78d*/i = /*@>1bde78c*/0; /*@>1bde797*/i < /*@>1bde795*/13; /*@>1bde793*/i/*@>1bdea11*/++) {
+    /*@>1b20e1f*/proc_control_DW./*@>1be0217*/obj./*@>1bdfaca*/emptyArray/*@>1624bcc*/[/*@>1873ecd*/i]/*@>1506526*/ = /*@>1b20e25*/proc_control_DW./*@>1be021a*/obj.dummy;
+}
+/*  Vecteur pose NULL */
+/*@>1b20e2d*/proc_control_DW./*@>1be021d*/obj./*@>1bdfb4e*/targetReachedCount/*@>1190af7*/ = /*@>1695dca*/0.0;
+/*  Buffer trajectoire */
+/*@>1506575*/for (/*@>1bde77c*/i = /*@>1bde77b*/0; /*@>1bde786*/i < /*@>1bde784*/78013; /*@>1bde782*/i/*@>1bdea12*/++) {
+    /*@>1b20e3d*/proc_control_DW./*@>1be0223*/obj./*@>1bdfac7*/poseBuffer/*@>1506567*/[/*@>1873ed8*/i]/*@>1506568*/ = /*@>1b20e43*/proc_control_DW./*@>1be0226*/obj.dummy;
+}
+/*@>1b20e35*/proc_control_DW./*@>1be0220*/obj./*@>1bdfb51*/bufferCount/*@>1190b04*/ = /*@>1695dcc*/0.0;
+/*@>1b20e4b*/proc_control_DW./*@>1be0229*/obj./*@>1bdfb54*/done/*@>1190b08*/ = /*@>1695dd0*/false;
+/*@>1b20e53*/proc_control_DW./*@>1be022c*/obj./*@>1bdfb57*/init/*@>1190b0d*/ = /*@>1695dcf*/0.0;
+/* {E!d1660}End of Start for MATLABSystem: '<S297>/MATLAB System' */
+/* {E!d1459}End of SystemInitialize for SubSystem: '<S9>/singleWpts Trajectory' */
+
+/* {S!d1469}SystemInitialize for Atomic SubSystem: '<Root>/Subsystem Controller' */
+/* {S!d1662}Start for SwitchCase: '<S133>/Switch Case' */
+/*  Fonction reset */
+/*  Initialize / reset discrete-state properties */
+/*@>1b20e5b*/proc_control_DW./*@>1be022f*/SwitchCase_ActiveSubsystem_l/*@>118eb31*/ = /*@>1bde62a*/-1;
+/* {S!d1664}InitializeConditions for Delay: '<S7>/Delay' */
+/*@>145a181*/for (/*@>1bde76b*/i = /*@>1bde76a*/0; /*@>1bde775*/i < /*@>1bde773*/8; /*@>1bde771*/i/*@>1bdea13*/++) {
+    /*@>1b20e73*/proc_control_DW./*@>1be0235*/Delay_DSTATE_g/*@>15065af*/[/*@>1873ee3*/i]/*@>145a173*/ = /*@>1b1e1de*/proc_control_P./*@>1bdff92*/Delay_InitialCondition_jd/*@>1ab1eb2*/[/*@>1ab1eaf*/i];
+}
+/* {E!d1664}End of InitializeConditions for Delay: '<S7>/Delay' */
+
+/* {S!d1666}InitializeConditions for Delay: '<S135>/Delay' */
+/*@>1b20e6b*/proc_control_DW./*@>1be0232*/Delay_DSTATE_k/*@>118efaf*/ = /*@>1b1e1d6*/proc_control_P./*@>1bdff8f*/Delay_InitialCondition_i;
+/* {S!d1470}SystemInitialize for Enabled SubSystem: '<S7>/MPC manager' */
+/* {S!d1471}SystemInitialize for Atomic SubSystem: '<S134>/Subscribe1' */
+/* {S!d1472}SystemInitialize for Enabled SubSystem: '<S233>/Enabled Subsystem' */
+/* {S!d1668}SystemInitialize for SignalConversion generated from: '<S235>/In1' incorporates:
+ *  Outport: '<S235>/Out1'
+ */
+/*@>1b05ed1*/proc_control_B./*@>1bdfe63*/In1_o/*@>1190cbf*/ = /*@>1b1e1e6*/proc_control_P./*@>1bdff95*/Out1_Y0_c;
+/* {E!d1472}End of SystemInitialize for SubSystem: '<S233>/Enabled Subsystem' */
+
+/* {S!d1670}Start for MATLABSystem: '<S233>/SourceBlock' */
+/*@>1b20e7b*/proc_control_DW./*@>1be0238*/obj_hh./*@>1bdfc89*/matlabCodegenIsDeleted/*@>11968b2*/ = /*@>1695fa7*/false;
+/*@>1b20e83*/proc_control_DW./*@>1be023b*/obj_hh./*@>1bdfc8c*/isInitialized/*@>11968c0*/ = /*@>1bde62d*/1;
+/*@>1506636*/for (/*@>1bde75a*/i = /*@>1bde759*/0; /*@>1bde764*/i < /*@>1bde762*/27; /*@>1bde760*/i/*@>1bdea14*/++) {
+    /*@>1b05eed*/proc_control_B./*@>1bdfe69*/b_zeroDelimTopic_d/*@>1624bf1*/[/*@>1873ef4*/i]/*@>1506629*/ = /*@>1ab1eb6*/tmp_l/*@>1ab1eb8*/[/*@>1ab1eb5*/i];
+}
+/*@>1b05ee5*/proc_control_B./*@>1bdfe66*/b_zeroDelimTopic_d/*@>1624c00*/[/*@>169576c*/27]/*@>150664f*/ = /*@>169590b*/'\x00';
+/*@>1a28527*/Sub_proc_control_182_1643.createSubscriber(&/*@>1b05ef5*/proc_control_B./*@>1bdfe6c*/b_zeroDelimTopic_d/*@>1624c07*/[/*@>169576b*/0], /*@>1695c5b*/1);
+/*@>1b20e8b*/proc_control_DW./*@>1be023e*/obj_hh./*@>1bdfc8f*/isSetupComplete/*@>11968d2*/ = /*@>1695fac*/true;
+/* {E!d1670}End of Start for MATLABSystem: '<S233>/SourceBlock' */
+/* {E!d1471}End of SystemInitialize for SubSystem: '<S134>/Subscribe1' */
+
+/* {S!d1475}SystemInitialize for Atomic SubSystem: '<S134>/Subscribe' */
+/* {S!d1476}SystemInitialize for Enabled SubSystem: '<S232>/Enabled Subsystem' */
+/* {S!d1672}SystemInitialize for SignalConversion generated from: '<S234>/In1' incorporates:
+ *  Outport: '<S234>/Out1'
+ */
+/*@>1b05eff*/proc_control_B./*@>1bdfe6f*/In1_f/*@>1190ce5*/ = /*@>1b1e1f4*/proc_control_P./*@>1bdff98*/Out1_Y0_m;
+/* {E!d1476}End of SystemInitialize for SubSystem: '<S232>/Enabled Subsystem' */
+
+/* {S!d1674}Start for MATLABSystem: '<S232>/SourceBlock' */
+/*@>1b20e93*/proc_control_DW./*@>1be0241*/obj_k4./*@>1bdfc92*/matlabCodegenIsDeleted/*@>1196b1f*/ = /*@>1695fb6*/false;
+/*@>1b20e9b*/proc_control_DW./*@>1be0244*/obj_k4./*@>1bdfc95*/isInitialized/*@>1196b2d*/ = /*@>1bde630*/1;
+/*@>15066d3*/for (/*@>1bde749*/i = /*@>1bde748*/0; /*@>1bde753*/i < /*@>1bde751*/23; /*@>1bde74f*/i/*@>1bdea15*/++) {
+    /*@>1b05f1b*/proc_control_B./*@>1bdfe75*/b_zeroDelimTopic_fa/*@>1624c1a*/[/*@>1873f05*/i]/*@>15066c6*/ = /*@>1ab1ebc*/tmp_m/*@>1ab1ebe*/[/*@>1ab1ebb*/i];
+}
+/*@>1b05f13*/proc_control_B./*@>1bdfe72*/b_zeroDelimTopic_fa/*@>1624c29*/[/*@>169576a*/23]/*@>15066ec*/ = /*@>16958f9*/'\x00';
+/*@>1a28529*/Sub_proc_control_182_1620.createSubscriber(&/*@>1b05f23*/proc_control_B./*@>1bdfe78*/b_zeroDelimTopic_fa/*@>1624c30*/[/*@>1695769*/0], /*@>1695c58*/1);
+/*@>1b20ea3*/proc_control_DW./*@>1be0247*/obj_k4./*@>1bdfc98*/isSetupComplete/*@>1196b3f*/ = /*@>1695fbb*/true;
+/* {E!d1674}End of Start for MATLABSystem: '<S232>/SourceBlock' */
+/* {E!d1475}End of SystemInitialize for SubSystem: '<S134>/Subscribe' */
+
+/* {S!d1676}Start for MATLABSystem: '<S134>/MPC manager' */
+/*@>1b20eab*/proc_control_DW./*@>1be024a*/obj_f./*@>1bdfc20*/isInitialized/*@>119482e*/ = /*@>1bde633*/1;
+/* {S!d1678}InitializeConditions for MATLABSystem: '<S134>/MPC manager' */
+/*         %<"\%\% Fonction execute a chaque iteration"> */
+/*  Perform one-time calculations, such as computing constants */
+%<SLibCG_DumpSSCode("/*@[1b8ad3a*/",(SLibCGCallSubFcn("proc_contr_mpcManager_resetImpl", ["&/*@>1be0557*/proc_control_DW./*@>1be0556*/obj_f"], 0, 244, 0)),"/*@]*/")>;
+/* {S!d1680}SystemInitialize for MATLABSystem: '<S134>/MPC manager' incorporates:
+ *  Outport: '<S134>/MPC param'
+ */
+/*@>1a41c5d*/std::memcpy(&/*@>1b05f41*/proc_control_B./*@>1bdfe7b*/mvmin/*@>19df722*/[/*@>19df6f5*/0], &/*@>1b1e206*/proc_control_P./*@>1bdff9b*/MPCparam_Y0./*@>1bdfcb6*/mvmin[0], /*@>19df732*/sizeof(real_T)/*@>1b81d8b*/ << /*@>1b81d8a*/3U);
+/* {S!d1682}SystemInitialize for MATLABSystem: '<S134>/MPC manager' incorporates:
+ *  Outport: '<S134>/MPC param'
+ */
+/*@>1a41c5f*/std::memcpy(&/*@>1b05f49*/proc_control_B./*@>1bdfe7e*/mvmax/*@>19df747*/[/*@>19df711*/0], &/*@>1b1e20e*/proc_control_P./*@>1bdff9e*/MPCparam_Y0./*@>1bdfcb9*/mvmax[0], /*@>19df757*/sizeof(real_T)/*@>1b81d8e*/ << /*@>1b81d8d*/3U);
+/* {S!d1684}SystemInitialize for MATLABSystem: '<S134>/MPC manager' incorporates:
+ *  Outport: '<S134>/MPC param'
+ */
+/*@>1a41c61*/std::memcpy(&/*@>1b05f59*/proc_control_B./*@>1bdfe81*/ywt/*@>19df68a*/[/*@>19df679*/0], &/*@>1b1e216*/proc_control_P./*@>1bdffa1*/MPCparam_Y0./*@>1bdfcb3*/ywt[0], /*@>19df688*/13U/*@>19df69b*/ * /*@>19df69a*/sizeof(real_T));
+/* {S!d1686}SystemInitialize for MATLABSystem: '<S134>/MPC manager' incorporates:
+ *  Outport: '<S134>/MPC param'
+ */
+/*@>1a41c63*/std::memcpy(&/*@>1b05f79*/proc_control_B./*@>1bdfe84*/mvwt/*@>19df604*/[/*@>19df5bb*/0], &/*@>1b1e21e*/proc_control_P./*@>1bdffa4*/MPCparam_Y0./*@>1bdfcad*/mvwt[0], /*@>19df614*/sizeof(real_T)/*@>1b81d91*/ << /*@>1b81d90*/3U);
+/* {S!d1688}SystemInitialize for MATLABSystem: '<S134>/MPC manager' incorporates:
+ *  Outport: '<S134>/MPC param'
+ */
+/*@>1a41c65*/std::memcpy(&/*@>1b05f81*/proc_control_B./*@>1bdfe87*/dmwwt/*@>19df629*/[/*@>19df5d7*/0], &/*@>1b1e226*/proc_control_P./*@>1bdffa7*/MPCparam_Y0./*@>1bdfcb0*/dmwwt[0], /*@>19df639*/sizeof(real_T)/*@>1b81d94*/ << /*@>1b81d93*/3U);
+/*@>145a1f9*/for (/*@>1bde738*/i = /*@>1bde737*/0; /*@>1bde742*/i < /*@>1bde740*/8; /*@>1bde73e*/i/*@>1bdea16*/++) {
+    /* {S!d1690}SystemInitialize for MATLABSystem: '<S134>/MPC manager' incorporates:
+ *  Outport: '<S134>/MPC param'
+ */
+    /*@>1b05f8b*/proc_control_B./*@>1bdfe8a*/thrustersStatus/*@>1506821*/[/*@>1873f62*/i]/*@>145a225*/ = /*@>1b1e230*/proc_control_P./*@>1bdffaa*/MPCparam_Y0./*@>1bdfcd7*/thrustersStatus/*@>1ab1ec8*/[/*@>1ab1ec1*/i];
+}
+/* {E!d1470}End of SystemInitialize for SubSystem: '<S7>/MPC manager' */
+
+/* {S!d1480}SystemInitialize for IfAction SubSystem: '<S133>/Adaptive MPC quaternion ' */
+/* {S!d1692}InitializeConditions for Memory: '<S143>/Memory' */
+/*@>1a41c67*/std::memcpy(&/*@>1b20ec3*/proc_control_DW./*@>1be0250*/Memory_PreviousInput_g/*@>19df538*/[/*@>19df527*/0], &/*@>1b1e238*/proc_control_P./*@>1bdffad*/Memory_InitialCondition/*@>19df540*/[/*@>19df534*/0], /*@>19df536*/252U/*@>19df543*/ * /*@>19df542*/sizeof(boolean_T));
+/* {S!d1694}InitializeConditions for UnitDelay: '<S143>/last_mv' */
+/*@>1a41c69*/std::memcpy(&/*@>1b20edb*/proc_control_DW./*@>1be0253*/last_mv_DSTATE_f/*@>19df4bd*/[/*@>19df490*/0], &/*@>1b1e244*/proc_control_P./*@>1bdffb0*/last_mv_InitialCondition/*@>19df4c5*/[/*@>19df49d*/0], /*@>19df4c7*/sizeof(real_T)/*@>1b81d97*/ << /*@>1b81d96*/3U);
+/* {S!d1696}InitializeConditions for Delay: '<S136>/Delay1' incorporates:
+ *  UnitDelay: '<S143>/last_mv'
+ */
+/*@>1a41c6b*/std::memcpy(&/*@>1b20ee3*/proc_control_DW./*@>1be0256*/Delay1_DSTATE_e/*@>19df4dd*/[/*@>19df4ac*/0], &/*@>1b1e24c*/proc_control_P./*@>1bdffb3*/Delay1_InitialCondition/*@>19df4e5*/[/*@>19df4b9*/0], /*@>19df4e7*/sizeof(real_T)/*@>1b81d9a*/ << /*@>1b81d99*/3U);
+/* {S!d1698}InitializeConditions for MATLABSystem: '<S136>/MATLAB System' */
+/*  Perform one-time calculations, such as computing constants */
+/*  Initialize / reset discrete-state properties */
+/*@>1b20eeb*/proc_control_DW./*@>1be0259*/obj_b./*@>1bdfaa0*/lastQuat/*@>163bb98*/[/*@>1695651*/0]/*@>163bb97*/ = /*@>16dc68a*/1.0;
+/*@>1b20ef3*/proc_control_DW./*@>1be025c*/obj_b./*@>1bdfa9d*/lastQuat/*@>163bba8*/[/*@>169564a*/1]/*@>163bba7*/ = /*@>16dc68c*/0.0;
+/*@>1b20efb*/proc_control_DW./*@>1be025f*/obj_b./*@>1bdfa9a*/lastQuat/*@>163bbb8*/[/*@>1695643*/2]/*@>163bbb7*/ = /*@>16dc68e*/0.0;
+/*@>1b20f03*/proc_control_DW./*@>1be0262*/obj_b./*@>1bdfa97*/lastQuat/*@>163bbc8*/[/*@>169563c*/3]/*@>163bbc7*/ = /*@>16dc690*/0.0;
+/* {E!d1480}End of SystemInitialize for SubSystem: '<S133>/Adaptive MPC quaternion ' */
+
+/* {S!d1482}SystemInitialize for IfAction SubSystem: '<S133>/JoyStick OpenLoop' */
+/* {S!d1700}InitializeConditions for UnitDelay: '<S173>/UD'
+ *
+ * Block description for '<S173>/UD':
+ *  
+ *  Store in Global RAM
+ */
+/*@>145a2bd*/for (/*@>1bde727*/i = /*@>1bde726*/0; /*@>1bde731*/i < /*@>1bde72f*/6; /*@>1bde72d*/i/*@>1bdea17*/++) {
+    /*@>1b20f1b*/proc_control_DW./*@>1be0268*/UD_DSTATE_i/*@>145a2b4*/[/*@>1873fa3*/i]/*@>145a2b3*/ = /*@>1b1e266*/proc_control_P./*@>1bdffb9*/DiscreteDerivative_ICPrevScaled;
+}
+/* {E!d1700}End of InitializeConditions for UnitDelay: '<S173>/UD' */
+
+/* {S!d1702}Start for MATLABSystem: '<S138>/MATLAB System' */
+/*@>1b20f13*/proc_control_DW./*@>1be0265*/obj_m./*@>1bdfc23*/k/*@>1194cbb*/ = /*@>1b1e25e*/proc_control_P./*@>1bdffb6*/MATLABSystem_k;
+/*@>1a41c6d*/std::memcpy(&/*@>1b20f23*/proc_control_DW./*@>1be026b*/obj_m./*@>1bdfcaa*/binv[0], &/*@>1b1e26e*/proc_control_P./*@>1bdffbc*/binv/*@>19df42e*/[/*@>19df420*/0], /*@>19df422*/48U/*@>19df431*/ * /*@>19df430*/sizeof(real_T));
+/*@>1b20f2b*/proc_control_DW./*@>1be026e*/obj_m./*@>1bdfc26*/mass/*@>1194cc3*/ = /*@>1b1e276*/proc_control_P./*@>1bdffbf*/physics.mass;
+/*@>1b20f33*/proc_control_DW./*@>1be0271*/obj_m./*@>1bdfc29*/volume/*@>1194cc7*/ = /*@>1b1e27e*/proc_control_P./*@>1bdffc2*/physics.volume;
+/*@>1b20f3b*/proc_control_DW./*@>1be0274*/obj_m./*@>1bdfc2c*/height/*@>1194ccb*/ = /*@>1b1e286*/proc_control_P./*@>1bdffc5*/physics.height;
+/*@>1a41c6f*/std::memcpy(&/*@>1b20f43*/proc_control_DW./*@>1be0277*/obj_m./*@>1bdfca4*/I[0], &/*@>1b1e28e*/proc_control_P./*@>1bdffc8*/physics./*@>1bdfca7*/I[0], 9U * sizeof(real_T));
+/*@>1b20f4b*/proc_control_DW./*@>1be027a*/obj_m./*@>1bdfab2*/RG/*@>163bb27*/[/*@>169567d*/0]/*@>163bb26*/ = /*@>1b1e296*/proc_control_P./*@>1bdffcb*/physics./*@>1bdfcda*/RG/*@>1ab1ed1*/[/*@>1ab1eca*/0];
+/*@>1b20f53*/proc_control_DW./*@>1be027d*/obj_m./*@>1bdfaaf*/RB/*@>163bb36*/[/*@>169567b*/0]/*@>163bb35*/ = /*@>1b1e29e*/proc_control_P./*@>1bdffce*/physics./*@>1bdfcdd*/RB/*@>1ab1eda*/[/*@>1ab1ed3*/0];
+/*@>1b20f5b*/proc_control_DW./*@>1be0280*/obj_m./*@>1bdfaac*/RG/*@>163bb4a*/[/*@>169566d*/1]/*@>163bb49*/ = /*@>1b1e2a6*/proc_control_P./*@>1bdffd1*/physics./*@>1bdfce0*/RG/*@>1ab1ee3*/[/*@>1ab1edc*/1];
+/*@>1b20f63*/proc_control_DW./*@>1be0283*/obj_m./*@>1bdfaa9*/RB/*@>163bb59*/[/*@>169566b*/1]/*@>163bb58*/ = /*@>1b1e2ae*/proc_control_P./*@>1bdffd4*/physics./*@>1bdfce3*/RB/*@>1ab1eec*/[/*@>1ab1ee5*/1];
+/*@>1b20f6b*/proc_control_DW./*@>1be0286*/obj_m./*@>1bdfaa6*/RG/*@>163bb6d*/[/*@>169565d*/2]/*@>163bb6c*/ = /*@>1b1e2b6*/proc_control_P./*@>1bdffd7*/physics./*@>1bdfce6*/RG/*@>1ab1ef5*/[/*@>1ab1eee*/2];
+/*@>1b20f73*/proc_control_DW./*@>1be0289*/obj_m./*@>1bdfaa3*/RB/*@>163bb7c*/[/*@>169565b*/2]/*@>163bb7b*/ = /*@>1b1e2be*/proc_control_P./*@>1bdffda*/physics./*@>1bdfce9*/RB/*@>1ab1efe*/[/*@>1ab1ef7*/2];
+/*@>1506aba*/for (/*@>1bde716*/i = /*@>1bde715*/0; /*@>1bde720*/i < /*@>1bde71e*/6; /*@>1bde71c*/i/*@>1bdea18*/++) {
+    /*@>1b20f83*/proc_control_DW./*@>1be028f*/obj_m./*@>1bdfac4*/AddedMass/*@>1624cb3*/[/*@>1873fd4*/i]/*@>1506aad*/ = /*@>1b1e2ce*/proc_control_P./*@>1bdffe0*/physics./*@>1bdfcef*/AddedMass/*@>1ab1f11*/[/*@>1ab1f0a*/i];
+    /*@>1b20f93*/proc_control_DW./*@>1be0295*/obj_m./*@>1bdfac1*/CDL/*@>1624cbd*/[/*@>1873fe0*/i]/*@>1506af3*/ = /*@>1b1e2de*/proc_control_P./*@>1bdffe6*/physics./*@>1bdfcf5*/CDL/*@>1ab1f24*/[/*@>1ab1f1d*/i];
+    /*@>1b20fa3*/proc_control_DW./*@>1be029b*/obj_m./*@>1bdfabe*/CDQ/*@>1624cc7*/[/*@>1873fec*/i]/*@>1506b39*/ = /*@>1b1e2ee*/proc_control_P./*@>1bdffec*/physics./*@>1bdfcfb*/CDQ/*@>1ab1f37*/[/*@>1ab1f30*/i];
+}
+/*@>1b20f7b*/proc_control_DW./*@>1be028c*/obj_m./*@>1bdfabb*/AF/*@>163bae8*/[/*@>169569e*/0]/*@>163bae7*/ = /*@>1b1e2c6*/proc_control_P./*@>1bdffdd*/physics./*@>1bdfcec*/AF/*@>1ab1f07*/[/*@>1ab1f00*/0];
+/*@>1b20f8b*/proc_control_DW./*@>1be0292*/obj_m./*@>1bdfab8*/AF/*@>163bafa*/[/*@>1695696*/1]/*@>163baf9*/ = /*@>1b1e2d6*/proc_control_P./*@>1bdffe3*/physics./*@>1bdfcf2*/AF/*@>1ab1f1a*/[/*@>1ab1f13*/1];
+/*@>1b20f9b*/proc_control_DW./*@>1be0298*/obj_m./*@>1bdfab5*/AF/*@>163bb0c*/[/*@>169568e*/2]/*@>163bb0b*/ = /*@>1b1e2e6*/proc_control_P./*@>1bdffe9*/physics./*@>1bdfcf8*/AF/*@>1ab1f2d*/[/*@>1ab1f26*/2];
+/*@>1b20fab*/proc_control_DW./*@>1be029e*/obj_m./*@>1bdfc2f*/g/*@>1194ceb*/ = /*@>1b1e2f6*/proc_control_P./*@>1bdffef*/physics.g;
+/*@>1b20fb3*/proc_control_DW./*@>1be02a1*/obj_m./*@>1bdfc32*/rho/*@>1194cef*/ = /*@>1b1e2fe*/proc_control_P./*@>1bdfff2*/physics.rho;
+/*@>1b20fbb*/proc_control_DW./*@>1be02a4*/obj_m./*@>1bdfc35*/isInitialized/*@>1194d35*/ = /*@>1bde636*/1;
+/* {E!d1702}End of Start for MATLABSystem: '<S138>/MATLAB System' */
+/* {E!d1482}End of SystemInitialize for SubSystem: '<S133>/JoyStick OpenLoop' */
+
+/* {S!d1484}SystemInitialize for IfAction SubSystem: '<S133>/LTV MPC quaternion ' */
+/* {S!d1704}InitializeConditions for UnitDelay: '<S177>/last_mv' */
+/*  Perform one-time calculations, such as computing constants */
+/* [M,C,D,Gq] = AUVModelMatrices(in1,in2) */
+/*  Initialize / reset discrete-state properties */
+/*@>1a41c71*/std::memcpy(&/*@>1b20fcb*/proc_control_DW./*@>1be02a7*/last_mv_DSTATE/*@>19df185*/[/*@>19df174*/0], &/*@>1b1e30a*/proc_control_P./*@>1bdfff5*/last_mv_InitialCondition_o/*@>19df18d*/[/*@>19df181*/0], /*@>19df18f*/sizeof(real_T)/*@>1b81d9d*/ << /*@>1b81d9c*/3U);
+/* {S!d1706}InitializeConditions for Delay: '<S139>/Delay1' */
+/*@>1a41c73*/std::memcpy(&/*@>1b20fdb*/proc_control_DW./*@>1be02aa*/Delay1_DSTATE/*@>19df12b*/[/*@>19df11a*/0], &/*@>1b1e314*/proc_control_P./*@>1bdfff8*/Delay1_InitialCondition_n/*@>19df133*/[/*@>19df127*/0], /*@>19df129*/88U/*@>19df136*/ * /*@>19df135*/sizeof(real_T));
+/* {S!d1708}InitializeConditions for Memory: '<S177>/Memory' */
+/*@>1a41c75*/std::memcpy(&/*@>1b20feb*/proc_control_DW./*@>1be02ad*/Memory_PreviousInput/*@>19df0d1*/[/*@>19df0c0*/0], &/*@>1b1e31e*/proc_control_P./*@>1bdfffb*/Memory_InitialCondition_p/*@>19df0d9*/[/*@>19df0cd*/0], /*@>19df0cf*/252U/*@>19df0dc*/ * /*@>19df0db*/sizeof(boolean_T));
+/* {E!d1484}End of SystemInitialize for SubSystem: '<S133>/LTV MPC quaternion ' */
+
+/* {S!d1486}SystemInitialize for IfAction SubSystem: '<S133>/Quaternion Non linear MPC (Not for codegen)' */
+/* {S!d1710}InitializeConditions for Delay: '<S140>/Delay' */
+/*@>1a41c77*/std::memcpy(&/*@>1b20ffb*/proc_control_DW./*@>1be02b0*/Delay_DSTATE_a/*@>19df077*/[/*@>19df066*/0], &/*@>1b1e328*/proc_control_P./*@>1bdfffe*/Delay_InitialCondition/*@>19df07f*/[/*@>19df073*/0], /*@>19df081*/sizeof(real_T)/*@>1b81da0*/ << /*@>1b81d9f*/3U);
+/* {S!d1712}InitializeConditions for Delay: '<S210>/mv_Delay' */
+/*@>1b21003*/proc_control_DW./*@>1be02b3*/icLoad/*@>118f82b*/ = /*@>1695d70*/true;
+/* {S!d1714}InitializeConditions for Delay: '<S210>/x_Delay' */
+/*@>1b2100b*/proc_control_DW./*@>1be02b6*/icLoad_a/*@>118f838*/ = /*@>1695d73*/true;
+/* {S!d1716}InitializeConditions for Delay: '<S210>/slack_delay' */
+/*@>1b21013*/proc_control_DW./*@>1be02b9*/icLoad_j/*@>118f845*/ = /*@>1695d76*/true;
+/* {E!d1486}End of SystemInitialize for SubSystem: '<S133>/Quaternion Non linear MPC (Not for codegen)' */
+/*@>145a361*/for (/*@>1bde705*/i = /*@>1bde704*/0; /*@>1bde70f*/i < /*@>1bde70d*/10; /*@>1bde70b*/i/*@>1bdea19*/++) {
+    /* {S!d1718}SystemInitialize for Merge: '<S133>/Merge' */
+    /*@>1b05ff9*/proc_control_B./*@>1bdfe90*/Merge/*@>145a358*/[/*@>1874041*/i]/*@>145a357*/ = /*@>1b1e33e*/proc_control_P./*@>1be0004*/Merge_InitialOutput;
+}
+/* {E!d1469}End of SystemInitialize for SubSystem: '<Root>/Subsystem Controller' */
+
+/* {S!d1720}SystemInitialize for Merge: '<S9>/Merge1' */
+/*@>1b05ff1*/proc_control_B./*@>1bdfe8d*/isReached/*@>118e95a*/ = /*@>1b1e336*/proc_control_P./*@>1be0001*/Merge1_InitialOutput;
+/* {S!d1489}SystemInitialize for Enabled SubSystem: '<Root>/Send Data to ROS' */
+/* {S!d1490}SystemInitialize for Atomic SubSystem: '<S5>/Publish2' */
+/* {S!d1722}Start for MATLABSystem: '<S109>/SinkBlock' */
+/*@>1b2101b*/proc_control_DW./*@>1be02bc*/obj_p./*@>1bdfc38*/matlabCodegenIsDeleted/*@>11952c0*/ = /*@>1695f20*/false;
+/*@>1b21023*/proc_control_DW./*@>1be02bf*/obj_p./*@>1bdfc3b*/isInitialized/*@>11952ce*/ = /*@>1bde639*/1;
+/*@>1506d34*/for (/*@>1bde6f4*/i = /*@>1bde6f3*/0; /*@>1bde6fe*/i < /*@>1bde6fc*/31; /*@>1bde6fa*/i/*@>1bdea1a*/++) {
+    /*@>1b06015*/proc_control_B./*@>1bdfe96*/b_zeroDelimTopic_i/*@>1624d12*/[/*@>187404c*/i]/*@>1506d27*/ = /*@>1ab1f3b*/tmp_n/*@>1ab1f3d*/[/*@>1ab1f3a*/i];
+}
+/*@>1b0600d*/proc_control_B./*@>1bdfe93*/b_zeroDelimTopic_i/*@>1624d21*/[/*@>1695768*/31]/*@>1506d4d*/ = /*@>1695829*/'\x00';
+/*@>1a28549*/Pub_proc_control_104.createPublisher(&/*@>1b0601d*/proc_control_B./*@>1bdfe99*/b_zeroDelimTopic_i/*@>1624d28*/[/*@>1695767*/0], /*@>1695c53*/1);
+/*@>1b2102b*/proc_control_DW./*@>1be02c2*/obj_p./*@>1bdfc3e*/isSetupComplete/*@>11952e0*/ = /*@>1695f25*/true;
+/* {E!d1722}End of Start for MATLABSystem: '<S109>/SinkBlock' */
+/* {E!d1490}End of SystemInitialize for SubSystem: '<S5>/Publish2' */
+
+/* {S!d1492}SystemInitialize for Atomic SubSystem: '<S5>/Subsystem' */
+/* {S!d1493}SystemInitialize for Atomic SubSystem: '<S110>/Publish5' */
+/* {S!d1724}Start for MATLABSystem: '<S113>/SinkBlock' */
+/*@>1b21033*/proc_control_DW./*@>1be02c5*/obj_i1./*@>1bdfc9b*/matlabCodegenIsDeleted/*@>1196d8c*/ = /*@>1695fc5*/false;
+/*@>1b2103b*/proc_control_DW./*@>1be02c8*/obj_i1./*@>1bdfc9e*/isInitialized/*@>1196d9a*/ = /*@>1bde63c*/1;
+/*@>1506dd0*/for (/*@>1bde6e3*/i = /*@>1bde6e2*/0; /*@>1bde6ed*/i < /*@>1bde6eb*/28; /*@>1bde6e9*/i/*@>1bdea1b*/++) {
+    /*@>1b0603b*/proc_control_B./*@>1bdfe9f*/b_zeroDelimTopic_a/*@>1624d37*/[/*@>187405d*/i]/*@>1506dc3*/ = /*@>1ab1f41*/tmp_o/*@>1ab1f43*/[/*@>1ab1f40*/i];
+}
+/*@>1b06033*/proc_control_B./*@>1bdfe9c*/b_zeroDelimTopic_a/*@>1624d46*/[/*@>1695766*/28]/*@>1506de9*/ = /*@>1695817*/'\x00';
+/*@>1a2854b*/Pub_proc_control_287.createPublisher(&/*@>1b06043*/proc_control_B./*@>1bdfea2*/b_zeroDelimTopic_a/*@>1624d4d*/[/*@>1695765*/0], /*@>1695c50*/1);
+/*@>1b21043*/proc_control_DW./*@>1be02cb*/obj_i1./*@>1bdfca1*/isSetupComplete/*@>1196dac*/ = /*@>1695fca*/true;
+/* {E!d1724}End of Start for MATLABSystem: '<S113>/SinkBlock' */
+/* {E!d1493}End of SystemInitialize for SubSystem: '<S110>/Publish5' */
+/* {E!d1492}End of SystemInitialize for SubSystem: '<S5>/Subsystem' */
+/*@>145a379*/for (/*@>1bde6d2*/i = /*@>1bde6d1*/0; /*@>1bde6dc*/i < /*@>1bde6da*/8; /*@>1bde6d8*/i/*@>1bdea1c*/++) {
+    /* {S!d1726}SystemInitialize for SignalConversion generated from: '<S5>/mv' incorporates:
+ *  Outport: '<S5>/mv'
+ */
+    /*@>1b0605f*/proc_control_B./*@>1bdfea5*/BufferToMakeInportVirtual_Ins_e/*@>145a370*/[/*@>1874070*/i]/*@>145a36f*/ = /*@>1b1e35a*/proc_control_P./*@>1be000a*/mv_Y0;
+    /* {S!d1728}SystemInitialize for SignalConversion generated from: '<S5>/thrust' incorporates:
+ *  Outport: '<S5>/mv'
+ *  Outport: '<S5>/thrust'
+ *  SignalConversion generated from: '<S5>/mv'
+ */
+    /*@>1b06069*/proc_control_B./*@>1bdfea8*/BufferToMakeInportVirtual_Inser/*@>145a388*/[/*@>1874076*/i]/*@>145a387*/ = /*@>1b1e36a*/proc_control_P./*@>1be0010*/thrust_Y0;
+}
+/* {E!d1489}End of SystemInitialize for SubSystem: '<Root>/Send Data to ROS' */
+
+/* {S!d1497}SystemInitialize for Enabled SubSystem: '<Root>/Modèle Physique' */
+/* {S!d1730}InitializeConditions for DiscreteTransferFcn: '<S17>/Discrete Transfer Fcn1' */
+/*@>1b2104b*/proc_control_DW./*@>1be02ce*/DiscreteTransferFcn1_states/*@>118f0e6*/ = /*@>1b1e352*/proc_control_P./*@>1be0007*/DiscreteTransferFcn1_InitialSta;
+/* {S!d1732}InitializeConditions for DiscreteTransferFcn: '<S18>/Discrete Transfer Fcn1' */
+/*@>1b21053*/proc_control_DW./*@>1be02d1*/DiscreteTransferFcn1_states_k/*@>118f0f6*/ = /*@>1b1e362*/proc_control_P./*@>1be000d*/DiscreteTransferFcn1_InitialS_k;
+/* {S!d1734}InitializeConditions for DiscreteTransferFcn: '<S19>/Discrete Transfer Fcn1' */
+/*@>1b2105b*/proc_control_DW./*@>1be02d4*/DiscreteTransferFcn1_states_o/*@>118f106*/ = /*@>1b1e372*/proc_control_P./*@>1be0013*/DiscreteTransferFcn1_InitialS_g;
+/* {S!d1736}InitializeConditions for DiscreteTransferFcn: '<S20>/Discrete Transfer Fcn1' */
+/*@>1b21063*/proc_control_DW./*@>1be02d7*/DiscreteTransferFcn1_states_i/*@>118f116*/ = /*@>1b1e37a*/proc_control_P./*@>1be0016*/DiscreteTransferFcn1_InitialS_h;
+/* {S!d1738}InitializeConditions for DiscreteTransferFcn: '<S21>/Discrete Transfer Fcn1' */
+/*@>1b2106b*/proc_control_DW./*@>1be02da*/DiscreteTransferFcn1_states_g/*@>118f126*/ = /*@>1b1e382*/proc_control_P./*@>1be0019*/DiscreteTransferFcn1_InitialS_m;
+/* {S!d1740}InitializeConditions for DiscreteTransferFcn: '<S22>/Discrete Transfer Fcn1' */
+/*@>1b21073*/proc_control_DW./*@>1be02dd*/DiscreteTransferFcn1_states_h/*@>118f136*/ = /*@>1b1e38a*/proc_control_P./*@>1be001c*/DiscreteTransferFcn1_InitialS_b;
+/* {S!d1742}InitializeConditions for DiscreteTransferFcn: '<S23>/Discrete Transfer Fcn1' */
+/*@>1b2107b*/proc_control_DW./*@>1be02e0*/DiscreteTransferFcn1_states_l/*@>118f146*/ = /*@>1b1e392*/proc_control_P./*@>1be001f*/DiscreteTransferFcn1_Initial_mm;
+/* {S!d1744}InitializeConditions for DiscreteTransferFcn: '<S24>/Discrete Transfer Fcn1' */
+/*@>1b21083*/proc_control_DW./*@>1be02e3*/DiscreteTransferFcn1_states_ge/*@>118f156*/ = /*@>1b1e39a*/proc_control_P./*@>1be0022*/DiscreteTransferFcn1_Initial_gv;
+/* {S!d1746}InitializeConditions for UniformRandomNumber: '<S12>/ Drift' */
+/*@>16960c1*/i/*@>1198612*/ = static_cast<int32_T>(static_cast<uint32_T>(/*@>1b1e3a2*/proc_control_P./*@>1be0025*/dSeedX)/*@>119860f*/ >> /*@>16960be*/16U);
+/*@>16960c6*/t/*@>119861c*/ = static_cast<int32_T>(static_cast<uint32_T>(/*@>1b1e3aa*/proc_control_P./*@>1be0028*/dSeedX)/*@>16b689e*/ & /*@>16960c3*/32768U);
+/*@>11982a3*/for ( int32_T /*@>1bde6c1*/Ns{/*@>1bde6c0*/0}; /*@>1bde6cb*/Ns < /*@>1bde6c9*/6; /*@>1bde6c7*/Ns/*@>1bdea25*/++) {
+    /*@>16960d4*/tseed/*@>1198639*/ = ((((static_cast<uint32_T>(/*@>1b1e3b4*/proc_control_P./*@>1be002b*/dSeedX)/*@>12ea320*/ - (static_cast<uint32_T>(/*@>16960c9*/i)/*@>16b689d*/ << /*@>16960c8*/16U))/*@>12ea321*/ + /*@>16960cb*/t)/*@>16b689c*/ << /*@>16960cf*/16U)/*@>1198631*/ + /*@>16960d0*/t)/*@>1198635*/ + /*@>16960d2*/i;
+    /*@>1198657*/if (/*@>16960d7*/tseed/*@>1198640*/ < /*@>16960d6*/1U) {
+        /*@>16960da*/tseed/*@>1198645*/ = /*@>16960d9*/1144108930U;
+    } else /*@>1198654*/if (/*@>16960dd*/tseed/*@>119864c*/ > /*@>16960dc*/2147483646U) {
+        /*@>16960e0*/tseed/*@>1198651*/ = /*@>16960df*/2147483646U;
+    }
+    /*@>1b210b3*/proc_control_DW./*@>1be02f2*/RandSeed/*@>13966e1*/[/*@>1695c34*/Ns]/*@>1198676*/ = /*@>16960e2*/tseed;
+    /*@>1b210c3*/proc_control_DW./*@>1be02f8*/Drift_NextOutput/*@>1506ec7*/[/*@>16957f0*/Ns]/*@>119868d*/ = (/*@>1b1e3ce*/proc_control_P./*@>1be0031*/dmax/*@>1ab1f49*/[/*@>1ab1f46*/Ns]/*@>1198682*/ - /*@>1b1e3d4*/proc_control_P./*@>1be0034*/dmin/*@>1ab1f4f*/[/*@>1ab1f4c*/Ns])/*@>16b689a*/ * %<SLibCG_DumpSSCode("/*@[1b8adc4*/",(SLibCGCallSubFcn("rt_urand_Upu32_Yd_f_pw_snf", ["&/*@>1be0565*/proc_control_DW./*@>1be0564*/RandSeed/*@>1be0563*/[/*@>1be0567*/Ns]"], 0, 244, 6)),"/*@]*/")>/*@>119868a*/ + /*@>1b1e3da*/proc_control_P./*@>1be0037*/dmin/*@>1ab1f55*/[/*@>1ab1f52*/Ns];
+}
+/* {E!d1746}End of InitializeConditions for UniformRandomNumber: '<S12>/ Drift' */
+
+/* {S!d1748}InitializeConditions for UnitDelay: '<S1>/Unit Delay' */
+/*@>1a41c79*/std::memcpy(&/*@>1b21093*/proc_control_DW./*@>1be02e6*/UnitDelay_DSTATE/*@>19def86*/[/*@>19def75*/0], &/*@>1b1e3bc*/proc_control_P./*@>1be002e*/UnitDelay_InitialCondition/*@>19def8e*/[/*@>19def82*/0], /*@>19def84*/13U/*@>19def91*/ * /*@>19def90*/sizeof(real_T));
+/* {S!d1750}InitializeConditions for DiscreteIntegrator: '<S1>/Discrete-Time Integrator' */
+/*@>1b2109b*/proc_control_DW./*@>1be02e9*/DiscreteTimeIntegrator_PrevRese/*@>118ebb7*/ = /*@>1bde63f*/2;
+/*@>1b210a3*/proc_control_DW./*@>1be02ec*/DiscreteTimeIntegrator_IC_LOADI/*@>118f183*/ = /*@>1bde642*/1U;
+/* {S!d1752}InitializeConditions for DiscreteIntegrator: '<S1>/Discrete-Time Integrator1' */
+/*@>1b210ab*/proc_control_DW./*@>1be02ef*/DiscreteTimeIntegrator1_PrevRes/*@>118ebbb*/ = /*@>1bde645*/2;
+/* {S!d1754}InitializeConditions for DiscreteIntegrator: '<S1>/Discrete-Time Integrator2' */
+/*@>1b210bb*/proc_control_DW./*@>1be02f5*/DiscreteTimeIntegrator2_PrevRes/*@>118ebbc*/ = /*@>1bde648*/2;
+/*@>1b210d1*/proc_control_DW./*@>1be02fe*/DiscreteTimeIntegrator2_IC_LOAD/*@>118f194*/ = /*@>1bde64b*/1U;
+/* {S!d1756}InitializeConditions for DiscreteIntegrator: '<S1>/Discrete-Time Integrator1' incorporates:
+ *  Constant: '<S1>/Initial Angular Rates'
+ */
+/*@>1b210d9*/proc_control_DW./*@>1be0301*/DiscreteTimeIntegrator1_DSTATE/*@>163ba8f*/[/*@>16956c3*/0]/*@>163ba8e*/ = /*@>1b1e3e4*/proc_control_P./*@>1be003a*/InitialAngularRates_Value/*@>1ab1f5a*/[/*@>1ab1f57*/0];
+/* {S!d1758}InitializeConditions for DiscreteIntegrator: '<S1>/Discrete-Time Integrator3' incorporates:
+ *  Constant: '<S1>/Initial Body velocity '
+ */
+/*@>1b210e1*/proc_control_DW./*@>1be0304*/DiscreteTimeIntegrator3_DSTATE/*@>163ba9a*/[/*@>16956c1*/0]/*@>163ba99*/ = /*@>1b1e3ec*/proc_control_P./*@>1be003d*/InitialBodyvelocity_Value/*@>1ab1f5f*/[/*@>1ab1f5c*/0];
+/* {S!d1760}InitializeConditions for DiscreteIntegrator: '<S1>/Discrete-Time Integrator1' incorporates:
+ *  Constant: '<S1>/Initial Angular Rates'
+ */
+/*@>1b210e9*/proc_control_DW./*@>1be0307*/DiscreteTimeIntegrator1_DSTATE/*@>163baaa*/[/*@>16956b7*/1]/*@>163baa9*/ = /*@>1b1e3f4*/proc_control_P./*@>1be0040*/InitialAngularRates_Value/*@>1ab1f64*/[/*@>1ab1f61*/1];
+/* {S!d1762}InitializeConditions for DiscreteIntegrator: '<S1>/Discrete-Time Integrator3' incorporates:
+ *  Constant: '<S1>/Initial Body velocity '
+ */
+/*@>1b210f1*/proc_control_DW./*@>1be030a*/DiscreteTimeIntegrator3_DSTATE/*@>163bab5*/[/*@>16956b5*/1]/*@>163bab4*/ = /*@>1b1e3fc*/proc_control_P./*@>1be0043*/InitialBodyvelocity_Value/*@>1ab1f69*/[/*@>1ab1f66*/1];
+/* {S!d1764}InitializeConditions for DiscreteIntegrator: '<S1>/Discrete-Time Integrator1' incorporates:
+ *  Constant: '<S1>/Initial Angular Rates'
+ */
+/*@>1b210f9*/proc_control_DW./*@>1be030d*/DiscreteTimeIntegrator1_DSTATE/*@>163bac5*/[/*@>16956ab*/2]/*@>163bac4*/ = /*@>1b1e404*/proc_control_P./*@>1be0046*/InitialAngularRates_Value/*@>1ab1f6e*/[/*@>1ab1f6b*/2];
+/* {S!d1766}InitializeConditions for DiscreteIntegrator: '<S1>/Discrete-Time Integrator3' incorporates:
+ *  Constant: '<S1>/Initial Body velocity '
+ */
+/*@>1b21101*/proc_control_DW./*@>1be0310*/DiscreteTimeIntegrator3_DSTATE/*@>163bad0*/[/*@>16956a9*/2]/*@>163bacf*/ = /*@>1b1e40c*/proc_control_P./*@>1be0049*/InitialBodyvelocity_Value/*@>1ab1f73*/[/*@>1ab1f70*/2];
+/*@>1b21109*/proc_control_DW./*@>1be0313*/DiscreteTimeIntegrator3_PrevRes/*@>118ebc0*/ = /*@>1bde64e*/2;
+/* {S!d1768}InitializeConditions for RandomNumber: '<S28>/White Noise' */
+/*@>1695fdb*/i/*@>11982bd*/ = static_cast<int32_T>(static_cast<uint32_T>(/*@>1b1e416*/proc_control_P./*@>1be004c*/BandLimitedWhiteNoise_seed)/*@>11982ba*/ >> /*@>1695fd8*/16U);
+/*@>1695fe0*/t/*@>11982c7*/ = static_cast<int32_T>(static_cast<uint32_T>(/*@>1b1e41e*/proc_control_P./*@>1be004f*/BandLimitedWhiteNoise_seed)/*@>16b686c*/ & /*@>1695fdd*/32768U);
+/*@>1695fee*/tseed/*@>11982e4*/ = ((((static_cast<uint32_T>(/*@>1b1e426*/proc_control_P./*@>1be0052*/BandLimitedWhiteNoise_seed)/*@>12ea32a*/ - (static_cast<uint32_T>(/*@>1695fe3*/i)/*@>16b686b*/ << /*@>1695fe2*/16U))/*@>12ea32b*/ + /*@>1695fe5*/t)/*@>16b686a*/ << /*@>1695fe9*/16U)/*@>11982dc*/ + /*@>1695fea*/t)/*@>11982e0*/ + /*@>1695fec*/i;
+/*@>1198302*/if (/*@>1695ff1*/tseed/*@>11982eb*/ < /*@>1695ff0*/1U) {
+    /*@>1695ff4*/tseed/*@>11982f0*/ = /*@>1695ff3*/1144108930U;
+} else /*@>11982ff*/if (/*@>1695ff7*/tseed/*@>11982f7*/ > /*@>1695ff6*/2147483646U) {
+    /*@>1695ffa*/tseed/*@>11982fc*/ = /*@>1695ff9*/2147483646U;
+}
+/*@>1b21111*/proc_control_DW./*@>1be0316*/RandSeed_j/*@>1198309*/ = /*@>1695ffc*/tseed;
+/*@>1b21119*/proc_control_DW./*@>1be0319*/NextOutput/*@>1198314*/ = %<SLibCG_DumpSSCode("/*@[1b8ad51*/",(SLibCGCallSubFcn("rt_nrand_Upu32_Yd_f_pw_snf", ["&/*@>1be0573*/proc_control_DW./*@>1be0572*/RandSeed_j"], 0, 244, 1)),"/*@]*/")>/*@>16b6868*/ * /*@>1b1e430*/proc_control_P./*@>1be0055*/WhiteNoise_StdDev/*@>1198311*/ + /*@>1b1e436*/proc_control_P./*@>1be0058*/WhiteNoise_Mean;
+/* {E!d1768}End of InitializeConditions for RandomNumber: '<S28>/White Noise' */
+
+/* {S!d1770}InitializeConditions for RandomNumber: '<S29>/White Noise' */
+/*@>1696009*/i/*@>1198328*/ = static_cast<int32_T>(static_cast<uint32_T>(/*@>1b1e43e*/proc_control_P./*@>1be005b*/BandLimitedWhiteNoise1_seed)/*@>1198325*/ >> /*@>1696006*/16U);
+/*@>169600e*/t/*@>1198332*/ = static_cast<int32_T>(static_cast<uint32_T>(/*@>1b1e446*/proc_control_P./*@>1be005e*/BandLimitedWhiteNoise1_seed)/*@>16b6862*/ & /*@>169600b*/32768U);
+/*@>169601c*/tseed/*@>119834f*/ = ((((static_cast<uint32_T>(/*@>1b1e44e*/proc_control_P./*@>1be0061*/BandLimitedWhiteNoise1_seed)/*@>12ea334*/ - (static_cast<uint32_T>(/*@>1696011*/i)/*@>16b6861*/ << /*@>1696010*/16U))/*@>12ea335*/ + /*@>1696013*/t)/*@>16b6860*/ << /*@>1696017*/16U)/*@>1198347*/ + /*@>1696018*/t)/*@>119834b*/ + /*@>169601a*/i;
+/*@>119836d*/if (/*@>169601f*/tseed/*@>1198356*/ < /*@>169601e*/1U) {
+    /*@>1696022*/tseed/*@>119835b*/ = /*@>1696021*/1144108930U;
+} else /*@>119836a*/if (/*@>1696025*/tseed/*@>1198362*/ > /*@>1696024*/2147483646U) {
+    /*@>1696028*/tseed/*@>1198367*/ = /*@>1696027*/2147483646U;
+}
+/*@>1b21127*/proc_control_DW./*@>1be031f*/RandSeed_d/*@>1198374*/ = /*@>169602a*/tseed;
+/*@>1b2112f*/proc_control_DW./*@>1be0322*/NextOutput_b/*@>119837f*/ = %<SLibCG_DumpSSCode("/*@[1b8ad68*/",(SLibCGCallSubFcn("rt_nrand_Upu32_Yd_f_pw_snf", ["&/*@>1be0580*/proc_control_DW./*@>1be057f*/RandSeed_d"], 0, 244, 2)),"/*@]*/")>/*@>16b685e*/ * /*@>1b1e458*/proc_control_P./*@>1be0064*/WhiteNoise_StdDev_d/*@>119837c*/ + /*@>1b1e45e*/proc_control_P./*@>1be0067*/WhiteNoise_Mean_e;
+/* {E!d1770}End of InitializeConditions for RandomNumber: '<S29>/White Noise' */
+
+/* {S!d1772}InitializeConditions for RandomNumber: '<S30>/White Noise' */
+/*@>1696037*/i/*@>1198393*/ = static_cast<int32_T>(static_cast<uint32_T>(/*@>1b1e466*/proc_control_P./*@>1be006a*/BandLimitedWhiteNoise2_seed)/*@>1198390*/ >> /*@>1696034*/16U);
+/*@>169603c*/t/*@>119839d*/ = static_cast<int32_T>(static_cast<uint32_T>(/*@>1b1e46e*/proc_control_P./*@>1be006d*/BandLimitedWhiteNoise2_seed)/*@>16b6858*/ & /*@>1696039*/32768U);
+/*@>169604a*/tseed/*@>11983ba*/ = ((((static_cast<uint32_T>(/*@>1b1e476*/proc_control_P./*@>1be0070*/BandLimitedWhiteNoise2_seed)/*@>12ea33e*/ - (static_cast<uint32_T>(/*@>169603f*/i)/*@>16b6857*/ << /*@>169603e*/16U))/*@>12ea33f*/ + /*@>1696041*/t)/*@>16b6856*/ << /*@>1696045*/16U)/*@>11983b2*/ + /*@>1696046*/t)/*@>11983b6*/ + /*@>1696048*/i;
+/*@>11983d8*/if (/*@>169604d*/tseed/*@>11983c1*/ < /*@>169604c*/1U) {
+    /*@>1696050*/tseed/*@>11983c6*/ = /*@>169604f*/1144108930U;
+} else /*@>11983d5*/if (/*@>1696053*/tseed/*@>11983cd*/ > /*@>1696052*/2147483646U) {
+    /*@>1696056*/tseed/*@>11983d2*/ = /*@>1696055*/2147483646U;
+}
+/*@>1b2113d*/proc_control_DW./*@>1be0328*/RandSeed_e/*@>11983df*/ = /*@>1696058*/tseed;
+/*@>1b21145*/proc_control_DW./*@>1be032b*/NextOutput_g/*@>11983ea*/ = %<SLibCG_DumpSSCode("/*@[1b8ad7f*/",(SLibCGCallSubFcn("rt_nrand_Upu32_Yd_f_pw_snf", ["&/*@>1be058d*/proc_control_DW./*@>1be058c*/RandSeed_e"], 0, 244, 3)),"/*@]*/")>/*@>16b6854*/ * /*@>1b1e480*/proc_control_P./*@>1be0073*/WhiteNoise_StdDev_e/*@>11983e7*/ + /*@>1b1e486*/proc_control_P./*@>1be0076*/WhiteNoise_Mean_c;
+/* {E!d1772}End of InitializeConditions for RandomNumber: '<S30>/White Noise' */
+
+/* {S!d1774}InitializeConditions for RandomNumber: '<S31>/White Noise' */
+/*@>1696065*/i/*@>11983fe*/ = static_cast<int32_T>(static_cast<uint32_T>(/*@>1b1e48e*/proc_control_P./*@>1be0079*/BandLimitedWhiteNoise3_seed)/*@>11983fb*/ >> /*@>1696062*/16U);
+/*@>169606a*/t/*@>1198408*/ = static_cast<int32_T>(static_cast<uint32_T>(/*@>1b1e496*/proc_control_P./*@>1be007c*/BandLimitedWhiteNoise3_seed)/*@>16b684e*/ & /*@>1696067*/32768U);
+/*@>1696078*/tseed/*@>1198425*/ = ((((static_cast<uint32_T>(/*@>1b1e49e*/proc_control_P./*@>1be007f*/BandLimitedWhiteNoise3_seed)/*@>12ea348*/ - (static_cast<uint32_T>(/*@>169606d*/i)/*@>16b684d*/ << /*@>169606c*/16U))/*@>12ea349*/ + /*@>169606f*/t)/*@>16b684c*/ << /*@>1696073*/16U)/*@>119841d*/ + /*@>1696074*/t)/*@>1198421*/ + /*@>1696076*/i;
+/*@>1198443*/if (/*@>169607b*/tseed/*@>119842c*/ < /*@>169607a*/1U) {
+    /*@>169607e*/tseed/*@>1198431*/ = /*@>169607d*/1144108930U;
+} else /*@>1198440*/if (/*@>1696081*/tseed/*@>1198438*/ > /*@>1696080*/2147483646U) {
+    /*@>1696084*/tseed/*@>119843d*/ = /*@>1696083*/2147483646U;
+}
+/*@>1b21153*/proc_control_DW./*@>1be0331*/RandSeed_n/*@>119844a*/ = /*@>1696086*/tseed;
+/*@>1b2115b*/proc_control_DW./*@>1be0334*/NextOutput_l/*@>1198455*/ = %<SLibCG_DumpSSCode("/*@[1b8ad96*/",(SLibCGCallSubFcn("rt_nrand_Upu32_Yd_f_pw_snf", ["&/*@>1be059a*/proc_control_DW./*@>1be0599*/RandSeed_n"], 0, 244, 4)),"/*@]*/")>/*@>16b684a*/ * /*@>1b1e4a8*/proc_control_P./*@>1be0082*/WhiteNoise_StdDev_j/*@>1198452*/ + /*@>1b1e4ae*/proc_control_P./*@>1be0085*/WhiteNoise_Mean_p;
+/* {E!d1774}End of InitializeConditions for RandomNumber: '<S31>/White Noise' */
+
+/* {S!d1776}InitializeConditions for RandomNumber: '<S32>/White Noise' */
+/*@>1696093*/i/*@>1198469*/ = static_cast<int32_T>(static_cast<uint32_T>(/*@>1b1e4b6*/proc_control_P./*@>1be0088*/BandLimitedWhiteNoise4_seed)/*@>1198466*/ >> /*@>1696090*/16U);
+/*@>1696098*/t/*@>1198473*/ = static_cast<int32_T>(static_cast<uint32_T>(/*@>1b1e4be*/proc_control_P./*@>1be008b*/BandLimitedWhiteNoise4_seed)/*@>16b6844*/ & /*@>1696095*/32768U);
+/*@>16960a6*/tseed/*@>1198490*/ = ((((static_cast<uint32_T>(/*@>1b1e4c6*/proc_control_P./*@>1be008e*/BandLimitedWhiteNoise4_seed)/*@>12ea352*/ - (static_cast<uint32_T>(/*@>169609b*/i)/*@>16b6843*/ << /*@>169609a*/16U))/*@>12ea353*/ + /*@>169609d*/t)/*@>16b6842*/ << /*@>16960a1*/16U)/*@>1198488*/ + /*@>16960a2*/t)/*@>119848c*/ + /*@>16960a4*/i;
+/*@>11984ae*/if (/*@>16960a9*/tseed/*@>1198497*/ < /*@>16960a8*/1U) {
+    /*@>16960ac*/tseed/*@>119849c*/ = /*@>16960ab*/1144108930U;
+} else /*@>11984ab*/if (/*@>16960af*/tseed/*@>11984a3*/ > /*@>16960ae*/2147483646U) {
+    /*@>16960b2*/tseed/*@>11984a8*/ = /*@>16960b1*/2147483646U;
+}
+/*@>1b21169*/proc_control_DW./*@>1be033a*/RandSeed_b/*@>11984b5*/ = /*@>16960b4*/tseed;
+/*@>1b21171*/proc_control_DW./*@>1be033d*/NextOutput_e/*@>11984c0*/ = %<SLibCG_DumpSSCode("/*@[1b8adad*/",(SLibCGCallSubFcn("rt_nrand_Upu32_Yd_f_pw_snf", ["&/*@>1be05a7*/proc_control_DW./*@>1be05a6*/RandSeed_b"], 0, 244, 5)),"/*@]*/")>/*@>16b6840*/ * /*@>1b1e4d0*/proc_control_P./*@>1be0091*/WhiteNoise_StdDev_p/*@>11984bd*/ + /*@>1b1e4d6*/proc_control_P./*@>1be0094*/WhiteNoise_Mean_l;
+/* {E!d1776}End of InitializeConditions for RandomNumber: '<S32>/White Noise' */
+
+/* {S!d1498}SystemInitialize for Atomic SubSystem: '<S16>/Publish2' */
+/* {S!d1778}Start for MATLABSystem: '<S27>/SinkBlock' */
+/*@>1b2117f*/proc_control_DW./*@>1be0343*/obj_jj./*@>1bdfc41*/matlabCodegenIsDeleted/*@>119554a*/ = /*@>1695f2f*/false;
+/*@>1b21187*/proc_control_DW./*@>1be0346*/obj_jj./*@>1bdfc44*/isInitialized/*@>1195558*/ = /*@>1bde651*/1;
+/*@>1506fef*/for (/*@>1bde6b0*/i = /*@>1bde6af*/0; /*@>1bde6ba*/i < /*@>1bde6b8*/29; /*@>1bde6b6*/i/*@>1bdea5a*/++) {
+    /*@>1b060e9*/proc_control_B./*@>1bdfeae*/b_zeroDelimTopic_k/*@>1624e13*/[/*@>1874092*/i]/*@>1506fe2*/ = /*@>1ab1f77*/tmp_p/*@>1ab1f79*/[/*@>1ab1f76*/i];
+}
+/*@>1b060e1*/proc_control_B./*@>1bdfeab*/b_zeroDelimTopic_k/*@>1624e22*/[/*@>1695764*/29]/*@>1507008*/ = /*@>16957e9*/'\x00';
+/*@>1a2855b*/Pub_proc_control_19_1361.createPublisher(&/*@>1b060f1*/proc_control_B./*@>1bdfeb1*/b_zeroDelimTopic_k/*@>1624e29*/[/*@>1695763*/0], /*@>1695c4d*/1);
+/*@>1b2118f*/proc_control_DW./*@>1be0349*/obj_jj./*@>1bdfc47*/isSetupComplete/*@>119556a*/ = /*@>1695f34*/true;
+/* {E!d1778}End of Start for MATLABSystem: '<S27>/SinkBlock' */
+/* {E!d1498}End of SystemInitialize for SubSystem: '<S16>/Publish2' */
+
+/* {S!d1500}SystemInitialize for Atomic SubSystem: '<S33>/Subscribe' */
+/* {S!d1780}Start for MATLABSystem: '<S42>/SourceBlock' */
+/*@>1b21197*/proc_control_DW./*@>1be034c*/obj_n./*@>1bdfc4a*/matlabCodegenIsDeleted/*@>11957b7*/ = /*@>1695f3e*/false;
+/*@>1b2119f*/proc_control_DW./*@>1be034f*/obj_n./*@>1bdfc4d*/isInitialized/*@>11957c5*/ = /*@>1bde654*/1;
+/*@>150708c*/for (/*@>1bde69f*/i = /*@>1bde69e*/0; /*@>1bde6a9*/i < /*@>1bde6a7*/36; /*@>1bde6a5*/i/*@>1bdea5b*/++) {
+    /*@>1b0610f*/proc_control_B./*@>1bdfeb7*/b_zeroDelimTopic_j/*@>1624e3c*/[/*@>18740a3*/i]/*@>150707f*/ = /*@>1ab1f7d*/tmp_q/*@>1ab1f7f*/[/*@>1ab1f7c*/i];
+}
+/*@>1b06107*/proc_control_B./*@>1bdfeb4*/b_zeroDelimTopic_j/*@>1624e4d*/[/*@>1695762*/36]/*@>15070a5*/ = /*@>16957d7*/'\x00';
+/*@>1a2855d*/Sub_proc_control_19_1385.createSubscriber(&/*@>1b06117*/proc_control_B./*@>1bdfeba*/b_zeroDelimTopic_j/*@>1624e54*/[/*@>1695761*/0], /*@>1695c4a*/1);
+/*@>1b211a7*/proc_control_DW./*@>1be0352*/obj_n./*@>1bdfc50*/isSetupComplete/*@>11957d7*/ = /*@>1695f43*/true;
+/* {E!d1780}End of Start for MATLABSystem: '<S42>/SourceBlock' */
+/* {E!d1500}End of SystemInitialize for SubSystem: '<S33>/Subscribe' */
+
+/* {S!d1502}SystemInitialize for Atomic SubSystem: '<S33>/Publish' */
+/* {S!d1782}Start for MATLABSystem: '<S41>/SinkBlock' */
+/*@>1b211af*/proc_control_DW./*@>1be0355*/obj_d./*@>1bdfc53*/matlabCodegenIsDeleted/*@>1195a24*/ = /*@>1695f4d*/false;
+/*@>1b211b7*/proc_control_DW./*@>1be0358*/obj_d./*@>1bdfc56*/isInitialized/*@>1195a32*/ = /*@>1bde657*/1;
+/*@>1507128*/for (/*@>1bde68e*/i = /*@>1bde68d*/0; /*@>1bde698*/i < /*@>1bde696*/32; /*@>1bde694*/i/*@>1bdea5c*/++) {
+    /*@>1b06135*/proc_control_B./*@>1bdfec0*/b_zeroDelimTopic_fq/*@>1624e63*/[/*@>18740b4*/i]/*@>150711b*/ = /*@>1ab1f83*/tmp_r/*@>1ab1f85*/[/*@>1ab1f82*/i];
+}
+/*@>1b0612d*/proc_control_B./*@>1bdfebd*/b_zeroDelimTopic_fq/*@>1624e72*/[/*@>1695760*/32]/*@>1507141*/ = /*@>16957c5*/'\x00';
+/*@>1a2855f*/Pub_proc_control_19_1384.createPublisher(&/*@>1b0613d*/proc_control_B./*@>1bdfec3*/b_zeroDelimTopic_fq/*@>1624e79*/[/*@>169575f*/0], /*@>1695c47*/1);
+/*@>1b211bf*/proc_control_DW./*@>1be035b*/obj_d./*@>1bdfc59*/isSetupComplete/*@>1195a44*/ = /*@>1695f52*/true;
+/* {E!d1782}End of Start for MATLABSystem: '<S41>/SinkBlock' */
+/* {E!d1502}End of SystemInitialize for SubSystem: '<S33>/Publish' */
+
+/* {S!d1784}Start for MATLABSystem: '<S33>/MATLAB System' */
+/*  Perform one-time calculations, such as computing constants */
+/*  Initialize / reset discrete-state properties */
+/*@>1b211c7*/proc_control_DW./*@>1be035e*/method/*@>11913dc*/ = /*@>1695dd9*/7U;
+/*@>1b211cf*/proc_control_DW./*@>1be0361*/state/*@>11913e4*/ = /*@>1695ddc*/1144108930U;
+/*@>1b211df*/proc_control_DW./*@>1be0364*/state_k/*@>163ba66*/[/*@>16956d2*/0]/*@>163ba65*/ = /*@>16955c8*/362436069U;
+/*@>1b211e7*/proc_control_DW./*@>1be0367*/state_k/*@>163ba76*/[/*@>16956cf*/1]/*@>163ba75*/ = /*@>16955c7*/521288629U;
+/*@>1b211ef*/proc_control_DW./*@>1be036a*/obj_fj./*@>1bdfb5a*/isInitialized/*@>1191464*/ = /*@>1bde65a*/1;
+/* {S!d1786}InitializeConditions for MATLABSystem: '<S33>/MATLAB System' */
+/*  Perform one-time calculations, such as computing constants */
+/*  Initialize / reset discrete-state properties */
+/* this.pingerPosition = this.pingerStartPosition; */
+/*@>1b211f7*/proc_control_DW./*@>1be036d*/obj_fj./*@>1bdfb5d*/pingerPosition./*@>1bdfb60*/X/*@>1191591*/ = /*@>16dc692*/10.0;
+/*@>1b211ff*/proc_control_DW./*@>1be0370*/obj_fj./*@>1bdfb63*/pingerPosition./*@>1bdfb66*/Y/*@>1191598*/ = /*@>16dc694*/0.0;
+/*@>1b21207*/proc_control_DW./*@>1be0373*/obj_fj./*@>1bdfb69*/pingerPosition./*@>1bdfb6c*/Z/*@>119159f*/ = /*@>16dc696*/5.0;
+/* {S!d1788}SystemInitialize for Outport: '<S1>/Clean Output' */
+/*@>1b06159*/proc_control_B./*@>1bdfec6*/y_d/*@>163b9b7*/[/*@>1695717*/0]/*@>163b9b6*/ = /*@>1b1e502*/proc_control_P./*@>1be0097*/CleanOutput_Y0./*@>1bdfcfe*/x./*@>1bdfd01*/Quaternion/*@>1ab1f92*/[/*@>1ab1f87*/0];
+/* {S!d1790}SystemInitialize for Sum: '<S14>/Sum1' incorporates:
+ *  Outport: '<S1>/Sensors Output'
+ */
+/*@>1b06161*/proc_control_B./*@>1bdfec9*/Quaternion/*@>163b9c6*/[/*@>1695715*/0]/*@>163b9c5*/ = /*@>1b1e50a*/proc_control_P./*@>1be009a*/SensorsOutput_Y0./*@>1bdfd04*/Quaternion/*@>1ab1f9b*/[/*@>1ab1f94*/0];
+/* {S!d1792}SystemInitialize for Outport: '<S1>/Clean Output' */
+/*@>1b06169*/proc_control_B./*@>1bdfecc*/y_d/*@>163b9d8*/[/*@>1695708*/1]/*@>163b9d7*/ = /*@>1b1e512*/proc_control_P./*@>1be009d*/CleanOutput_Y0./*@>1bdfd07*/x./*@>1bdfd0a*/Quaternion/*@>1ab1fa8*/[/*@>1ab1f9d*/1];
+/* {S!d1794}SystemInitialize for Sum: '<S14>/Sum1' incorporates:
+ *  Outport: '<S1>/Sensors Output'
+ */
+/*@>1b06171*/proc_control_B./*@>1bdfecf*/Quaternion/*@>163b9e7*/[/*@>1695706*/1]/*@>163b9e6*/ = /*@>1b1e51a*/proc_control_P./*@>1be00a0*/SensorsOutput_Y0./*@>1bdfd0d*/Quaternion/*@>1ab1fb1*/[/*@>1ab1faa*/1];
+/* {S!d1796}SystemInitialize for Outport: '<S1>/Clean Output' */
+/*@>1b06179*/proc_control_B./*@>1bdfed2*/y_d/*@>163b9f9*/[/*@>16956f9*/2]/*@>163b9f8*/ = /*@>1b1e522*/proc_control_P./*@>1be00a3*/CleanOutput_Y0./*@>1bdfd10*/x./*@>1bdfd13*/Quaternion/*@>1ab1fbe*/[/*@>1ab1fb3*/2];
+/* {S!d1798}SystemInitialize for Sum: '<S14>/Sum1' incorporates:
+ *  Outport: '<S1>/Sensors Output'
+ */
+/*@>1b06181*/proc_control_B./*@>1bdfed5*/Quaternion/*@>163ba08*/[/*@>16956f7*/2]/*@>163ba07*/ = /*@>1b1e52a*/proc_control_P./*@>1be00a6*/SensorsOutput_Y0./*@>1bdfd16*/Quaternion/*@>1ab1fc7*/[/*@>1ab1fc0*/2];
+/* {S!d1800}SystemInitialize for Outport: '<S1>/Clean Output' */
+/*@>1b06189*/proc_control_B./*@>1bdfed8*/y_d/*@>163ba1a*/[/*@>16956ea*/3]/*@>163ba19*/ = /*@>1b1e532*/proc_control_P./*@>1be00a9*/CleanOutput_Y0./*@>1bdfd19*/x./*@>1bdfd1c*/Quaternion/*@>1ab1fd4*/[/*@>1ab1fc9*/3];
+/* {S!d1802}SystemInitialize for Sum: '<S14>/Sum1' incorporates:
+ *  Outport: '<S1>/Sensors Output'
+ */
+/*@>1b06191*/proc_control_B./*@>1bdfedb*/Quaternion/*@>163ba29*/[/*@>16956e8*/3]/*@>163ba28*/ = /*@>1b1e53a*/proc_control_P./*@>1be00ac*/SensorsOutput_Y0./*@>1bdfd1f*/Quaternion/*@>1ab1fdd*/[/*@>1ab1fd6*/3];
+/* {E!d1497}End of SystemInitialize for SubSystem: '<Root>/Modèle Physique' */
+
+/* {S!d1505}SystemInitialize for Enabled SubSystem: '<Root>/ROS Output' */
+/* {S!d1506}SystemInitialize for Atomic SubSystem: '<S93>/Publish' */
+/* {S!d1804}Start for MATLABSystem: '<S106>/SinkBlock' */
+/*@>1b2120f*/proc_control_DW./*@>1be0376*/obj_ap./*@>1bdfc5c*/matlabCodegenIsDeleted/*@>1195c91*/ = /*@>1695f5c*/false;
+/*@>1b21217*/proc_control_DW./*@>1be0379*/obj_ap./*@>1bdfc5f*/isInitialized/*@>1195c9f*/ = /*@>1bde65d*/1;
+/*@>15072ea*/for (/*@>1bde67d*/i = /*@>1bde67c*/0; /*@>1bde687*/i < /*@>1bde685*/8; /*@>1bde683*/i/*@>1bdea5d*/++) {
+    /*@>16957a9*/b_zeroDelimTopic/*@>1624ee3*/[/*@>18740c5*/i]/*@>15072dd*/ = /*@>1ab1fe1*/tmp_s/*@>1ab1fe3*/[/*@>1ab1fe0*/i];
+}
+/*@>16957a0*/b_zeroDelimTopic/*@>1624ef4*/[/*@>169575b*/8]/*@>1507303*/ = /*@>16957ab*/'\x00';
+/*@>1a28561*/Pub_proc_control_75.createPublisher(&/*@>1695f63*/b_zeroDelimTopic/*@>1624efb*/[/*@>169575a*/0], /*@>1695c42*/1);
+/*@>1b2121f*/proc_control_DW./*@>1be037c*/obj_ap./*@>1bdfc62*/isSetupComplete/*@>1195cb1*/ = /*@>1695f61*/true;
+/* {E!d1804}End of Start for MATLABSystem: '<S106>/SinkBlock' */
+/* {E!d1506}End of SystemInitialize for SubSystem: '<S93>/Publish' */
+
+/* {S!d1508}SystemInitialize for Atomic SubSystem: '<S89>/Publish' */
+/* {S!d1806}Start for MATLABSystem: '<S96>/SinkBlock' */
+/*@>1b21227*/proc_control_DW./*@>1be037f*/obj_kw./*@>1bdfc65*/matlabCodegenIsDeleted/*@>1195efe*/ = /*@>1695f6b*/false;
+/*@>1b2122f*/proc_control_DW./*@>1be0382*/obj_kw./*@>1bdfc68*/isInitialized/*@>1195f0c*/ = /*@>1bde660*/1;
+/*@>1a28563*/Pub_proc_control_41.createPublisher(&/*@>1b061a3*/proc_control_B./*@>1bdfede*/b_zeroDelimTopic_fc/*@>1624f08*/[/*@>1695759*/0], /*@>1695c3f*/1);
+/*@>1b21237*/proc_control_DW./*@>1be0385*/obj_kw./*@>1bdfc6b*/isSetupComplete/*@>1195f1e*/ = /*@>1695f70*/true;
+/* {E!d1508}End of SystemInitialize for SubSystem: '<S89>/Publish' */
+
+/* {S!d1510}SystemInitialize for Atomic SubSystem: '<S90>/Publish Depth' */
+/* {S!d1808}Start for MATLABSystem: '<S98>/SinkBlock' */
+/*@>1b2123f*/proc_control_DW./*@>1be0388*/obj_k./*@>1bdfc6e*/matlabCodegenIsDeleted/*@>119616b*/ = /*@>1695f7a*/false;
+/*@>1b21247*/proc_control_DW./*@>1be038b*/obj_k./*@>1bdfc71*/isInitialized/*@>1196179*/ = /*@>1bde663*/1;
+/*@>1a28565*/Pub_proc_control_243.createPublisher(&/*@>1b061b1*/proc_control_B./*@>1bdfee1*/b_zeroDelimTopic_g/*@>1624f15*/[/*@>1695758*/0], /*@>1695c3c*/1);
+/*@>1b2124f*/proc_control_DW./*@>1be038e*/obj_k./*@>1bdfc74*/isSetupComplete/*@>119618b*/ = /*@>1695f7f*/true;
+/* {E!d1510}End of SystemInitialize for SubSystem: '<S90>/Publish Depth' */
+
+/* {S!d1512}SystemInitialize for Atomic SubSystem: '<S91>/Publish imu_info' */
+/* {S!d1810}Start for MATLABSystem: '<S101>/SinkBlock' */
+/*@>1b21257*/proc_control_DW./*@>1be0391*/obj_ab./*@>1bdfc77*/matlabCodegenIsDeleted/*@>11963d8*/ = /*@>1695f89*/false;
+/*@>1b2125f*/proc_control_DW./*@>1be0394*/obj_ab./*@>1bdfc7a*/isInitialized/*@>11963e6*/ = /*@>1bde666*/1;
+/*@>1a28567*/Pub_proc_control_47.createPublisher(&/*@>1b061bf*/proc_control_B./*@>1bdfee4*/b_zeroDelimTopic_il/*@>1624f22*/[/*@>1695757*/0], /*@>1695c39*/1);
+/*@>1b21267*/proc_control_DW./*@>1be0397*/obj_ab./*@>1bdfc7d*/isSetupComplete/*@>11963f8*/ = /*@>1695f8e*/true;
+/* {E!d1512}End of SystemInitialize for SubSystem: '<S91>/Publish imu_info' */
+
+/* {S!d1514}SystemInitialize for Atomic SubSystem: '<S92>/Publish Ping' */
+/* {S!d1812}Start for MATLABSystem: '<S103>/SinkBlock' */
+/*@>1b2126f*/proc_control_DW./*@>1be039a*/obj_c./*@>1bdfc80*/matlabCodegenIsDeleted/*@>1196645*/ = /*@>1695f98*/false;
+/*@>1b21277*/proc_control_DW./*@>1be039d*/obj_c./*@>1bdfc83*/isInitialized/*@>1196653*/ = /*@>1bde669*/1;
+/*@>1a28569*/Pub_proc_control_350.createPublisher(&/*@>1b061cd*/proc_control_B./*@>1bdfee7*/b_zeroDelimTopic_jo/*@>1624f2f*/[/*@>1695756*/0], /*@>1695c36*/1);
+/*@>1b2127f*/proc_control_DW./*@>1be03a0*/obj_c./*@>1bdfc86*/isSetupComplete/*@>1196665*/ = /*@>1695f9d*/true;
+/* {E!d1514}End of SystemInitialize for SubSystem: '<S92>/Publish Ping' */
+/* {E!d1505}End of SystemInitialize for SubSystem: '<Root>/ROS Output' */
+%<SLibInsertInitPeriodicCStatesFcn(system)>
+%closefile cfgTxt
+%<cfgTxt>
+%<LibSetSystemField(system, "CachedModelInitializeLocalVars", localVarDecl)>
+%endfunction
+%function ModelInitializeFcnProtoType(block, system) Output
+%assign fcnProtoType = ""
+%openfile fcnProtoType
+static void ModelInitialize(\
+%assign comma = ""
+%closefile fcnProtoType
+%<SLibCG_SetFcnProtoType(0, 244, fcnProtoType)>
+%endfunction

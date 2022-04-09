@@ -1,0 +1,326 @@
+%function CGIRBlockRegisterFixPointFunctions() void
+%if !ISFIELD(FixPtUtils,"plook_u32d_binckpang")
+%assign tmpRet = SETFIELD(FixPtUtils,"plook_u32d_binckpang",1)
+%assign fcnProBuf =""
+%openfile fcnProBuf
+extern uint32_T plook_u32d_binckpang(real_T u, const real_T bp[], uint32_T maxIndex, uint32_T *prevIndex);
+%closefile fcnProBuf
+%assign fcnDefBuf =""
+%openfile fcnDefBuf
+%assign fcnRec = SLibFcnPrototypeToRec(fcnProBuf)
+%addtorecord fcnRec Abstract "" Category "utility" ...
+             GeneratedBy "" Type "Utility"
+%<SLibDumpFunctionBanner(fcnRec)>
+%undef fcnRec
+uint32_T plook_u32d_binckpang(real_T u, const real_T bp[], uint32_T maxIndex, uint32_T *prevIndex)
+{
+    uint32_T bpIndex;
+    /* Prelookup - Index only
+   Index Search method: 'binary'
+   Interpolation method: 'Use nearest'
+   Use previous index: 'on'
+   Use last breakpoint for index at or above upper limit: 'on'
+   Remove protection against out-of-range input in generated code: 'on'
+ */
+    if (u < bp[maxIndex]) {
+        bpIndex = binsearch_u32d_prevIdx(u, bp, *prevIndex, maxIndex);
+        if ((bpIndex < maxIndex) && (bp[bpIndex + 1U] - u <= u - bp[bpIndex])) {
+            bpIndex++;
+        }
+    } else {
+        bpIndex = maxIndex;
+    }
+    *prevIndex = bpIndex;
+    return bpIndex;
+}
+%closefile fcnDefBuf
+%<LibPushEmptyStackSharedUtils()>
+%<LibAddtoSharedUtilsIncludes("binsearch_u32d_prevIdx.h")>
+%<SLibDumpUtilsSourceCode("plook_u32d_binckpang",fcnProBuf,fcnDefBuf)>
+%if !EXISTS(::CompiledModel.GenUtilsSrcInSharedLocation) || (::CompiledModel.GenUtilsSrcInSharedLocation == 0)
+%assign fcnProPragmaBuf =""
+%openfile fcnProPragmaBuf
+  %<SLibGetFcnMemSecPragmaOnDecl("plook_u32d_binckpang", "MemSecFuncSharedUtil", "Pre")>\
+  %<fcnProBuf>
+  %<SLibGetFcnMemSecPragmaOnDecl("plook_u32d_binckpang", "MemSecFuncSharedUtil", "Post")>\
+%closefile fcnProPragmaBuf
+  %<LibCacheFunctionPrototype(fcnProPragmaBuf)>
+%endif
+%assign incStackBuf = LibPopStackSharedUtilsIncludes()
+%undef incStackBuf
+%undef fcnProPragmaBuf
+%undef fcnProBuf
+%undef fcnDefBuf
+%endif %% !ISFIELD(FixPtUtils,"plook_u32d_binckpang")
+
+
+%if !ISFIELD(FixPtUtils,"plook_u32u16_binckpan")
+%assign tmpRet = SETFIELD(FixPtUtils,"plook_u32u16_binckpan",1)
+%assign fcnProBuf =""
+%openfile fcnProBuf
+extern uint32_T plook_u32u16_binckpan(uint16_T u, const uint16_T bp[], uint32_T maxIndex, uint32_T *prevIndex);
+%closefile fcnProBuf
+%assign fcnDefBuf =""
+%openfile fcnDefBuf
+%assign fcnRec = SLibFcnPrototypeToRec(fcnProBuf)
+%addtorecord fcnRec Abstract "" Category "utility" ...
+             GeneratedBy "" Type "Utility"
+%<SLibDumpFunctionBanner(fcnRec)>
+%undef fcnRec
+uint32_T plook_u32u16_binckpan(uint16_T u, const uint16_T bp[], uint32_T maxIndex, uint32_T *prevIndex)
+{
+    uint32_T bpIndex;
+    /* Prelookup - Index only
+   Index Search method: 'binary'
+   Interpolation method: 'Use nearest'
+   Extrapolation method: 'Clip'
+   Use previous index: 'on'
+   Use last breakpoint for index at or above upper limit: 'on'
+   Remove protection against out-of-range input in generated code: 'off'
+ */
+    if (u <= bp[0U]) {
+        bpIndex = 0U;
+    } else if (u < bp[maxIndex]) {
+        bpIndex = binsearch_u32u16_prevIdx(u, bp, *prevIndex, maxIndex);
+        if ((bpIndex < maxIndex) && (static_cast<uint16_T>(static_cast<uint32_T>(bp[bpIndex + 1U]) - u) <= static_cast<uint16_T>(static_cast<uint32_T>(u) - bp[bpIndex]))) {
+            bpIndex++;
+        }
+    } else {
+        bpIndex = maxIndex;
+    }
+    *prevIndex = bpIndex;
+    return bpIndex;
+}
+%closefile fcnDefBuf
+%<LibPushEmptyStackSharedUtils()>
+%<LibAddtoSharedUtilsIncludes("binsearch_u32u16_prevIdx.h")>
+%<SLibDumpUtilsSourceCode("plook_u32u16_binckpan",fcnProBuf,fcnDefBuf)>
+%if !EXISTS(::CompiledModel.GenUtilsSrcInSharedLocation) || (::CompiledModel.GenUtilsSrcInSharedLocation == 0)
+%assign fcnProPragmaBuf =""
+%openfile fcnProPragmaBuf
+  %<SLibGetFcnMemSecPragmaOnDecl("plook_u32u16_binckpan", "MemSecFuncSharedUtil", "Pre")>\
+  %<fcnProBuf>
+  %<SLibGetFcnMemSecPragmaOnDecl("plook_u32u16_binckpan", "MemSecFuncSharedUtil", "Post")>\
+%closefile fcnProPragmaBuf
+  %<LibCacheFunctionPrototype(fcnProPragmaBuf)>
+%endif
+%assign incStackBuf = LibPopStackSharedUtilsIncludes()
+%undef incStackBuf
+%undef fcnProPragmaBuf
+%undef fcnProBuf
+%undef fcnDefBuf
+%endif %% !ISFIELD(FixPtUtils,"plook_u32u16_binckpan")
+
+
+%if !ISFIELD(FixPtUtils,"plook_u32d_binckpan")
+%assign tmpRet = SETFIELD(FixPtUtils,"plook_u32d_binckpan",1)
+%assign fcnProBuf =""
+%openfile fcnProBuf
+extern uint32_T plook_u32d_binckpan(real_T u, const real_T bp[], uint32_T maxIndex, uint32_T *prevIndex);
+%closefile fcnProBuf
+%assign fcnDefBuf =""
+%openfile fcnDefBuf
+%assign fcnRec = SLibFcnPrototypeToRec(fcnProBuf)
+%addtorecord fcnRec Abstract "" Category "utility" ...
+             GeneratedBy "" Type "Utility"
+%<SLibDumpFunctionBanner(fcnRec)>
+%undef fcnRec
+uint32_T plook_u32d_binckpan(real_T u, const real_T bp[], uint32_T maxIndex, uint32_T *prevIndex)
+{
+    uint32_T bpIndex;
+    /* Prelookup - Index only
+   Index Search method: 'binary'
+   Interpolation method: 'Use nearest'
+   Extrapolation method: 'Clip'
+   Use previous index: 'on'
+   Use last breakpoint for index at or above upper limit: 'on'
+   Remove protection against out-of-range input in generated code: 'off'
+ */
+    if (u <= bp[0U]) {
+        bpIndex = 0U;
+    } else if (u < bp[maxIndex]) {
+        bpIndex = binsearch_u32d_prevIdx(u, bp, *prevIndex, maxIndex);
+        if ((bpIndex < maxIndex) && (bp[bpIndex + 1U] - u <= u - bp[bpIndex])) {
+            bpIndex++;
+        }
+    } else {
+        bpIndex = maxIndex;
+    }
+    *prevIndex = bpIndex;
+    return bpIndex;
+}
+%closefile fcnDefBuf
+%<LibPushEmptyStackSharedUtils()>
+%<LibAddtoSharedUtilsIncludes("binsearch_u32d_prevIdx.h")>
+%<SLibDumpUtilsSourceCode("plook_u32d_binckpan",fcnProBuf,fcnDefBuf)>
+%if !EXISTS(::CompiledModel.GenUtilsSrcInSharedLocation) || (::CompiledModel.GenUtilsSrcInSharedLocation == 0)
+%assign fcnProPragmaBuf =""
+%openfile fcnProPragmaBuf
+  %<SLibGetFcnMemSecPragmaOnDecl("plook_u32d_binckpan", "MemSecFuncSharedUtil", "Pre")>\
+  %<fcnProBuf>
+  %<SLibGetFcnMemSecPragmaOnDecl("plook_u32d_binckpan", "MemSecFuncSharedUtil", "Post")>\
+%closefile fcnProPragmaBuf
+  %<LibCacheFunctionPrototype(fcnProPragmaBuf)>
+%endif
+%assign incStackBuf = LibPopStackSharedUtilsIncludes()
+%undef incStackBuf
+%undef fcnProPragmaBuf
+%undef fcnProBuf
+%undef fcnDefBuf
+%endif %% !ISFIELD(FixPtUtils,"plook_u32d_binckpan")
+
+
+%if !ISFIELD(FixPtUtils,"binsearch_u32d_prevIdx")
+%assign tmpRet = SETFIELD(FixPtUtils,"binsearch_u32d_prevIdx",1)
+%assign fcnProBuf =""
+%openfile fcnProBuf
+extern uint32_T binsearch_u32d_prevIdx(real_T u, const real_T bp[], uint32_T startIndex, uint32_T maxIndex);
+%closefile fcnProBuf
+%assign fcnDefBuf =""
+%openfile fcnDefBuf
+%assign fcnRec = SLibFcnPrototypeToRec(fcnProBuf)
+%addtorecord fcnRec Abstract "" Category "utility" ...
+             GeneratedBy "" Type "Utility"
+%<SLibDumpFunctionBanner(fcnRec)>
+%undef fcnRec
+uint32_T binsearch_u32d_prevIdx(real_T u, const real_T bp[], uint32_T startIndex, uint32_T maxIndex)
+{
+    uint32_T bpIndex;
+    uint32_T found;
+    uint32_T iLeft;
+    uint32_T iRght;
+    /* Binary Search using Previous Index */
+    bpIndex = startIndex;
+    iLeft = 0U;
+    iRght = maxIndex;
+    found = 0U;
+    while (found == 0U) {
+        if (u < bp[bpIndex]) {
+            iRght = bpIndex - 1U;
+            bpIndex = ((bpIndex + iLeft) - 1U) >> 1U;
+        } else if (u < bp[bpIndex + 1U]) {
+            found = 1U;
+        } else {
+            iLeft = bpIndex + 1U;
+            bpIndex = ((bpIndex + iRght) + 1U) >> 1U;
+        }
+    }
+    return bpIndex;
+}
+%closefile fcnDefBuf
+%<LibPushEmptyStackSharedUtils()>
+%<SLibDumpUtilsSourceCode("binsearch_u32d_prevIdx",fcnProBuf,fcnDefBuf)>
+%if !EXISTS(::CompiledModel.GenUtilsSrcInSharedLocation) || (::CompiledModel.GenUtilsSrcInSharedLocation == 0)
+%assign fcnProPragmaBuf =""
+%openfile fcnProPragmaBuf
+  %<SLibGetFcnMemSecPragmaOnDecl("binsearch_u32d_prevIdx", "MemSecFuncSharedUtil", "Pre")>\
+  %<fcnProBuf>
+  %<SLibGetFcnMemSecPragmaOnDecl("binsearch_u32d_prevIdx", "MemSecFuncSharedUtil", "Post")>\
+%closefile fcnProPragmaBuf
+  %<LibCacheFunctionPrototype(fcnProPragmaBuf)>
+%endif
+%assign incStackBuf = LibPopStackSharedUtilsIncludes()
+%undef incStackBuf
+%undef fcnProPragmaBuf
+%undef fcnProBuf
+%undef fcnDefBuf
+%endif %% !ISFIELD(FixPtUtils,"binsearch_u32d_prevIdx")
+
+
+%if !ISFIELD(FixPtUtils,"binsearch_u32u16_prevIdx")
+%assign tmpRet = SETFIELD(FixPtUtils,"binsearch_u32u16_prevIdx",1)
+%assign fcnProBuf =""
+%openfile fcnProBuf
+extern uint32_T binsearch_u32u16_prevIdx(uint16_T u, const uint16_T bp[], uint32_T startIndex, uint32_T maxIndex);
+%closefile fcnProBuf
+%assign fcnDefBuf =""
+%openfile fcnDefBuf
+%assign fcnRec = SLibFcnPrototypeToRec(fcnProBuf)
+%addtorecord fcnRec Abstract "" Category "utility" ...
+             GeneratedBy "" Type "Utility"
+%<SLibDumpFunctionBanner(fcnRec)>
+%undef fcnRec
+uint32_T binsearch_u32u16_prevIdx(uint16_T u, const uint16_T bp[], uint32_T startIndex, uint32_T maxIndex)
+{
+    uint32_T bpIndex;
+    uint32_T found;
+    uint32_T iLeft;
+    uint32_T iRght;
+    /* Binary Search using Previous Index */
+    bpIndex = startIndex;
+    iLeft = 0U;
+    iRght = maxIndex;
+    found = 0U;
+    while (found == 0U) {
+        if (u < bp[bpIndex]) {
+            iRght = bpIndex - 1U;
+            bpIndex = ((bpIndex + iLeft) - 1U) >> 1U;
+        } else if (u < bp[bpIndex + 1U]) {
+            found = 1U;
+        } else {
+            iLeft = bpIndex + 1U;
+            bpIndex = ((bpIndex + iRght) + 1U) >> 1U;
+        }
+    }
+    return bpIndex;
+}
+%closefile fcnDefBuf
+%<LibPushEmptyStackSharedUtils()>
+%<SLibDumpUtilsSourceCode("binsearch_u32u16_prevIdx",fcnProBuf,fcnDefBuf)>
+%if !EXISTS(::CompiledModel.GenUtilsSrcInSharedLocation) || (::CompiledModel.GenUtilsSrcInSharedLocation == 0)
+%assign fcnProPragmaBuf =""
+%openfile fcnProPragmaBuf
+  %<SLibGetFcnMemSecPragmaOnDecl("binsearch_u32u16_prevIdx", "MemSecFuncSharedUtil", "Pre")>\
+  %<fcnProBuf>
+  %<SLibGetFcnMemSecPragmaOnDecl("binsearch_u32u16_prevIdx", "MemSecFuncSharedUtil", "Post")>\
+%closefile fcnProPragmaBuf
+  %<LibCacheFunctionPrototype(fcnProPragmaBuf)>
+%endif
+%assign incStackBuf = LibPopStackSharedUtilsIncludes()
+%undef incStackBuf
+%undef fcnProPragmaBuf
+%undef fcnProBuf
+%undef fcnDefBuf
+%endif %% !ISFIELD(FixPtUtils,"binsearch_u32u16_prevIdx")
+
+
+%if !ISFIELD(FixPtUtils,"div_nde_s32_floor")
+%assign tmpRet = SETFIELD(FixPtUtils,"div_nde_s32_floor",1)
+%assign fcnProBuf =""
+%openfile fcnProBuf
+extern int32_T div_nde_s32_floor(int32_T numerator, int32_T denominator);
+%closefile fcnProBuf
+%assign fcnDefBuf =""
+%openfile fcnDefBuf
+%assign fcnRec = SLibFcnPrototypeToRec(fcnProBuf)
+%addtorecord fcnRec Abstract "" Category "utility" ...
+             GeneratedBy "" Type "Utility"
+%<SLibDumpFunctionBanner(fcnRec)>
+%undef fcnRec
+int32_T div_nde_s32_floor(int32_T numerator, int32_T denominator)
+{
+    return (((numerator < 0) != (denominator < 0)) && (numerator % denominator != 0) ? -1 : 0) + numerator / denominator;
+}
+%closefile fcnDefBuf
+%<LibPushEmptyStackSharedUtils()>
+%<SLibDumpUtilsSourceCode("div_nde_s32_floor",fcnProBuf,fcnDefBuf)>
+%if !EXISTS(::CompiledModel.GenUtilsSrcInSharedLocation) || (::CompiledModel.GenUtilsSrcInSharedLocation == 0)
+%assign fcnProPragmaBuf =""
+%openfile fcnProPragmaBuf
+  %<SLibGetFcnMemSecPragmaOnDecl("div_nde_s32_floor", "MemSecFuncSharedUtil", "Pre")>\
+  %<fcnProBuf>
+  %<SLibGetFcnMemSecPragmaOnDecl("div_nde_s32_floor", "MemSecFuncSharedUtil", "Post")>\
+%closefile fcnProPragmaBuf
+  %<LibCacheFunctionPrototype(fcnProPragmaBuf)>
+%endif
+%assign incStackBuf = LibPopStackSharedUtilsIncludes()
+%undef incStackBuf
+%undef fcnProPragmaBuf
+%undef fcnProBuf
+%undef fcnDefBuf
+%endif %% !ISFIELD(FixPtUtils,"div_nde_s32_floor")
+
+
+%endfunction
+
+
