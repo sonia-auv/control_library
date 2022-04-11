@@ -1,6 +1,6 @@
 
 trajpub = rospublisher('/proc_planner/send_trajectory_list','trajectory_msgs/MultiDOFJointTrajectoryPoint',"DataFormat","struct");
-
+icpub = rospublisher("proc_planner/initial_pose","geometry_msgs/Pose","DataFormat","struct");
 addposemsg = rosmessage('sonia_common/AddPose',"DataFormat","struct");
 Maddposemsg = rosmessage('sonia_common/MultiAddPose',"DataFormat","struct");
 rMaddposemsg = rosmessage('sonia_common/MultiAddPose',"DataFormat","struct");
@@ -13,6 +13,7 @@ icMsg = rosmessage('geometry_msgs/Pose',"DataFormat","struct"); % IC topic
 icMsg.Position.X =8;
 icMsg.Position.Y =8;
 icMsg.Orientation.W = 1;
+send(icpub,icMsg);
 param.ts = 0.1;
 param.amax = 0.15;
 param.vlmax = 0.8;

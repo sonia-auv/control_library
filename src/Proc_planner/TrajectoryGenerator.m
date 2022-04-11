@@ -213,7 +213,6 @@ classdef TrajectoryGenerator < handle
 
         function info = interpolateWaypoints(this, trajpub)  
 
-           this.courseList
             % Crée l'objet waypoint trajectory
             trajObj = waypointTrajectory(this.pointList, this.timeList,...
                                          'SampleRate', 1/this.param.ts,...
