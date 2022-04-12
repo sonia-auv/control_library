@@ -3,10 +3,13 @@ function proc_planner
 % Si on roule en simulation
     if coder.target('MATLAB')
         setenv("AUV","AUV8");
+        
         if ~ ros.internal.Global.isNodeActive
             % partir le node ros matlab 
             rosinit;
         end
+        
+        system("rosparam load ./config/proc_planner_config.yaml");
     end
 
     fprintf('INFO : proc planner : Load config for %s \n', getenv("AUV"));    
@@ -18,18 +21,13 @@ function proc_planner
 
     newMadpPose = false;
     newInitalPose = false;
-    %mAddposemsg = rosmessage('sonia_common/MultiAddPose',"DataFormat","struct");
-    %icMsg = rosmessage('geometry_msgs/Pose',"DataFormat","struct"); % IC topic
 
 % Variables locals
     rosSpin = 1;
     r = rosrate(rosSpin);
     killNode = false;
 
-    param.ts = 0.1;
-    param.amax = 0.10;
-    param.vlmax = 0.5;
-    param.vamax = deg2rad(45);
+    
 
 % Definir les message ros
     validMsg = rosmessage("std_msgs/Bool","DataFormat","struct");
@@ -43,25 +41,13 @@ function proc_planner
     validPub = rospublisher("/proc_planner/is_waypoints_valid","std_msgs/Bool","DataFormat","struct");
 
 %% Definir les parametre de trajectoire  
-
-% Obtenir les rosparams
-    obtainRosparam = RosparamClass;
-    obtainRosparam.setParameterTree(rosparam);
-
-    param.amax = obtainRosparam.getValue("/proc_planner/maximum_acceleration",param.amax);
-    param.vlmax = obtainRosparam.getValue("/proc_planner/maximum_velocity",param.vlmax);
-    param.vamax = obtainRosparam.getValue("/proc_planner/maximum_angular_rate",param.vamax);
-    
-    fprintf('INFO : proc planner : Maximum acceleration is %f m/s^2. \n', param.amax);
-    fprintf('INFO : proc planner : Maximum velocity is %f m/s. \n', param.vlmax);
-    fprintf('INFO : proc planner : Maximum angular rate is %f rad/s. \n', param.vamax);
-
-    fprintf('INFO : proc planner : Node is started \n');
-    fprintf('INFO : proc planner : Wait for poses \n');
-
-    reset(r)
+    param = getRosParam();
 
 %% Ros Spin
+    fprintf('INFO : proc planner : Node is started \n');
+    fprintf('INFO : proc planner : Wait for poses \n');
+    reset(r);
+
     while ~killNode 
       
         if newMadpPose && newInitalPose
@@ -110,4 +96,38 @@ function icCallback(src,msg)
         newInitalPose =true;
         fprintf('INFO : proc planner : Initial poses received \n');
     end
+end
+
+%% Get rosparam 
+function param = getRosParam()
+
+    param.ts = 0.1;
+
+    param.lowSpeed.amax = 0.05;
+    param.lowSpeed.vlmax = 0.2;
+    param.lowSpeed.vamax = 0.3;
+
+    param.normalSpeed.amax = 0.10;
+    param.normalSpeed.vlmax = 0.5;
+    param.normalSpeed.vamax = 0.5;
+
+    param.highSpeed.amax = 0.15;
+    param.highSpeed.vlmax = 0.8;
+    param.highSpeed.vamax = 0.8;
+
+    obtainRosparam = RosparamClass;
+    obtainRosparam.setParameterTree(rosparam);
+
+    param.lowSpeed.amax = obtainRosparam.getValue("/proc_planner/low_speed/maximum_acceleration",param.lowSpeed.amax);
+    param.lowSpeed.vlmax = obtainRosparam.getValue("/proc_planner/low_speed/maximum_velocity", param.lowSpeed.vlmax);
+    param.lowSpeed.vamax = obtainRosparam.getValue("/proc_planner/low_speed/maximum_angular_rate",param.lowSpeed.vamax);
+    
+    param.normalSpeed.amax = obtainRosparam.getValue("/proc_planner/normal_speed/maximum_acceleration",param.normalSpeed.amax);
+    param.normalSpeed.vlmax = obtainRosparam.getValue("/proc_planner/normal_speed/maximum_velocity", param.normalSpeed.vlmax);
+    param.normalSpeed.vamax = obtainRosparam.getValue("/proc_planner/normal_speed/maximum_angular_rate",param.normalSpeed.vamax);
+
+    param.highSpeed.amax = obtainRosparam.getValue("/proc_planner/high_speed/maximum_acceleration",param.highSpeed.amax);
+    param.highSpeed.vlmax = obtainRosparam.getValue("/proc_planner/high_speed/maximum_velocity", param.highSpeed.vlmax);
+    param.highSpeed.vamax = obtainRosparam.getValue("/proc_planner/high_speed/maximum_angular_rate",param.highSpeed.vamax);
+
 end

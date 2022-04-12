@@ -14,6 +14,7 @@ classdef TrajectoryGenerator < handle
         quatList;  % liste de quaternion.
         timeList;  % liste de temp
         courseList; % Liste de courbe
+        speedList
         nbPoint = 1;   % Nombre de points dans la trajectoire
         lastConj = false;
 
@@ -38,6 +39,7 @@ classdef TrajectoryGenerator < handle
             this.quatList = zeros(this.n,4);
             this.timeList = zeros(this.n,1);
             this.courseList = zeros(1, this.n);
+            this.speedList = zeros(1, this.n);
 
             % Initialiser les parametres
             this.param = param;
@@ -58,10 +60,17 @@ classdef TrajectoryGenerator < handle
             
             if this.status
                 % Calculer les temps entre chaque waypoints
-                this.computetimeArrival();
+
+                 if logical(this.computetimeArrival());
+                    % Déterminer le nombre de points
+                    this.nbPoint = floor(this.timeList(end) / this.param.ts);
+                
+                 else
+                    fprintf('INFO : proc planner : Speed parameter not recognized \n');
+                    this.status = false;
+                 end
     
-                % Déterminer le nombre de points
-                this.nbPoint = floor(this.timeList(end) / this.param.ts);
+                
             end
            
         end
@@ -125,14 +134,18 @@ classdef TrajectoryGenerator < handle
                         return
                 end
 
-            % determiner le yaw pour le vecteur course
-            eul = rad2deg(quat2eul(this.quatList(i+2,:),"ZYX")); 
-            
-            if eul(1)<0
-                 eul(1)= 360+eul(1);
-            end
+                % copier le parametre de vitesse
+                this.speedList(i + 2) = this.MAPM.Pose(i).Speed;
 
-            this.courseList(i+2) = eul(1);
+                % determiner le yaw pour le vecteur course
+                eul = rad2deg(quat2eul(this.quatList(i+2,:),"ZYX")); 
+            
+                if eul(1)<0
+
+                    eul(1)= 360+eul(1);
+                end
+
+                this.courseList(i+2) = eul(1);
             end
 
            
@@ -141,6 +154,7 @@ classdef TrajectoryGenerator < handle
             this.pointList(end,:) = this.pointList(end-1,:); 
             this.quatList(end,:) = this.quatList(end-1,:);
             this.courseList(end) = this.courseList(end-1);
+            this.speedList(end) = this.speedList(end-1);
             status = states;
         end
 
@@ -179,23 +193,47 @@ classdef TrajectoryGenerator < handle
         %================================================================== 
         % Fonnction qui calcul le temps entre chaque waypoint
 
-        function  computetimeArrival(this)
+        function  status = computetimeArrival(this)
+
+            status = false;
 
             for i = 2 : this.n % pour chaques waypoints
+
+                % Determiner le parametre de vitesse 
+                switch this.speedList(i)
+
+                    case 0 % Vitesse normale
+                        amax = this.param.normalSpeed.amax;
+                        vlmax = this.param.normalSpeed.vlmax;
+                        vamax = this.param.normalSpeed.vamax;
+                    
+                    case 1 % Vitesse rapide
+                        amax = this.param.highSpeed.amax;
+                        vlmax = this.param.highSpeed.vlmax;
+                        vamax = this.param.highSpeed.vamax;
+
+                    case 2 % Vitesse lente
+                        amax = this.param.lowSpeed.amax;
+                        vlmax = this.param.lowSpeed.vlmax;
+                        vamax = this.param.lowSpeed.vamax;
+
+                    otherwise % mode non reconue.
+                        return 
+                end
 
                 % Trouver la distance Eucledienne entre 2 points
                 d = norm( this.pointList(i,:) - this.pointList(i-1,:));
 
                 % Déterminer le temps selon aMax
-                tl = (4 * sqrt(3 * d)) / (3 * sqrt(this.param.amax));
+                tl = (4 * sqrt(3 * d)) / (3 * sqrt(amax));
 
                 % Déterminer la vitesse maximum de la trajectoire
-                vl = (this.param.amax * tl) / 4;
+                vl = (amax * tl) / 4;
 
                 % Si la vitesse est plus grande que la vitesse maximum
-                if vl > this.param.vlmax
+                if vl > vlmax
                     % Calculer le temps selon vmax
-                    tl = (4 * d) / (3 * this.param.vlmax);
+                    tl = (4 * d) / (3 * vlmax);
                 end
 
                 % Déterminer l'angle entre les 2 quaternions
@@ -203,10 +241,13 @@ classdef TrajectoryGenerator < handle
                 travelAngle = 2 * atan2(norm(qRel(2:4)),qRel(1));
 
                 % Déterminer le temps angulaire 
-                ta = travelAngle/this.param.vamax;
+                ta = travelAngle / vamax;
 
                 this.timeList(i) = this.timeList(i-1) + max([tl,ta,this.param.ts]);
             end
+
+            status = true;
+
         end
         %================================================================== 
         % Fonnction qui interpole les waypoints
@@ -302,13 +343,6 @@ classdef TrajectoryGenerator < handle
         % Fonnction qui retoure le waypoint initial
         function status = getInitialWaypoint(this,icMsg)
 
-            % lire la position initale
-            % [this.icMsg, status] = receive(this.icSub,5);
-            %this.icMsg = this.icSub.LatestMessage;
-            
-            %status = ~isempty(this.icMsg);
-            
-         
                 % Replire les listes.
                  this.pointList(1,:) = [icMsg.Position.X,...
                                         icMsg.Position.Y,...
@@ -320,6 +354,7 @@ classdef TrajectoryGenerator < handle
                                        icMsg.Orientation.Z];
 
                  this.timeList(1) = 0;
+                 this.speedList(1) = 0;
                  
                  eul = rad2deg(quat2eul(this.quatList(1,:),"ZYX")); 
                  this.courseList(1) = eul(1);
@@ -329,7 +364,7 @@ classdef TrajectoryGenerator < handle
                  this.quatList(2,:) = this.quatList(1,:);
                  this.timeList(2) = this.param.ts;
                  this.courseList(2) = eul(1);
-
+                 this.speedList(2) = this.speedList(1);
                  status = true;
         end
         

@@ -16,9 +16,18 @@ icMsg.Position.Z = 0.3;
 icMsg.Position.Y = 8;
 icMsg.Position.X = 10;
 param.ts = 0.1;
-param.amax = 0.15;
-param.vlmax = 0.8;
-param.vamax = deg2rad(45);
+
+param.lowSpeed.amax = 0.05;
+param.lowSpeed.vlmax = 0.2;
+param.lowSpeed.vamax = 0.3;
+
+param.normalSpeed.amax = 0.1;
+param.normalSpeed.vlmax = 0.5;
+param.normalSpeed.vamax = 0.5;
+
+param.highSpeed.amax = 0.15;
+param.highSpeed.vlmax = 0.8;
+param.highSpeed.vamax = 0.8;
 
 TG = TrajectoryGenerator(newmsg,param,icMsg);
 if TG.status

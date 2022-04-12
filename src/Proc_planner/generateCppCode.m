@@ -37,4 +37,4 @@
     try rmdir('msgdef','s'); end;
     try rmdir('src','s'); end;   
 
-    Disp('Done !')
+    disp('Done !');
