@@ -9,6 +9,7 @@ classdef TrajectoryGenerator < handle
     properties (Access = private)
 
         % Parametres 
+        nMAPM;
         n;         % Nombre de waypoints 
         pointList; % liste de position.
         quatList;  % liste de quaternion.
@@ -30,7 +31,7 @@ classdef TrajectoryGenerator < handle
         function this = TrajectoryGenerator(multiAddposeMsg, param, icMsg)
             
             this.MAPM =multiAddposeMsg;
-            inputPoint = max(size(multiAddposeMsg.Pose)); % matlab and cpp dont use same index. return max instead
+            this.nMAPM = max(size(multiAddposeMsg.Pose)); % matlab and cpp dont use same index. return max instead
 
              % Initialiser les parametres
              this.param = param;
@@ -38,7 +39,7 @@ classdef TrajectoryGenerator < handle
             % point supplementaire pour l'arrondissement.
             suppPoint = 0;
 
-            for i=1 : inputPoint
+            for i=1 : this.nMAPM
                 
                 if ~(this.MAPM.Pose(i).Fine == 0)
                     suppPoint =suppPoint + 1;
@@ -46,7 +47,7 @@ classdef TrajectoryGenerator < handle
             end
 
             % nombre de waypoints + iC + point supp
-            this.n = inputPoint + suppPoint + icOffset + 1; 
+            this.n = this.nMAPM + suppPoint + this.icOffset + 1; 
 
             % Initialiser les tableaux
             this.pointList = zeros(this.n,3);
@@ -107,7 +108,7 @@ classdef TrajectoryGenerator < handle
             
            states = true; 
 
-            for i = 1 : this.n - 3 % pour chaques waypoints
+            for i = 1 : this.nMAPM % pour chaques AddPose
 
                 % transformer les angle d'euler quaternions
                 q = eul2quat(deg2rad([this.MAPM.Pose(i).Orientation.Z,...
@@ -128,7 +129,7 @@ classdef TrajectoryGenerator < handle
         
                     case 1 % position et angle relatif
                         this.quatList(i+this.icOffset,:) = this.getQuatDir(this.quatList(i+this.icOffset-1,:), q, this.MAPM.Pose(i).Rotation);
-                        this.pointList(i+this.icOffset,:) = this.pointList(i+1,:) + this.quatrotation(p,this.quatList(i+1,:));
+                        this.pointList(i+this.icOffset,:) = this.pointList(i+this.icOffset-1,:) + this.quatrotation(p,this.quatList(i+this.icOffset-1,:));
                         
         
                     case 2 % position relatif et angle absolue             
@@ -149,39 +150,33 @@ classdef TrajectoryGenerator < handle
                 this.speedList(i + this.icOffset) = this.MAPM.Pose(i).Speed;
 
                 % determiner le yaw pour le vecteur course
-                eul = rad2deg(quat2eul(this.quatList(i+this.icOffset,:),"ZYX")); 
-            
-                if eul(1)<0
-
-                    eul(1)= 360+eul(1);
-                end
-
-                this.courseList(i+this.icOffset) = eul(1);
+                this.courseList(i+this.icOffset) = this.getCourseAngle(this.quatList(i+this.icOffset,:));
 
                 % verifier si faut arrondire la trajectoire.
-                    if i>1 && this.MAPM.Pose(i-1).fine ~=0
+                    if i>1 && this.MAPM.Pose(i-1).Fine ~=0
 
                         [status, p01, p12] = this.inscribedCircles(i+this.icOffset);
 
-                        if ~status;
+                        if ~status
                             status = false;
                             return
                         end
 
-                        this.pointList(i+this.icOffset+1) = this.pointList(i+2);
-                        this.pointList(i+this.icOffset) = p12; 
-                        this.pointList(i+this.icOffset-1) = p01;
+                        % Decaler les waypoints
+                        this.pointList(i+this.icOffset+1,:) = this.pointList(i+this.icOffset,:);
+                        this.pointList(i+this.icOffset,:) = p12; 
+                        this.pointList(i+this.icOffset-1,:) = p01;
                         
-                        this.quatList(i+this.icOffset+1) = this.quatList(i+this.icOffset);
-                        this.quatList(i+this.icOffset) = this.quatList(i+this.icOffset-1);
-                        this.quatList(i+this.icOffset-1) = this.quatList(i+this.icOffset-2);
+                        this.quatList(i+this.icOffset+1,:) = this.quatList(i+this.icOffset,:);
+                        this.quatList(i+this.icOffset,:) = this.quatList(i+this.icOffset-1,:);
+                        this.quatList(i+this.icOffset-1,:) = this.quatList(i+this.icOffset-2,:);
 
-                        this.speedList(i + this.icOffset + 1 ) =this.speedList(i + this.icOffset);
+                        this.speedList(i + this.icOffset + 1) =this.speedList(i + this.icOffset);
                         this.speedList(i + this.icOffset) = this.speedList(i + this.icOffset - 1 );
 
                         this.courseList(i+this.icOffset +1) = this.courseList(i+this.icOffset);
                         this.courseList(i+this.icOffset) = this.courseList(i+this.icOffset-1);
-                        this.courseList(i+this.icOffset-2) = this.courseList(i+this.icOffset-1);
+                        this.courseList(i+this.icOffset-1) = this.courseList(i+this.icOffset-2);
 
                         % nouveau waypoint. augmente le offset
                         this.icOffset =this.icOffset + 1;
@@ -192,6 +187,7 @@ classdef TrajectoryGenerator < handle
             % Copier le dernier waypoint 2 fois pour éviter un comportement
             % du generateur de trajecteur
             this.pointList(end,:) = this.pointList(end-1,:); 
+            %this.pointList(end,1) = -0.1;
             this.quatList(end,:) = this.quatList(end-1,:);
             this.courseList(end) = this.courseList(end-1);
             this.speedList(end) = this.speedList(end-1);
@@ -214,9 +210,8 @@ classdef TrajectoryGenerator < handle
 % 
 %             end
             
-            
-
             rq = quatmultiply(lq,q);
+            
          end
          %=================================================================
          % Fonction qui tourne un vecteur selon un quaternion.
@@ -229,6 +224,72 @@ classdef TrajectoryGenerator < handle
              rp= (2*dot(qu,p)*qu +(qs^2-dot(qu,qu))*p + 2*qs*cross(qu,p)); 
          end
         
+        %================================================================== 
+        % Fonction qui retourne l'angle de course
+         function angle = getCourseAngle(this, q)
+            
+            eul = rad2deg(quat2eul(q,"ZYX")); 
+                        
+            if eul(1)<0
+
+                eul(1) = 360+eul(1);
+            end
+
+            angle = eul(1);
+         end
+
+
+        %================================================================== 
+        % Fonction qui arrondie les waypoints.
+
+        function [status, p01, p12] = inscribedCircles(this,i)
+
+            R_Bar = this.MAPM.Pose(i- this.icOffset-1).Fine;
+
+            % Si rayon positif calculer la courbe
+            if R_Bar > 0
+                % Definition point.
+                    P0 = this.pointList(i-2,:);
+                    P1 = this.pointList(i-1,:);
+                    P2 = this.pointList(i,:);
+                % Determiner les vecteurs
+                    v02 = P2-P0;
+                    v01 = P1-P0;
+                    v12 = P2-P1;
+
+                % Determiner les longeures du triangle
+                    a = norm(v02);
+                    b = norm(v01);
+                    c = norm(v12);
+
+                % Calculer alpha 1
+                    alpha_1 = (1/2) * acos((-(a^2)+b^2+c^2)/(2*b*c)); % radians
+
+                % Calculer R
+                    R_1 = R_Bar/tan(alpha_1);
+
+                % Verifier que le rayon n'est pas trop grand
+                if R_1 < b || R_1 < c
+
+                % Calculer les points tangeant au cercle de rayon.
+                    p01 = P0 + (v01./b)* (b-R_1);
+
+                    p12 = P1 + (v12./c)* R_1;
+                    status = true;
+
+                else
+                    p01 = zeros(1,3);
+                    p12 = p01;
+                    status = false;
+                end
+
+            % Si rayon negatif. copier le point 2 fois
+            else
+                p01 = this.pointList(i-1,:);
+                p12 = this.pointList(i-1,:);
+                status = true; 
+            end
+        end
 
         %================================================================== 
         % Fonnction qui calcul le temps entre chaque waypoint
@@ -289,58 +350,6 @@ classdef TrajectoryGenerator < handle
             status = true;
 
         end
-        %================================================================== 
-        % Fonction qui arrondie les waypoints.
-
-        function [status, p01, p12] = inscribedCircles(this,i)
-
-            R_bar = this.MAPM.Pose(i-1).Fine;
-
-            % Si rayon positif calculer la courbe
-            if R_Bar > 0
-                % Definition point.
-                    P0 = this.pointList(i-2);
-                    P1 = this.pointList(i-1);
-                    P2 = this.pointList(i);
-                % Determiner les vecteurs
-                    v02 = P2-P0;
-                    v01 = P1-P0;
-                    v12 = P2-P1;
-
-                % Determiner les longeures du triangle
-                    a = norm(v02);
-                    b = norm(v01);
-                    c = norm(v12);
-
-                % Calculer alpha 1
-                    alpha_1 = (1/2) * acos((-(a^2)+b^2+c^2)/(2*b*c)) % radians
-
-                % Calculer R
-                    R_1 = R_bar/tan(alpha_1);
-
-                % Verifier que le rayon n'est pas trop grand
-                if R1_1 < b || R1_1 < c
-
-                % Calculer les points tangeant au cercle de rayon.
-                    p01 = P0 + (v01./b)* (b-R_1);
-
-                    p12 = P1 + (v12./c)* R_1;
-                    status = true;
-
-                else
-                    p01 = zeros(1,3);
-                    p12 = p01;
-                    status = false;
-                end
-
-            % Si rayon negatif. copier le point 2 fois
-            else
-                p01 = P1;
-                p12 = P1;
-                status = true; 
-        end
-        end
-
 
         %================================================================== 
         % Fonction qui interpole les waypoints

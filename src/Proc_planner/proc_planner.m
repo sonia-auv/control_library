@@ -59,7 +59,7 @@ function proc_planner
             validMsg.Data = logical(TG.status);
             send(validPub, validMsg);
 
-            % Si la trajectoire est valide
+            % Si la trajectoire est valide generer la trajectoire
             if TG.status
                 TG.Compute(trajpub);            
 

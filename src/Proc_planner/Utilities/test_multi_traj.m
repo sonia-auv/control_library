@@ -10,8 +10,8 @@ mapSub = rossubscriber('/proc_planner/madpos','sonia_common/MultiAddPose',"DataF
 
 tt= mapSub.LatestMessage;
 icMsg = rosmessage('geometry_msgs/Pose',"DataFormat","struct"); % IC topic
-icMsg.Position.X =8;
-icMsg.Position.Y =8;
+icMsg.Position.X =0;
+icMsg.Position.Y =0;
 icMsg.Orientation.W = 1;
 send(icpub,icMsg);
 
@@ -65,38 +65,50 @@ Maddposemsg.Pose = [Maddposemsg.Pose, addposemsg];
 % addposemsg.Frame = uint8(0);
 % addposemsg.Speed = uint8(2);
 % Maddposemsg.Pose = [Maddposemsg.Pose, addposemsg];
+% % WayPts 4
+% addposemsg.Position.X = 8.072 ;
+% addposemsg.Position.Y = 0;
+% addposemsg.Position.Z = 2;
+% addposemsg.Orientation.X =0 ;
+% addposemsg.Orientation.Y =0 ;
+% addposemsg.Orientation.Z = 0 ;
+% addposemsg.Frame = uint8(0);
+% addposemsg.Speed = uint8(2);
+% Maddposemsg.Pose = [Maddposemsg.Pose, addposemsg];
+% WayPts 3
+% addposemsg.Position.X = 8 ;
+% addposemsg.Position.Y = 0;
+% addposemsg.Position.Z = 2;
+% 
+% addposemsg.Orientation.X =0 ;
+% addposemsg.Orientation.Y =0 ;
+% addposemsg.Orientation.Z =0 ;
+% addposemsg.Frame = uint8(0);
+% addposemsg.Speed = uint8(2);
+
+Maddposemsg.Pose = [Maddposemsg.Pose, addposemsg];
 % WayPts 4
-addposemsg.Position.X = 8.072 ;
+addposemsg.Position.X = 9 ;
 addposemsg.Position.Y = 0;
 addposemsg.Position.Z = 2;
 addposemsg.Orientation.X =0 ;
 addposemsg.Orientation.Y =0 ;
-addposemsg.Orientation.Z = 0 ;
+addposemsg.Orientation.Z = -40 ;
 addposemsg.Frame = uint8(0);
 addposemsg.Speed = uint8(2);
+addposemsg.Fine = 3;
 Maddposemsg.Pose = [Maddposemsg.Pose, addposemsg];
 
-% WayPts 4
-addposemsg.Position.X = 8.072 ;
-addposemsg.Position.Y = 0;
-addposemsg.Position.Z = 2;
-addposemsg.Orientation.X =0 ;
-addposemsg.Orientation.Y =0 ;
-addposemsg.Orientation.Z = 0 ;
-addposemsg.Frame = uint8(0);
-addposemsg.Speed = uint8(2);
-Maddposemsg.Pose = [Maddposemsg.Pose, addposemsg];
-
-% WayPts 5
-addposemsg.Position.X = 11.921 ;
-addposemsg.Position.Y = -1.364;
-addposemsg.Position.Z = 1.696;
-addposemsg.Orientation.X =0 ;
-addposemsg.Orientation.Y =0 ;
-addposemsg.Orientation.Z = -39.23 ;
-addposemsg.Frame = uint8(0);
-addposemsg.Speed = uint8(2);
-Maddposemsg.Pose = [Maddposemsg.Pose, addposemsg];
+% % WayPts 5
+% addposemsg.Position.X = 11.921 ;
+% addposemsg.Position.Y = -1.364;
+% addposemsg.Position.Z = 1.696;
+% addposemsg.Orientation.X =0 ;
+% addposemsg.Orientation.Y =0 ;
+% addposemsg.Orientation.Z = -39.23 ;
+% addposemsg.Frame = uint8(0);
+% addposemsg.Speed = uint8(2);
+% Maddposemsg.Pose = [Maddposemsg.Pose, addposemsg];
 
 % WayPts 6
 addposemsg.Position.X = 13 ;
@@ -107,6 +119,7 @@ addposemsg.Orientation.Y =0 ;
 addposemsg.Orientation.Z =0 ;
 addposemsg.Frame = uint8(0);
 addposemsg.Speed = uint8(2);
+addposemsg.Fine = 0;
 Maddposemsg.Pose = [Maddposemsg.Pose, addposemsg];
 
 % WayPts 8
@@ -154,19 +167,8 @@ addposemsg.Orientation.Z = 180;
 addposemsg.Frame = uint8(0);
 addposemsg.Speed = uint8(2);
 Maddposemsg.Pose = [Maddposemsg.Pose, addposemsg];
-% WayPts 12
-addposemsg.Position.X = 8.072 ;
-addposemsg.Position.Y = 0;
-addposemsg.Position.Z = 2;
-addposemsg.Orientation.X =0 ;
-addposemsg.Orientation.Y =0 ;
-addposemsg.Orientation.Z = 180;
-addposemsg.Frame = uint8(0);
-addposemsg.Speed = uint8(2);
-Maddposemsg.Pose = [Maddposemsg.Pose, addposemsg];
-
 % % WayPts 12
-% addposemsg.Position.X = 6 ;
+% addposemsg.Position.X = 8.072 ;
 % addposemsg.Position.Y = 0;
 % addposemsg.Position.Z = 2;
 % addposemsg.Orientation.X =0 ;
@@ -175,6 +177,17 @@ Maddposemsg.Pose = [Maddposemsg.Pose, addposemsg];
 % addposemsg.Frame = uint8(0);
 % addposemsg.Speed = uint8(2);
 % Maddposemsg.Pose = [Maddposemsg.Pose, addposemsg];
+
+% WayPts 12
+addposemsg.Position.X = 6 ;
+addposemsg.Position.Y = 0;
+addposemsg.Position.Z = 2;
+addposemsg.Orientation.X =0 ;
+addposemsg.Orientation.Y =0 ;
+addposemsg.Orientation.Z = 180;
+addposemsg.Frame = uint8(0);
+addposemsg.Speed = uint8(2);
+Maddposemsg.Pose = [Maddposemsg.Pose, addposemsg];
 % WayPts 14
 addposemsg.Position.X = 0 ;
 addposemsg.Position.Y = 0;
