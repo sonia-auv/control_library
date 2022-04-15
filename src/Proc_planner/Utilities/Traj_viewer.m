@@ -24,7 +24,14 @@ angularRate = zeros(n,3);
      angularRate(i,1) = trajMsg.Velocities(i).Angular.X;
      angularRate(i,2) = trajMsg.Velocities(i).Angular.Y;
      angularRate(i,3) = trajMsg.Velocities(i).Angular.Z;
+     
+     linearAcc(i,1) = trajMsg.Accelerations(i).Linear.X;
+     linearAcc(i,2) = trajMsg.Accelerations(i).Linear.Y;
+     linearAcc(i,3) = trajMsg.Accelerations(i).Linear.Z;
 
+     angularAcc(i,1) = trajMsg.Accelerations(i).Angular.X;
+     angularAcc(i,2) = trajMsg.Accelerations(i).Angular.Y;
+     angularAcc(i,3) = trajMsg.Accelerations(i).Angular.Z;
  end
 
  tvec  = (0:1:n-1)/10;
@@ -49,6 +56,45 @@ angularRate = zeros(n,3);
  ylabel('distance en mètre');
  legend({'distance en x','distance en x','distance en z'},'Location','northeast');
 
+figure;
+ % Afficher vitesse angulaire en fonction du temps
+ nexttile;
+ plot(tvec,angularRate.');
+ ax = gca;
+ ax.FontSize = 13;
+ title('Vitesse angulaire en fonction du temps');
+ xlabel('temps en seconde');
+ legend({'p','q','r',},'Location','northeast');
+
+ % Afficher la vitesse lineaire en fonction du temps
+ nexttile;
+ plot(tvec, velocity.');
+ ax = gca;
+ ax.FontSize = 13;
+ title('vitesse linéaire en fonction du temps');
+ xlabel('temps en seconde') ;
+ ylabel('distance en mètre');
+ legend({'u','v','w'},'Location','northeast');
+
+ figure;
+ % Afficher acceleration angulaire en fonction du temps
+ nexttile;
+ plot(tvec,angularAcc.');
+ ax = gca;
+ ax.FontSize = 13;
+ title('acceleration angulaire en fonction du temps');
+ xlabel('temps en seconde');
+ legend({'\p_dot','\q_dot','\r_dot',},'Location','northeast');
+
+ % Afficher la v lineaire en fonction du temps
+ nexttile;
+ plot(tvec, linearAcc.');
+ ax = gca;
+ ax.FontSize = 13;
+ title('acceleration linéaire en fonction du temps');
+ xlabel('temps en seconde') ;
+ ylabel('distance en mètre');
+ legend({'\u_dot','\v_dot','\w_dot'},'Location','northeast');
 
  % Afficher un second graphique en 3d
  figure

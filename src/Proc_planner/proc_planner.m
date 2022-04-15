@@ -17,10 +17,10 @@ function proc_planner
 %% Definir les variables
 
 % Variables globals
-    global newMadpPose newInitalPose;
+    global newMadpPose newInitialPose;
 
     newMadpPose = false;
-    newInitalPose = false;
+    newInitialPose = false;
 
 % Variables locals
     rosSpin = 1;
@@ -50,7 +50,7 @@ function proc_planner
 
     while ~killNode 
       
-        if newMadpPose && newInitalPose
+        if newMadpPose && newInitialPose
 
             % Cree l'objet trajectoire
             TG = TrajectoryGenerator(madpSub.LatestMessage,param,icSub.LatestMessage);
@@ -66,7 +66,7 @@ function proc_planner
             end
         
             newMadpPose = false;
-            newInitalPose = false;
+            newInitialPose = false;
 
             fprintf('INFO : proc planner : Wait for poses \n');
        end
@@ -90,10 +90,10 @@ end
 %% Initial condition (IC) callback
 function icCallback(src,msg)
 
-    global newMadpPose newInitalPose;
+    global newMadpPose newInitialPose;
 
     if (newMadpPose == true)
-        newInitalPose =true;
+        newInitialPose =true;
         fprintf('INFO : proc planner : Initial poses received \n');
     end
 end

@@ -41,3 +41,4 @@ proc_control_node/
 #Build files from Simulink
 *.sh
 *.tgz
+*.zip
