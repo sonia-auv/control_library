@@ -26,7 +26,13 @@ classdef TrajectoryGenerator < handle
         icOffset = 2; % nombre de point pour la condition initial
         
         % paramètre de generation de trajectoire
-        nbPoint = 1;   % Nombre de points dans la trajectoire
+        nbPoint = 1;      % Nombre de points dans la trajectoire
+        trajPosition;     
+        trajQuat; 
+        trajBodyVelocity;
+        trajAngulairRates;
+        trajLinearAcceleration;
+        trajAngularAcceleration;
 
     end
     
@@ -65,22 +71,30 @@ classdef TrajectoryGenerator < handle
             if ~this.getInitialWaypoint(icMsg)
                 this.status = false;
                 fprintf('INFO : proc planner : initial waypoint not received \n');
-                
+                return;
             end
 
             % Process le message addpose
             if ~logical(this.processWpt())
                 this.status = false;
                 fprintf('INFO : proc planner : Waypoints are not valid  \n');
-              
+                return;
             end
             
             if this.status
                 % Calculer les temps entre chaque waypoints
 
-                 if logical(this.computetimeArrival());
+                 if logical(this.computetimeArrival())
                     % Déterminer le nombre de points
                     this.nbPoint = round(this.timeList(end) / this.param.ts);
+
+                    % Definir la taille de la trajectoire
+                    this.trajPosition = zeros(this.nbPoint,3);     
+                    this.trajQuat = zeros(this.nbPoint,4); 
+                    this.trajBodyVelocity = zeros(this.nbPoint,3);
+                    this.trajAngulairRates = zeros(this.nbPoint,3);
+                    this.trajLinearAcceleration = zeros(this.nbPoint,3);
+                    this.trajAngularAcceleration = zeros(this.nbPoint,3);
                 
                  else
                     fprintf('INFO : proc planner : Speed parameter not recognized \n');
@@ -96,7 +110,10 @@ classdef TrajectoryGenerator < handle
         function status = Compute(this,trajpub)
 
             % Interpoler les waypoints
-            status = this.interpolateWaypoints(trajpub);  
+            this.interpolateWaypoints();
+
+            % Envoyer la trajectoire sur ROS.
+            status = this.sendTrajectory(trajpub);  
             
         end
             
@@ -369,9 +386,61 @@ classdef TrajectoryGenerator < handle
 
         %================================================================== 
         % Fonction qui interpole les waypoints
+        function interpolateWaypoints(this)
 
-        function info = interpolateWaypoints(this, trajpub)  
+             % vecteur temps
+             t = this.param.ts : this.param.ts : this.timeList(end);
 
+             % Interpoler la trajectoire lineaire
+             this.trajPosition(:,1) = interp1(this.timeList,this.pointList(:,1),t,'pchip').';
+             this.trajPosition(:,2)  = interp1(this.timeList,this.pointList(:,2),t,'pchip').';
+             this.trajPosition(:,3) = interp1(this.timeList,this.pointList(:,3),t,'pchip').';
+ 
+             % Deriver la trajectoire pour avoir les vitesse linéare;
+             this.trajBodyVelocity(:,1) = [0 ; diff(this.trajPosition(:,1))];
+             this.trajBodyVelocity(:,2) = [0 ; diff(this.trajPosition(:,2))];
+             this.trajBodyVelocity(:,3) = [0 ; diff(this.trajPosition(:,3))];
+ 
+             % Deriver la vitesse pour avoir les acceleration linéare;
+             this.trajLinearAcceleration(:,1) = [0 ; diff(this.trajBodyVelocity(:,1))];
+             this.trajLinearAcceleration(:,2) = [0 ; diff(this.trajBodyVelocity(:,2))];
+             this.trajLinearAcceleration(:,3) = [0 ; diff(this.trajBodyVelocity(:,3))];
+ 
+             % Interpoler l'orientation avec spline. résultat plus smooth/moins jerk que slerp. 
+             this.trajQuat(:,1) = interp1(this.timeList,this.quatList(:,1),t,'spline').';
+             this.trajQuat(:,2) = interp1(this.timeList,this.quatList(:,2),t,'spline').';
+             this.trajQuat(:,3) = interp1(this.timeList,this.quatList(:,3),t,'spline').';
+             this.trajQuat(:,4) = interp1(this.timeList,this.quatList(:,4),t,'spline').';
+ 
+             % Post traitement
+             for i = 1 : this.nbPoint
+
+                % Normaliser les quaternions car l'interpolation de type spline ne le garentie pas.
+                this.trajQuat(i,:) = quatnormalize(this.trajQuat(i,:));
+
+                 % verifier la discontinuité du quaternion.
+                 if i > 1 && dot(this.trajQuat(i-1,:), this.trajQuat(i,:)) < 0
+                    this.trajQuat(i,:) = -this.trajQuat(i,:);
+
+                end
+
+                % Convertir les vitesse lineaire dans le ref sub
+                this.trajBodyVelocity(i,:) = this.quatrotation(this.trajBodyVelocity(i,:), this.trajQuat(i,:));
+
+                % Convertir les vitesse angulaire dans le ref sub
+                this.trajAngulairRates(i,:) = -this.trajAngulairRates(i,:);
+                
+                % Convertire les accélération angulaire dans le ref sub
+                this.trajLinearAcceleration(i,:) = this.quatrotation(this.trajLinearAcceleration(i,:), this.trajQuat(i,:));
+
+             end
+
+        end
+
+        %================================================================== 
+        % Fonction qui envoie les message sur ros
+
+        function info = sendTrajectory(this, trajpub)  
 
             % Initialiser le message trajectoire.
             trajMsg = rosmessage('trajectory_msgs/MultiDOFJointTrajectoryPoint',"DataFormat","struct"); % message point
@@ -383,116 +452,57 @@ classdef TrajectoryGenerator < handle
             trajMsg.Velocities = repelem(twistBuff,this.nbPoint).';
             trajMsg.Accelerations = repelem(twistBuff,this.nbPoint).';
 
-            lastQuat = [1 0 0 0];
-
-            % vecteur temps
-            t = this.param.ts : this.param.ts : this.timeList(end);
-
-            % Interpoler la trajectoire lineaire
-            px = interp1(this.timeList,this.pointList(:,1),t,'pchip').';
-            py = interp1(this.timeList,this.pointList(:,2),t,'pchip').';
-            pz = interp1(this.timeList,this.pointList(:,3),t,'pchip').';
-
-            % Deriver la trajectoire pour avoir les vitesse linéare;
-            vx = [0 ; diff(px)];
-            vy = [0 ; diff(py)];
-            vz = [0 ; diff(pz)];
-
-            % Deriver la vitesse pour avoir les acceleration linéare;
-            ax = [0 ; diff(vz)];
-            ay = [0 ; diff(vy)];
-            az = [0 ; diff(vz)];
-
-            % Interpoler la trajectoire angulaire (Quaternion slerp)
-            q = zeros(this.nbPoint,4);
-            omega = zeros(this.nbPoint,3);
-            alpha = zeros(this.nbPoint,3);
-
-            index = 1;
-            for i = 2 : this.n
-
-                % Calculer le temps d'interval entre deux quaternion.
-                tInterval = this.timeList(i) - this.timeList(i-1);
-                tSamples = this.param.ts : this.param.ts : max(tInterval,this.param.ts);
-
-                % determiner le nombre de points
-                nbp = max(size(tSamples));
-
-                % Quaternion slerp
-                [r,o,a] = rottraj(quaternion(this.quatList(i-1,:)), quaternion(this.quatList(i,:)), [0 , tInterval], tSamples);
-
-                q(index:index+nbp-1,:) = compact(r);
-                omega(index:index+nbp-1,:) = o.';
-                alpha(index:index+nbp-1,:) = a.';
-                index = index + nbp;
-
-            end
-
             % Remplire le message ROS
             for i=1 : this.nbPoint
 
                 % Remplire le message Transform.
-                transformBuff.Translation.X = px(i);
-                transformBuff.Translation.Y = py(i);
-                transformBuff.Translation.Z = pz(i);
+                transformBuff.Translation.X = this.trajPosition(i,1);
+                transformBuff.Translation.Y = this.trajPosition(i,2);
+                transformBuff.Translation.Z = this.trajPosition(i,3);
                 
-                % Convertir l'objet quaternion en vecteur
-                bufferQuat = q(i,:);
-                
-                % Verifier de retourner la rotation la plus petite
-                if i > 1 && dot(lastQuat,bufferQuat) < 0
-                    bufferQuat = -bufferQuat;
-                end
-                lastQuat = bufferQuat;
-
-                transformBuff.Rotation.W = bufferQuat(1);
-                transformBuff.Rotation.X = bufferQuat(2);
-                transformBuff.Rotation.Y = bufferQuat(3);
-                transformBuff.Rotation.Z = bufferQuat(4);
+                transformBuff.Rotation.W = this.trajQuat(i,1);
+                transformBuff.Rotation.X = this.trajQuat(i,2);
+                transformBuff.Rotation.Y = this.trajQuat(i,3);
+                transformBuff.Rotation.Z = this.trajQuat(i,4);
 
                 trajMsg.Transforms(i) = transformBuff;
-                
-                % Convertir les vitesse dans le ref sub
-                nedVelocity = [ vx(i) vy(i) vz(i) ];
-                bodyVelocity = this.quatrotation(nedVelocity, bufferQuat);
                
                 % Remplire les vitesse
-                twistBuff.Linear.X = bodyVelocity(1);
-                twistBuff.Linear.Y = bodyVelocity(2);
-                twistBuff.Linear.Z = bodyVelocity(3);
+                twistBuff.Linear.X = this.trajBodyVelocity(i,1);
+                twistBuff.Linear.Y = this.trajBodyVelocity(i,2);
+                twistBuff.Linear.Z = this.trajBodyVelocity(i,3);
 
-                twistBuff.Angular.X = -omega(i,1); % (-) pour convertir les vitesse angulaire dans le ref sub
-                twistBuff.Angular.Y = -omega(i,2);
-                twistBuff.Angular.Z = -omega(i,3);
+                twistBuff.Angular.X = this.trajAngulairRates(i,1); 
+                twistBuff.Angular.Y = this.trajAngulairRates(i,2);
+                twistBuff.Angular.Z = this.trajAngulairRates(i,3);
                 
                 trajMsg.Velocities(i) = twistBuff;
-                % Ecrire le point dans le message
-                
-                % Convertir les accels dans le ref sub
-                nedAcc = [ax(i), ay(i) az(i)] ;
-                bodyAcc = this.quatrotation(nedAcc, bufferQuat);
 
                % Remplire les acceleration
-                twistBuff.Linear.X = bodyAcc(1);
-                twistBuff.Linear.Y = bodyAcc(2);
-                twistBuff.Linear.Z = bodyAcc(3);
+                twistBuff.Linear.X = this.trajLinearAcceleration(i,1);
+                twistBuff.Linear.Y = this.trajLinearAcceleration(i,2);
+                twistBuff.Linear.Z = this.trajLinearAcceleration(i,3);
 
-                twistBuff.Angular.X = alpha(i,1);
-                twistBuff.Angular.Y = alpha(i,2);
-                twistBuff.Angular.Z = alpha(i,3);
+                twistBuff.Angular.X = this.trajAngularAcceleration(i,1);
+                twistBuff.Angular.Y = this.trajAngularAcceleration(i,2);
+                twistBuff.Angular.Z = this.trajAngularAcceleration(i,3);
                 trajMsg.Accelerations(i) = twistBuff;
 
             end
+
             % Envoyer le message
             send(trajpub,trajMsg);
             fprintf('INFO : proc planner : Trajectory generation succeded with %d points. \n',int16(this.nbPoint));
+
             % Si on roule en simulation
             if coder.target('MATLAB')
                 % Retourner la trajectoire
                 info = trajMsg;
+
             else
                 % Retourner true (sucess)
                 info = 1;
+
             end
         end
         %================================================================== 

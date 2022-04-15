@@ -31,11 +31,11 @@ clear;
     param.highSpeed.vamax = 0.8;
 
 % Parametre constante
-    x = 10;
-    y = 10;
-    step = 2;
+    x = 5;
+    y = 5;
+    step = 1;
     speed = 1;
-    fine = 1;
+    fine = 0.4;
 
     fstep = floor(x/step);
     residut = mod(x,step);
