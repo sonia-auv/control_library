@@ -15,23 +15,24 @@ classdef TrajectoryGenerator < handle
         qUtils; % quaternion utilities
 
         % Structures
-        MAPM; % Multi Add Pose Msg
-        param; % paramètre de trajectoire
+        MAPM; % Multi Add Pose Msg.
+        param; % paramètre de trajectoire.
 
         % Parametres 
-        nMAPM;     % nombre de waypoints dans la liste multiaddpose
-        n;         % Nombre de waypoints réel
-        lastConj = false; % condition de discontinute du quaternion
-
+        nMAPM;     % nombre de waypoints dans la liste multiaddpose.
+        n;         % Nombre de waypoints réel.
+        lastConj = false; % condition de discontinute du quaternion.
+        icOffset = 2; % nombre de point pour la condition initial.
+        
         % Liste waypoints
         pointList; % liste de position.
         quatList;  % liste de quaternion.
         timeList;  % liste de temp
         courseList; % Liste de courbe
         speedList; % parametre de vitesse
-        icOffset = 2; % nombre de point pour la condition initial
         
-        % paramètre de generation de trajectoire
+        
+        % liste de trajectoire
         nbPoint = 1;      % Nombre de points dans la trajectoire
         trajPosition;     
         trajQuat; 
@@ -83,6 +84,12 @@ classdef TrajectoryGenerator < handle
                 
             end
 
+            % Verifier si le mode d'interpolation est valide
+            if ~logical(this.interpStrategy(0, 0, 0, true))
+                this.status = false;
+                fprintf('INFO : proc planner : Interpolation strategy is not recognized  \n');
+            end
+
             % Process le message addpose
             if ~logical(this.processWpt())
                 this.status = false;
@@ -96,7 +103,7 @@ classdef TrajectoryGenerator < handle
                 this.nbPoint = round(this.timeList(end) / this.param.ts);
 
             else
-                fprintf('INFO : proc planner : Speed parameter not recognized \n');
+                fprintf('INFO : proc planner : Speed parameter is not recognized \n');
                 this.nbPoint = 1;
                 this.status = false;
             end
@@ -108,7 +115,7 @@ classdef TrajectoryGenerator < handle
             this.trajAngulairRates = zeros(this.nbPoint,3);
             this.trajLinearAcceleration = zeros(this.nbPoint,3);
             this.trajAngularAcceleration = zeros(this.nbPoint,3);
-            
+  
         end
         %==================================================================
         % Fonction Main qui génère les waypoints
@@ -159,7 +166,7 @@ classdef TrajectoryGenerator < handle
                         this.pointList(i+this.icOffset,:) = p; 
         
                     case 1 % position et angle relatif
-                        this.quatList(i+this.icOffset,:) = this.getQuatDir(this.quatList(i+this.icOffset-1,:), q, this.MAPM.Pose(i).Rotation);
+                        this.quatList(i+this.icOffset,:) = this.qUtils.getQuatDir(this.quatList(i+this.icOffset-1,:), q, this.MAPM.Pose(i).Rotation);
                         this.pointList(i+this.icOffset,:) = this.pointList(i+this.icOffset-1,:) + this.qUtils.quatRotation(p,this.quatList(i+this.icOffset-1,:));
                         
         
@@ -168,7 +175,7 @@ classdef TrajectoryGenerator < handle
                         this.pointList(i+this.icOffset,:) = this.pointList(i+this.icOffset-1,:) + this.qUtils.quatRotation(p,this.quatList(i+this.icOffset-1,:));
         
                     case 3 % position absolue et angle relatif
-                        this.quatList(i+this.icOffset,:) = this.getQuatDir(this.quatList(i+this.icOffset-1,:), q, this.MAPM.Pose(i).Rotation);
+                        this.quatList(i+this.icOffset,:) = this.qUtils.getQuatDir(this.quatList(i+this.icOffset-1,:), q, this.MAPM.Pose(i).Rotation);
                         this.pointList(i+this.icOffset,:) = p;
         
                     otherwise % Le referentiel n'est pas valide
@@ -218,33 +225,12 @@ classdef TrajectoryGenerator < handle
             % Copier le dernier waypoint 2 fois pour éviter un comportement
             % du generateur de trajecteur
             this.pointList(end,:) = this.pointList(end-1,:); 
-            %this.pointList(end,1) = -0.1;
             this.quatList(end,:) = this.quatList(end-1,:);
             this.courseList(end) = this.courseList(end-1);
             this.speedList(end) = this.speedList(end-1);
             status = states;
         end
-
-        %================================================================== 
-        % Fonnction qui retoure le quaternion le plus court/long selon
-        % l'utilisateur
-     
-         function rq =  getQuatDir(this,lq,q,dir)    
-
-
-%           norm = dot(lq,q);
-%             % conjuger le quaternion au besoin
-%             %if  norm > 1 && dir == 0 || norm < 1 && dir == 1
-%            if  norm < 0  && dir == 0 || norm >= 0 && dir == 1
-%                 q = quatconj(q);    
-%                 this.lastConj =true;
-% 
-%             end
-            
-            rq = quatmultiply(lq,q);
-            
-         end
-        
+      
         %================================================================== 
         % Fonction qui retourne l'angle de course
          function angle = getCourseAngle(this, q)
@@ -391,8 +377,8 @@ classdef TrajectoryGenerator < handle
              t = this.param.ts : this.param.ts : this.timeList(end);
 
              % Interpoler la trajectoire lineaire
-             this.trajPosition(:,1) = interp1(this.timeList,this.pointList(:,1),t,'pchip').';
-             this.trajPosition(:,2)  = interp1(this.timeList,this.pointList(:,2),t,'pchip').';
+             this.trajPosition(:,1) = this.interpStrategy(this.timeList,this.pointList(:,1),t,false).';
+             this.trajPosition(:,2)  = this.interpStrategy(this.timeList,this.pointList(:,2),t,false).';
              this.trajPosition(:,3) = interp1(this.timeList,this.pointList(:,3),t,'pchip').';
  
              % Deriver la trajectoire pour avoir les vitesse linéare;
@@ -448,6 +434,48 @@ classdef TrajectoryGenerator < handle
              this.trajAngularAcceleration(:,1) = [0 ; diff(this.trajAngulairRates(:,1))]; % p_dot
              this.trajAngularAcceleration(:,2) = [0 ; diff(this.trajAngulairRates(:,2))]; % q_dot
              this.trajAngularAcceleration(:,3) = [0 ; diff(this.trajAngulairRates(:,3))]; % rs_dot
+        end
+
+        %================================================================== 
+        % Fonction qui envoie les message sur ros
+        function trajList = interpStrategy(this, timeList, pointList, sample, verif)
+
+            % Le parametre verif permet au constructeur de verifier si le mode existe sans interpoler.
+            % Determiner le type d'imterpolation
+            switch 0
+
+            case 0 % piecewise cubic interpolation
+                if~(verif)
+                     trajList = interp1(timeList,pointList,sample,'pchip'); 
+
+                else 
+                    trajList = 1 ;
+
+                end    
+
+            case 1 % spline
+                if~(verif)
+                    trajList = interp1(timeList,pointList,sample,'spline');
+
+                else 
+                    trajList = 1 ;
+
+                end
+
+            case 2 % Cubic convolution
+                if~(verif)
+                    trajList = interp1(timeList,pointList,sample,'v5cubic');
+
+                else 
+                    trajList = 1 ;
+
+                end
+            
+            otherwise
+                trajList = 0 ; 
+                 
+            end
+            
         end
 
         %================================================================== 

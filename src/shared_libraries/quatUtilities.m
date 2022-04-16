@@ -48,8 +48,27 @@ classdef quatUtilities
             qDot = E2* omega.';
          end
         
-        
+        %================================================================== 
+        % Fonnction qui retoure le quaternion le plus court/long selon
+        % l'utilisateur
+     
+        function rq = getQuatDir(lq,q,dir)    
+
+            %           norm = dot(lq,q);
+            %             % conjuger le quaternion au besoin
+            %             %if  norm > 1 && dir == 0 || norm < 1 && dir == 1
+            %            if  norm < 0  && dir == 0 || norm >= 0 && dir == 1
+            %                 q = quatconj(q);    
+            %                 this.lastConj =true;
+            % 
+            %             end
+                        
+            rq = quatmultiply(lq,q);
+                        
+        end   
+
     end
+
     methods(Static, Access = private)
 
        %=================================================================
