@@ -3,6 +3,8 @@ for i =1 : max(size(newmsg.Pose))
 fprintf("WPTS # %d :: Position { X: %d Y: %d Z: %d } Orientation { yaw : %d } \n",i, newmsg.Pose(i).Position.X,newmsg.Pose(i).Position.Y,newmsg.Pose(i).Position.Z,newmsg.Pose(i).Orientation.Z)
 end
 
+newmsg.InterpolationMethod =2;
+
 iquat= eul2quat(deg2rad([45,0,0]),"ZYX");
 icMsg = rosmessage('geometry_msgs/Pose',"DataFormat","struct"); % IC topic
 

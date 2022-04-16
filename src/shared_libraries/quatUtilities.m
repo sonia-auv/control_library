@@ -28,24 +28,22 @@ classdef quatUtilities
 
          %=================================================================
          % Fonction qui convertie un quaternion instantané en vitesses angulaires. 
-         % quatnormalize de matlab demande areospace block set pour etre compilable.
          function angularRates = qDot2angularRates(q,qDot)
 
             E2 = quatUtilities.liniairzeE2(q);
             invE2 = pinv(E2);
             
-            angularRates = (invE2 * qDot.').';
+            angularRates = -(invE2 * qDot.').';
             
          end
 
         %=================================================================
          % Fonction qui convertie des vitesses angulaires quaternion instantané en quaternion instantané. 
-         % quatnormalize de matlab demande areospace block set pour etre compilable.
          function qDot = angularRates2qDot(this, q, omega)
 
             E2 = quatUtilities.liniairzeE2(q);
             
-            qDot = E2* omega.';
+            qDot = -E2* omega.';
          end
         
         %================================================================== 

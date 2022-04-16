@@ -84,7 +84,7 @@ figure;
  ax.FontSize = 13;
  title('acceleration angulaire en fonction du temps');
  xlabel('temps en seconde');
- legend({'\p_dot','\q_dot','\r_dot',},'Location','northeast');
+ legend({'\p_dot','\q_dot','\r_dot'},'Location','northeast');
 
  % Afficher la v lineaire en fonction du temps
  nexttile;
