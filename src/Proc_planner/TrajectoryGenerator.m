@@ -1,16 +1,22 @@
 classdef TrajectoryGenerator < handle
     %TRAJECTORYGENERATOR Summary of this class goes here
     %   Detailed explanation goes here
-    
+
+    % The Fossen(2021) Reference is the book "Handbook of Marine Craft Hydrodynamics and Motion Control second edition"
+    % Disponible a la bibliotheque de l'ets. Code : VM 156 F67 2021
+
     properties
         status = true; % esce que la liste de waypoints est valide
     end
 
     properties (Access = private)
 
+        % class
+        qUtils; % quaternion utilities
+
         % Structures
         MAPM; % Multi Add Pose Msg
-        param % paramètre de trajectoire
+        param; % paramètre de trajectoire
 
         % Parametres 
         nMAPM;     % nombre de waypoints dans la liste multiaddpose
@@ -44,8 +50,11 @@ classdef TrajectoryGenerator < handle
             this.MAPM =multiAddposeMsg;
             this.nMAPM = max(size(multiAddposeMsg.Pose)); % matlab and cpp dont use same index. return max instead
 
-             % Initialiser les parametres
-             this.param = param;
+            % Initialiser les parametres
+            this.param = param;
+
+            % Importer la librairie quatUtilities
+             this.qUtils = quatUtilities();
 
             % point supplementaire pour l'arrondissement.
             suppPoint = 0;
@@ -71,54 +80,54 @@ classdef TrajectoryGenerator < handle
             if ~this.getInitialWaypoint(icMsg)
                 this.status = false;
                 fprintf('INFO : proc planner : initial waypoint not received \n');
-                return;
+                
             end
 
             % Process le message addpose
             if ~logical(this.processWpt())
                 this.status = false;
                 fprintf('INFO : proc planner : Waypoints are not valid  \n');
-                return;
+                
             end
+              
+            % Calculer les temps entre chaque waypoints
+            if this.status && logical(this.computetimeArrival())
+                % Déterminer le nombre de points
+                this.nbPoint = round(this.timeList(end) / this.param.ts);
+
+            else
+                fprintf('INFO : proc planner : Speed parameter not recognized \n');
+                this.nbPoint = 1;
+                this.status = false;
+            end
+  
+            % Definir la taille de la trajectoire
+            this.trajPosition = zeros(this.nbPoint,3);     
+            this.trajQuat = zeros(this.nbPoint,4); 
+            this.trajBodyVelocity = zeros(this.nbPoint,3);
+            this.trajAngulairRates = zeros(this.nbPoint,3);
+            this.trajLinearAcceleration = zeros(this.nbPoint,3);
+            this.trajAngularAcceleration = zeros(this.nbPoint,3);
             
-            if this.status
-                % Calculer les temps entre chaque waypoints
-
-                 if logical(this.computetimeArrival())
-                    % Déterminer le nombre de points
-                    this.nbPoint = round(this.timeList(end) / this.param.ts);
-
-                    % Definir la taille de la trajectoire
-                    this.trajPosition = zeros(this.nbPoint,3);     
-                    this.trajQuat = zeros(this.nbPoint,4); 
-                    this.trajBodyVelocity = zeros(this.nbPoint,3);
-                    this.trajAngulairRates = zeros(this.nbPoint,3);
-                    this.trajLinearAcceleration = zeros(this.nbPoint,3);
-                    this.trajAngularAcceleration = zeros(this.nbPoint,3);
-                
-                 else
-                    fprintf('INFO : proc planner : Speed parameter not recognized \n');
-                    this.status = false;
-                 end
-    
-                
-            end
-           
         end
         %==================================================================
         % Fonction Main qui génère les waypoints
         function status = Compute(this,trajpub)
 
-            % Interpoler les waypoints
-            this.interpolateWaypoints();
+            if this.status
+                % Interpoler les waypoints
+                this.interpolateWaypoints();
 
-            % Envoyer la trajectoire sur ROS.
-            status = this.sendTrajectory(trajpub);  
+                % Envoyer la trajectoire sur ROS.
+                status = this.sendTrajectory(trajpub);  
+
+            else
+                status =false;
+
+            end
             
         end
-            
     end
-
 %% ========================================================================
     % Private function
 
@@ -151,12 +160,12 @@ classdef TrajectoryGenerator < handle
         
                     case 1 % position et angle relatif
                         this.quatList(i+this.icOffset,:) = this.getQuatDir(this.quatList(i+this.icOffset-1,:), q, this.MAPM.Pose(i).Rotation);
-                        this.pointList(i+this.icOffset,:) = this.pointList(i+this.icOffset-1,:) + this.quatrotation(p,this.quatList(i+this.icOffset-1,:));
+                        this.pointList(i+this.icOffset,:) = this.pointList(i+this.icOffset-1,:) + this.qUtils.quatRotation(p,this.quatList(i+this.icOffset-1,:));
                         
         
                     case 2 % position relatif et angle absolue             
                         this.quatList(i+this.icOffset,:) = q;
-                        this.pointList(i+this.icOffset,:) = this.pointList(i+this.icOffset-1,:) + this.quatrotation(p,this.quatList(i+this.icOffset-1,:));
+                        this.pointList(i+this.icOffset,:) = this.pointList(i+this.icOffset-1,:) + this.qUtils.quatRotation(p,this.quatList(i+this.icOffset-1,:));
         
                     case 3 % position absolue et angle relatif
                         this.quatList(i+this.icOffset,:) = this.getQuatDir(this.quatList(i+this.icOffset-1,:), q, this.MAPM.Pose(i).Rotation);
@@ -175,34 +184,34 @@ classdef TrajectoryGenerator < handle
                 this.courseList(i+this.icOffset) = this.getCourseAngle(this.quatList(i+this.icOffset,:));
 
                 % verifier si faut arrondire la trajectoire.
-                    if i>1 && this.MAPM.Pose(i-1).Fine ~=0
+                if i>1 && this.MAPM.Pose(i-1).Fine ~=0
 
-                        [status, p01, p12] = this.inscribedCircles(i+this.icOffset);
+                    [status, p01, p12] = this.inscribedCircles(i+this.icOffset);
 
-                        if ~status
-                            status = false;
-                            return
-                        end
-
-                        % Decaler les waypoints
-                        this.pointList(i+this.icOffset+1,:) = this.pointList(i+this.icOffset,:);
-                        this.pointList(i+this.icOffset,:) = p12; 
-                        this.pointList(i+this.icOffset-1,:) = p01;
-                        
-                        this.quatList(i+this.icOffset+1,:) = this.quatList(i+this.icOffset,:);
-                        this.quatList(i+this.icOffset,:) = this.quatList(i+this.icOffset-1,:);
-                        this.quatList(i+this.icOffset-1,:) = this.quatList(i+this.icOffset-2,:);
-
-                        this.speedList(i + this.icOffset + 1) =this.speedList(i + this.icOffset);
-                        this.speedList(i + this.icOffset) = this.speedList(i + this.icOffset - 1 );
-
-                        this.courseList(i+this.icOffset +1) = this.courseList(i+this.icOffset);
-                        this.courseList(i+this.icOffset) = this.courseList(i+this.icOffset-1);
-                        this.courseList(i+this.icOffset-1) = this.courseList(i+this.icOffset-2);
-
-                        % nouveau waypoint. augmente le offset
-                        this.icOffset =this.icOffset + 1;
+                    if ~status
+                        status = false;
+                        return
                     end
+
+                    % Decaler les waypoints
+                    this.pointList(i+this.icOffset+1,:) = this.pointList(i+this.icOffset,:);
+                    this.pointList(i+this.icOffset,:) = p12; 
+                    this.pointList(i+this.icOffset-1,:) = p01;
+                    
+                    this.quatList(i+this.icOffset+1,:) = this.quatList(i+this.icOffset,:);
+                    this.quatList(i+this.icOffset,:) = this.quatList(i+this.icOffset-1,:);
+                    this.quatList(i+this.icOffset-1,:) = this.quatList(i+this.icOffset-2,:);
+
+                    this.speedList(i + this.icOffset + 1) =this.speedList(i + this.icOffset);
+                    this.speedList(i + this.icOffset) = this.speedList(i + this.icOffset - 1 );
+
+                    this.courseList(i+this.icOffset +1) = this.courseList(i+this.icOffset);
+                    this.courseList(i+this.icOffset) = this.courseList(i+this.icOffset-1);
+                    this.courseList(i+this.icOffset-1) = this.courseList(i+this.icOffset-2);
+
+                    % nouveau waypoint. augmente le offset
+                    this.icOffset =this.icOffset + 1;
+                end
             end
 
            
@@ -234,16 +243,6 @@ classdef TrajectoryGenerator < handle
             
             rq = quatmultiply(lq,q);
             
-         end
-         %=================================================================
-         % Fonction qui tourne un vecteur selon un quaternion.
-         function rp = quatrotation(this,p,q)
-
-             qs = q(1);   % quaternion partie scalaire
-             qu = q(2:4); % quaternion partie vectoriel
-
-             % QuatRotate n'est pas compilable
-             rp= (2*dot(qu,p)*qu +(qs^2-dot(qu,qu))*p + 2*qs*cross(qu,p)); 
          end
         
         %================================================================== 
@@ -407,16 +406,23 @@ classdef TrajectoryGenerator < handle
              this.trajLinearAcceleration(:,3) = [0 ; diff(this.trajBodyVelocity(:,3))];
  
              % Interpoler l'orientation avec spline. résultat plus smooth/moins jerk que slerp. 
-             this.trajQuat(:,1) = interp1(this.timeList,this.quatList(:,1),t,'spline').';
-             this.trajQuat(:,2) = interp1(this.timeList,this.quatList(:,2),t,'spline').';
-             this.trajQuat(:,3) = interp1(this.timeList,this.quatList(:,3),t,'spline').';
-             this.trajQuat(:,4) = interp1(this.timeList,this.quatList(:,4),t,'spline').';
+             this.trajQuat(:,1) = interp1(this.timeList,this.quatList(:,1),t,'spline').'; % eta
+             this.trajQuat(:,2) = interp1(this.timeList,this.quatList(:,2),t,'spline').'; % epsilon 1
+             this.trajQuat(:,3) = interp1(this.timeList,this.quatList(:,3),t,'spline').'; % epsilon 2
+             this.trajQuat(:,4) = interp1(this.timeList,this.quatList(:,4),t,'spline').'; % epsilon 3
+
+             % Dériver l'orientation
+             qdot = zeros(this.nbPoint,4);
+             qdot(:,1) = [0 ; diff(this.trajQuat(:,1))]; % eta_dot
+             qdot(:,2) = [0 ; diff(this.trajQuat(:,2))]; % epsilon 1 dot
+             qdot(:,3) = [0 ; diff(this.trajQuat(:,3))]; % epsilon 2 dot
+             qdot(:,4) = [0 ; diff(this.trajQuat(:,4))]; % epsilon 3 dot
  
              % Post traitement
              for i = 1 : this.nbPoint
 
                 % Normaliser les quaternions car l'interpolation de type spline ne le garentie pas.
-                this.trajQuat(i,:) = quatnormalize(this.trajQuat(i,:));
+                this.trajQuat(i,:) = this.qUtils.quatNorm(this.trajQuat(i,:));
 
                  % verifier la discontinuité du quaternion.
                  if i > 1 && dot(this.trajQuat(i-1,:), this.trajQuat(i,:)) < 0
@@ -425,16 +431,23 @@ classdef TrajectoryGenerator < handle
                 end
 
                 % Convertir les vitesse lineaire dans le ref sub
-                this.trajBodyVelocity(i,:) = this.quatrotation(this.trajBodyVelocity(i,:), this.trajQuat(i,:));
+                this.trajBodyVelocity(i,:) = this.qUtils.quatRotation(this.trajBodyVelocity(i,:), this.trajQuat(i,:));
+
+                % Convertir des quaternion instantané en vitesse angulaire
+                this.trajAngulairRates(i,:) =  this.qUtils.qDot2angularRates(this.trajQuat(i,:),qdot(i,:));
 
                 % Convertir les vitesse angulaire dans le ref sub
                 this.trajAngulairRates(i,:) = -this.trajAngulairRates(i,:);
                 
                 % Convertire les accélération angulaire dans le ref sub
-                this.trajLinearAcceleration(i,:) = this.quatrotation(this.trajLinearAcceleration(i,:), this.trajQuat(i,:));
+                this.trajLinearAcceleration(i,:) = this.qUtils.quatRotation(this.trajLinearAcceleration(i,:), this.trajQuat(i,:));
 
              end
 
+             % Calucler les acceleration angulaire
+             this.trajAngularAcceleration(:,1) = [0 ; diff(this.trajAngulairRates(:,1))]; % p_dot
+             this.trajAngularAcceleration(:,2) = [0 ; diff(this.trajAngulairRates(:,2))]; % q_dot
+             this.trajAngularAcceleration(:,3) = [0 ; diff(this.trajAngulairRates(:,3))]; % rs_dot
         end
 
         %================================================================== 

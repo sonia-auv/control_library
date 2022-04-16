@@ -1,7 +1,10 @@
 % This Script generate the c++ code for proc_planner.
 % Make sure to run this script in src/proc_planner folder.
-
+    
     clear;
+    
+% add shared lib folder   
+    addpath("../shared_libraries/");
 
 % Set the code generation config
     cfg = coder.config('exe');
