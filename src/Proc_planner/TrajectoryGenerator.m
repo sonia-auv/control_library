@@ -379,7 +379,7 @@ classdef TrajectoryGenerator < handle
              % Interpoler la trajectoire lineaire
              this.trajPosition(:,1) = this.interpStrategy(this.timeList,this.pointList(:,1),t,false).';
              this.trajPosition(:,2)  = this.interpStrategy(this.timeList,this.pointList(:,2),t,false).';
-             this.trajPosition(:,3) = interp1(this.timeList,this.pointList(:,3),t,'pchip').';
+             this.trajPosition(:,3) = interp1(this.timeList,this.pointList(:,3),t,'pchip').'; % par sécurité, on ne veux pas de courbe en z. laissez pchip
  
              % Deriver la trajectoire pour avoir les vitesse linéare;
              this.trajBodyVelocity(:,1) = [0 ; diff(this.trajPosition(:,1))];
@@ -442,7 +442,7 @@ classdef TrajectoryGenerator < handle
 
             % Le parametre verif permet au constructeur de verifier si le mode existe sans interpoler.
             % Determiner le type d'imterpolation
-            switch 0
+            switch this.MAPM.InterpolationMethod;
 
             case 0 % piecewise cubic interpolation
                 if~(verif)
@@ -473,7 +473,7 @@ classdef TrajectoryGenerator < handle
             
             otherwise
                 trajList = 0 ; 
-                 
+
             end
             
         end

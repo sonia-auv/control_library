@@ -36,6 +36,8 @@ clear;
     step = 1;
     speed = 1;
     fine = 0.4;
+    Maddposemsg.InterpolationMethod = 1;
+
 
     fstep = floor(x/step);
     residut = mod(x,step);
