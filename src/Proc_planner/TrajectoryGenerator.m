@@ -47,6 +47,7 @@ classdef TrajectoryGenerator < handle
         %==================================================================
         % Constructeur
         function this = TrajectoryGenerator(multiAddposeMsg, param, icMsg)
+            % Initialise l'objet trajectoire et vérifie si le message multi add pose est valide.
             
             this.MAPM =multiAddposeMsg;
             this.nMAPM = max(size(multiAddposeMsg.Pose)); % matlab and cpp dont use same index. return max instead
@@ -57,9 +58,16 @@ classdef TrajectoryGenerator < handle
             % Importer la librairie quatUtilities
              this.qUtils = quatUtilities();
 
+            % Verifier que le dernier point ne contient pas de rayon.
+            if this.MAPM.Pose(this.nMAPM).Fine ~= 0
+
+                this.MAPM.Pose(this.nMAPM).Fine = 0;
+                fprintf('Warning : proc planner : last waypoint must have fine parameter set to 0 \n');
+
+            end
+
             % point supplementaire pour l'arrondissement.
             suppPoint = 0;
-
             for i=1 : this.nMAPM
                 
                 if ~(this.MAPM.Pose(i).Fine == 0)
@@ -67,10 +75,10 @@ classdef TrajectoryGenerator < handle
                 end
             end
 
-            % nombre de waypoints + iC + point supp
+            % nombre de waypoints  + point supp + offset + point initial
             this.n = this.nMAPM + suppPoint + this.icOffset + 1; 
-
-            % Initialiser les tableaux
+            
+             % Initialiser les tableaux
             this.pointList = zeros(this.n,3);
             this.quatList = zeros(this.n,4);
             this.timeList = zeros(this.n,1);
@@ -107,7 +115,7 @@ classdef TrajectoryGenerator < handle
                 this.nbPoint = 1;
                 this.status = false;
             end
-  
+
             % Definir la taille de la trajectoire
             this.trajPosition = zeros(this.nbPoint,3);     
             this.trajQuat = zeros(this.nbPoint,4); 
@@ -423,7 +431,7 @@ classdef TrajectoryGenerator < handle
                 this.trajAngulairRates(i,:) =  this.qUtils.qDot2angularRates(this.trajQuat(i,:),qdot(i,:));
 
                 % Convertir les vitesse angulaire dans le ref sub
-                this.trajAngulairRates(i,:) = -this.trajAngulairRates(i,:);
+                this.trajAngulairRates(i,:) = - this.trajAngulairRates(i,:);
                 
                 % Convertire les accélération angulaire dans le ref sub
                 this.trajLinearAcceleration(i,:) = this.qUtils.quatRotation(this.trajLinearAcceleration(i,:), this.trajQuat(i,:));
@@ -442,7 +450,7 @@ classdef TrajectoryGenerator < handle
 
             % Le parametre verif permet au constructeur de verifier si le mode existe sans interpoler.
             % Determiner le type d'imterpolation
-            switch this.MAPM.InterpolationMethod;
+            switch this.MAPM.InterpolationMethod
 
             case 0 % piecewise cubic interpolation
                 if~(verif)
@@ -574,7 +582,6 @@ classdef TrajectoryGenerator < handle
                  this.speedList(2) = this.speedList(1);
                  status = true;
         end
-        
 
     end
 end
