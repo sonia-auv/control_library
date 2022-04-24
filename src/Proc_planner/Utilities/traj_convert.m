@@ -32,7 +32,7 @@ param.highSpeed.vlmax = 0.8;
 param.highSpeed.vamax = 0.8;
 
 TG = TrajectoryGenerator(newmsg,param,icMsg);
-if TG.status
+if TG.status == TG.RECIEVED_VALID_WAYPTS
     test= TG.Compute(trajpub);
     Traj_viewer(test);
 end

@@ -25,12 +25,10 @@ function proc_planner
 % Variables locals
     rosSpin = 1;
     r = rosrate(rosSpin);
-    killNode = false;
-
-    
+    killNode = false; 
 
 % Definir les message ros
-    validMsg = rosmessage("std_msgs/Bool","DataFormat","struct");
+    validMsg = rosmessage("std_msgs/int8","DataFormat","struct");
 
 % Definir les Subscrier ros
     madpSub = rossubscriber('/proc_planner/send_multi_addpose','sonia_common/MultiAddPose',@madCallback,"DataFormat","struct");
@@ -38,7 +36,7 @@ function proc_planner
 
 % Definir les publisher ROS
     trajpub = rospublisher('/proc_planner/send_trajectory_list','trajectory_msgs/MultiDOFJointTrajectoryPoint',"DataFormat","struct");
-    validPub = rospublisher("/proc_planner/is_waypoints_valid","std_msgs/Bool","DataFormat","struct");
+    validPub = rospublisher("/proc_planner/is_waypoints_valid","std_msgs/int8","DataFormat","struct");
 
 %% Definir les parametre de trajectoire  
     param = getRosParam();
@@ -56,11 +54,11 @@ function proc_planner
             TG = TrajectoryGenerator(madpSub.LatestMessage,param,icSub.LatestMessage);
 
             % Envoyer a ros si le mAddpose est valide
-            validMsg.Data = logical(TG.status);
+            validMsg.Data = int8(TG.status);
             send(validPub, validMsg);
 
             % Si la trajectoire est valide generer la trajectoire
-            if TG.status
+            if (TG.status == TG.RECIEVED_VALID_WAYPTS)
                 TG.Compute(trajpub);            
 
             end

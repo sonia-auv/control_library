@@ -103,9 +103,9 @@ clear;
     for i =1 : max(size(Maddposemsg.Pose))
         fprintf("WPTS # %d :: Position { X: %d Y: %d Z: %d } Orientation { yaw : %d } \n",i, Maddposemsg.Pose(i).Position.X,Maddposemsg.Pose(i).Position.Y,Maddposemsg.Pose(i).Position.Z,Maddposemsg.Pose(i).Orientation.Z)
     end
-    TG = TrajectoryGenerator(Maddposemsg,param,icMsg);
+    TG = TrajectoryGenerator(Maddposemsg,param,icMsg)
 
-    if TG.status
+    if TG.status == TG.RECIEVED_VALID_WAYPTS
         test= TG.Compute(trajpub);
         Traj_viewer(test);
     end

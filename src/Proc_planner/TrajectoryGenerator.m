@@ -5,8 +5,20 @@ classdef TrajectoryGenerator < handle
     % The Fossen(2021) Reference is the book "Handbook of Marine Craft Hydrodynamics and Motion Control second edition"
     % Disponible a la bibliotheque de l'ets. Code : VM 156 F67 2021
 
+    properties (Constant)
+        % Code d'erreur
+        RECIEVED_VALID_WAYPTS = 0;
+        ERR_INVALID_INTERP_METHOD = -1;
+        ERR_INVALID_FRAME_REF = -2;
+        ERR_INVALID_SPEED_PARAM = -3;
+        ERR_RADIUS_TO_LARGE =-4;
+        ERR_INVALID_IC = -5;
+
+    end
+
     properties
-        status = true; % esce que la liste de waypoints est valide
+        status; % Validité de waypoints reçus.
+
     end
 
     properties (Access = private)
@@ -49,6 +61,8 @@ classdef TrajectoryGenerator < handle
         function this = TrajectoryGenerator(multiAddposeMsg, param, icMsg)
             % Initialise l'objet trajectoire et vérifie si le message multi add pose est valide.
             
+            this.status = this.RECIEVED_VALID_WAYPTS; % Validité de waypoints reçus.
+
             this.MAPM =multiAddposeMsg;
             this.nMAPM = max(size(multiAddposeMsg.Pose)); % matlab and cpp dont use same index. return max instead
 
@@ -87,33 +101,28 @@ classdef TrajectoryGenerator < handle
 
             % trouver le waypoint initial
             if ~this.getInitialWaypoint(icMsg)
-                this.status = false;
+                this.status = this.ERR_INVALID_IC;
                 fprintf('INFO : proc planner : initial waypoint not received \n');
                 
             end
 
             % Verifier si le mode d'interpolation est valide
             if ~logical(this.interpStrategy(0, 0, 0, true))
-                this.status = false;
+                this.status = this.ERR_INVALID_INTERP_METHOD;
                 fprintf('INFO : proc planner : Interpolation strategy is not recognized  \n');
             end
 
             % Process le message addpose
-            if ~logical(this.processWpt())
-                this.status = false;
-                fprintf('INFO : proc planner : Waypoints are not valid  \n');
-                
-            end
+                this.processWpt();
               
             % Calculer les temps entre chaque waypoints
-            if this.status && logical(this.computetimeArrival())
+            if (this.status == this.RECIEVED_VALID_WAYPTS && logical(this.computetimeArrival()))
                 % Déterminer le nombre de points
                 this.nbPoint = round(this.timeList(end) / this.param.ts);
 
             else
-                fprintf('INFO : proc planner : Speed parameter is not recognized \n');
                 this.nbPoint = 1;
-                this.status = false;
+                
             end
 
             % Definir la taille de la trajectoire
@@ -129,7 +138,7 @@ classdef TrajectoryGenerator < handle
         % Fonction Main qui génère les waypoints
         function status = Compute(this,trajpub)
 
-            if this.status
+            if (this.status == this.RECIEVED_VALID_WAYPTS)
                 % Interpoler les waypoints
                 this.interpolateWaypoints();
 
@@ -150,9 +159,7 @@ classdef TrajectoryGenerator < handle
 
         %==================================================================
         % Fonction qui interprete les waypoints reçu par ROS
-        function status = processWpt(this)
-            
-           states = true; 
+        function processWpt(this)
 
             for i = 1 : this.nMAPM % pour chaques AddPose
 
@@ -187,9 +194,10 @@ classdef TrajectoryGenerator < handle
                         this.pointList(i+this.icOffset,:) = p;
         
                     otherwise % Le referentiel n'est pas valide
-                        states = false;
-                        status = states;
+                        this.status = this.ERR_INVALID_FRAME_REF;
+                        fprintf('INFO : proc planner : Invalid Reference Frame.\n');
                         return
+
                 end
 
                 % copier le parametre de vitesse
@@ -201,11 +209,13 @@ classdef TrajectoryGenerator < handle
                 % verifier si faut arrondire la trajectoire.
                 if i>1 && this.MAPM.Pose(i-1).Fine ~=0
 
-                    [status, p01, p12] = this.inscribedCircles(i+this.icOffset);
+                    [valid, p01, p12] = this.inscribedCircles(i+this.icOffset);
 
-                    if ~status
-                        status = false;
+                    if ~valid
+                        this.status = this.ERR_RADIUS_TO_LARGE;
+                        fprintf('INFO : proc planner : Circle radius is to large.\n');
                         return
+
                     end
 
                     % Decaler les waypoints
@@ -236,7 +246,7 @@ classdef TrajectoryGenerator < handle
             this.quatList(end,:) = this.quatList(end-1,:);
             this.courseList(end) = this.courseList(end-1);
             this.speedList(end) = this.speedList(end-1);
-            status = states;
+        
         end
       
         %================================================================== 
@@ -267,6 +277,7 @@ classdef TrajectoryGenerator < handle
                     P0 = this.pointList(i-2,:);
                     P1 = this.pointList(i-1,:);
                     P2 = this.pointList(i,:);
+                    
                 % Determiner les vecteurs
                     v02 = P2-P0;
                     v01 = P1-P0;
@@ -309,9 +320,9 @@ classdef TrajectoryGenerator < handle
         %================================================================== 
         % Fonnction qui calcul le temps entre chaque waypoint
 
-        function  status = computetimeArrival(this)
+        function  valid = computetimeArrival(this)
 
-            status = false;
+            valid = false;
 
             for i = 2 : this.n % pour chaques waypoints
 
@@ -334,6 +345,8 @@ classdef TrajectoryGenerator < handle
                         vamax = this.param.lowSpeed.vamax;
 
                     otherwise % mode non reconue.
+                        this.status = this.ERR_INVALID_SPEED_PARAM;
+                        fprintf('INFO : proc planner : Speed parameter is not recognized \n');
                         return 
                 end
 
@@ -373,8 +386,7 @@ classdef TrajectoryGenerator < handle
                 this.timeList(i) = this.timeList(i-1) + tmax;
             end
 
-            status = true;
-
+            valid = true;
         end
 
         %================================================================== 
