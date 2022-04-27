@@ -22,7 +22,7 @@ icMsg.Orientation.X = iquat(2);
 icMsg.Orientation.Y = iquat(3);
 icMsg.Orientation.Z = iquat(4);
 
-icMsg.Position.Z = 0;
+icMsg.Position.Z = 0.5;
 icMsg.Position.Y = 0;
 icMsg.Position.X = 0;
 param.ts = 0.1;
@@ -42,5 +42,6 @@ param.highSpeed.vamax = 0.8;
 TG = TrajectoryGenerator(newmsg,param,icMsg);
 if TG.status == TG.RECIEVED_VALID_WAYPTS
     test= TG.Compute(trajpub);
-    Traj_viewer(test);
+    send(trajpub,test);
+    %Traj_viewer(test);
 end
