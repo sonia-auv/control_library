@@ -28,7 +28,7 @@ function proc_planner
     killNode = false; 
 
 % Definir les message ros
-    validMsg = rosmessage("std_msgs/int8","DataFormat","struct");
+    validMsg = rosmessage("std_msgs/Int8","DataFormat","struct");
 
 % Definir les Subscrier ros
     madpSub = rossubscriber('/proc_planner/send_multi_addpose','sonia_common/MultiAddPose',@madCallback,"DataFormat","struct");
@@ -36,7 +36,7 @@ function proc_planner
 
 % Definir les publisher ROS
     trajpub = rospublisher('/proc_planner/send_trajectory_list','trajectory_msgs/MultiDOFJointTrajectoryPoint',"DataFormat","struct");
-    validPub = rospublisher("/proc_planner/is_waypoints_valid","std_msgs/int8","DataFormat","struct");
+    validPub = rospublisher("/proc_planner/is_waypoints_valid","std_msgs/Int8","DataFormat","struct");
 
 %% Definir les parametre de trajectoire  
     param = getRosParam();
