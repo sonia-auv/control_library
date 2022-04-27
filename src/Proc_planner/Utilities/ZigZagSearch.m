@@ -36,7 +36,7 @@ clear;
     step = 1;
     speed = 1;
     fine = 0.4;
-    Maddposemsg.InterpolationMethod = 1;
+    Maddposemsg.InterpolationMethod = 2;
 
 
     fstep = floor(x/step);
