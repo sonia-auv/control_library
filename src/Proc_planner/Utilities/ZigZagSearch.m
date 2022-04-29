@@ -107,5 +107,6 @@ clear;
 
     if TG.status == TG.RECIEVED_VALID_WAYPTS
         test= TG.Compute(trajpub);
+        send(trajpub,test);
         Traj_viewer(test);
     end

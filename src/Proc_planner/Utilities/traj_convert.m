@@ -11,9 +11,9 @@ newmsg.Pose(i).Rotation = logical(newmsg.Pose(i).Rotation);
 end
 
 
-newmsg.InterpolationMethod =uint8(2);
+newmsg.InterpolationMethod =uint8(1);
 
-iquat= eul2quat(deg2rad([0,0,0]),"ZYX");
+iquat= eul2quat(deg2rad([45,0,0]),"ZYX");
 icMsg = rosmessage('geometry_msgs/Pose',"DataFormat","struct"); % IC topic
 
 send(pospub,newmsg);
@@ -43,5 +43,5 @@ TG = TrajectoryGenerator(newmsg,param,icMsg);
 if TG.status == TG.RECIEVED_VALID_WAYPTS
     test= TG.Compute(trajpub);
     send(trajpub,test);
-    %Traj_viewer(test);
+    Traj_viewer(test);
 end

@@ -55,7 +55,7 @@ classdef TrajectoryManager < matlab.System
            
         end
 %% Main execute a chaque iteration.
-        function [currentPose, isReached] = stepImpl(this, poses, target, reset,x0,mesuredPose)
+        function [currentPose, isReached] = stepImpl(this,reset, poses, target,x0,mesuredPose)
             % Implement algorithm. Calculate y as a function of input u and
             new = 1;
             count = 1;
@@ -188,6 +188,60 @@ end
           end
           
       end
+%%=========================================================================          
+ % Definire outputs   
+%==========================================================================    
+      function [currentPose, isReached] = getOutputSizeImpl(this)
+      currentPose = [this.prediction 13];
+      isReached = [1 1];
+   
+      end 
       
+      function [currentPose, isReached] = isOutputFixedSizeImpl(this)
+          currentPose = true;
+          isReached=true;
+      end
+      function [currentPose, isReached] = getOutputDataTypeImpl(this)
+          currentPose = "double";
+          isReached = "logical";
+      end
+      
+     function [currentPose, isReached] = isOutputComplexImpl(this)
+         currentPose = false;
+         isReached = false;
+     end
+     
+     function [sz,dt,cp] = getDiscreteStateSpecificationImpl(this,name)
+         if strcmp(name,'poseBuffer')
+              sz = [this.bufferSize, 13];
+              dt = "double";
+              cp = false;
+         
+         elseif strcmp(name,'generationNumber')
+             sz = [1 1];
+             dt = "double";
+             cp = false;
+         
+         elseif strcmp(name,'bufferCount')
+             sz = [1 1];
+             dt = "double";
+             cp = false;
+
+         elseif strcmp(name,'done')
+             sz = [1 1];
+             dt = "logical";
+             cp = false;
+
+         elseif strcmp(name,'targetReachedCount')
+             sz = [1 1];
+             dt = "double";
+             cp = false;
+
+         elseif strcmp(name,'init')
+             sz = [1 1];
+             dt = "double";
+             cp = false;
+         end
+     end       
     end    
 end

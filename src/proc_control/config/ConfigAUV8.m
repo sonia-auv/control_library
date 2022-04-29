@@ -67,7 +67,7 @@ function [simulink, simulation, physics, kalman, MPC, mode] = ConfigAUV8()
        MPC.nu = 8;  % Number of inputs
        MPC.Ts = 0.1;% Sample time
        MPC.p = 10; % Prediction horizon (in sample)
-       MPC.m =  2; % control horizon (in sample)
+       MPC.m =  1; % control horizon (in sample)
        MPC.dts =10; % Sample time divider
        MPC.tmax = 10; % maximum thrust in N
        MPC.tmin = -10;% minimum thrust in N
@@ -95,7 +95,7 @@ function [simulink, simulation, physics, kalman, MPC, mode] = ConfigAUV8()
        MPC.gains.defaut.MV = [ 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ];
        MPC.gains.defaut.MVR = [ 0.4, 0.4, 0.4, 0.4, 0.5, 0.5, 0.5, 0.5 ];
        
-       MPC.gains.c10.OV = [ 30, 30, 30, 45, 45, 45, 45, 0, 0, 0, 0, 0, 0 ];
+       MPC.gains.c10.OV = [ 30, 30, 30, 45, 45, 45, 45, 1, 1, 1, 1, 1, 1 ];
        MPC.gains.c10.MV = [ 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ];
        MPC.gains.c10.MVR = [ 0.4, 0.4, 0.4, 0.4, 0.5, 0.5, 0.5, 0.5 ];
        

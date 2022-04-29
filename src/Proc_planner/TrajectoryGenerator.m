@@ -411,11 +411,12 @@ classdef TrajectoryGenerator < handle
              this.trajLinearAcceleration(:,2) = [0 ; diff(this.trajBodyVelocity(:,2))];
              this.trajLinearAcceleration(:,3) = [0 ; diff(this.trajBodyVelocity(:,3))];
  
-             % Interpoler l'orientation avec spline. résultat plus smooth/moins jerk que slerp. 
-             this.trajQuat(:,1) = interp1(this.timeList,this.quatList(:,1),t,'spline').'; % eta
-             this.trajQuat(:,2) = interp1(this.timeList,this.quatList(:,2),t,'spline').'; % epsilon 1
-             this.trajQuat(:,3) = interp1(this.timeList,this.quatList(:,3),t,'spline').'; % epsilon 2
-             this.trajQuat(:,4) = interp1(this.timeList,this.quatList(:,4),t,'spline').'; % epsilon 3
+             % Interpoler l'orientation avec pchip. résultat plus smooth/moins jerk que slerp.
+             % De plus, pas d'oscillation 
+             this.trajQuat(:,1) = interp1(this.timeList,this.quatList(:,1),t,'pchip').'; % eta
+             this.trajQuat(:,2) = interp1(this.timeList,this.quatList(:,2),t,'pchip').'; % epsilon 1
+             this.trajQuat(:,3) = interp1(this.timeList,this.quatList(:,3),t,'pchip').'; % epsilon 2
+             this.trajQuat(:,4) = interp1(this.timeList,this.quatList(:,4),t,'pchip').'; % epsilon 3
 
              % Dériver l'orientation
              qdot = zeros(this.nbPoint,4);

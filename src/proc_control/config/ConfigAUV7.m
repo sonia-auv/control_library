@@ -166,12 +166,12 @@ function [simulink, simulation, physics, kalman, MPC, mode] = ConfigAUV7()
         simulation.sensors.imu.acc.noisePower = 0.000002;
         simulation.sensors.imu.acc.bias = [0,0,-9.59066];
 
-        simulation.sensors.dvl.sampletime = 1/5;
+        simulation.sensors.dvl.sampletime = 1/10;
         simulation.sensors.dvl.maxSpeedThres = 10;
         simulation.sensors.dvl.resolution = 0.001;
         simulation.sensors.dvl.noise.power = 0.0000000004;
         
-        simulation.sensors.depth.sampletime = 1/50;
+        simulation.sensors.depth.sampletime = 1/10;
         simulation.sensors.depth.resolution = 0.001;
         simulation.sensors.depth.noise.power = 0.0000000004;
         

@@ -17,10 +17,11 @@ function proc_planner
 %% Definir les variables
 
 % Variables globals
-    global newMadpPose newInitialPose;
+    global newMadpPose newInitialPose TrajIsGenerating;
 
     newMadpPose = false;
     newInitialPose = false;
+    TrajIsGenerating = false; 
 
 % Variables locals
     rosSpin = 1;
@@ -35,8 +36,8 @@ function proc_planner
     icSub = rossubscriber("proc_planner/initial_pose","geometry_msgs/Pose",@icCallback,"DataFormat","struct");
 
 % Definir les publisher ROS
-    trajpub = rospublisher('/proc_planner/send_trajectory_list','trajectory_msgs/MultiDOFJointTrajectoryPoint',"DataFormat","struct");
-    validPub = rospublisher("/proc_planner/is_waypoints_valid","std_msgs/Int8","DataFormat","struct");
+    trajpub = rospublisher('/proc_planner/send_trajectory_list','trajectory_msgs/MultiDOFJointTrajectoryPoint',"DataFormat","struct","IsLatching",false);
+    validPub = rospublisher("/proc_planner/is_waypoints_valid","std_msgs/Int8","DataFormat","struct","IsLatching",false);
 
 %% Definir les parametre de trajectoire  
     param = getRosParam();
@@ -65,7 +66,7 @@ function proc_planner
         
             newMadpPose = false;
             newInitialPose = false;
-
+            TrajIsGenerating = false;
             fprintf('INFO : proc planner : Wait for poses \n');
        end
  
@@ -88,10 +89,12 @@ end
 %% Initial condition (IC) callback
 function icCallback(src,msg)
 
-    global newMadpPose newInitialPose;
+    global newMadpPose newInitialPose TrajIsGenerating;
 
-    if (newMadpPose == true)
+    if (newMadpPose == true && TrajIsGenerating == false)
+
         newInitialPose =true;
+        TrajIsGenerating = true;
         fprintf('INFO : proc planner : Initial poses received \n');
     end
 end
