@@ -29,7 +29,7 @@ classdef TrimPlant < matlab.System
             this.lastQuat = this.MPC.Xi(4:7).';
             this.J = str2func(this.MPC.JacobianFnc);
             this.f = str2func(this.MPC.StateFnc);
-            this.xl = this.MPC.Xi;
+            this.xl = this.MPC.Xi.';
         end
 
         function setupImpl(this)
@@ -41,7 +41,7 @@ classdef TrimPlant < matlab.System
             % Regarder la discontinuité entre le qk et qk-1
             y = this.checkQuatFlip(y);
 
-            Z = y - this.xl;
+            Z = y - this.xl.';
 
             % Linéariser le systeme.
             [A, B, C, D, U, Y, X, DX] = this.trimPlantQuat(u,y);
@@ -86,7 +86,7 @@ classdef TrimPlant < matlab.System
             DX = (xk-y).' ;
             
             % save prediction for next step
-            this.xl =xk;
+            this.xl =xk.';
         end
 
         function x = checkQuatFlip(this, x)
