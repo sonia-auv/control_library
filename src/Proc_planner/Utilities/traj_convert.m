@@ -13,7 +13,7 @@ end
 
 newmsg.InterpolationMethod =uint8(1);
 
-iquat= eul2quat(deg2rad([45,0,0]),"ZYX");
+iquat= eul2quat(deg2rad([180,0,0]),"ZYX");
 icMsg = rosmessage('geometry_msgs/Pose',"DataFormat","struct"); % IC topic
 
 send(pospub,newmsg);
