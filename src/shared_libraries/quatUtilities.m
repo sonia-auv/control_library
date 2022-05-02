@@ -52,6 +52,10 @@ classdef quatUtilities
      
         function rq = getQuatDir(lq,q,dir)    
 
+            %---------------------------------------------------------------
+            % Code not ready for deploy yet. It is comment to avoid instablitiy 
+            % during pool testing.
+            %---------------------------------------------------------------
             %           norm = dot(lq,q);
             %             % conjuger le quaternion au besoin
             %             %if  norm > 1 && dir == 0 || norm < 1 && dir == 1

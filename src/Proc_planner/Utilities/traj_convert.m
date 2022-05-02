@@ -1,7 +1,8 @@
 trajpub = rospublisher('/proc_planner/send_trajectory_list','trajectory_msgs/MultiDOFJointTrajectoryPoint',"DataFormat","struct");
-pospub = rospublisher('/proc_planner/send_multi_addpose','sonia_common/MultiAddPose',"DataFormat","struct");
+%pospub = rospublisher('/proc_planner/send_multi_addpose','sonia_common/MultiAddPose',"DataFormat","struct");
+mappub = rospublisher('/proc_planner/send_multi_addpose','sonia_common/MultiAddPose',"DataFormat","struct","IsLatching",false);
 
-
+icpub = rospublisher("proc_planner/initial_pose","geometry_msgs/Pose","DataFormat","struct");
 for i =1 : max(size(newmsg.Pose))
 fprintf("WPTS # %d :: Position { X: %d Y: %d Z: %d } Orientation { yaw : %d } \n",i, newmsg.Pose(i).Position.X,newmsg.Pose(i).Position.Y,newmsg.Pose(i).Position.Z,newmsg.Pose(i).Orientation.Z)
 newmsg.Pose(i).Frame = uint8(newmsg.Pose(i).Frame);
@@ -16,7 +17,7 @@ newmsg.InterpolationMethod =uint8(1);
 iquat= eul2quat(deg2rad([180,0,0]),"ZYX");
 icMsg = rosmessage('geometry_msgs/Pose',"DataFormat","struct"); % IC topic
 
-send(pospub,newmsg);
+%send(pospub,newmsg);
 icMsg.Orientation.W = iquat(1);
 icMsg.Orientation.X = iquat(2);
 icMsg.Orientation.Y = iquat(3);
@@ -38,6 +39,10 @@ param.normalSpeed.vamax = 0.5;
 param.highSpeed.amax = 0.15;
 param.highSpeed.vlmax = 0.8;
 param.highSpeed.vamax = 0.8;
+
+send(mappub , newmsg);
+pause(1);
+%send(icpub, icMsg);
 
 TG = TrajectoryGenerator(newmsg,param,icMsg);
 if TG.status == TG.RECIEVED_VALID_WAYPTS

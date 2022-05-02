@@ -3,6 +3,7 @@ clear;
     addposemsg = rosmessage('sonia_common/AddPose',"DataFormat","struct");
     Maddposemsg = rosmessage('sonia_common/MultiAddPose',"DataFormat","struct");
     icMsg = rosmessage('geometry_msgs/Pose',"DataFormat","struct"); % IC topic
+    mappub = rospublisher('/proc_planner/send_multi_addpose','sonia_common/MultiAddPose',"DataFormat","struct","IsLatching",false);
 
     trajpub = rospublisher('/proc_planner/send_trajectory_list','trajectory_msgs/MultiDOFJointTrajectoryPoint',"DataFormat","struct");
     
@@ -34,9 +35,9 @@ clear;
     x = 5;
     y = 5;
     step = 1;
-    speed = 1;
+    speed = 0;
     fine = 0.4;
-    Maddposemsg.InterpolationMethod = 2;
+    Maddposemsg.InterpolationMethod = uint8(0);
 
 
     fstep = floor(x/step);
@@ -54,8 +55,8 @@ clear;
     addposemsg.Fine = 0;
     Maddposemsg.Pose = [Maddposemsg.Pose, addposemsg]; 
 
-    addposemsg.Position.Y = 0;
-    addposemsg.Position.X = (y/2) ;
+    addposemsg.Position.Y = (x/2);%0
+    addposemsg.Position.X = 0;%(y/2) ;
     addposemsg.Position.Z = 0;
     addposemsg.Orientation.X = 0 ;
     addposemsg.Orientation.Y = 0 ;
@@ -75,8 +76,8 @@ clear;
         side = ~side; 
              
          
-        addposemsg.Position.Y = step;
-        addposemsg.Position.X = 0;
+        addposemsg.Position.Y = 0;%step
+        addposemsg.Position.X = step;%0;
         addposemsg.Position.Z = 0;
         addposemsg.Orientation.X = 0 ;
         addposemsg.Orientation.Y = 0 ;
@@ -87,8 +88,8 @@ clear;
         Maddposemsg.Pose = [Maddposemsg.Pose, addposemsg];  
 
 
-        addposemsg.Position.Y = 0;
-        addposemsg.Position.X = signe*(y) ;
+        addposemsg.Position.Y = signe*(y) ;%0;
+        addposemsg.Position.X = 0;%signe*(y) ;
         addposemsg.Position.Z = 0;
         addposemsg.Orientation.X = 0 ;
         addposemsg.Orientation.Y = 0 ;
@@ -99,6 +100,7 @@ clear;
         Maddposemsg.Pose = [Maddposemsg.Pose, addposemsg];  
         
     end
+   send(mappub , Maddposemsg);
 
     for i =1 : max(size(Maddposemsg.Pose))
         fprintf("WPTS # %d :: Position { X: %d Y: %d Z: %d } Orientation { yaw : %d } \n",i, Maddposemsg.Pose(i).Position.X,Maddposemsg.Pose(i).Position.Y,Maddposemsg.Pose(i).Position.Z,Maddposemsg.Pose(i).Orientation.Z)

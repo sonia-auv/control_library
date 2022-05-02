@@ -13,7 +13,7 @@
             rosinit;
         end
 
-        % Definir AUV8
+        % Definir AUV7
         setenv("AUV","AUV7");
     end
 
@@ -164,9 +164,6 @@
 % Définir le modele de perturbation.
     setoutdist(Qmpcobj,'model',waveDist);
     
-% Keep for future use
-    
-
 %% Initialiser le comtrolleur MPC non lineaire
 
 % Création du controleur NMPC.
