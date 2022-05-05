@@ -14,7 +14,7 @@
         end
 
         % Definir AUV7
-        setenv("AUV","AUV7");
+        setenv("AUV","AUV8");
     end
 
 % Obtenir la variable d'environement du sub

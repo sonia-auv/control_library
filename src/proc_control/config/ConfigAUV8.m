@@ -69,8 +69,8 @@ function [simulink, simulation, physics, kalman, MPC, mode] = ConfigAUV8()
        MPC.p = 10; % Prediction horizon (in sample)
        MPC.m =  1; % control horizon (in sample)
        MPC.dts =10; % Sample time divider
-       MPC.tmax = 10; % maximum thrust in N
-       MPC.tmin = -10;% minimum thrust in N
+       MPC.tmax = 30; % maximum thrust in N
+       MPC.tmin = -20;% minimum thrust in N
        MPC.thrusters.faultThres = .10; %  % Pourcentage de fautes pour moteurs
        MPC.thrusters.faultSample = 20; %  fault Sample
    
@@ -144,9 +144,9 @@ function [simulink, simulation, physics, kalman, MPC, mode] = ConfigAUV8()
         kalman.Cx = 100;
 
     % Covariences des capteurs
-        kalman.Cimu = [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1];
+        kalman.Cimu = [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1];
         kalman.Cdvl = ones(1,3)*0.01;
-
+        kalman.Cdepth = [0.01];
   %% Paramèetre de Simulation
    % Gazebo
        simulation.gazebo.sampletime = simulink.sampletime;

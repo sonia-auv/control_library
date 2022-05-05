@@ -67,7 +67,7 @@ function [simulink, simulation, physics, kalman, MPC, mode] = ConfigAUV7()
        MPC.nu = 8;  % Number of inputs
        MPC.Ts = 0.1;% Sample time
        MPC.p = 10; % Prediction horizon (in sample)
-       MPC.m =  2; % control horizon (in sample)
+       MPC.m =  1; % control horizon (in sample)
        MPC.dts =10; % Sample time divider
        MPC.tmax = 15; % maximum thrust in N
        MPC.tmin = -15;% minimum thrust in N
@@ -146,7 +146,7 @@ function [simulink, simulation, physics, kalman, MPC, mode] = ConfigAUV7()
     % Covariences des capteurs
         kalman.Cimu = [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1];
         kalman.Cdvl = ones(1,3)*0.01;
-        kalman.Cdepth = [0.01 1];
+        kalman.Cdepth = [0.01];
         
   %% Paramèetre de Simulation
    % Gazebo

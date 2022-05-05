@@ -33,7 +33,7 @@ function proc_planner
 
 % Definir les Subscrier ros
     madpSub = rossubscriber('/proc_planner/send_multi_addpose','sonia_common/MultiAddPose',@madCallback,"DataFormat","struct");
-    icSub = rossubscriber("proc_planner/initial_pose","geometry_msgs/Pose",@icCallback,"DataFormat","struct");
+    icSub = rossubscriber("/proc_control/current_target","geometry_msgs/Pose",@icCallback,"DataFormat","struct");
 
 % Definir les publisher ROS
     trajpub = rospublisher('/proc_planner/send_trajectory_list','trajectory_msgs/MultiDOFJointTrajectoryPoint',"DataFormat","struct","IsLatching",false);
