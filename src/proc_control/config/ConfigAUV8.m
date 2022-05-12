@@ -92,11 +92,11 @@ function [simulink, simulation, physics, kalman, MPC, mode] = ConfigAUV8()
        
    % MPC gains
        MPC.gains.defaut.OV =  [30, 30, 30, 45, 45, 45, 45, 0, 0, 0, 0, 0, 0 ];
-       MPC.gains.defaut.MV = [ 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ];
+       MPC.gains.defaut.MV = [ 0.20, 0.20, 0.20, 0.20, 0.20, 0.20, 0.20, 0.20 ];
        MPC.gains.defaut.MVR = [ 0.4, 0.4, 0.4, 0.4, 0.5, 0.5, 0.5, 0.5 ];
        
-       MPC.gains.c10.OV = [ 30, 30, 30, 45, 45, 45, 45, 1, 1, 1, 1, 1, 1 ];
-       MPC.gains.c10.MV = [ 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ];
+       MPC.gains.c10.OV = [ 30, 30, 30, 45, 45, 45, 45, 0, 0, 0, 0, 0, 0 ];
+       MPC.gains.c10.MV = [ 0.20, 0.20, 0.20, 0.20, 0.20, 0.20, 0.20, 0.20 ];
        MPC.gains.c10.MVR = [ 0.4, 0.4, 0.4, 0.4, 0.5, 0.5, 0.5, 0.5 ];
        
        MPC.gains.c11.OV = MPC.gains.c10.OV;
@@ -144,7 +144,7 @@ function [simulink, simulation, physics, kalman, MPC, mode] = ConfigAUV8()
         kalman.Cx = 100;
 
     % Covariences des capteurs
-        kalman.Cimu = [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1];
+        kalman.Cimu = [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01];
         kalman.Cdvl = ones(1,3)*0.01;
         kalman.Cdepth = [0.01];
   %% Paramèetre de Simulation

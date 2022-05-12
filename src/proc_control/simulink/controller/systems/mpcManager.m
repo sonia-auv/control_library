@@ -48,13 +48,13 @@
             % Perform one-time calculations, such as computing constants
         end
 
-        function [mvmin,mvmax,ywt,mvwt,dmwwt, tInfo, kill] = stepImpl(this, newRosGains, rosGains,mode,newReadCurrent,readCurrent, estimatedCurrent)
+        function [mvmin,mvmax,ywt,mvwt,dmwwt, tInfo, kill] = stepImpl(this, newRosGains, rosGains,mode,newReadCurrent,readCurrent, estimatedCurrent, mo)
 
             
             initMPCManager(this); % Init function
             
             this.readRosGains(newRosGains, rosGains); % traiter les gains recu via ros.
-            [ywt,mvwt,dmwwt] = this.getMpcWeigth(mode); % Avoir les gains selon le mode 
+            [ywt,mvwt,dmwwt] = this.getMpcWeigth(mode, mo); % Avoir les gains selon le mode 
             
             this.checkThrustersCurrent(newReadCurrent, readCurrent, estimatedCurrent ); % Vérifier l'etats des thrusters
             [mvmin,  mvmax] = this.getThrusterSaturation();
@@ -73,7 +73,7 @@
         end
         
         %% Fonction qui détermine les gain
-        function [OV, MV, MVR]= getMpcWeigth(this,mode)
+        function [OV, MV, MVR]= getMpcWeigth(this, mode, q)
             
           % Vérifier si le mode existe
             corr = this.MPC.gainsList(:,1) == mode;
@@ -97,6 +97,15 @@
                 OV = this.MPC.gains.defaut.OV(1,1:this.MPC.nx);
                 MV = this.MPC.gains.defaut.MV(1,1:this.MPC.nu);
                 MVR = this.MPC.gains.defaut.MVR(1,1:this.MPC.nu);
+                
+            end
+
+            %  Ajust gain if loosing dvl
+            e = abs(quat2eul(q.','ZYX'));
+
+            if(e(2) > deg2rad(20) || e(3) > deg2rad(20)) % If roll pitch exeed 20deg
+    
+                MV = ones(1,this.MPC.nu) * 0.2;
                 
             end
             
