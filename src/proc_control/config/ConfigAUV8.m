@@ -107,6 +107,8 @@ function [simulink, simulation, physics, kalman, MPC, mode] = ConfigAUV8()
        MPC.gains.c19.MV = [ 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2 ];
        MPC.gains.c19.MVR = [ 0.1, 0.1, 0.1, 0.1, 0.3, 0.3, 0.3, 0.3 ];
        
+       MPC.gains.noDvl.MV = [ 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2 ];
+
    %% Définitions des modes
    
    % Mode initial

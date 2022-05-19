@@ -105,7 +105,7 @@
 
             if(e(2) > deg2rad(20) || e(3) > deg2rad(20)) % If roll pitch exeed 20deg
     
-                MV = ones(1,this.MPC.nu) * 0.2;
+                MV = this.MPC.gains.noDvl.MV;
                 
             end
             

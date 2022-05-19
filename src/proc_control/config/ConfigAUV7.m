@@ -107,6 +107,7 @@ function [simulink, simulation, physics, kalman, MPC, mode] = ConfigAUV7()
        MPC.gains.c19.MV = [ 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2 ];
        MPC.gains.c19.MVR = [ 0.1, 0.1, 0.1, 0.1, 0.3, 0.3, 0.3, 0.3 ];
        
+       MPC.gains.noDvl.MV = [ 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2 ];
    %% Définitions des modes
    
    % Mode initial
@@ -167,7 +168,7 @@ function [simulink, simulation, physics, kalman, MPC, mode] = ConfigAUV7()
         simulation.sensors.imu.acc.noisePower = 0.000002;
         simulation.sensors.imu.acc.bias = [0,0,-9.59066];
 
-        simulation.sensors.dvl.sampletime = 1/10;
+        simulation.sensors.dvl.sampletime = 1/50;
         simulation.sensors.dvl.maxSpeedThres = 10;
         simulation.sensors.dvl.resolution = 0.001;
         simulation.sensors.dvl.noise.power = 0.0000000004;
