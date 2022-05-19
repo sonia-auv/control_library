@@ -96,7 +96,7 @@ function [simulink, simulation, physics, kalman, MPC, mode] = ConfigAUV8()
        MPC.gains.defaut.MVR = [ 0.4, 0.4, 0.4, 0.4, 0.5, 0.5, 0.5, 0.5 ];
        
        MPC.gains.c10.OV = [ 30, 30, 30, 45, 45, 45, 45, 0, 0, 0, 0, 0, 0 ];
-       MPC.gains.c10.MV = [ 0.20, 0.20, 0.20, 0.20, 0.20, 0.20, 0.20, 0.20 ];
+       MPC.gains.c10.MV = [ 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ];
        MPC.gains.c10.MVR = [ 0.4, 0.4, 0.4, 0.4, 0.5, 0.5, 0.5, 0.5 ];
        
        MPC.gains.c11.OV = MPC.gains.c10.OV;
@@ -168,7 +168,7 @@ function [simulink, simulation, physics, kalman, MPC, mode] = ConfigAUV8()
         simulation.sensors.imu.acc.noisePower = 0.000002;
         simulation.sensors.imu.acc.bias = [0,0,-9.59066];
 
-        simulation.sensors.dvl.sampletime = 1/10;
+        simulation.sensors.dvl.sampletime = 1/50;
         simulation.sensors.dvl.maxSpeedThres = 10;
         simulation.sensors.dvl.resolution = 0.001;
         simulation.sensors.dvl.noise.power = 0.0000000004;

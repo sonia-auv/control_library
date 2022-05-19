@@ -4,6 +4,9 @@
 # OSX / *nix default autosave extension
 *.m~
 
+# simulink autosave
+*.original
+
 # Compiled MEX binaries (all platforms)
 *.mex*
 

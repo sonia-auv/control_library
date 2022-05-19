@@ -26,6 +26,17 @@ classdef quatUtilities
             nq = q ./ norm(q);
          end
 
+        %=================================================================
+        % Fonction qui assure la continuité entre 2 quaternions
+         function q = checkQuatFlip(q, qk)
+
+            % Regarder la discontinuité entre le qk et qk-1
+            if  dot(qk,q) < 0
+                q = -q;
+
+            end
+            
+        end
          %=================================================================
          % Fonction qui convertie un quaternion instantané en vitesses angulaires. 
          function angularRates = qDot2angularRates(q,qDot)

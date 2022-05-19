@@ -11,7 +11,8 @@ classdef TrimPlant < matlab.System
     end
 
     properties(DiscreteState)
-        lastQuat; % Quaternion of last step
+        qkm; % mesured Quaternion of last step
+        qkt; % trajectory Quaternion of last step
         xl;
     end
 
@@ -19,6 +20,7 @@ classdef TrimPlant < matlab.System
     properties(Access = private)
         J; % Jacobian function 
         f; % state function
+        qUtils; % quatUtil class
         
     end
 
@@ -26,7 +28,8 @@ classdef TrimPlant < matlab.System
 
         function resetImpl(this)
             % Initialize / reset discrete-state properties
-            this.lastQuat = this.MPC.Xi(4:7).';
+            this.qkm = this.MPC.Xi(4:7).';
+            this.qkt = this.MPC.Xi(4:7).';
             this.J = str2func(this.MPC.JacobianFnc);
             this.f = str2func(this.MPC.StateFnc);
             this.xl = this.MPC.Xi.';
@@ -34,13 +37,19 @@ classdef TrimPlant < matlab.System
 
         function setupImpl(this)
             % Perform one-time calculations, such as computing constants
+            this.qUtils = quatUtilities();
         end
 
-        function [A, B, C, D, U, Y, X, DX, Z] = stepImpl(this, u, y)
+        function [A, B, C, D, U, Y, X, DX, ref, Z] = stepImpl(this, u, y, ref)
             
-            % Regarder la discontinuité entre le qk et qk-1
-            y = this.checkQuatFlip(y);
+            % Regarder la discontinuité entre le qk et qk-1 pour la mesure
+            y(4:7) = this.qUtils.checkQuatFlip(y(4:7).', this.qkm).';
+            this.qkm = y(4:7).';
 
+            % Regarder la discontinuité entre le qk et qk + p pour la trajectoire
+            ref = this.checkTrajectory(ref);
+
+            % Calculer le residue de mesure
             Z = y - this.xl.';
 
             % Linéariser le systeme.
@@ -75,8 +84,8 @@ classdef TrimPlant < matlab.System
               x_dot_kk = x_dot_k;
         
                % correct Quaternion
-               d = norm(xk(4:7));
-               xk(4:7) = xk(4:7)/d;
+               xk(4:7)=this.qUtils.quatNorm(xk(4:7));
+               
             end
             
             % Nominal conditions for discrete-time plant
@@ -89,18 +98,22 @@ classdef TrimPlant < matlab.System
             this.xl =xk.';
         end
 
-        function x = checkQuatFlip(this, x)
+        function traj = checkTrajectory(this, traj)
 
-            % Regarder la discontinuité entre le qk et qk-1
-            if  dot(this.lastQuat,x(4:7).') < 0
-                x(4:7) = -x(4:7);
+            % check fist ref 
+            traj(1,4:7) = this.qUtils.checkQuatFlip(traj(1,4:7), this.qkt);
 
+            for i = 2 : this.MPC.p
+                traj(i,4:7) = this.qUtils.checkQuatFlip(traj(i,4:7), traj(i-1,4:7));
             end
-            this.lastQuat = x(4:7).';
-        end
 
+            % save quat for next step
+            this.qkt = traj(1,4:7);
+
+        end
+      
          %% Definire outputs       
-        function [A, B, C, D, U, Y, X, DX, Z] = getOutputSizeImpl(this)
+        function [A, B, C, D, U, Y, X, DX, ref Z] = getOutputSizeImpl(this)
             A = [this.MPC.nx,this.MPC.nx];
             B = [this.MPC.nx,this.MPC.nu];
             C = [this.MPC.nx,this.MPC.nx];
@@ -109,11 +122,12 @@ classdef TrimPlant < matlab.System
             Y = [1,this.MPC.nx];
             X = [1,this.MPC.nx];
             DX = [1,this.MPC.nx];
+            ref = [this.MPC.p, this.MPC.nx];
             Z = [this.MPC.nx,1];
 
         end 
       
-        function [A, B, C, D, U, Y, X, DX, Z] = isOutputFixedSizeImpl(this)
+        function [A, B, C, D, U, Y, X, DX, ref, Z] = isOutputFixedSizeImpl(this)
             A = true;
             B = true;
             C = true;
@@ -121,11 +135,12 @@ classdef TrimPlant < matlab.System
             U = true;
             Y = true;
             X = true;
-            DX = true;     
+            DX = true;   
+            ref = true  
             Z = true; 
         end
       
-        function [A, B, C, D, U, Y, X, DX, Z] = getOutputDataTypeImpl(this)
+        function [A, B, C, D, U, Y, X, DX, ref, Z] = getOutputDataTypeImpl(this)
             A = "double";
             B = "double";
             C = "double";
@@ -134,10 +149,11 @@ classdef TrimPlant < matlab.System
             Y = "double";
             X = "double";
             DX = "double";
+            ref = "double";
             Z = "double";
         end
       
-        function [A, B, C, D, U, Y, X, DX, Z] = isOutputComplexImpl(this)
+        function [A, B, C, D, U, Y, X, DX, ref, Z] = isOutputComplexImpl(this)
             A = false;
             B = false;
             C = false;
@@ -146,10 +162,15 @@ classdef TrimPlant < matlab.System
             Y = false;
             X = false;
             DX = false;  
+            ref = false;
             Z = false;
         end
         function [sz,dt,cp] = getDiscreteStateSpecificationImpl(this,name)
-            if strcmp(name,'lastQuat')
+            if strcmp(name,'qkm')
+                sz = [1 4];
+                dt = "double";
+                cp = false;
+            elseif strcmp(name,'qkt')
                 sz = [1 4];
                 dt = "double";
                 cp = false;
