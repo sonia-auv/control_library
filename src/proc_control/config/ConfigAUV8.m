@@ -91,7 +91,7 @@ function [simulink, simulation, physics, kalman, MPC, mode] = ConfigAUV8()
        MPC.targetReached.timeInTol = 3; % Seconds
        
    % MPC gains
-       MPC.gains.defaut.OV =  [30, 30, 30, 45, 45, 45, 45, 0, 0, 0, 0, 0, 0 ];
+       MPC.gains.defaut.OV =  [30, 30, 30, 45, 45, 45, 45, 1, 1, 1, 1, 1, 1 ];
        MPC.gains.defaut.MV = [ 0.20, 0.20, 0.20, 0.20, 0.20, 0.20, 0.20, 0.20 ];
        MPC.gains.defaut.MVR = [ 0.4, 0.4, 0.4, 0.4, 0.5, 0.5, 0.5, 0.5 ];
        
