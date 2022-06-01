@@ -13,7 +13,7 @@
             rosinit;
         end
 
-        % Definir AUV8
+        % Definir AUV pour mode interprété
         setenv("AUV","AUV8");
     end
 
@@ -57,10 +57,6 @@ if ~ coder.target('MATLAB')
         MPC.gains.c19.MVR = obtainRosparam.getArray("/proc_control/mpc/gains/c19/mvr", MPC.nu, MPC.gains.c19.MVR);
     
         MPC.gains.noDvl.MV = obtainRosparam.getArray("//proc_control/mpc/gains/noDvl/mv", MPC.nu, MPC.gains.noDvl.MV);
-    % Insére les gains dans la liste des gains
-        MPC.gainsList = [ 10, MPC.gains.c10.OV, MPC.gains.c10.MV, MPC.gains.c10.MVR;
-                        11, MPC.gains.c11.OV, MPC.gains.c11.MV, MPC.gains.c11.MVR;
-                        19, MPC.gains.c19.OV, MPC.gains.c19.MV, MPC.gains.c19.MVR];
 
     % Load Thruster min & max
         MPC.tmax = obtainRosparam.getValue("/proc_control/mpc/tmax", MPC.tmax);
@@ -72,6 +68,11 @@ if ~ coder.target('MATLAB')
         MPC.targetReached.timeInTol = obtainRosparam.getValue("/proc_control/target_reached/time_in_tolerance",  MPC.targetReached.timeInTol);
 
 end
+
+    % Insére les gains dans la liste des gains
+        MPC.gainsList = [ 10, MPC.gains.c10.OV, MPC.gains.c10.MV, MPC.gains.c10.MVR;
+                          11, MPC.gains.c11.OV, MPC.gains.c11.MV, MPC.gains.c11.MVR;
+                          19, MPC.gains.c19.OV, MPC.gains.c19.MV, MPC.gains.c19.MVR];
 
 %% Modèle du thruster
     load('T200-Spec-16V.mat');
@@ -136,9 +137,9 @@ end
 %% Initialiser le controlleur MPC quaternion
 
 % Création du controleur MPC.
-    Qmpcobj =mpc(Plant);
-    Qmpcobj.PredictionHorizon =MPC.p;
-    Qmpcobj.ControlHorizon=MPC.m;
+    Qmpcobj = mpc(Plant);
+    Qmpcobj.PredictionHorizon = MPC.p;
+    Qmpcobj.ControlHorizon= MPC.m;
     
 % Conditions Initials
     Qmpcobj.Model.Nominal.X = MPC.Xi;
@@ -156,7 +157,7 @@ end
 
 % Paramètre du solveur
     Qmpcobj.Optimizer.Algorithm = 'active-set';
-    Qmpcobj.Optimizer.ActiveSetOptions.ConstraintTolerance=0.01;
+    Qmpcobj.Optimizer.ActiveSetOptions.ConstraintTolerance = 0.01;
 
     % To test if major differences
     % setCustomSolver(Qmpcobj,'quadprog');
@@ -165,7 +166,7 @@ end
     setEstimator(Qmpcobj,'custom');
 
 % Définir le modele de perturbation.
-   setoutdist(Qmpcobj,'model',waveDist);
+  % setoutdist(Qmpcobj,'model',waveDist);
     
 %% Initialiser le comtrolleur MPC non lineaire
 

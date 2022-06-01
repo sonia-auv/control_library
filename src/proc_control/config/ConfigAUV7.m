@@ -19,7 +19,7 @@ function [simulink, simulation, physics, kalman, MPC, mode] = ConfigAUV7()
                0.004, -0.001, 2.9030]; % Izx Izy Izz1.68
 
    % Center of mass      
-   physics.RG =[0.001,... x
+   physics.RG =[-0.005,... x
                 0.002,... y
                 0.009]; % z
 
@@ -67,7 +67,7 @@ function [simulink, simulation, physics, kalman, MPC, mode] = ConfigAUV7()
        MPC.nu = 8;  % Number of inputs
        MPC.Ts = 0.1;% Sample time
        MPC.p = 10; % Prediction horizon (in sample)
-       MPC.m =  1; % control horizon (in sample)
+       MPC.m =  2; % control horizon (in sample)
        MPC.dts =10; % Sample time divider
        MPC.tmax = 30; % maximum thrust in N
        MPC.tmin = -20;% minimum thrust in N
@@ -91,13 +91,13 @@ function [simulink, simulation, physics, kalman, MPC, mode] = ConfigAUV7()
        MPC.targetReached.timeInTol = 3; % Seconds
        
    % MPC gains
-       MPC.gains.defaut.OV =  [30, 30, 30, 45, 45, 45, 45, 0, 0, 0, 0, 0, 0 ];
+       MPC.gains.defaut.OV =  [30, 30, 30, 45, 45, 60, 45, 0, 0, 0, 0, 0, 0 ];
        MPC.gains.defaut.MV = [ 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2 ];
        MPC.gains.defaut.MVR = [ 0.4, 0.4, 0.4, 0.4, 0.5, 0.5, 0.5, 0.5 ];
        
-       MPC.gains.c10.OV = [ 30, 30, 30, 60, 45, 45, 45, 0, 0, 0, 0, 0, 0];
-       MPC.gains.c10.MV = [ 0.0, 0.0, 0.0, 0.0, 0.1, 0.1, 0.1, 0.1 ];
-       MPC.gains.c10.MVR = [ 0.4, 0.4, 0.4, 0.4, 0.3, 0.3, 0.3, 0.3 ];
+       MPC.gains.c10.OV = [ 30, 30, 30, 45, 45, 60, 45, 0, 0, 0, 0, 0, 0];
+       MPC.gains.c10.MV = [ 0.0, 0.0, 0.0, 0.0, 0.2, 0.2, 0.2, 0.2 ];
+       MPC.gains.c10.MVR = [ 0.4, 0.4, 0.4, 0.4, 0.5, 0.5, 0.5, 0.5 ];
        
        MPC.gains.c11.OV = MPC.gains.c10.OV;
        MPC.gains.c11.MV = MPC.gains.c10.MV;
