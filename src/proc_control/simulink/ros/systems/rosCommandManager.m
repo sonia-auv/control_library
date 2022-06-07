@@ -97,7 +97,7 @@ classdef rosCommandManager < matlab.System
            
             if (newIc)
                 this.m_simulation =1; % activer la simulation
-                this.m_initCond(1:3) = ic(1:3);
+                this.m_initCond(1:3) = [0, 0, ic(3)];
                 this.m_initCond(4:7) = this.checkQuaternion(ic(4:7));
             end
         end

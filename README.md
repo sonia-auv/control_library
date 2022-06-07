@@ -62,7 +62,17 @@ You need to generate the ros message in matlab to be able to use it. To do so, n
 
 `rosgenmsg('./')`
 
+If matlab doesn't find python executable, check first if python is install on your machine. Type in a command windows:
 
+`python3 --version`
+
+You need to have version 3.9 or higer. If its the case, you can type the following command to find the path of the python environement.
+
+`which python3`
+
+Then, you have to tell matlab where is your python executable. To do so, type the following command in your matlab console.
+
+`pyenv('Version',<your python executable path>)`
 
 # Use the control
 There are multiple mode available:

@@ -26,11 +26,11 @@ classdef AddPose < matlab.System
 % Fonctions Principales
 %==========================================================================
 %% Fonction appeler a l'initialisation
-    function setupImpl(this, compute, clearBuffer, isNew, waypoint,initCond, reset)
+    function setupImpl(this, reset, compute, clearBuffer, isNew, waypoint,initCond )
         % Perform one-time calculations, such as computing constants   
     end
 %% Main appeller à chaque exécution
-    function [waypoints, count, initCond] = stepImpl(this, compute, clearBuffer, isNew, waypoint,xk, reset)
+    function [waypoints, count, initCond] = stepImpl(this, reset, compute, clearBuffer, isNew, waypoint,xk)
         % Suppression du buffer.
         this.CheckEvent(compute, clearBuffer, isNew,waypoint, xk, reset);
         initCond = this.initcond;

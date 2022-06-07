@@ -8,69 +8,72 @@
         clear; 
 
         % Regarder si le node ros matlab est actif
-        if ~ ros.internal.Global.isNodeActive
+       if ~ ros.internal.Global.isNodeActive
             % partir le node ros matlab 
             rosinit;
         end
 
-        % Definir AUV8
+        % Definir AUV pour mode interprété
         setenv("AUV","AUV8");
     end
 
 % Obtenir la variable d'environement du sub
     auv = getenv("AUV");
-
 % Parametre et constantes
     switch auv
         case 'AUV8'
             [simulink, simulation, physics, kalman, MPC, mode] = ConfigAUV8();
         case 'AUV7'
-            [simulink, simulation, physics, thrusters, MPC, mode] = ConfigAUV7();
+            [simulink, simulation, physics, kalman, MPC, mode] = ConfigAUV7();
         otherwise
             return;
     end
 
   fprintf('INFO : proc control : Load model of %s. \n', auv);
 
-%% Load Rosparam
-
-     obtainRosparam = RosparamClass;
-     obtainRosparam.setParameterTree(rosparam);
- 
-% Load MPC Gain Default
-    MPC.gains.defaut.OV = obtainRosparam.getArray("/proc_control/mpc/gains/default/ov", MPC.nx, MPC.gains.defaut.OV);
-    MPC.gains.defaut.MV = obtainRosparam.getArray("/proc_control/mpc/gains/default/mv", MPC.nu, MPC.gains.defaut.MV);
-    MPC.gains.defaut.MVR = obtainRosparam.getArray("/proc_control/mpc/gains/default/mvr", MPC.nu, MPC.gains.defaut.MVR);
+%% Load Rosparam only in generated code.
+if ~ coder.target('MATLAB')
+        obtainRosparam = RosparamClass;
+        obtainRosparam.setParameterTree(rosparam);
     
-% Load MPC Gain Mode 10
-    MPC.gains.c10.OV = obtainRosparam.getArray("/proc_control/mpc/gains/c10/ov", MPC.nx, MPC.gains.c10.OV);
-    MPC.gains.c10.MV = obtainRosparam.getArray("/proc_control/mpc/gains/c10/mv", MPC.nu, MPC.gains.c10.MV);
-    MPC.gains.c10.MVR = obtainRosparam.getArray("/proc_control/mpc/gains/c10/mvr", MPC.nu, MPC.gains.c10.MVR);
+    % Load MPC Gain Default
+        MPC.gains.defaut.OV = obtainRosparam.getArray("/proc_control/mpc/gains/default/ov", MPC.nx, MPC.gains.defaut.OV);
+        MPC.gains.defaut.MV = obtainRosparam.getArray("/proc_control/mpc/gains/default/mv", MPC.nu, MPC.gains.defaut.MV);
+        MPC.gains.defaut.MVR = obtainRosparam.getArray("/proc_control/mpc/gains/default/mvr", MPC.nu, MPC.gains.defaut.MVR);
+        
+    % Load MPC Gain Mode 10
+        MPC.gains.c10.OV = obtainRosparam.getArray("/proc_control/mpc/gains/c10/ov", MPC.nx, MPC.gains.c10.OV);
+        MPC.gains.c10.MV = obtainRosparam.getArray("/proc_control/mpc/gains/c10/mv", MPC.nu, MPC.gains.c10.MV);
+        MPC.gains.c10.MVR = obtainRosparam.getArray("/proc_control/mpc/gains/c10/mvr", MPC.nu, MPC.gains.c10.MVR);
 
-% Load MPC Gain Mode 11
-    MPC.gains.c11.OV = obtainRosparam.getArray("/proc_control/mpc/gains/c11/ov", MPC.nx, MPC.gains.c11.OV);
-    MPC.gains.c11.MV = obtainRosparam.getArray("/proc_control/mpc/gains/c11/mv", MPC.nu, MPC.gains.c11.MV);
-    MPC.gains.c11.MVR = obtainRosparam.getArray("/proc_control/mpc/gains/c11/mvr", MPC.nu, MPC.gains.c11.MVR);
+    % Load MPC Gain Mode 11
+        MPC.gains.c11.OV = obtainRosparam.getArray("/proc_control/mpc/gains/c11/ov", MPC.nx, MPC.gains.c11.OV);
+        MPC.gains.c11.MV = obtainRosparam.getArray("/proc_control/mpc/gains/c11/mv", MPC.nu, MPC.gains.c11.MV);
+        MPC.gains.c11.MVR = obtainRosparam.getArray("/proc_control/mpc/gains/c11/mvr", MPC.nu, MPC.gains.c11.MVR);
+        
+    % Load MPC Gain Mode 19
+        MPC.gains.c19.OV = obtainRosparam.getArray("/proc_control/mpc/gains/c19/ov", MPC.nx, MPC.gains.c19.OV);
+        MPC.gains.c19.MV = obtainRosparam.getArray("/proc_control/mpc/gains/c19/mv", MPC.nu, MPC.gains.c19.MV);
+        MPC.gains.c19.MVR = obtainRosparam.getArray("/proc_control/mpc/gains/c19/mvr", MPC.nu, MPC.gains.c19.MVR);
     
-% Load MPC Gain Mode 19
-    MPC.gains.c19.OV = obtainRosparam.getArray("/proc_control/mpc/gains/c19/ov", MPC.nx, MPC.gains.c19.OV);
-    MPC.gains.c19.MV = obtainRosparam.getArray("/proc_control/mpc/gains/c19/mv", MPC.nu, MPC.gains.c19.MV);
-    MPC.gains.c19.MVR = obtainRosparam.getArray("/proc_control/mpc/gains/c19/mvr", MPC.nu, MPC.gains.c19.MVR);
- 
-% Insére les gains dans la liste des gains
-    MPC.gainsList = [ 10, MPC.gains.c10.OV, MPC.gains.c10.MV, MPC.gains.c10.MVR;
-                      11, MPC.gains.c11.OV, MPC.gains.c11.MV, MPC.gains.c11.MVR;
-                      19, MPC.gains.c19.OV, MPC.gains.c19.MV, MPC.gains.c19.MVR];
+        MPC.gains.noDvl.MV = obtainRosparam.getArray("//proc_control/mpc/gains/noDvl/mv", MPC.nu, MPC.gains.noDvl.MV);
 
-% Load Thruster min & max
-    MPC.tmax = obtainRosparam.getValue("/proc_control/mpc/tmax", MPC.tmax);
-    MPC.tmin = obtainRosparam.getValue("/proc_control/mpc/tmin", MPC.tmin);
+    % Load Thruster min & max
+        MPC.tmax = obtainRosparam.getValue("/proc_control/mpc/tmax", MPC.tmax);
+        MPC.tmin = obtainRosparam.getValue("/proc_control/mpc/tmin", MPC.tmin);
 
-% Param du target reached
-    MPC.targetReached.linearTol = obtainRosparam.getValue("/proc_control/target_reached/linear_tolerance", MPC.targetReached.linearTol);
-    MPC.targetReached.angularTol = obtainRosparam.getValue("/proc_control/target_reached/angular_tolerance",  MPC.targetReached.angularTol);
-    MPC.targetReached.timeInTol = obtainRosparam.getValue("/proc_control/target_reached/time_in_tolerance",  MPC.targetReached.timeInTol);
-    
+    % Param du target reached
+        MPC.targetReached.linearTol = obtainRosparam.getValue("/proc_control/target_reached/linear_tolerance", MPC.targetReached.linearTol);
+        MPC.targetReached.angularTol = obtainRosparam.getValue("/proc_control/target_reached/angular_tolerance",  MPC.targetReached.angularTol);
+        MPC.targetReached.timeInTol = obtainRosparam.getValue("/proc_control/target_reached/time_in_tolerance",  MPC.targetReached.timeInTol);
+
+end
+
+    % Insére les gains dans la liste des gains
+        MPC.gainsList = [ 10, MPC.gains.c10.OV, MPC.gains.c10.MV, MPC.gains.c10.MVR;
+                          11, MPC.gains.c11.OV, MPC.gains.c11.MV, MPC.gains.c11.MVR;
+                          19, MPC.gains.c19.OV, MPC.gains.c19.MV, MPC.gains.c19.MVR];
+
 %% Modèle du thruster
     load('T200-Spec-16V.mat');
     
@@ -85,12 +88,12 @@
     TMAX ={MPC.tmax; MPC.tmax; MPC.tmax; MPC.tmax; MPC.tmax; MPC.tmax; MPC.tmax; MPC.tmax};
 
 % z transform of the thruster 1st order transfert function.
- physics.thruster.b0 = -exp(-(1/physics.thruster.tau)*simulink.sampletime);
+ physics.thruster.b0 = -exp(-(1/physics.thruster.tau) * simulink.sampletime);
  physics.thruster.a1 = 1 + physics.thruster.b0;
 
 
 %Vitesse Max
-    XMIN ={ -inf; -inf; 0; -1; -1; -1; -1; -1; -1; -1; -1; -1; -1};
+    XMIN ={ -inf; -inf; -inf; -1; -1; -1; -1; -1; -1; -1; -1; -1; -1};
     XMAX ={inf; inf; 5; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1};
 
 
@@ -106,31 +109,38 @@
     % crée la matrice inverse 
     binv=pinv(Tm);
     
-%% Initialiser le controlleur MPC quaternion
+%% liniéarisation du modèle aux conditions initales.
+    J = str2func(MPC.JacobianFnc);
+    [Aqc,Bqc,Cqc,Dqc] = J(MPC.Xi,MPC.Ui);       
+    
+% Discrétiser le système.
+    Aq = expm(Aqc*MPC.Ts); % Fossen Eq B.10/B.9 page 662
+    
+    BT = Aqc(8:13,8:13)\(Aq(8:13,8:13)-eye(6))*Bqc(8:13,1:8); % Fossen Eq B.11 p 662
+    Bq = [zeros(7,8); BT];
 
-%liniéarisation du modèle aux conditions initales.
-    [Aqc,Bqc,Cqc,Dqc] = AUVQuatJacobianMatrix(MPC.Xi,MPC.Ui);   
-    
-% création de l'objet state space.
-% Generate discrete-time model
-    nx = size(Aqc,1);
-    nu = size(Bqc,2);
-    
-    M = expm([[Aqc Bqc]*MPC.Ts; zeros(nu,nu+nx)]);
-    Aq = M(1:nx,1:nx);
-    Bq = M(1:nx,nx+1:nx+nu);
     Cq = Cqc;
     Dq = Dqc;
 
-    IntitalPlant=ss(Aq,Bq,Cq,Dq,MPC.Ts);
+    Plant=ss(Aq,Bq,Cq,Dq,MPC.Ts);
+    pole(Plant)
 
-    pole(IntitalPlant)
+% perturbation externe
+    [Ap, Bp, Cp, Dp ] = WaveModelMatrix(ones(6,1)*0.5, ones(6,1)*5, ones(6,1)*3);
+    
+% Dicrétiser les perturbations externes    
+    Adp = expm(Ap*MPC.Ts);
+    Bdp = Ap\(Adp-eye(12))*Bp;
+
+    waveDist = ss(Adp,Bdp,Cp,Dp);
+
+%% Initialiser le controlleur MPC quaternion
 
 % Création du controleur MPC.
-    Qmpcobj =mpc(IntitalPlant);
-    Qmpcobj.PredictionHorizon =MPC.p;
-    Qmpcobj.ControlHorizon=MPC.m;
-
+    Qmpcobj = mpc(Plant);
+    Qmpcobj.PredictionHorizon = MPC.p;
+    Qmpcobj.ControlHorizon= MPC.m;
+    
 % Conditions Initials
     Qmpcobj.Model.Nominal.X = MPC.Xi;
     Qmpcobj.Model.Nominal.Y= MPC.Xi;
@@ -147,7 +157,7 @@
 
 % Paramètre du solveur
     Qmpcobj.Optimizer.Algorithm = 'active-set';
-    Qmpcobj.Optimizer.ActiveSetOptions.ConstraintTolerance=0.01;
+    Qmpcobj.Optimizer.ActiveSetOptions.ConstraintTolerance = 0.01;
 
     % To test if major differences
     % setCustomSolver(Qmpcobj,'quadprog');
@@ -155,9 +165,9 @@
 % Paramètre de l'estimateur   
     setEstimator(Qmpcobj,'custom');
 
-% Keep for future use
-   % IntitalPlant = setmpcsignals(IntitalPlant,'UD',[1:8]);
-
+% Définir le modele de perturbation.
+  % setoutdist(Qmpcobj,'model',waveDist);
+    
 %% Initialiser le comtrolleur MPC non lineaire
 
 % Création du controleur NMPC.
@@ -167,9 +177,9 @@
     nlobj.ControlHorizon = MPC.m;
 
 % Definire les fonctions différentielles et les matrices jacobienne
-    nlobj.Model.StateFcn = "AUVQuatSimFcn";
-    nlobj.Jacobian.OutputFcn="AUVQuatSimFcn";
-    nlobj.Jacobian.StateFcn = @AUVQuatJacobianMatrix;
+    nlobj.Model.StateFcn = MPC.StateFnc;
+    nlobj.Jacobian.OutputFcn= MPC.StateFnc;
+    nlobj.Jacobian.StateFcn = MPC.JacobianFnc;
 
 % Définir les poids et gains
     nlobj.Weights.OutputVariables = MPC.gains.defaut.OV;
@@ -191,8 +201,8 @@
     
     validateFcns(nlobj,MPC.Xi,MPC.Ui);
 
-%% Perturbation Drift
 
+%% Perturbation Drift
 % Initialiser le seed du random
     rng shuffle
 % Temp d'échantillionage des perturbation 

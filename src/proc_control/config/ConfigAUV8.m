@@ -67,12 +67,16 @@ function [simulink, simulation, physics, kalman, MPC, mode] = ConfigAUV8()
        MPC.nu = 8;  % Number of inputs
        MPC.Ts = 0.1;% Sample time
        MPC.p = 10; % Prediction horizon (in sample)
-       MPC.m =  2; % control horizon (in sample)
+       MPC.m =  3; % control horizon (in sample)
        MPC.dts =10; % Sample time divider
-       MPC.tmax = 10; % maximum thrust in N
-       MPC.tmin = -10;% minimum thrust in N
+       MPC.tmax = 20; % maximum thrust in N
+       MPC.tmin = -15;% minimum thrust in N
        MPC.thrusters.faultThres = .10; %  % Pourcentage de fautes pour moteurs
        MPC.thrusters.faultSample = 20; %  fault Sample
+   
+   % Jacobian fonction
+       MPC.JacobianFnc = "AUV8QuatJacobianMatrix";
+       MPC.StateFnc = "AUV8QuatSimFcn";
 
    % Initial conditions
        MPC.Xi = [0;0;0.3;1;0;0;0;0;0;0;0;0;0]; % états initials
@@ -88,11 +92,11 @@ function [simulink, simulation, physics, kalman, MPC, mode] = ConfigAUV8()
        
    % MPC gains
        MPC.gains.defaut.OV =  [30, 30, 30, 45, 45, 45, 45, 0, 0, 0, 0, 0, 0 ];
-       MPC.gains.defaut.MV = [ 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2 ];
+       MPC.gains.defaut.MV = [ 0.20, 0.20, 0.20, 0.20, 0.20, 0.20, 0.20, 0.20 ];
        MPC.gains.defaut.MVR = [ 0.4, 0.4, 0.4, 0.4, 0.5, 0.5, 0.5, 0.5 ];
        
        MPC.gains.c10.OV = [ 30, 30, 30, 45, 45, 45, 45, 0, 0, 0, 0, 0, 0 ];
-       MPC.gains.c10.MV = [ 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2 ];
+       MPC.gains.c10.MV = [ 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ];
        MPC.gains.c10.MVR = [ 0.4, 0.4, 0.4, 0.4, 0.5, 0.5, 0.5, 0.5 ];
        
        MPC.gains.c11.OV = MPC.gains.c10.OV;
@@ -103,6 +107,8 @@ function [simulink, simulation, physics, kalman, MPC, mode] = ConfigAUV8()
        MPC.gains.c19.MV = [ 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2 ];
        MPC.gains.c19.MVR = [ 0.1, 0.1, 0.1, 0.1, 0.3, 0.3, 0.3, 0.3 ];
        
+       MPC.gains.noDvl.MV = [ 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2 ];
+
    %% Définitions des modes
    
    % Mode initial
@@ -140,15 +146,18 @@ function [simulink, simulation, physics, kalman, MPC, mode] = ConfigAUV8()
         kalman.Cx = 100;
 
     % Covariences des capteurs
-        kalman.Cimu = [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1];
+        kalman.Cimu = [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01];
         kalman.Cdvl = ones(1,3)*0.01;
-
+        kalman.Cdepth = [0.01];
   %% Paramèetre de Simulation
    % Gazebo
        simulation.gazebo.sampletime = simulink.sampletime;
        simulation.gazebo.reference_frame = uint8('world');
        simulation.gazebo.model_name = uint8('auv8');
-    
+
+   % States equations 
+        simulation.stateFnc = "AUV8QuatPerturbedSimFcn";
+
    % Unity
         simulation.unity.sampletime = simulink.sampletime;
         
@@ -159,7 +168,7 @@ function [simulink, simulation, physics, kalman, MPC, mode] = ConfigAUV8()
         simulation.sensors.imu.acc.noisePower = 0.000002;
         simulation.sensors.imu.acc.bias = [0,0,-9.59066];
 
-        simulation.sensors.dvl.sampletime = 1/5;
+        simulation.sensors.dvl.sampletime = 1/50;
         simulation.sensors.dvl.maxSpeedThres = 10;
         simulation.sensors.dvl.resolution = 0.001;
         simulation.sensors.dvl.noise.power = 0.0000000004;

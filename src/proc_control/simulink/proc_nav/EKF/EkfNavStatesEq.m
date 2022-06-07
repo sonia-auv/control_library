@@ -5,6 +5,6 @@ function xk = EkfNavStatesEq(x,u)
     xk = x;
     p = zeros(6,1);
     for i=1:M
-        xk = xk + AUVQuatPerturbedSimFcn(x ,p, u) * Ts;
+        xk = xk + AUV8QuatPerturbedSimFcn(x ,p, u) * Ts;
     end
 end

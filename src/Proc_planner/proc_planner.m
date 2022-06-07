@@ -1,116 +1,134 @@
 function proc_planner
 
-    % Si on roule en simulation
+% Si on roule en simulation
     if coder.target('MATLAB')
+        setenv("AUV","AUV8");
         
         if ~ ros.internal.Global.isNodeActive
             % partir le node ros matlab 
             rosinit;
         end
+        
+        system("rosparam load ./config/proc_planner_config.yaml");
     end
 
-    % definir le node
+    fprintf('INFO : proc planner : Load config for %s \n', getenv("AUV"));    
+
+%% Definir les variables
+
+% Variables globals
+    global newMadpPose newInitialPose TrajIsGenerating;
+
+    newMadpPose = false;
+    newInitialPose = false;
+    TrajIsGenerating = false; 
+
+% Variables locals
     rosSpin = 1;
     r = rosrate(rosSpin);
-    killNode = false;
-    newMaddPose = false;
-    newInitalPose = false;
+    killNode = false; 
 
-    % Definir les message ros
-    Maddposemsg = rosmessage('sonia_common/MultiAddPose',"DataFormat","struct");
-    emptyMAddPoseMsg = rosmessage('sonia_common/MultiAddPose',"DataFormat","struct");
-    emptyMAddPoseMsg.Pose = rosmessage('sonia_common/AddPose',"DataFormat","struct");
-    validMsg = rosmessage("std_msgs/Bool","DataFormat","struct");
-    icMsg = rosmessage('geometry_msgs/Pose',"DataFormat","struct"); % IC topic
-    emptyIcMsg = rosmessage('geometry_msgs/Pose',"DataFormat","struct");
+% Definir les message ros
+    validMsg = rosmessage("std_msgs/Int8","DataFormat","struct");
 
-    % Definir les Subscrier ros
-    mapSub = rossubscriber('/proc_planner/send_multi_addpose','sonia_common/MultiAddPose',"DataFormat","struct");
-    icSub = rossubscriber("proc_planner/initial_pose","geometry_msgs/Pose","DataFormat","struct");
+% Definir les Subscrier ros
+    madpSub = rossubscriber('/proc_planner/send_multi_addpose','sonia_common/MultiAddPose',@madCallback,"DataFormat","struct");
+    icSub = rossubscriber("/proc_control/current_target","geometry_msgs/Pose",@icCallback,"DataFormat","struct");
 
-    % Definir les publisher ROS
-    trajpub = rospublisher('/proc_planner/send_trajectory_list','trajectory_msgs/MultiDOFJointTrajectoryPoint',"DataFormat","struct");
-    validPub = rospublisher("/proc_planner/is_waypoints_valid","std_msgs/Bool","DataFormat","struct");
-    mapPub = rospublisher('/proc_planner/send_multi_addpose','sonia_common/MultiAddPose',"DataFormat","struct");
-    icPub = rospublisher("proc_planner/initial_pose","geometry_msgs/Pose","DataFormat","struct");
-    % Definir les parametre de trajectoire
-    param.ts = 0.1;
-    param.amax = 0.10;
-    param.vlmax = 0.5;
-    param.vamax = deg2rad(45);
+% Definir les publisher ROS
+    trajpub = rospublisher('/proc_planner/send_trajectory_list','trajectory_msgs/MultiDOFJointTrajectoryPoint',"DataFormat","struct","IsLatching",false);
+    validPub = rospublisher("/proc_planner/is_waypoints_valid","std_msgs/Int8","DataFormat","struct","IsLatching",false);
 
-    % Obtenir les rosparams
-    obtainRosparam = RosparamClass;
-    obtainRosparam.setParameterTree(rosparam);
+%% Definir les parametre de trajectoire  
+    param = getRosParam();
 
-    param.amax = obtainRosparam.getValue("/proc_planner/maximum_acceleration",param.amax);
-    param.vlmax = obtainRosparam.getValue("/proc_planner/maximum_velocity",param.vlmax);
-    param.vamax = obtainRosparam.getValue("/proc_planner/maximum_angular_rate",param.vamax);
-    
-    fprintf('INFO : proc planner : Maximum acceleration is %f m/s^2. \n', param.amax);
-    fprintf('INFO : proc planner : Maximum velocity is %f m/s. \n', param.vlmax);
-    fprintf('INFO : proc planner : Maximum angular rate is %f rad/s. \n', param.vamax);
-
-    % Initialiser les topics
-    Maddposemsg = mapSub.LatestMessage;
-    icMsg = icSub.LatestMessage;
-
+%% Ros Spin
     fprintf('INFO : proc planner : Node is started \n');
     fprintf('INFO : proc planner : Wait for poses \n');
-
-    reset(r)
+    reset(r);
 
     while ~killNode 
-        %[ rMaddposemsg,status] = receive(mapSub,0.2);     
-        
-        % Si Recois un nouveau message MultiaddPose
-        if ~isequaln(Maddposemsg, mapSub.LatestMessage)
-
-            Maddposemsg = mapSub.LatestMessage;
-            newMaddPose = true;
-            fprintf('INFO : proc planner : Poses received \n');
-            fprintf('INFO : proc planner : Wait for initial pose \n');
-        end
-
-        % Si Recois un nouveau message initial waypoint
-        if (~isequaln(icMsg, icSub.LatestMessage)) && newMaddPose
-
-            icMsg = icSub.LatestMessage;
-            newInitalPose = true;
-            fprintf('INFO : proc planner : Initial poses received \n');
-        end   
-            
-           % [icMsg,status] = receive(icSub);
-        
-        if newMaddPose && newInitalPose
+      
+        if newMadpPose && newInitialPose
 
             % Cree l'objet trajectoire
-            TG = TrajectoryGenerator(Maddposemsg,param,icMsg);
+            TG = TrajectoryGenerator(madpSub.LatestMessage,param,icSub.LatestMessage);
 
             % Envoyer a ros si le mAddpose est valide
-            validMsg.Data = logical(TG.status);
+            validMsg.Data = int8(TG.status);
             send(validPub, validMsg);
 
-            % Si la trajectoire est valide
-            if TG.status
+            % Si la trajectoire est valide generer la trajectoire
+            if (TG.status == TG.RECIEVED_VALID_WAYPTS)
                 TG.Compute(trajpub);            
 
             end
-
-            Maddposemsg = emptyMAddPoseMsg;
-            icMsg = emptyIcMsg;
-
-            send(mapPub,Maddposemsg);
-            send(icPub,icMsg);
-            
-            newMaddPose = false;
-            newInitalPose = false;
-
+        
+            newMadpPose = false;
+            newInitialPose = false;
+            TrajIsGenerating = false;
             fprintf('INFO : proc planner : Wait for poses \n');
-        end
+       end
  
         waitfor(r);
     end
 
 end
 
+%% MultiAddPose (mad) callback
+function madCallback(src,msg)
+
+    global newMadpPose 
+
+    newMadpPose = true;
+
+    fprintf('INFO : proc planner : Poses received \n');
+    fprintf('INFO : proc planner : Wait for initial pose \n');
+end
+
+%% Initial condition (IC) callback
+function icCallback(src,msg)
+
+    global newMadpPose newInitialPose TrajIsGenerating;
+
+    if (newMadpPose == true && TrajIsGenerating == false)
+
+        newInitialPose =true;
+        TrajIsGenerating = true;
+        fprintf('INFO : proc planner : Initial poses received \n');
+    end
+end
+
+%% Get rosparam 
+function param = getRosParam()
+
+    param.ts = 0.1;
+
+    param.lowSpeed.amax = 0.05;
+    param.lowSpeed.vlmax = 0.2;
+    param.lowSpeed.vamax = 0.3;
+
+    param.normalSpeed.amax = 0.10;
+    param.normalSpeed.vlmax = 0.5;
+    param.normalSpeed.vamax = 0.5;
+
+    param.highSpeed.amax = 0.15;
+    param.highSpeed.vlmax = 0.8;
+    param.highSpeed.vamax = 0.8;
+
+    obtainRosparam = RosparamClass;
+    obtainRosparam.setParameterTree(rosparam);
+
+    param.lowSpeed.amax = obtainRosparam.getValue("/proc_planner/low_speed/maximum_acceleration",param.lowSpeed.amax);
+    param.lowSpeed.vlmax = obtainRosparam.getValue("/proc_planner/low_speed/maximum_velocity", param.lowSpeed.vlmax);
+    param.lowSpeed.vamax = obtainRosparam.getValue("/proc_planner/low_speed/maximum_angular_rate",param.lowSpeed.vamax);
+    
+    param.normalSpeed.amax = obtainRosparam.getValue("/proc_planner/normal_speed/maximum_acceleration",param.normalSpeed.amax);
+    param.normalSpeed.vlmax = obtainRosparam.getValue("/proc_planner/normal_speed/maximum_velocity", param.normalSpeed.vlmax);
+    param.normalSpeed.vamax = obtainRosparam.getValue("/proc_planner/normal_speed/maximum_angular_rate",param.normalSpeed.vamax);
+
+    param.highSpeed.amax = obtainRosparam.getValue("/proc_planner/high_speed/maximum_acceleration",param.highSpeed.amax);
+    param.highSpeed.vlmax = obtainRosparam.getValue("/proc_planner/high_speed/maximum_velocity", param.highSpeed.vlmax);
+    param.highSpeed.vamax = obtainRosparam.getValue("/proc_planner/high_speed/maximum_angular_rate",param.highSpeed.vamax);
+
+end
