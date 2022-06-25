@@ -42,7 +42,7 @@ param.highSpeed.vamax = 0.8;
 
 send(mappub , newmsg);
 pause(1);
-%send(icpub, icMsg);
+send(icpub, icMsg);
 
 TG = TrajectoryGenerator(newmsg,param,icMsg);
 if TG.status == TG.RECIEVED_VALID_WAYPTS

@@ -31,6 +31,8 @@ clear;
     param.highSpeed.vlmax = 0.8;
     param.highSpeed.vamax = 0.8;
 
+    param.maxDepth = 5;
+
 % Parametre constante
     x = 5;
     y = 5;

@@ -37,6 +37,22 @@ classdef quatUtilities
             end
             
         end
+
+        %=================================================================
+        % Fonction qui calcule la rotation entre 2 vector
+        % https://math.stackexchange.com/questions/2356649/how-to-find-the-quaternion-representing-the-rotation-between-two-3-d-vectors
+        function q = quaternionForm2Vectors(v1, v2)
+
+            c = cross(v1, v2);
+
+            n = c / norm(c);
+
+            theta = atan(norm(c) / dot(v1,v2));
+
+            q = [ cos(theta / 2), n * sin(theta / 2)]; % Fossen eq 2.67 p.33
+
+        end
+
          %=================================================================
          % Fonction qui convertie un quaternion instantané en vitesses angulaires. 
          function angularRates = qDot2angularRates(q,qDot)

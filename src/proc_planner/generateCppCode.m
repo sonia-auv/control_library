@@ -15,7 +15,7 @@
     cfg.Hardware.BuildAction = 'none';
 
 % Generate the code
-    codegen -globals {'newMadpPose',false,'newInitialPose',false,'TrajIsGenerating',false} proc_planner -v -args {} -config cfg
+    codegen proc_planner -v -args {} -config cfg
 
 % Load build Info mat
     load('./codegen/exe/proc_planner/buildInfo.mat')
