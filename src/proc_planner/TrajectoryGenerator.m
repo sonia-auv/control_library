@@ -191,7 +191,7 @@ classdef TrajectoryGenerator < handle
                 switch this.MAPM.Pose(i).Frame
 
                     case 0 % position et angle absolue
-                        this.quatList(i+this.icOffset,:) = q;
+                        this.quatList(i+this.icOffset,:) = this.qUtils.checkQuatFlip(q, this.quatList(i+this.icOffset-1,:));
                         this.pointList(i+this.icOffset,:) = p; 
         
                     case 1 % position et angle relatif
@@ -200,7 +200,7 @@ classdef TrajectoryGenerator < handle
                         
         
                     case 2 % position relatif et angle absolue             
-                        this.quatList(i+this.icOffset,:) = q;
+                        this.quatList(i+this.icOffset,:) = this.qUtils.checkQuatFlip(q, this.quatList(i+this.icOffset-1,:));
                         this.pointList(i+this.icOffset,:) = this.pointList(i+this.icOffset-1,:) + this.qUtils.quatRotation(p,this.quatList(i+this.icOffset-1,:));
         
                     case 3 % position absolue et angle relatif
