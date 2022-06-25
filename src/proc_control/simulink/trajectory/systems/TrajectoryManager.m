@@ -35,6 +35,7 @@ classdef TrajectoryManager < matlab.System
     properties(Access = private)
     dummy;
     emptyArray;
+    qUtils;
     end
 
     methods(Access = protected)
@@ -50,6 +51,7 @@ classdef TrajectoryManager < matlab.System
            this.bufferCount =0;
            this.done=false;
            this.init=0;
+           this.qUtils = quatUtilities();
            
            
            
@@ -154,9 +156,11 @@ function isReached= targetReached(this, mesuredPose, poses, target)
     % vérifier le traget reached si la trajectoire est terminé
     if this.done
         
-         % calcule de l'erreur de langle en 3D avec le quaternion
-         qRel = quatmultiply(quatconj(target(4:7)),mesuredPose(4:7));
-         errAngle = 2 * atan2(norm(qRel(2:4)),qRel(1));
+         % check flip 
+         mesuredPose(4:7) = this.qUtils.checkQuatFlip(mesuredPose(4:7), target(4:7));
+
+         % calculer l'erreur angulaire.
+         errAngle = this.qUtils.angleBetween2Quaternion(target(4:7),mesuredPose(4:7));
         
         % vérifier si le sub est dans la zone de convergence (sphérique / conique)
         if norm(target(1:3) - mesuredPose(1:3)) < this.linearConvergence ...

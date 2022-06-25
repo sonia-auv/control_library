@@ -33,7 +33,6 @@ classdef quatUtilities
             % Regarder la discontinuité entre le qk et qk-1
             if  dot(qk,q) < 0
                 q = -q;
-
             end
             
         end
@@ -53,6 +52,14 @@ classdef quatUtilities
 
         end
 
+        %=================================================================
+        % Fonction qui calcule l'angle entre 2 quaternion
+        function angle = angleBetween2Quaternion(q1, q2)
+
+            qRel = quatmultiply(quatconj(q1),q2);
+            angle = 2 * atan2(norm(qRel(2:4)),qRel(1));
+
+        end
          %=================================================================
          % Fonction qui convertie un quaternion instantané en vitesses angulaires. 
          function angularRates = qDot2angularRates(q,qDot)
