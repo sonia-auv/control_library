@@ -48,7 +48,7 @@
             % Perform one-time calculations, such as computing constants
         end
 
-        function [mvmin,mvmax,ywt,mvwt,dmwwt, tInfo, kill] = stepImpl(this, newRosGains, rosGains,mode,newReadCurrent,readCurrent, estimatedCurrent, mo)
+        function [mvmin,mvmax,ywt,mvwt,dmwwt, tInfo, kill, p, m] = stepImpl(this, newRosGains, rosGains,mode,newReadCurrent,readCurrent, estimatedCurrent, mo)
 
             
             initMPCManager(this); % Init function
@@ -60,6 +60,8 @@
             [mvmin,  mvmax] = this.getThrusterSaturation();
             tInfo = ~this.isThrusterFault;
             kill = this.isAuvNeedToBeKill();
+            p = this.MPC.p;
+            m = this.MPC.m;
          
         end
         
@@ -173,7 +175,7 @@
       end
       
       %% Definire outputs       
-      function [mvmin,mvmax,ywt,mvwt,dmwwt,tInfo,kill] = getOutputSizeImpl(this)
+      function [mvmin,mvmax,ywt,mvwt,dmwwt,tInfo,kill,p,m] = getOutputSizeImpl(this)
           mvmin = [1,this.MPC.nu];
           mvmax = [1,this.MPC.nu];
           ywt = [1,this.MPC.nx];
@@ -181,10 +183,12 @@
           dmwwt = [1,this.MPC.nu];
           tInfo = [1, this.MPC.nu];
           kill = [1,1];
+          p = [1,1];
+          m = [1,1];
           
       end 
       
-      function [mvmin,mvmax,ywt,mvwt,dmwwt,tInfo,kill] = isOutputFixedSizeImpl(this)
+      function [mvmin,mvmax,ywt,mvwt,dmwwt,tInfo,kill,p,m] = isOutputFixedSizeImpl(this)
           mvmin = true;
           mvmax = true;
           ywt = true;
@@ -192,10 +196,13 @@
           dmwwt = true;
           tInfo = true;
           kill = true;
+          p = true;
+          m = true;
+
           
       end
       
-      function [mvmin,mvmax,ywt,mvwt,dmwwt,tInfo,kill] = getOutputDataTypeImpl(this)
+      function [mvmin,mvmax,ywt,mvwt,dmwwt,tInfo,kill,p,m] = getOutputDataTypeImpl(this)
           mvmin = "double";
           mvmax = "double";
           ywt = "double";
@@ -203,10 +210,12 @@
           dmwwt = "double";
           tInfo = "logical";
           kill = "logical";
+          p = "double";
+          m = "double";
 
       end
       
-     function [mvmin,mvmax,ywt,mvwt,dmwwt,tInfo,kill] = isOutputComplexImpl(this)
+     function [mvmin,mvmax,ywt,mvwt,dmwwt,tInfo,kill,p,m] = isOutputComplexImpl(this)
          mvmin = false;
          mvmax = false;
          ywt = false;
@@ -214,6 +223,8 @@
          dmwwt = false;
          tInfo = false;
          kill = false;
+         p = false;
+         m = false;
          
      end
      function [sz,dt,cp] = getDiscreteStateSpecificationImpl(this,name)

@@ -33,9 +33,32 @@ classdef quatUtilities
             % Regarder la discontinuité entre le qk et qk-1
             if  dot(qk,q) < 0
                 q = -q;
-
             end
             
+        end
+
+        %=================================================================
+        % Fonction qui calcule la rotation entre 2 vector
+        % https://math.stackexchange.com/questions/2356649/how-to-find-the-quaternion-representing-the-rotation-between-two-3-d-vectors
+        function q = quaternionForm2Vectors(v1, v2)
+
+            c = cross(v1, v2);
+
+            n = c / norm(c);
+
+            theta = atan(norm(c) / dot(v1,v2));
+
+            q = [ cos(theta / 2), n * sin(theta / 2)]; % Fossen eq 2.67 p.33
+
+        end
+
+        %=================================================================
+        % Fonction qui calcule l'angle entre 2 quaternion
+        function angle = angleBetween2Quaternion(q1, q2)
+
+            qRel = quatmultiply(quatconj(q1),q2);
+            angle = 2 * atan2(norm(qRel(2:4)),qRel(1));
+
         end
          %=================================================================
          % Fonction qui convertie un quaternion instantané en vitesses angulaires. 

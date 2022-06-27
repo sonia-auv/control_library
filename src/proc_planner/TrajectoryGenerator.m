@@ -7,12 +7,14 @@ classdef TrajectoryGenerator < handle
 
     properties (Constant)
         % Code d'erreur
+        WARN_AUV_MAY_SURFACE = 1
         RECIEVED_VALID_WAYPTS = 0;
         ERR_INVALID_INTERP_METHOD = -1;
         ERR_INVALID_FRAME_REF = -2;
         ERR_INVALID_SPEED_PARAM = -3;
         ERR_RADIUS_TO_LARGE =-4;
-        ERR_INVALID_IC = -5;
+        ERR_INVALID_IC = -5; 
+        ERR_TRAJ_EXCEED_MAX_DEPTH = -6;
 
     end
 
@@ -125,6 +127,17 @@ classdef TrajectoryGenerator < handle
                 
             end
 
+            % vérifier la profondeur maximum.
+            if (max(this.pointList(:,3)) > this.param.maxDepth )
+                this.status = this.ERR_TRAJ_EXCEED_MAX_DEPTH;
+            end
+
+              % NEED MISSION CLEAN UP
+%             % Vérifier si le sub peut faire surface;
+%             if (min(this.pointList(:,3)) > this.param.surface_warning )
+%                 this.status = this.WARN_AUV_MAY_SURFACE;
+%             end
+
             % Definir la taille de la trajectoire
             this.trajPosition = zeros(this.nbPoint,3);     
             this.trajQuat = zeros(this.nbPoint,4); 
@@ -138,10 +151,11 @@ classdef TrajectoryGenerator < handle
         % Fonction Main qui génère les waypoints
         function status = Compute(this,trajpub)
 
+            %Vérifier la pré-validation
             if (this.status == this.RECIEVED_VALID_WAYPTS)
-                % Interpoler les waypoints
+                % Interpoler les waypoints               
                 this.interpolateWaypoints();
-
+            
                 % Envoyer la trajectoire sur ROS.
                 status = this.sendTrajectory(trajpub);  
 
@@ -177,7 +191,7 @@ classdef TrajectoryGenerator < handle
                 switch this.MAPM.Pose(i).Frame
 
                     case 0 % position et angle absolue
-                        this.quatList(i+this.icOffset,:) = q;
+                        this.quatList(i+this.icOffset,:) = this.qUtils.checkQuatFlip(q, this.quatList(i+this.icOffset-1,:));
                         this.pointList(i+this.icOffset,:) = p; 
         
                     case 1 % position et angle relatif
@@ -186,7 +200,7 @@ classdef TrajectoryGenerator < handle
                         
         
                     case 2 % position relatif et angle absolue             
-                        this.quatList(i+this.icOffset,:) = q;
+                        this.quatList(i+this.icOffset,:) = this.qUtils.checkQuatFlip(q, this.quatList(i+this.icOffset-1,:));
                         this.pointList(i+this.icOffset,:) = this.pointList(i+this.icOffset-1,:) + this.qUtils.quatRotation(p,this.quatList(i+this.icOffset-1,:));
         
                     case 3 % position absolue et angle relatif

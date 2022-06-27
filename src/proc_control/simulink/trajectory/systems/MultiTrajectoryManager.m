@@ -17,7 +17,7 @@ classdef MultiTrajectoryManager < matlab.System
 
     % Pre-computed constants
     properties(Access = private)
-
+        qUtils;
         dummy;
         emptyArray;
     end
@@ -38,7 +38,7 @@ classdef MultiTrajectoryManager < matlab.System
            this.done = false;
            this.init = false;
            
-           
+           this.qUtils = quatUtilities();
            
         end
 
@@ -162,16 +162,22 @@ classdef MultiTrajectoryManager < matlab.System
             % vérifier le traget reached si la trajectoire est terminé
             if this.done
 
+                % prendre le target
                 target = this.poseBuffer(1,:);
+                
+                 % check flip (exemple ne pas comparer 0deg avec 360deg)
+                 mesuredPose(4:7) = this.qUtils.checkQuatFlip(mesuredPose(4:7), target(4:7));
 
-                 % calcule de l'angle entre les 2 quaternions
-                 qRel = quatmultiply(quatconj(target(4:7)),mesuredPose(4:7).');
-                 errAngle = 2 * atan2(norm(qRel(2:4)),qRel(1));
+                 % calculer l'erreur angulaire.
+                 errAngle = this.qUtils.angleBetween2Quaternion(target(4:7),mesuredPose(4:7).');
+
+                 % calculer l'erreur lineaire 
                  errDist = norm(target(1:3) - mesuredPose(1:3).');
 
                 % vérifier si le sub est dans la zone de convergence (sphérique / conique)
                 if errDist < this.mpcParam.targetReached.linearTol &&  errAngle < this.mpcParam.targetReached.angularTol
                    
+                   % incrementer le nombre de sample en target reached
                    this.targetReachedCount = this.targetReachedCount + 1;
                    
                    % si le sub est dans la zone de convergence depuis le temps demander
