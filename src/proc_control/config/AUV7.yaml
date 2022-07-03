@@ -10,7 +10,7 @@
 /proc_control/mpc/gains/default/mvr : "0.1,0.1,0.1,0.1,0.3,0.3,0.3,0.3"
 
 #MPC Gain Mode 10
-/proc_control/mpc/gains/c10/ov : "30,30,30,45,45,45,45,0,0,0,0,0,0" 
+/proc_control/mpc/gains/c10/ov : "30,30,30,45,45,45,45,0,0,0,0,0,0"
 /proc_control/mpc/gains/c10/mv : "0,0,0,0,0,0,0,0"
 /proc_control/mpc/gains/c10/mvr : "0.4,0.4,0.4,0.4,0.5,0.5,0.5,0.5"
 
