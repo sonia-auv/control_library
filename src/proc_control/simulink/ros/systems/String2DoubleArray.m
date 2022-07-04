@@ -10,28 +10,13 @@ classdef String2DoubleArray < matlab.System
     end
 
     properties(DiscreteState)
-
+        lastMsg;
+        lastValues;
     end
 
     % Pre-computed constants
     properties(Access = private)
 
-    end
-
-    methods(Access = protected)
-        function setupImpl(this)
-            % Perform one-time calculations, such as computing constants
-        end
-
-        function array = stepImpl(this,string, length)
-            % Implement algorithm. Calculate y as a function of input u and
-            % discrete states.
-            array = extractionArray(this, char(string(1:length)), this.arraySize); 
-        end
-
-        function resetImpl(this)
-            % Initialize / reset discrete-state properties
-        end
     end
 
     methods(Access = private)
@@ -42,10 +27,69 @@ classdef String2DoubleArray < matlab.System
             for i = 1:nbElements
                 [token, remain] = strtok(str, ',');
                 array(i) = real(str2double(token));
-                fprintf("gain(%d) : %f \n",int8(i), array(i));
+                
                 remainSize = max(size(remain));
                 str(1:remainSize-1) = remain(2:end);
             end
         end
+
+        
     end
+
+    methods(Access = protected)
+        function setupImpl(this)
+            % Perform one-time calculations, such as computing constants
+        end
+
+        function array = stepImpl(this,string, length)
+            % Implement algorithm. Calculate y as a function of input u and
+            % discrete states.
+
+            if ~strcmp(char(this.lastMsg(1:length)), char(string(1:length)))
+                this.lastValues = extractionArray(this, char(string(1:length)), this.arraySize);
+                this.lastMsg(1:length) = string(1:length);
+            end
+
+            array = this.lastValues;
+        end
+
+        function resetImpl(this)
+            % Initialize / reset discrete-state properties
+            this.lastMsg = zeros(1,128);
+            this.lastValues = zeros(1, this.arraySize);
+        end
+        %% Definire outputs       
+        function [array] = getOutputSizeImpl(this)
+            array = [1, this.arraySize];
+
+        end 
+    
+        function [array] = isOutputFixedSizeImpl(this)
+            array = true;
+
+        end
+        
+        function [array] = getOutputDataTypeImpl(this)
+            array = "double";
+  
+        end
+     
+       function [array] = isOutputComplexImpl(this)
+            array = false;
+  
+       end
+
+       function [sz,dt,cp] = getDiscreteStateSpecificationImpl(this,name)
+           if strcmp(name,'lastMsg')
+                sz = [1, 128];
+                dt = "double";
+                cp = false;
+           elseif strcmp(name,'lastValues')
+                sz = [1, this.arraySize];
+                dt = "double";
+                cp = false;
+           end
+       end
+    end
+
 end
