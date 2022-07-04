@@ -1,0 +1,45 @@
+%implements s215_b0_5o2qj_0_Outputs "C"
+
+%function Outputs(block, system) Output
+%assign cfgTxt = ""
+%openfile cfgTxt
+%assign localVarDecl = ""
+/* MATLABSystem: '<S100>/Current Time' */
+/*@>1c580c8*/currentROSTimeBus(&/*@>1c581dc*/localB->/*@>1c585c9*/CurrentTime);
+%closefile cfgTxt
+%<cfgTxt>
+%assign rtmArgSys = ::CompiledModel.System[::CompiledModel.System[::CompiledModel.RTWCGModules.RTWCGModule[0].CGSystemIdx].NonInlinedParentSystemIdx]
+%if SysFcnArgNeeded("Output", rtmArgSys.Interface.RTMArgDef, rtmArgSys.CurrentTID, FcnSysModuleIsRateGrouping(rtmArgSys, "Output"))
+%<SLibCG_AccessArg(0, 1, 0)>
+%endif
+%if SLibCG_ArgAccessed(0, 1, 0)
+%<SLibAccessArg(rtmArgSys.Interface.RTMArgDef, "Output", rtmArgSys.CurrentTID, FcnSysModuleIsRateGrouping(rtmArgSys, "Output"))>
+%endif
+%if (IsModelReferenceBaseSys(rtmArgSys) && (IsModelRefScalableBuild() || GenerateClassInterface)) ||...
+(GenerateClassInterface && SLibIsMultiInstanceServer(rtmArgSys))
+%<SLibCG_UndoAccessArg(0, 1, 0)>
+%endif
+%<LibSetSystemField(system, "CachedOutputLocalVars", localVarDecl)>
+%endfunction
+%function OutputsFcnProtoType(block, system) Output
+%assign fcnProtoType = ""
+%openfile fcnProtoType
+static void proc_control_CurrentTime(\
+%assign comma = ""
+%assign rtmArgSys = ::CompiledModel.System[::CompiledModel.System[::CompiledModel.RTWCGModules.RTWCGModule[0].CGSystemIdx].NonInlinedParentSystemIdx]
+%if SLibGenSubsysFcnAsClassMemFcn(rtmArgSys)
+%if SLibCG_ArgAccessed(0, 1, 0)
+%assign ::CompiledModel.RTWCGModules.RTWCGModule[rtmArgSys.CGIRModuleIdx].Function[::CurrentFunctionIdx].ForbidStaticMemberDecl =  TLC_TRUE
+%endif
+%<SLibCG_UndoAccessArg(0, 1, 0)>\
+%endif
+%if SLibCG_ArgAccessed(0, 1, 0)
+%<comma>%<::tSimStructType> * const %<::tSimStruct>\
+%assign comma = ", "
+%<SLibUpdateSymbolForFunction("proc_control_CurrentTime", SLibGetFcnDefinitionRTMSymbolName(), TLC_FALSE)>\
+%endif
+%<comma>B_CurrentTime_proc_control_T *localB\
+%assign comma = ", "
+%closefile fcnProtoType
+%<SLibCG_SetFcnProtoType(0, 1, fcnProtoType)>
+%endfunction

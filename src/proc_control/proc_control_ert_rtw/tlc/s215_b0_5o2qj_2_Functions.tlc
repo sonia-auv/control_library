@@ -1,0 +1,541 @@
+%implements s215_b0_5o2qj_2_Functions "C"
+
+%function proc_control_copydigits_a_Fcn0(block) void
+%assign fcnBuff = ""
+%openfile fcnBuff
+%assign cfgTxt = ""
+%openfile cfgTxt
+boolean_T exitg1;
+*/*@>1cbdd37*/b_k/*@>987bfa*/ = /*@>1ca9661*/k;
+*/*@>1cbdd3a*/b_idx/*@>987bf2*/ = /*@>1ca965d*/idx;
+b_s1_size/*@>1ca3f71*/[/*@>1ca9689*/0]/*@>1c9bf9b*/ = /*@>1cc72e8*/1;
+b_s1_size/*@>1ca3fc2*/[/*@>1ca968f*/1]/*@>1c9bfa7*/ = s1_size/*@>1cc1c65*/[/*@>1cc1c61*/1];
+/*@>1cc3c6a*/localB->/*@>1cc73ce*/loop_ub_b/*@>1c9e8b1*/ = s1_size/*@>1cc1c6b*/[/*@>1cc1c67*/1]/*@>1ca4783*/ - /*@>1ca96dd*/1;
+if (/*@>1cc3c73*/localB->/*@>1cc73d1*/loop_ub_b >= /*@>1cbc631*/0) {
+    /*@>1cbe9dc*/std::memcpy(&/*@>1cbdd4c*/b_s1_data[/*@>1cbc5fc*/0], &/*@>1cbc619*/s1_data[/*@>1cbc60e*/0], (/*@>1cc3c7c*/localB->/*@>1cc73d4*/loop_ub_b + 1)/*@>1cbc61d*/ * /*@>1cbc61c*/sizeof(char_T));
+}
+*/*@>1cbdd4f*/success/*@>987b2b*/ = (/*@>1ca9672*/k/*@>987cae*/ <= /*@>1ca963c*/n);
+/*@>1cc3c85*/localB->/*@>1cc73d7*/haspoint/*@>987b2d*/ = /*@>1ca966b*/false;
+exitg1 = false;
+while/*@<987c03*/ ((!exitg1) && ((*/*@<1cc7333*//*@>1cbdd52*/success)/*@>1cc7028*/ && (*/*@<1cc7334*//*@>1cbdd55*/b_k/*@>987cc2*/ <= /*@>1ca9644*/n))) {
+    /*@>1cc3c8e*/localB->/*@>1cc73da*/c/*@>1cb3e11*/ = /*@>1cc1c73*/s_data[*/*@<1cc7384*//*@>1cc1c70*/b_k/*@>1cc1c6d*/ - /*@>1cc1c71*/1];
+    /*@>987aff*/if ((/*@>1cc3c97*/localB->/*@>1cc73dd*/c/*@>987ce9*/ >= /*@>1ca9646*/'0')/*@>1cc7029*/ && (localB->c/*@>987d10*/ <= /*@>1ca9647*/'9')) {
+        /*@>1cbdd6a*/b_s1_data[*/*@<1cc7348*//*@>1cbdd6d*/b_idx/*@>1ca4340*/ - /*@>1ca96d6*/1]/*@>987b59*/ = localB->c;
+        (*/*@>1cbdd70*/b_idx)/*@>1cc7325*/++;
+        (*/*@>1cc7316*/b_k)/*@>1cc7326*/++;
+    } else /*@>987b00*/if (localB->c/*@>987d69*/ == /*@>1ca964c*/'.') {
+        /*@>987c31*/if (/*@>1ca964d*/allowpoint/*@>1cc702a*/ && (!/*@<987d6d*//*@>1cc3cc4*/localB->/*@>1cc73ec*/haspoint)) {
+            /*@>1cbdd5e*/b_s1_data[*/*@<1cc7349*//*@>1cbdd61*/b_idx/*@>1ca43a2*/ - /*@>1ca96dc*/1]/*@>987b7b*/ = /*@>1ca9651*/'.';
+            (*/*@>1cbdd64*/b_idx)/*@>1cc7327*/++;
+            /*@>1cc3ccd*/localB->/*@>1cc73ef*/haspoint/*@>987b82*/ = /*@>1ca966e*/true;
+        } else {
+            */*@>1cbdd5b*/success/*@>987c35*/ = /*@>1ca9665*/false;
+        }
+        (*/*@>1cc730d*/b_k)/*@>1cc7328*/++;
+    } else /*@>987b01*/if (localB->c/*@>987da1*/ == /*@>1ca9658*/',') {
+        (*/*@>1cbdd76*/b_k)/*@>1cc7329*/++;
+    } else {
+        exitg1 = true;
+    }
+}
+%closefile cfgTxt
+%<cfgTxt>
+%closefile fcnBuff
+%assign rtmArgSys = ::CompiledModel.System[::CompiledModel.System[::CompiledModel.RTWCGModules.RTWCGModule[2].CGSystemIdx].NonInlinedParentSystemIdx]
+%if SysFcnArgNeeded("proc_control_copydigits_a", rtmArgSys.Interface.RTMArgDef, rtmArgSys.CurrentTID, FcnSysModuleIsRateGrouping(rtmArgSys, "proc_control_copydigits_a"))
+%<SLibCG_AccessArg(2, 0, 12)>
+%endif
+%if SLibCG_ArgAccessed(2, 0, 12)
+%<SLibAccessArg(rtmArgSys.Interface.RTMArgDef, "proc_control_copydigits_a", rtmArgSys.CurrentTID, FcnSysModuleIsRateGrouping(rtmArgSys, "proc_control_copydigits_a"))>
+%endif
+%if (IsModelReferenceBaseSys(rtmArgSys) && (IsModelRefScalableBuild() || GenerateClassInterface)) ||...
+(GenerateClassInterface && SLibIsMultiInstanceServer(rtmArgSys))
+%<SLibCG_UndoAccessArg(2, 0, 12)>
+%endif
+%assign fcnProtoType = ""
+%openfile fcnProtoType
+static void proc_control_copydigits_a(\
+%assign comma = ""
+%<comma>const char_T s1_data[]\
+%assign comma = ", "
+%<comma>const int32_T s1_size[2]\
+%assign comma = ", "
+%<comma>int32_T idx\
+%assign comma = ", "
+%<comma>const char_T s_data[]\
+%assign comma = ", "
+%<comma>int32_T k\
+%assign comma = ", "
+%<comma>int32_T n\
+%assign comma = ", "
+%<comma>boolean_T allowpoint\
+%assign comma = ", "
+%<comma>char_T b_s1_data[]\
+%assign comma = ", "
+%<comma>int32_T b_s1_size[2]\
+%assign comma = ", "
+%<comma>int32_T *b_idx\
+%assign comma = ", "
+%<comma>int32_T *b_k\
+%assign comma = ", "
+%<comma>boolean_T *success\
+%assign comma = ", "
+%assign rtmArgSys = ::CompiledModel.System[::CompiledModel.System[::CompiledModel.RTWCGModules.RTWCGModule[2].CGSystemIdx].NonInlinedParentSystemIdx]
+%if SLibGenSubsysFcnAsClassMemFcn(rtmArgSys)
+%if SLibCG_ArgAccessed(2, 0, 12)
+%assign ::CompiledModel.RTWCGModules.RTWCGModule[rtmArgSys.CGIRModuleIdx].Function[::CurrentFunctionIdx].ForbidStaticMemberDecl =  TLC_TRUE
+%endif
+%<SLibCG_UndoAccessArg(2, 0, 12)>\
+%endif
+%if SLibCG_ArgAccessed(2, 0, 12)
+%<comma>%<::tSimStructType> * const %<::tSimStruct>\
+%assign comma = ", "
+%<SLibUpdateSymbolForFunction("proc_control_copydigits_a", SLibGetFcnDefinitionRTMSymbolName(), TLC_FALSE)>\
+%endif
+%<comma>B_MATLABSystem1_proc_control_T *localB\
+%assign comma = ", "
+%closefile fcnProtoType
+%<SLibCG_SetFcnProtoType(2, 0, fcnProtoType)>
+%return fcnBuff
+%endfunction
+
+%function proc_control_readfloat_l_Fcn1(block) void
+%assign fcnBuff = ""
+%openfile fcnBuff
+%assign cfgTxt = ""
+%openfile cfgTxt
+static const boolean_T tmp[128]{ false, false, false, false, false, false, false, false, false, true, true, true, true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, true, true, true, true, true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false };
+int32_T c_s1_size[2];
+int32_T c_s1_size_0[2];
+int32_T d_s1_size[2];
+int32_T b_k_0;
+int32_T c_idx;
+int32_T entryg2;
+char_T c_s1_data[66];
+char_T d_s1_data[66];
+char_T c_idx_0;
+boolean_T a__3;
+boolean_T exitg1;
+boolean_T isneg;
+%assign _modelSS = ""
+
+%if SLibCG_FcnCallArgAccessed(2,1,2,3)
+%<SLibCG_AccessArg(2 ,1, 3)>
+%endif
+%if SLibCG_FcnCallArgAccessed(2,1,2,5)
+%<SLibCG_AccessArg(2 ,1, 6)>
+%endif
+%if SLibCG_FcnCallArgAccessed(2,1,2,9)
+%<SLibCG_AccessArg(2 ,1, 10)>
+%endif
+%if SLibCG_FcnCallArgAccessed(2,1,2,10)
+%<SLibCG_AccessArg(2 ,1, 11)>
+%endif
+%if SLibCG_FcnCallArgAccessed(2,1,2,12)
+%<SLibCG_AccessArg(2 ,1, 17)>
+%endif
+%if SLibCG_FcnCallArgAccessed(2,1,2,13)
+%<SLibCG_AccessArg(2 ,1, 18)>
+%endif
+
+%if SLibCG_FcnCallArgAccessed(2,1,1,3)
+%<SLibCG_AccessArg(2 ,1, 3)>
+%endif
+%if SLibCG_FcnCallArgAccessed(2,1,1,4)
+%<SLibCG_AccessArg(2 ,1, 4)>
+%endif
+%if SLibCG_FcnCallArgAccessed(2,1,1,5)
+%<SLibCG_AccessArg(2 ,1, 11)>
+%endif
+%if SLibCG_FcnCallArgAccessed(2,1,1,6)
+%<SLibCG_AccessArg(2 ,1, 6)>
+%endif
+%if SLibCG_FcnCallArgAccessed(2,1,1,8)
+%<SLibCG_AccessArg(2 ,1, 8)>
+%endif
+%if SLibCG_FcnCallArgAccessed(2,1,1,9)
+%<SLibCG_AccessArg(2 ,1, 9)>
+%endif
+%if SLibCG_FcnCallArgAccessed(2,1,1,10)
+%<SLibCG_AccessArg(2 ,1, 10)>
+%endif
+%if SLibCG_FcnCallArgAccessed(2,1,1,11)
+%<SLibCG_AccessArg(2 ,1, 11)>
+%endif
+%if SLibCG_FcnCallArgAccessed(2,1,1,13)
+%<SLibCG_AccessArg(2 ,1, 13)>
+%endif
+%if SLibCG_FcnCallArgAccessed(2,1,1,14)
+%<SLibCG_AccessArg(2 ,1, 14)>
+%endif
+%if SLibCG_FcnCallArgAccessed(2,1,1,16)
+%<SLibCG_AccessArg(2 ,1, 16)>
+%endif
+%if SLibCG_FcnCallArgAccessed(2,1,1,17)
+%<SLibCG_AccessArg(2 ,1, 17)>
+%endif
+%if SLibCG_FcnCallArgAccessed(2,1,1,18)
+%<SLibCG_AccessArg(2 ,1, 18)>
+%endif
+
+%if SLibCG_FcnCallArgAccessed(2,1,0,3)
+%<SLibCG_AccessArg(2 ,1, 3)>
+%endif
+%if SLibCG_FcnCallArgAccessed(2,1,0,5)
+%<SLibCG_AccessArg(2 ,1, 6)>
+%endif
+%if SLibCG_FcnCallArgAccessed(2,1,0,9)
+%<SLibCG_AccessArg(2 ,1, 10)>
+%endif
+%if SLibCG_FcnCallArgAccessed(2,1,0,10)
+%<SLibCG_AccessArg(2 ,1, 11)>
+%endif
+%if SLibCG_FcnCallArgAccessed(2,1,0,11)
+%<SLibCG_AccessArg(2 ,1, 16)>
+%endif
+%if SLibCG_FcnCallArgAccessed(2,1,0,12)
+%<SLibCG_AccessArg(2 ,1, 17)>
+%endif
+%if SLibCG_FcnCallArgAccessed(2,1,0,13)
+%<SLibCG_AccessArg(2 ,1, 18)>
+%endif
+
+*/*@>1cbdbef*/isimag/*@>9860b3*/ = /*@>1ca9183*/false;
+*/*@>1cbdbf2*/b_finite/*@>9860b5*/ = /*@>1ca9184*/true;
+*/*@>1cbdbf5*/nfv/*@>9860b8*/ = /*@>1ca9137*/0.0;
+*/*@>1cbdbf8*/b_k/*@>1b5c789*/ = /*@>1ca926f*/k;
+/*@>1ca91b2*/c_idx/*@>1b5c78d*/ = /*@>1ca9271*/idx;
+c_s1_size/*@>1ca2245*/[/*@>1ca92f3*/0]/*@>1c9b4ab*/ = /*@>1cc7500*/1;
+c_s1_size/*@>1ca2296*/[/*@>1ca92f9*/1]/*@>1c9b4b7*/ = s1_size/*@>1cc1b0d*/[/*@>1cc1b09*/1];
+/*@>1ca92d3*/b_k_0/*@>1c9dfa2*/ = s1_size/*@>1cc1b13*/[/*@>1cc1b0f*/1]/*@>1ca474a*/ - /*@>1ca949f*/1;
+if (/*@>1cbc515*/b_k_0 >= /*@>1cbc513*/0) {
+    /*@>1cbe9d0*/std::memcpy(&/*@>1cbc4f1*/c_s1_data[/*@>1cbc4de*/0], &/*@>1cbc4fb*/s1_data[/*@>1cbc4f0*/0], (/*@>1cbc4d8*/b_k_0 + 1)/*@>1cbc4ff*/ * /*@>1cbc4fe*/sizeof(char_T));
+}
+/*@>1ca91ca*/isneg/*@>1b5c7de*/ = /*@>1ca91ad*/false;
+*/*@>1cbdc01*/foundsign/*@>1b5c7dc*/ = /*@>1ca91ac*/false;
+exitg1 = false;
+while/*@<1b5c7e7*/ ((!exitg1) && (*/*@<1cc76c1*//*@>1cbdc04*/b_k/*@>1b5c77e*/ <= /*@>1ca9273*/n)) {
+    /*@>1cb3b56*/c_idx_0/*@>1cb3b58*/ = /*@>1cc1b1b*/s_data[*/*@<1cc791c*//*@>1cc1b18*/b_k/*@>1cc1b15*/ - /*@>1cc1b19*/1];
+    /*@>1b5c7e8*/if (/*@>1cb3b5a*/c_idx_0/*@>1b5c774*/ == /*@>1ca91c7*/'-') {
+        /*@>1ca91c5*/isneg/*@>1b5c7ce*/ = !/*@<1b5c773*//*@>1ca91c3*/isneg;
+        */*@>1cbdd27*/foundsign/*@>1b5c7cc*/ = /*@>1ca91ab*/true;
+        (*/*@>1cc75cf*/b_k)/*@>1cc7623*/++;
+    } else /*@>1b5c7eb*/if (c_idx_0/*@>1b5c768*/ == /*@>1ca91c2*/',') {
+        (*/*@>1cc75c6*/b_k)/*@>1cc7624*/++;
+    } else /*@>1b5c7ec*/if (c_idx_0/*@>1b5c75e*/ == /*@>1ca91c1*/'+') {
+        */*@>1cbdd24*/foundsign/*@>1b5c7be*/ = /*@>1ca91aa*/true;
+        (*/*@>1cc75bd*/b_k)/*@>1cc7625*/++;
+    } else /*@>1b5c7ee*/if (!/*@<1b5c751*//*@>1cc1b25*/tmp/*@>1cc1b27*/[static_cast<uint8_T>(c_idx_0)/*@>1cc1b1f*/ & /*@>1cc1b24*/127]) {
+        exitg1 = true;
+    } else {
+        (*/*@>1cbdd2a*/b_k)/*@>1cc7627*/++;
+    }
+}
+*/*@>1cbdc0a*/success/*@>1b5c781*/ = (*/*@<1cc76bc*//*@>1cbdc0d*/b_k/*@>1b5c74e*/ <= /*@>1ca9275*/n);
+/*@>1b5c7f9*/if ((*/*@<1cc76c4*//*@>1cbdc10*/success)/*@>1cc6ff5*/ && /*@>1ca91b9*/isneg) {
+    /*@>1b5c7fb*/if ((/*@>1ca9277*/idx/*@>1b5c74d*/ >= /*@>1ca91a7*/2)/*@>1cc6ff6*/ && (/*@>1cc1b2c*/s1_data[/*@>1cc53d1*/idx/*@>1cc53cf*/ - /*@>1cc53d2*/2]/*@>1b5c744*/ == /*@>1ca91b8*/'-')) {
+        /*@>1cb88b8*/c_s1_data[/*@>1cc53d7*/idx/*@>1cc53d5*/ - /*@>1cc53d8*/2]/*@>1b5c79f*/ = /*@>1ca91b7*/' ';
+    } else {
+        /*@>1cb889b*/c_s1_data[/*@>1ca9341*/idx/*@>1ca266b*/ - /*@>1ca9343*/1]/*@>1b5c799*/ = /*@>1ca91b6*/'-';
+        /*@>1ca91b4*/c_idx/*@>1b5c795*/ = /*@>1ca9279*/idx/*@>1b5c732*/ + /*@>1ca91a8*/1;
+    }
+}
+b_s1_size/*@>1ca2609*/[/*@>1ca933d*/0]/*@>1c9b5d0*/ = /*@>1cc7503*/1;
+b_s1_size/*@>1ca2718*/[/*@>1ca934f*/1]/*@>1c9b5dc*/ = s1_size/*@>1cc1b34*/[/*@>1cc1b30*/1];
+/*@>1ca92d5*/b_k_0/*@>1c9e0d3*/ = s1_size/*@>1cc1b3a*/[/*@>1cc1b36*/1]/*@>1ca474d*/ - /*@>1ca94a0*/1;
+if (/*@>1cbc487*/b_k_0 >= /*@>1cbc485*/0) {
+    /*@>1cbe9d2*/std::memcpy(&/*@>1cbdc22*/b_s1_data[/*@>1cbc452*/0], &/*@>1cbc46d*/c_s1_data[/*@>1cbc464*/0], (/*@>1cbc44c*/b_k_0 + 1)/*@>1cbc471*/ * /*@>1cbc470*/sizeof(char_T));
+}
+*/*@>1cbdc25*/b_idx/*@>986226*/ = /*@>1ca9177*/c_idx;
+/*@>986084*/if (*/*@<1cc76e2*//*@>1cbdc28*/success) {
+    char_T c_idx_1;
+    char_T c_idx_2;
+    boolean_T guard1{false};
+    boolean_T guard2{false};
+    guard1 = false;
+    guard2 = false;
+    /*@>1b5c8a0*/if (*/*@<1cc76e3*//*@>1cbdc2b*/b_k/*@>1b5c87a*/ <= /*@>1ca927f*/n) {
+        /*@>1cb3b76*/c_idx_0/*@>1cb3b78*/ = /*@>1cc1b42*/s_data[*/*@<1cc7935*//*@>1cc1b3f*/b_k/*@>1cc1b3c*/ - /*@>1cc1b40*/1];
+        /*@>1b5c8a1*/if (/*@>1cb3b7a*/c_idx_0/*@>1b5c870*/ == /*@>1ca91d9*/'j') {
+            guard2 = true;
+        } else /*@>1b5c8a3*/if (c_idx_0/*@>1b5c865*/ == /*@>1ca91d6*/'i') {
+            /*@>1b5c8a4*/if (*/*@<1cc76e5*//*@>1cbdc31*/b_k/*@>1b5c862*/ >= /*@>1ca9283*/n/*@>1b5c864*/ - /*@>1ca91d1*/1) {
+                guard2 = true;
+            } else {
+                /*@>1ca9268*/b_k_0/*@>1b5ce3b*/ = */*@<1cc76e7*//*@>1cbdc34*/b_k;
+                /*@>1ca95ae*/c_idx_0/*@>1ca6e07*/ = /*@>1ca950f*/'\x00';
+                while/*@<1ca6e0e*/ ((/*@>1ca9510*/b_k_0/*@>1ca6e0f*/ <= /*@>1ca9512*/n)/*@>1cc6ff8*/ && (/*@>1cc1b5d*/s_data[/*@>1cc1b5a*/b_k_0/*@>1cc1b58*/ - /*@>1cc1b5b*/1]/*@>1ca6e16*/ == /*@>1ca951a*/',')) {
+                    /*@>1ca951f*/b_k_0/*@>1cc7640*/++;
+                }
+                /*@>1ca6e20*/if (/*@>1ca951b*/b_k_0/*@>1ca6e21*/ <= /*@>1ca951d*/n) {
+                    /*@>1ca95b0*/c_idx_0/*@>1ca6e2f*/ = /*@>1cc1b70*/s_data[/*@>1cc1b6d*/b_k_0/*@>1cc1b6b*/ - /*@>1cc1b6e*/1];
+                }
+                /*@>1ca952a*/b_k_0/*@>1cc7641*/++;
+                /*@>1ca95b2*/c_idx_1/*@>1ca6e47*/ = /*@>1ca952f*/'\x00';
+                while/*@<1ca6e4e*/ ((/*@>1ca9530*/b_k_0/*@>1ca6e4f*/ <= /*@>1ca9532*/n)/*@>1cc6fff*/ && (/*@>1cc1bb3*/s_data[/*@>1cc1bb0*/b_k_0/*@>1cc1bae*/ - /*@>1cc1bb1*/1]/*@>1ca6e56*/ == /*@>1ca953a*/',')) {
+                    /*@>1ca953f*/b_k_0/*@>1cc7642*/++;
+                }
+                /*@>1ca6e60*/if (/*@>1ca953b*/b_k_0/*@>1ca6e61*/ <= /*@>1ca953d*/n) {
+                    /*@>1ca95b4*/c_idx_1/*@>1ca6e6f*/ = /*@>1cc1bbc*/s_data[/*@>1cc1bb9*/b_k_0/*@>1cc1bb7*/ - /*@>1cc1bba*/1];
+                }
+                /*@>1ca954a*/b_k_0/*@>1cc7643*/++;
+                /*@>1ca95b6*/c_idx_2/*@>1ca6e87*/ = /*@>1ca954f*/'\x00';
+                while/*@<1ca6e8e*/ ((/*@>1ca9550*/b_k_0/*@>1ca6e8f*/ <= /*@>1ca9552*/n)/*@>1cc7001*/ && (/*@>1cc1bd7*/s_data[/*@>1cc1bd4*/b_k_0/*@>1cc1bd2*/ - /*@>1cc1bd5*/1]/*@>1ca6e96*/ == /*@>1ca955a*/',')) {
+                    /*@>1ca955f*/b_k_0/*@>1cc7644*/++;
+                }
+                /*@>1ca6ea0*/if (/*@>1ca955b*/b_k_0/*@>1ca6ea1*/ <= /*@>1ca955d*/n) {
+                    /*@>1ca95b8*/c_idx_2/*@>1ca6eaf*/ = /*@>1cc1be0*/s_data[/*@>1cc1bdd*/b_k_0/*@>1cc1bdb*/ - /*@>1cc1bde*/1];
+                }
+                /*@>1b5cea7*/if ((((/*@>1ca9572*/c_idx_0/*@>1b5ce67*/ == /*@>1ca9256*/'I')/*@>1cc7005*/ || (/*@>1ca9574*/c_idx_0/*@>1b5ce6b*/ == /*@>1ca9257*/'i'))/*@>1cc700a*/ && ((/*@>1ca9576*/c_idx_1/*@>1b5ce6f*/ == /*@>1ca9258*/'N')/*@>1cc7009*/ || (/*@>1ca9578*/c_idx_1/*@>1b5ce73*/ == /*@>1ca9259*/'n'))/*@>1cc700f*/ && ((/*@>1ca957a*/c_idx_2/*@>1b5ce77*/ == /*@>1ca925a*/'F')/*@>1cc700e*/ || (/*@>1ca957c*/c_idx_2/*@>1b5ce7b*/ == /*@>1ca925b*/'f')))/*@>1cc7016*/ || (((/*@>1ca957e*/c_idx_0/*@>1b5ce80*/ == /*@>1ca925e*/'N')/*@>1cc700d*/ || (/*@>1ca9580*/c_idx_0/*@>1b5ce84*/ == /*@>1ca925f*/'n'))/*@>1cc7013*/ && ((/*@>1ca9582*/c_idx_1/*@>1b5ce88*/ == /*@>1ca9260*/'A')/*@>1cc7012*/ || (/*@>1ca9584*/c_idx_1/*@>1b5ce8c*/ == /*@>1ca9261*/'a'))/*@>1cc7015*/ && ((/*@>1ca9586*/c_idx_2/*@>1b5ce90*/ == /*@>1ca9262*/'N')/*@>1cc7014*/ || (/*@>1ca9588*/c_idx_2/*@>1b5ce94*/ == /*@>1ca9263*/'n')))) {
+                    guard1 = true;
+                } else {
+                    guard2 = true;
+                }
+            }
+        } else {
+            guard1 = true;
+        }
+    } else {
+        guard1 = true;
+    }
+    if (guard2) {
+        /*@>98609f*/if (/*@>1ca913a*/allowimag) {
+            */*@>1cbdcd6*/isimag/*@>9860de*/ = /*@>1ca9185*/true;
+            (*/*@>1cbdcd9*/b_k)/*@>1cc7628*/++;
+            exitg1 = false;
+            while/*@<1b5ca68*/ ((!exitg1) && (*/*@<1cc76cb*//*@>1cbdcdf*/b_k/*@>1b5ca42*/ <= /*@>1ca929d*/n)) {
+                /*@>1cb3b86*/c_idx_0/*@>1cb3b88*/ = /*@>1cc1b67*/s_data[*/*@<1cc794e*//*@>1cc1b64*/b_k/*@>1cc1b61*/ - /*@>1cc1b65*/1];
+                /*@>1b5ca69*/if (/*@>1cc1b84*/tmp/*@>1cc1b86*/[static_cast<uint8_T>(/*@>1cc1b82*/c_idx_0)/*@>1cc1b7e*/ & /*@>1cc1b83*/127]/*@>1cc6ffc*/ || (c_idx_0/*@>1b5ca58*/ == /*@>1ca9207*/'\x00')/*@>1cc6ffd*/ || (c_idx_0/*@>1b5ca62*/ == /*@>1ca9200*/',')) {
+                    (*/*@>1cbdd1e*/b_k)/*@>1cc762b*/++;
+                } else {
+                    exitg1 = true;
+                }
+            }
+            /*@>9860a5*/if ((*/*@<1cc7698*//*@>1cbdce5*/b_k/*@>9875ea*/ <= /*@>1ca9140*/n)/*@>1cc6ffb*/ && (/*@>1cc1b98*/s_data[*/*@<1cc796e*//*@>1cc1b95*/b_k/*@>1cc1b92*/ - /*@>1cc1b96*/1]/*@>987611*/ == /*@>1ca9142*/'*')) {
+                (*/*@>1cbdcf1*/b_k)/*@>1cc762c*/++;
+                %<SLibCG_DumpSSCode("/*@[1cc7228*/",(SLibCGCallSubFcn("proc_control_readfloat_l", ["/*@>1cc7ac9*/c_s1_data", "c_s1_size", "/*@>1cc7add*/c_idx", "/*@>1cc7ae7*/s_data", "s_size", "*/*@<1cc7afb*//*@>1cc7afc*/b_k", "/*@>1cc7b06*/n", "/*@>1cc7b10*/false", "/*@>1cc7b1a*/b_s1_data", "b_s1_size", "/*@>1cc7b2e*/b_idx", "/*@>1cc7b38*/b_k", "&/*@>1cc7b43*/isneg", "/*@>1cc7b4d*/b_finite", "/*@>1cc7b57*/nfv", "&/*@>1cc7b62*/a__3", "/*@>1cc7b6c*/success", "/*@>1cc7b76*/%<::tSimStruct>", "/*@>1cc7b80*/localB"], 2, 1, 1)),"/*@]*/")>;
+            } else {
+                /*@>1cbdceb*/b_s1_data[/*@>1ca93b3*/c_idx/*@>1ca2f98*/ - /*@>1ca93b5*/1]/*@>986119*/ = /*@>1ca9151*/'1';
+                */*@>1cbdcee*/b_idx/*@>98611e*/ = /*@>1ca91a1*/c_idx/*@>987670*/ + 1;
+            }
+        } else {
+            */*@>1cbdcd3*/success/*@>986120*/ = /*@>1ca9189*/false;
+        }
+        entryg2 = 1;
+    }
+    if (guard1) {
+        /*@>1ca91f7*/b_k_0/*@>1b5c958*/ = */*@<1cc76e8*//*@>1cbdc37*/b_k;
+        /*@>1ca95a2*/c_idx_0/*@>1ca6d36*/ = /*@>1ca94ac*/'\x00';
+        while/*@<1ca6d3d*/ ((/*@>1ca94ad*/b_k_0/*@>1ca6d3e*/ <= /*@>1ca94af*/n)/*@>1cc6ff7*/ && (/*@>1cc1b4b*/s_data[/*@>1cc1b48*/b_k_0/*@>1cc1b46*/ - /*@>1cc1b49*/1]/*@>1ca6d45*/ == /*@>1ca94b7*/',')) {
+            /*@>1ca94bc*/b_k_0/*@>1cc762d*/++;
+        }
+        /*@>1ca6d4f*/if (/*@>1ca94b8*/b_k_0/*@>1ca6d50*/ <= /*@>1ca94ba*/n) {
+            /*@>1ca95a4*/c_idx_0/*@>1ca6d5e*/ = /*@>1cc1b54*/s_data[/*@>1cc1b51*/b_k_0/*@>1cc1b4f*/ - /*@>1cc1b52*/1];
+        }
+        /*@>1ca94c7*/b_k_0/*@>1cc762e*/++;
+        /*@>1ca95a6*/c_idx_1/*@>1ca6d76*/ = /*@>1ca94cc*/'\x00';
+        while/*@<1ca6d7d*/ ((/*@>1ca94cd*/b_k_0/*@>1ca6d7e*/ <= /*@>1ca94cf*/n)/*@>1cc6ffe*/ && (/*@>1cc1ba1*/s_data[/*@>1cc1b9e*/b_k_0/*@>1cc1b9c*/ - /*@>1cc1b9f*/1]/*@>1ca6d85*/ == /*@>1ca94d7*/',')) {
+            /*@>1ca94dc*/b_k_0/*@>1cc762f*/++;
+        }
+        /*@>1ca6d8f*/if (/*@>1ca94d8*/b_k_0/*@>1ca6d90*/ <= /*@>1ca94da*/n) {
+            /*@>1ca95a8*/c_idx_1/*@>1ca6d9e*/ = /*@>1cc1baa*/s_data[/*@>1cc1ba7*/b_k_0/*@>1cc1ba5*/ - /*@>1cc1ba8*/1];
+        }
+        /*@>1ca94e7*/b_k_0/*@>1cc7630*/++;
+        /*@>1ca95aa*/c_idx_2/*@>1ca6db6*/ = /*@>1ca94ec*/'\x00';
+        while/*@<1ca6dbd*/ ((/*@>1ca94ed*/b_k_0/*@>1ca6dbe*/ <= /*@>1ca94ef*/n)/*@>1cc7000*/ && (/*@>1cc1bc5*/s_data[/*@>1cc1bc2*/b_k_0/*@>1cc1bc0*/ - /*@>1cc1bc3*/1]/*@>1ca6dc5*/ == /*@>1ca94f7*/',')) {
+            /*@>1ca94fc*/b_k_0/*@>1cc7631*/++;
+        }
+        /*@>1ca6dcf*/if (/*@>1ca94f8*/b_k_0/*@>1ca6dd0*/ <= /*@>1ca94fa*/n) {
+            /*@>1ca95ac*/c_idx_2/*@>1ca6dde*/ = /*@>1cc1bce*/s_data[/*@>1cc1bcb*/b_k_0/*@>1cc1bc9*/ - /*@>1cc1bcc*/1];
+        }
+        /*@>1ca9507*/b_k_0/*@>1cc7632*/++;
+        /*@>1b5c9c7*/if (((/*@>1ca958a*/c_idx_0/*@>1b5c984*/ == /*@>1ca91dc*/'I')/*@>1cc7002*/ || (/*@>1ca958c*/c_idx_0/*@>1b5c988*/ == /*@>1ca91dd*/'i'))/*@>1cc7004*/ && ((/*@>1ca958e*/c_idx_1/*@>1b5c98c*/ == /*@>1ca91de*/'N')/*@>1cc7003*/ || (/*@>1ca9590*/c_idx_1/*@>1b5c990*/ == /*@>1ca91df*/'n'))/*@>1cc7008*/ && ((/*@>1ca9592*/c_idx_2/*@>1b5c994*/ == /*@>1ca91e0*/'F')/*@>1cc7007*/ || (/*@>1ca9594*/c_idx_2/*@>1b5c998*/ == /*@>1ca91e1*/'f'))) {
+            */*@>1cbdc43*/b_finite/*@>1b5c92d*/ = /*@>1ca91f9*/false;
+            */*@>1cbdc46*/nfv/*@>1b5c92f*/ = /*@>1ca91fa*/%<LibGetMathConstant(LibRealNonFinite("inf"), FcnGetDataTypeIdFromName("double"))>;
+        } else /*@>1b5c9d4*/if (((/*@>1ca9596*/c_idx_0/*@>1b5c99e*/ == /*@>1ca91e6*/'N')/*@>1cc7006*/ || (/*@>1ca9598*/c_idx_0/*@>1b5c9a2*/ == /*@>1ca91e7*/'n'))/*@>1cc700c*/ && ((/*@>1ca959a*/c_idx_1/*@>1b5c9a6*/ == /*@>1ca91e8*/'A')/*@>1cc700b*/ || (/*@>1ca959c*/c_idx_1/*@>1b5c9aa*/ == /*@>1ca91e9*/'a'))/*@>1cc7011*/ && ((/*@>1ca959e*/c_idx_2/*@>1b5c9ae*/ == /*@>1ca91ea*/'N')/*@>1cc7010*/ || (/*@>1ca95a0*/c_idx_2/*@>1b5c9b2*/ == /*@>1ca91eb*/'n'))) {
+            */*@>1cbdc3d*/b_finite/*@>1b5c949*/ = /*@>1ca91fb*/false;
+            */*@>1cbdc40*/nfv/*@>1b5c94b*/ = /*@>1ca91fc*/%<LibGetMathConstant(LibRealNonFinite("nan"), FcnGetDataTypeIdFromName("double"))>;
+        } else {
+            /*@>1ca91f5*/b_k_0/*@>1b5c954*/ = */*@<1cc76e9*//*@>1cbdc3a*/b_k;
+        }
+        */*@>1cbdc49*/b_k/*@>986244*/ = /*@>1ca9179*/b_k_0;
+        /*@>986089*/if (*/*@<1cc76ac*//*@>1cbdc4c*/b_finite) {
+            %<SLibCG_DumpSSCode("/*@[1cc71ff*/",(SLibCGCallSubFcn("proc_control_copydigits_a", ["/*@>1cc7b8a*/c_s1_data", "c_s1_size", "/*@>1cc7b9e*/c_idx", "/*@>1cc7ba8*/s_data", "/*@>1cc7bb2*/b_k_0", "/*@>1cc7bbc*/n", "/*@>1cc7bc6*/true", "/*@>1cc7bd0*/d_s1_data", "d_s1_size", "/*@>1cc7be4*/b_idx", "/*@>1cc7bee*/b_k", "/*@>1cc7bf8*/success", "/*@>1cc7c02*/%<::tSimStruct>", "/*@>1cc7c0c*/localB"], 2, 1, 0)),"/*@]*/")>;
+            b_s1_size/*@>1ca3345*/[/*@>1ca93be*/0]/*@>1c9bbaa*/ = /*@>1cc7506*/1;
+            b_s1_size/*@>1ca33f5*/[/*@>1ca93ca*/1]/*@>1c9bbb6*/ = d_s1_size/*@>1cc1bed*/[/*@>1cc1bea*/1];
+            /*@>1cb994f*/c_idx/*@>1cb9951*/ = d_s1_size/*@>1cc1bf2*/[/*@>1cc1bef*/1]/*@>1ca4750*/ - /*@>1ca94a1*/1;
+            if (/*@>1cbc3cb*/c_idx >= /*@>1cbc3c9*/0) {
+                /*@>1cbe9d4*/std::memcpy(&/*@>1cbdc6d*/b_s1_data[/*@>1cbc396*/0], &/*@>1cbc3b1*/d_s1_data[/*@>1cbc3a8*/0], (/*@>1cbc390*/c_idx + 1)/*@>1cbc3b5*/ * /*@>1cbc3b4*/sizeof(char_T));
+            }
+            /*@>98609c*/if (*/*@<1cc76b2*//*@>1cbdc70*/success) {
+                c_s1_size/*@>1ca37b6*/[/*@>1ca9414*/1]/*@>1c9bcf1*/ = d_s1_size/*@>1cc1c15*/[/*@>1cc1c12*/1];
+                if (c_idx >= /*@>1cbc34e*/0) {
+                    /*@>1cbe9d6*/std::memcpy(&/*@>1cbc32e*/c_s1_data[/*@>1cbc31b*/0], &/*@>1cbc336*/d_s1_data[/*@>1cbc32d*/0], (c_idx + 1)/*@>1cbc33a*/ * /*@>1cbc339*/sizeof(char_T));
+                }
+                /*@>1b5ccac*/if (*/*@<1cc76ea*//*@>1cbdc73*/b_k/*@>1b5cc50*/ <= /*@>1ca928d*/n) {
+                    /*@>1cb3bf6*/c_idx_0/*@>1cb3bf8*/ = /*@>1cc1c3b*/s_data[*/*@<1cc79dd*//*@>1cc1c38*/b_k/*@>1cc1c35*/ - /*@>1cc1c39*/1];
+                    /*@>1b5ccad*/if ((/*@>1cb3bfa*/c_idx_0/*@>1b5cc5a*/ == /*@>1ca921b*/'E')/*@>1cc701e*/ || (c_idx_0/*@>1b5cc64*/ == /*@>1ca921c*/'e')) {
+                        int32_T loop_ub;
+                        /*@>1cb8f41*/c_s1_data[*/*@<1cc7712*//*@>1cbdc79*/b_idx/*@>1ca3bc2*/ - /*@>1ca9461*/1]/*@>1b5cbe0*/ = /*@>1ca921d*/'e';
+                        /*@>1ca921e*/c_idx/*@>1b5cbe4*/ = */*@<1cc7718*//*@>1cbdc7c*/b_idx - 1;
+                        /*@>1ca9220*/b_k_0/*@>1b5cbe8*/ = */*@<1cc76ec*//*@>1cbdc7f*/b_k;
+                        while/*@<1b5ccb4*/ ((/*@>1ca9222*/b_k_0/*@>1ca4762*/ + /*@>1ca94a7*/1/*@>1b5cc69*/ <= /*@>1ca9291*/n)/*@>1cc701f*/ && (/*@>1cc1c4c*/s_data[/*@>1cc1c4a*/b_k_0]/*@>1b5cc73*/ == /*@>1ca9224*/',')) {
+                            /*@>1ca9225*/b_k_0/*@>1cc7633*/++;
+                        }
+                        /*@>1b5ccb8*/if (/*@>1ca9229*/b_k_0/*@>1ca475f*/ + /*@>1ca94a6*/1/*@>1b5cc76*/ <= /*@>1ca9293*/n) {
+                            c_idx_0 = /*@>1cc1c53*/s_data[/*@>1cc1c51*/b_k_0];
+                            /*@>1b5ccb9*/if (c_idx_0/*@>1b5cc80*/ == /*@>1ca922b*/'-') {
+                                /*@>1cb9040*/c_s1_data[*/*@<1cc7717*//*@>1cbdc82*/b_idx]/*@>1b5cc06*/ = /*@>1ca922c*/'-';
+                                /*@>1ca922d*/c_idx/*@>1b5cc0a*/ = */*@<1cc76f4*//*@>1cbdc85*/b_idx;
+                                /*@>1ca922f*/b_k_0/*@>1cc7634*/++;
+                            } else /*@>1b5ccbd*/if (c_idx_0/*@>1b5cc8e*/ == /*@>1ca9233*/'+') {
+                                /*@>1ca9234*/b_k_0/*@>1cc763f*/++;
+                            }
+                        }
+                        c_s1_size_0/*@>1cb7521*/[/*@>1cb751c*/0]/*@>1cb7524*/ = /*@>1cc750c*/1;
+                        c_s1_size_0/*@>1cb752d*/[/*@>1cb7528*/1]/*@>1cb7530*/ = d_s1_size/*@>1cc1c5a*/[/*@>1cc1c57*/1];
+                        /*@>1cb763e*/loop_ub/*@>1cb7640*/ = d_s1_size/*@>1cc1c5f*/[/*@>1cc1c5c*/1]/*@>1cb7624*/ - /*@>1cb7623*/1;
+                        if (/*@>1cbc2b8*/loop_ub >= /*@>1cbc2b6*/0) {
+                            /*@>1cbe9d8*/std::memcpy(&/*@>1cbc296*/d_s1_data[/*@>1cbc283*/0], &/*@>1cbc29e*/c_s1_data[/*@>1cbc295*/0], (/*@>1cbc27d*/loop_ub + 1)/*@>1cbc2a2*/ * /*@>1cbc2a1*/sizeof(char_T));
+                        }
+                        %<SLibCG_DumpSSCode("/*@[1cc724c*/",(SLibCGCallSubFcn("proc_control_copydigits_a", ["/*@>1cc7c16*/d_s1_data", "c_s1_size_0", "/*@>1cc7c2b*/c_idx/*@>1cc7c2a*/ + /*@>1cc7c2c*/2", "/*@>1cc7c36*/s_data", "/*@>1cc7c41*/b_k_0/*@>1cc7c40*/ + /*@>1cc7c42*/1", "/*@>1cc7c4c*/n", "/*@>1cc7c56*/false", "/*@>1cc7c60*/c_s1_data", "c_s1_size", "/*@>1cc7c74*/b_idx", "/*@>1cc7c7e*/b_k", "&/*@>1cc7c89*/isneg", "/*@>1cc7c93*/%<::tSimStruct>", "/*@>1cc7c9d*/localB"], 2, 1, 2)),"/*@]*/")>;
+                        /*@>1b5ccc7*/if (/*@>1ca9249*/isneg/*@>1cc7020*/ && (*/*@<1cc76d9*//*@>1cbdc8e*/b_k/*@>1b5cca6*/ > /*@>1ca92c2*/b_k_0/*@>1ca4759*/ + /*@>1ca94a4*/1)) {
+                        } else {
+                            */*@>1cbdc91*/success/*@>1b5cc4b*/ = /*@>1ca9242*/false;
+                        }
+                    }
+                }
+                b_s1_size/*@>1ca3be4*/[/*@>1ca9464*/0]/*@>1c9be4c*/ = /*@>1cc7509*/1;
+                b_s1_size/*@>1ca3c36*/[/*@>1ca946a*/1]/*@>1c9be58*/ = c_s1_size/*@>1cc1c42*/[/*@>1cc1c3f*/1];
+                /*@>1ca92db*/b_k_0/*@>1c9e7d4*/ = c_s1_size/*@>1cc1c47*/[/*@>1cc1c44*/1]/*@>1ca4765*/ - /*@>1ca94a8*/1;
+                if (/*@>1cbc236*/b_k_0 >= /*@>1cbc234*/0) {
+                    /*@>1cbe9da*/std::memcpy(&/*@>1cbdc9d*/b_s1_data[/*@>1cbc201*/0], &/*@>1cbc21c*/c_s1_data[/*@>1cbc213*/0], (/*@>1cbc1fb*/b_k_0 + 1)/*@>1cbc220*/ * /*@>1cbc21f*/sizeof(char_T));
+                }
+            }
+        } else /*@>98608a*/if ((/*@>1ca9193*/c_idx/*@>98821d*/ >= /*@>1ca9190*/2)/*@>1cc7017*/ && (/*@>1cc1be6*/c_s1_data[/*@>1cc53dd*/c_idx/*@>1cc53db*/ - /*@>1cc53de*/2]/*@>988248*/ == /*@>1ca915c*/'-')) {
+            */*@>1cbdc4f*/b_idx/*@>986161*/ = /*@>1ca9195*/c_idx/*@>98824a*/ - 1;
+            /*@>1cbdc52*/b_s1_data[/*@>1cc53e3*/c_idx/*@>1cc53e1*/ - /*@>1cc53e4*/2]/*@>986167*/ = /*@>1ca915f*/' ';
+            */*@>1cbdc55*/nfv/*@>98616b*/ = -/*@<1ca972e*/*/*@<1cc76af*//*@>1cbdc58*/nfv;
+        }
+        exitg1 = false;
+        while/*@<1b5cb6a*/ ((!exitg1) && (*/*@<1cc76cd*//*@>1cbdca0*/b_k/*@>1b5cb44*/ <= /*@>1ca9299*/n)) {
+            /*@>1cb3bb6*/c_idx_0/*@>1cb3bb8*/ = /*@>1cc1bfa*/s_data[*/*@<1cc79b1*//*@>1cc1bf7*/b_k/*@>1cc1bf4*/ - /*@>1cc1bf8*/1];
+            /*@>1b5cb6b*/if (/*@>1cc1c04*/tmp/*@>1cc1c06*/[static_cast<uint8_T>(/*@>1cc1c02*/c_idx_0)/*@>1cc1bfe*/ & /*@>1cc1c03*/127]/*@>1cc7019*/ || (c_idx_0/*@>1b5cb5a*/ == /*@>1ca9219*/'\x00')/*@>1cc701a*/ || (c_idx_0/*@>1b5cb64*/ == /*@>1ca9214*/',')) {
+                (*/*@>1cbdccd*/b_k)/*@>1cc7637*/++;
+            } else {
+                exitg1 = true;
+            }
+        }
+        /*@>98608e*/if ((*/*@<1cc76a3*//*@>1cbdca6*/b_k/*@>988283*/ <= /*@>1ca9164*/n)/*@>1cc7018*/ && (/*@>1cc1c0e*/s_data[*/*@<1cc79be*//*@>1cc1c0b*/b_k/*@>1cc1c08*/ - /*@>1cc1c0c*/1]/*@>9882aa*/ == /*@>1ca9166*/'*')) {
+            (*/*@>1cbdcac*/b_k)/*@>1cc7638*/++;
+            exitg1 = false;
+            while/*@<1b5cd76*/ ((!exitg1) && (*/*@<1cc76da*//*@>1cbdcb2*/b_k/*@>1b5cd50*/ <= /*@>1ca929b*/n)) {
+                /*@>1cb3bde*/c_idx_0/*@>1cb3be0*/ = /*@>1cc1c27*/s_data[*/*@<1cc79d0*//*@>1cc1c24*/b_k/*@>1cc1c21*/ - /*@>1cc1c25*/1];
+                /*@>1b5cd77*/if (/*@>1cc1c31*/tmp/*@>1cc1c33*/[static_cast<uint8_T>(/*@>1cc1c2f*/c_idx_0)/*@>1cc1c2b*/ & /*@>1cc1c30*/127]/*@>1cc701c*/ || (c_idx_0/*@>1b5cd66*/ == /*@>1ca9254*/'\x00')/*@>1cc701d*/ || (c_idx_0/*@>1b5cd70*/ == /*@>1ca924f*/',')) {
+                    (*/*@>1cbdcc7*/b_k)/*@>1cc763b*/++;
+                } else {
+                    exitg1 = true;
+                }
+            }
+        }
+        /*@>986090*/if (*/*@<1cc76a5*//*@>1cbdcb8*/b_k/*@>9882ba*/ <= /*@>1ca916d*/n) {
+            /*@>1cb3bce*/c_idx_0/*@>1cb3bd0*/ = /*@>1cc1c1d*/s_data[*/*@<1cc79c9*//*@>1cc1c1a*/b_k/*@>1cc1c17*/ - /*@>1cc1c1b*/1];
+            /*@>986291*/if ((/*@>1cb3bd2*/c_idx_0/*@>9882e1*/ == /*@>1ca916f*/'i')/*@>1cc701b*/ || (c_idx_0/*@>988308*/ == /*@>1ca9170*/'j')) {
+                (*/*@>1cbdcbe*/b_k)/*@>1cc763c*/++;
+                */*@>1cbdcc4*/isimag/*@>9861a9*/ = /*@>1ca918f*/true;
+            }
+        }
+        entryg2 = 0;
+    }
+    int32_T exitg3;
+    do {
+        exitg3 = 0;
+        if (entryg2 == 0) {
+        } else {
+            entryg2 = 0;
+        }
+        /*@>1b5cae9*/if (*/*@<1cc76cc*//*@>1cbdd12*/b_k/*@>1b5cac3*/ <= /*@>1ca929f*/n) {
+            /*@>1cb3b96*/c_idx_0/*@>1cb3b98*/ = /*@>1cc1b7a*/s_data[*/*@<1cc795b*//*@>1cc1b77*/b_k/*@>1cc1b74*/ - /*@>1cc1b78*/1];
+            /*@>1b5caea*/if (/*@>1cc1b8e*/tmp/*@>1cc1b90*/[static_cast<uint8_T>(/*@>1cc1b8c*/c_idx_0)/*@>1cc1b88*/ & /*@>1cc1b8d*/127]/*@>1cc6ff9*/ || (c_idx_0/*@>1b5cad9*/ == /*@>1ca9210*/'\x00')/*@>1cc6ffa*/ || (c_idx_0/*@>1b5cae3*/ == /*@>1ca920b*/',')) {
+                (*/*@>1cbdd18*/b_k)/*@>1cc763e*/++;
+            } else {
+                exitg3 = 1;
+            }
+        } else {
+            exitg3 = 1;
+        }
+    } while (exitg3 == 0);
+}
+%closefile cfgTxt
+%<cfgTxt>
+%closefile fcnBuff
+%assign rtmArgSys = ::CompiledModel.System[::CompiledModel.System[::CompiledModel.RTWCGModules.RTWCGModule[2].CGSystemIdx].NonInlinedParentSystemIdx]
+%if SysFcnArgNeeded("proc_control_readfloat_l", rtmArgSys.Interface.RTMArgDef, rtmArgSys.CurrentTID, FcnSysModuleIsRateGrouping(rtmArgSys, "proc_control_readfloat_l"))
+%<SLibCG_AccessArg(2, 1, 17)>
+%endif
+%if SLibCG_ArgAccessed(2, 1, 17)
+%<SLibAccessArg(rtmArgSys.Interface.RTMArgDef, "proc_control_readfloat_l", rtmArgSys.CurrentTID, FcnSysModuleIsRateGrouping(rtmArgSys, "proc_control_readfloat_l"))>
+%endif
+%if (IsModelReferenceBaseSys(rtmArgSys) && (IsModelRefScalableBuild() || GenerateClassInterface)) ||...
+(GenerateClassInterface && SLibIsMultiInstanceServer(rtmArgSys))
+%<SLibCG_UndoAccessArg(2, 1, 17)>
+%endif
+%assign fcnProtoType = ""
+%openfile fcnProtoType
+static void proc_control_readfloat_l(\
+%assign comma = ""
+%<comma>const char_T s1_data[]\
+%assign comma = ", "
+%<comma>const int32_T s1_size[2]\
+%assign comma = ", "
+%<comma>int32_T idx\
+%assign comma = ", "
+%<comma>const char_T s_data[]\
+%assign comma = ", "
+%if SLibCG_ArgAccessed(2, 1, 4)
+%<comma>const int32_T s_size[2]\
+%assign comma = ", "
+%endif
+%<comma>int32_T k\
+%assign comma = ", "
+%<comma>int32_T n\
+%assign comma = ", "
+%<comma>boolean_T allowimag\
+%assign comma = ", "
+%<comma>char_T b_s1_data[]\
+%assign comma = ", "
+%<comma>int32_T b_s1_size[2]\
+%assign comma = ", "
+%<comma>int32_T *b_idx\
+%assign comma = ", "
+%<comma>int32_T *b_k\
+%assign comma = ", "
+%<comma>boolean_T *isimag\
+%assign comma = ", "
+%<comma>boolean_T *b_finite\
+%assign comma = ", "
+%<comma>real_T *nfv\
+%assign comma = ", "
+%<comma>boolean_T *foundsign\
+%assign comma = ", "
+%<comma>boolean_T *success\
+%assign comma = ", "
+%assign rtmArgSys = ::CompiledModel.System[::CompiledModel.System[::CompiledModel.RTWCGModules.RTWCGModule[2].CGSystemIdx].NonInlinedParentSystemIdx]
+%if SLibGenSubsysFcnAsClassMemFcn(rtmArgSys)
+%if SLibCG_ArgAccessed(2, 1, 17)
+%assign ::CompiledModel.RTWCGModules.RTWCGModule[rtmArgSys.CGIRModuleIdx].Function[::CurrentFunctionIdx].ForbidStaticMemberDecl =  TLC_TRUE
+%endif
+%<SLibCG_UndoAccessArg(2, 1, 17)>\
+%endif
+%if SLibCG_ArgAccessed(2, 1, 17)
+%<comma>%<::tSimStructType> * const %<::tSimStruct>\
+%assign comma = ", "
+%<SLibUpdateSymbolForFunction("proc_control_readfloat_l", SLibGetFcnDefinitionRTMSymbolName(), TLC_FALSE)>\
+%endif
+%<comma>B_MATLABSystem1_proc_control_T *localB\
+%assign comma = ", "
+%closefile fcnProtoType
+%<SLibCG_SetFcnProtoType(2, 1, fcnProtoType)>
+%return fcnBuff
+%endfunction
+

@@ -1,0 +1,45 @@
+%implements s215_b0_5o2qj_2_Terminate "C"
+
+%function Terminate(block, system) Output
+%assign cfgTxt = ""
+%openfile cfgTxt
+%assign localVarDecl = ""
+/* Terminate for MATLABSystem: '<S320>/MATLAB System1' */
+/*@>1cbe9cc*/std::memcpy(&/*@>1cc44df*/localDW->/*@>1cc8bf7*/lastValues/*@>1cbc0dc*/[/*@>1cbc0cb*/0], &/*@>1cc44e6*/localDW->/*@>1cc8bfa*/obj./*@>1cc8bf4*/lastValues[0], /*@>1cbc0ec*/sizeof(real_T)/*@>1cc6fd3*/ << /*@>1cc6fd2*/3U);
+/*@>1cbe9ce*/std::memcpy(&/*@>1cc44f8*/localDW->/*@>1cc8bfd*/lastMsg/*@>1cbc07d*/[/*@>1cbc06c*/0], &/*@>1cc44ff*/localDW->/*@>1cc8c00*/obj./*@>1cc8bf1*/lastMsg[0], /*@>1cbc08d*/sizeof(real_T)/*@>1cc6fd6*/ << /*@>1cc6fd5*/7U);
+%closefile cfgTxt
+%<cfgTxt>
+%assign rtmArgSys = ::CompiledModel.System[::CompiledModel.System[::CompiledModel.RTWCGModules.RTWCGModule[2].CGSystemIdx].NonInlinedParentSystemIdx]
+%if SysFcnArgNeeded("Terminate", rtmArgSys.Interface.RTMArgDef, rtmArgSys.CurrentTID, FcnSysModuleIsRateGrouping(rtmArgSys, "Terminate"))
+%<SLibCG_AccessArg(2, 5, 0)>
+%endif
+%if SLibCG_ArgAccessed(2, 5, 0)
+%<SLibAccessArg(rtmArgSys.Interface.RTMArgDef, "Terminate", rtmArgSys.CurrentTID, FcnSysModuleIsRateGrouping(rtmArgSys, "Terminate"))>
+%endif
+%if (IsModelReferenceBaseSys(rtmArgSys) && (IsModelRefScalableBuild() || GenerateClassInterface)) ||...
+(GenerateClassInterface && SLibIsMultiInstanceServer(rtmArgSys))
+%<SLibCG_UndoAccessArg(2, 5, 0)>
+%endif
+%endfunction
+%function TerminateFcnProtoType(block, system) Output
+%assign fcnProtoType = ""
+%openfile fcnProtoType
+static void proc_control_MATLABSystem1_Term(\
+%assign comma = ""
+%assign rtmArgSys = ::CompiledModel.System[::CompiledModel.System[::CompiledModel.RTWCGModules.RTWCGModule[2].CGSystemIdx].NonInlinedParentSystemIdx]
+%if SLibGenSubsysFcnAsClassMemFcn(rtmArgSys)
+%if SLibCG_ArgAccessed(2, 5, 0)
+%assign ::CompiledModel.RTWCGModules.RTWCGModule[rtmArgSys.CGIRModuleIdx].Function[::CurrentFunctionIdx].ForbidStaticMemberDecl =  TLC_TRUE
+%endif
+%<SLibCG_UndoAccessArg(2, 5, 0)>\
+%endif
+%if SLibCG_ArgAccessed(2, 5, 0)
+%<comma>%<::tSimStructType> * const %<::tSimStruct>\
+%assign comma = ", "
+%<SLibUpdateSymbolForFunction("proc_control_MATLABSystem1_Term", SLibGetFcnDefinitionRTMSymbolName(), TLC_FALSE)>\
+%endif
+%<comma>DW_MATLABSystem1_proc_control_T *localDW\
+%assign comma = ", "
+%closefile fcnProtoType
+%<SLibCG_SetFcnProtoType(2, 5, fcnProtoType)>
+%endfunction

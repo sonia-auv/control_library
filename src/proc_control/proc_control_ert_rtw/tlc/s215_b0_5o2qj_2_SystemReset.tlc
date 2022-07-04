@@ -1,0 +1,52 @@
+%implements s215_b0_5o2qj_2_SystemReset "C"
+
+%function SystemReset(block, system) Output
+%assign cfgTxt = ""
+%openfile cfgTxt
+%assign localVarDecl = ""
+/* {S!d26}InitializeConditions for MATLABSystem: '<S320>/MATLAB System1' */
+/*  Initialize / reset discrete-state properties */
+/*@>1cbe9b6*/std::memset(&/*@>1cc42e8*/localDW->/*@>1cc7da6*/obj./*@>1cc7da0*/lastMsg[0], /*@>1cc7d40*/0, sizeof(real_T) << 7U);
+/*@>1ca043c*/for ( int32_T /*@>1cc7d48*/i{/*@>1cc7d47*/0}; /*@>1cc7d52*/i < /*@>1cc7d50*/8; /*@>1cc7d4e*/i/*@>1cc7d56*/++) {
+    /*@>1cc4303*/localDW->/*@>1cc7da9*/obj./*@>1cc7d9a*/lastValues/*@>1ca637a*/[/*@>1cb2d88*/i]/*@>1ca042f*/ = /*@>1ca8a67*/0.0;
+    /*@>1cc431c*/localDW->/*@>1cc7db2*/lastValues/*@>1ca046e*/[/*@>1cb2d8e*/i]/*@>1ca046f*/ = /*@>1cc4323*/localDW->/*@>1cc7db5*/obj./*@>1cc7da3*/lastValues/*@>1cc1a84*/[/*@>1cc1a7d*/i];
+}
+/*@>1cbe9b8*/std::memcpy(&/*@>1cc430c*/localDW->/*@>1cc7dac*/lastMsg/*@>1cbb8c4*/[/*@>1cbb8b3*/0], &/*@>1cc4313*/localDW->/*@>1cc7daf*/obj./*@>1cc7d9d*/lastMsg[0], /*@>1cbb8d4*/sizeof(real_T)/*@>1cc6fc4*/ << /*@>1cc6fc3*/7U);
+/* {E!d26}End of InitializeConditions for MATLABSystem: '<S320>/MATLAB System1' */
+%closefile cfgTxt
+%<cfgTxt>
+%assign rtmArgSys = ::CompiledModel.System[::CompiledModel.System[::CompiledModel.RTWCGModules.RTWCGModule[2].CGSystemIdx].NonInlinedParentSystemIdx]
+%if SysFcnArgNeeded("SystemReset", rtmArgSys.Interface.RTMArgDef, rtmArgSys.CurrentTID, FcnSysModuleIsRateGrouping(rtmArgSys, "SystemReset"))
+%<SLibCG_AccessArg(2, 3, 0)>
+%endif
+%if SLibCG_ArgAccessed(2, 3, 0)
+%<SLibAccessArg(rtmArgSys.Interface.RTMArgDef, "SystemReset", rtmArgSys.CurrentTID, FcnSysModuleIsRateGrouping(rtmArgSys, "SystemReset"))>
+%endif
+%if (IsModelReferenceBaseSys(rtmArgSys) && (IsModelRefScalableBuild() || GenerateClassInterface)) ||...
+(GenerateClassInterface && SLibIsMultiInstanceServer(rtmArgSys))
+%<SLibCG_UndoAccessArg(2, 3, 0)>
+%endif
+%<LibSetSystemField(system, "CachedSystemResetLocalVars", localVarDecl)>
+%endfunction
+%function SystemResetFcnProtoType(block, system) Output
+%assign fcnProtoType = ""
+%openfile fcnProtoType
+static void proc_contro_MATLABSystem1_Reset(\
+%assign comma = ""
+%assign rtmArgSys = ::CompiledModel.System[::CompiledModel.System[::CompiledModel.RTWCGModules.RTWCGModule[2].CGSystemIdx].NonInlinedParentSystemIdx]
+%if SLibGenSubsysFcnAsClassMemFcn(rtmArgSys)
+%if SLibCG_ArgAccessed(2, 3, 0)
+%assign ::CompiledModel.RTWCGModules.RTWCGModule[rtmArgSys.CGIRModuleIdx].Function[::CurrentFunctionIdx].ForbidStaticMemberDecl =  TLC_TRUE
+%endif
+%<SLibCG_UndoAccessArg(2, 3, 0)>\
+%endif
+%if SLibCG_ArgAccessed(2, 3, 0)
+%<comma>%<::tSimStructType> * const %<::tSimStruct>\
+%assign comma = ", "
+%<SLibUpdateSymbolForFunction("proc_contro_MATLABSystem1_Reset", SLibGetFcnDefinitionRTMSymbolName(), TLC_FALSE)>\
+%endif
+%<comma>DW_MATLABSystem1_proc_control_T *localDW\
+%assign comma = ", "
+%closefile fcnProtoType
+%<SLibCG_SetFcnProtoType(2, 3, fcnProtoType)>
+%endfunction

@@ -1,0 +1,63 @@
+%implements s215_b0_5o2qj_1_SystemInitialize "C"
+
+%function SystemInitialize(block, system) Output
+%assign cfgTxt = ""
+%openfile cfgTxt
+%assign localVarDecl = ""
+/* {S!d8}Start for MATLABSystem: '<S320>/MATLAB System' */
+/*@>1c8bf33*/localDW->/*@>1c8f9b2*/objisempty/*@>1b9988d*/ = /*@>1c7075e*/true;
+/* {S!d10}InitializeConditions for MATLABSystem: '<S320>/MATLAB System' */
+/*  Perform one-time calculations, such as computing constants */
+/*  Initialize / reset discrete-state properties */
+/*@>1c86707*/std::memset(&/*@>1c8bf45*/localDW->/*@>1c8f9b5*/obj./*@>1c8f9ac*/lastMsg[0], /*@>1c8f947*/0, sizeof(real_T) << 7U);
+/*@>1c68091*/for ( int32_T /*@>1c8f94f*/i{/*@>1c8f94e*/0}; /*@>1c8f959*/i < /*@>1c8f957*/13; /*@>1c8f955*/i/*@>1c8f95d*/++) {
+    /*@>1c8bf60*/localDW->/*@>1c8f9b8*/obj./*@>1c8f9a6*/lastValues/*@>1c6e0b3*/[/*@>1c7aab0*/i]/*@>1c68084*/ = /*@>1c70787*/0.0;
+    /*@>1c8bf79*/localDW->/*@>1c8f9c1*/lastValues/*@>1c680c3*/[/*@>1c7aab6*/i]/*@>1c680c4*/ = /*@>1c8bf80*/localDW->/*@>1c8f9c4*/obj./*@>1c8f9af*/lastValues/*@>1c8971b*/[/*@>1c89714*/i];
+}
+/*@>1c86713*/std::memcpy(&/*@>1c8bf69*/localDW->/*@>1c8f9bb*/lastMsg/*@>1c8356d*/[/*@>1c8355c*/0], &/*@>1c8bf70*/localDW->/*@>1c8f9be*/obj./*@>1c8f9a9*/lastMsg[0], /*@>1c8357d*/sizeof(real_T)/*@>1c8ec5f*/ << /*@>1c8ec5e*/7U);
+/* {E!d10}End of InitializeConditions for MATLABSystem: '<S320>/MATLAB System' */
+%closefile cfgTxt
+%<cfgTxt>
+%assign rtmArgSys = ::CompiledModel.System[::CompiledModel.System[::CompiledModel.RTWCGModules.RTWCGModule[1].CGSystemIdx].NonInlinedParentSystemIdx]
+%if SysFcnArgNeeded("SystemInitialize", rtmArgSys.Interface.RTMArgDef, rtmArgSys.CurrentTID, FcnSysModuleIsRateGrouping(rtmArgSys, "SystemInitialize"))
+%<SLibCG_AccessArg(1, 2, 0)>
+%endif
+%if SLibCG_ArgAccessed(1, 2, 0)
+%<SLibAccessArg(rtmArgSys.Interface.RTMArgDef, "SystemInitialize", rtmArgSys.CurrentTID, FcnSysModuleIsRateGrouping(rtmArgSys, "SystemInitialize"))>
+%endif
+%if (IsModelReferenceBaseSys(rtmArgSys) && (IsModelRefScalableBuild() || GenerateClassInterface)) ||...
+(GenerateClassInterface && SLibIsMultiInstanceServer(rtmArgSys))
+%<SLibCG_UndoAccessArg(1, 2, 0)>
+%endif
+%<LibSetSystemField(system, "CachedSystemInitializeLocalVars", localVarDecl)>
+%endfunction
+%function SystemInitializeFcnProtoType(block, system) Output
+%assign fcnProtoType = ""
+%openfile fcnProtoType
+static void proc_control_MATLABSystem_Init(\
+%assign comma = ""
+%assign rtmArgSys = ::CompiledModel.System[::CompiledModel.System[::CompiledModel.RTWCGModules.RTWCGModule[1].CGSystemIdx].NonInlinedParentSystemIdx]
+%if SLibGenSubsysFcnAsClassMemFcn(rtmArgSys)
+%if SLibCG_ArgAccessed(1, 2, 0)
+%assign ::CompiledModel.RTWCGModules.RTWCGModule[rtmArgSys.CGIRModuleIdx].Function[::CurrentFunctionIdx].ForbidStaticMemberDecl =  TLC_TRUE
+%endif
+%<SLibCG_UndoAccessArg(1, 2, 0)>\
+%endif
+%if SLibCG_ArgAccessed(1, 2, 0)
+%<comma>%<::tSimStructType> * const %<::tSimStruct>\
+%assign comma = ", "
+%<SLibUpdateSymbolForFunction("proc_control_MATLABSystem_Init", SLibGetFcnDefinitionRTMSymbolName(), TLC_FALSE)>\
+%endif
+%if SLibCG_ArgAccessed(1, 2, 1)
+%<comma>const uint8_T rtu_0[64]\
+%assign comma = ", "
+%endif
+%if SLibCG_ArgAccessed(1, 2, 2)
+%<comma>uint32_T rtu_1\
+%assign comma = ", "
+%endif
+%<comma>DW_MATLABSystem_proc_control_T *localDW\
+%assign comma = ", "
+%closefile fcnProtoType
+%<SLibCG_SetFcnProtoType(1, 2, fcnProtoType)>
+%endfunction

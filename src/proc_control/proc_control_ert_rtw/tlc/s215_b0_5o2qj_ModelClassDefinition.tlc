@@ -1,0 +1,33 @@
+%implements s215_b0_5o2qj_ModelClassDefinition "C"
+%function ModelClassDefinition(block) Output
+%openfile tmp
+class proc_control final 
+{
+  public:
+    %<SLibFillInPublicClassMembers()>
+        /* model initialize function */
+%<FcnStaticOnEmptyInitMethod()>void initialize();
+        /* model step function */
+%<FcnStaticOnEmptyOutputUpdateMethod()>void step()%<AddConstToStepIfNeccessary("Outputs")>;
+        /* model terminate function */
+%<FcnStaticOnEmptyTermMethod()>void terminate()%<AddConstToTermIfNecessary("terminate")>;
+        /* Constructor */
+proc_control();
+        /* Destructor */
+~proc_control();
+  protected:
+    %<SLibFillInProtectedClassMembers()>
+  private:
+    /* Block signals */
+    B_proc_control_T proc_control_B;
+    /* Block states */
+    DW_proc_control_T proc_control_DW;
+    /* Tunable parameters */
+    static P_proc_control_T proc_control_P;
+    /* Triggered events */
+    PrevZCX_proc_control_T proc_control_PrevZCX;
+    %<SLibFillInPrivateClassMembers()>
+};
+%closefile tmp
+%return tmp
+%endfunction

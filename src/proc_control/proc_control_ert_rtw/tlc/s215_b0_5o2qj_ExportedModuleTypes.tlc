@@ -1,0 +1,13 @@
+%implements s215_b0_5o2qj_ExportedModuleTypes "C"
+
+%function ExportedModuleTypes(block) Output
+
+#ifndef struct_HydroModel_proc_control_T
+#define struct_HydroModel_proc_control_T
+struct HydroModel_proc_control_T
+{
+    int32_T isInitialized;
+    SL_Bus_proc_control_geometry_msgs_Vector3 pingerPosition;
+};
+#endif /* struct_HydroModel_proc_control_T */
+%endfunction

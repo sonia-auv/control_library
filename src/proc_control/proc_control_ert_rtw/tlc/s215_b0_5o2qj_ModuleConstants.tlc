@@ -1,0 +1,8 @@
+%implements s215_b0_5o2qj_ModuleConstants "C"
+
+%function ModuleConstants(block) Output
+
+
+/* Named constants for MATLAB Function: '<S165>/VariableHorizonOptimizer' */
+const int32_T proc_control_nu{8};
+%endfunction

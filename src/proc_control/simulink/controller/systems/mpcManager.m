@@ -7,9 +7,7 @@
 
         mpcConst; % Config MPC
         mode; % Definitions modes
-        
-        Tmim; % Force min moteur
-        Tmax; % Force max moteur
+
         
     end
     
@@ -61,11 +59,11 @@
             [ywt,mvwt,dmwwt] = this.getMpcWeigth(mode, mo, mpcParams); % Avoir les gains selon le mode 
             
             this.checkThrustersCurrent(newReadCurrent, readCurrent, estimatedCurrent ); % Vérifier l'etats des thrusters
-            [mvmin,  mvmax] = this.getThrusterSaturation();
+            [mvmin,  mvmax] = this.getThrusterSaturation(mpcParams);
             tInfo = ~this.isThrusterFault;
             kill = this.isAuvNeedToBeKill();
-            p = this.mpcConst.p;
-            m = this.mpcConst.m;
+            p = mpcParams.gains.p;
+            m = mpcParams.gains.m;
          
         end
         
@@ -142,11 +140,11 @@
             end
         
         %% Fonction qui applique la saturation des moteurs
-        function [tmin, tmax] = getThrusterSaturation(this)
+        function [tmin, tmax] = getThrusterSaturation(this,mpcParams)
             
            % Enlever les thrusters defectueux
-            tmin = this.Tmim .* cast(~this.isThrusterFault, "double");
-            tmax = this.Tmax .* cast(~this.isThrusterFault, "double");
+            tmin = mpcParams.gains.tmin .* cast(~this.isThrusterFault, "double");
+            tmax = mpcParams.gains.tmax .* cast(~this.isThrusterFault, "double");
         end
       
       %% Fonction qui prend la decision de kill le sub 

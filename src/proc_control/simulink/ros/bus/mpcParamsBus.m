@@ -238,6 +238,51 @@ elems(5).Max = [];
 elems(5).DocUnits = '';
 elems(5).Description = '';
 
+elems(6) = Simulink.BusElement;
+elems(6).Name = 'p';
+elems(6).Dimensions = 1;
+elems(6).DimensionsMode = 'Fixed';
+elems(6).DataType = 'double';
+elems(6).Complexity = 'real';
+elems(6).Min = [];
+elems(6).Max = [];
+elems(6).DocUnits = '';
+elems(6).Description = '';
+
+elems(7) = Simulink.BusElement;
+elems(7).Name = 'm';
+elems(7).Dimensions = 1;
+elems(7).DimensionsMode = 'Fixed';
+elems(7).DataType = 'double';
+elems(7).Complexity = 'real';
+elems(7).Min = [];
+elems(7).Max = [];
+elems(7).DocUnits = '';
+elems(7).Description = '';
+
+elems(8) = Simulink.BusElement;
+elems(8).Name = 'tmax';
+elems(8).Dimensions = 1;
+elems(8).DimensionsMode = 'Fixed';
+elems(8).DataType = 'double';
+elems(8).Complexity = 'real';
+elems(8).Min = [];
+elems(8).Max = [];
+elems(8).DocUnits = '';
+elems(8).Description = '';
+
+elems(9) = Simulink.BusElement;
+elems(9).Name = 'tmin';
+elems(9).Dimensions = 1;
+elems(9).DimensionsMode = 'Fixed';
+elems(9).DataType = 'double';
+elems(9).Complexity = 'real';
+elems(9).Min = [];
+elems(9).Max = [];
+elems(9).DocUnits = '';
+elems(9).Description = '';
+
+
 Gains = Simulink.Bus;
 Gains.HeaderFile = '';
 Gains.Description = '';
