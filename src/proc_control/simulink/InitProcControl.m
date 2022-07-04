@@ -74,6 +74,10 @@ end
                           11, MPC.gains.c11.OV, MPC.gains.c11.MV, MPC.gains.c11.MVR;
                           19, MPC.gains.c19.OV, MPC.gains.c19.MV, MPC.gains.c19.MVR];
 
+
+%% Load BUS
+    mpcParamsBus();
+
 %% Modèle du thruster
     load('T200-Spec-16V.mat');
     

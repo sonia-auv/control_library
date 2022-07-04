@@ -3,7 +3,7 @@ classdef MultiTrajectoryManager < matlab.System
 
     % Public, tunable properties
     properties(Nontunable)
-         mpcParam;
+         mpcConst; % Constant settings
     end
     
     properties(DiscreteState)
@@ -22,18 +22,28 @@ classdef MultiTrajectoryManager < matlab.System
         emptyArray;
     end
 
+    methods
+         % Support name-value pair arguments
+         function this = slexBusesMATLABSystemMathOpSysObj(varargin)
+            
+            setProperties(this,nargin,varargin{:});
+          end 
+    end
+
     methods(Access = protected)
 
+        
+
+         % Perform one-time calculations, such as computing constants
         function  resetImpl(this)
-            
-           % Perform one-time calculations, such as computing constants
+        
            this.dummy=999;% Chiffre NULL
-           this.emptyArray= repmat(this.dummy, 1, this.mpcParam.nx); % Vecteur pose NULL
+           this.emptyArray= repmat(this.dummy, 1, this.mpcConst.nx); % Vecteur pose NULL
            this.targetReachedCount=0;
            this.initialPose = zeros(1,7);
 
            % Buffer trajectoire
-           this.poseBuffer=repmat(this.dummy, this.mpcParam.trajectory.bufferSize, this.mpcParam.nx);
+           this.poseBuffer=repmat(this.dummy, this.mpcConst.trajectory.bufferSize, this.mpcConst.nx);
            this.bufferCount = 0 ;
            this.done = false;
            this.init = false;
@@ -44,7 +54,7 @@ classdef MultiTrajectoryManager < matlab.System
 
         %% ================================================================
         % Main execute a chaque iteration.
-        function [currentPose, isReached, isTrajDone, initWpt] = stepImpl(this, isNew, trajMsg, reset,mesuredPose)
+        function [currentPose, isReached, isTrajDone, initWpt] = stepImpl(this, isNew, trajMsg, reset,mesuredPose, mpcParams)
    
             
             if reset || ~this.init
@@ -59,7 +69,7 @@ classdef MultiTrajectoryManager < matlab.System
             this.processNewPoses(trajMsg, isNew);
             
             currentPose = this.SendCurrentPoses();
-            isReached = this.targetReached(mesuredPose);
+            isReached = this.targetReached(mesuredPose,mpcParams);
             isTrajDone = this.done; 
             initWpt = this.initialPose(1:7);
         end      
@@ -76,9 +86,9 @@ classdef MultiTrajectoryManager < matlab.System
                 
                 
                 % si il y a asser de place dans le buffer.
-                if count + this.bufferCount <  this.mpcParam.trajectory.bufferSize
+                if count + this.bufferCount <  this.mpcConst.trajectory.bufferSize
                         
-                    tamp = zeros(1,this.mpcParam.nx);
+                    tamp = zeros(1,this.mpcConst.nx);
                      % Remplire le tampon
                      for i=1 : count
                          tamp(1) = trajMsg.Transforms(i).Translation.X;
@@ -123,7 +133,7 @@ classdef MultiTrajectoryManager < matlab.System
             isempty =false;
             
             % Vérifier s'il reste au moins mpc.p points dans les buffers
-            for i = 2 : this.mpcParam.p
+            for i = 2 : this.mpcConst.p
                 index = i;
                 if this.poseBuffer(i,:) == this.emptyArray
                      isempty = true;
@@ -131,13 +141,13 @@ classdef MultiTrajectoryManager < matlab.System
                 end
             end
             
-            currPose = zeros(this.mpcParam.p, this.mpcParam.nx);
+            currPose = zeros(this.mpcConst.p, this.mpcConst.nx);
             
             currPose(1:index,:) = this.poseBuffer(1:index,:);
             
             % S'il ya moins de mpc.p points, padder avec le dernier points
             if isempty
-                for i = index: this.mpcParam.p
+                for i = index: this.mpcConst.p
                     currPose(i,:) = currPose(index - 1,:);
                 end  
             end
@@ -155,7 +165,7 @@ classdef MultiTrajectoryManager < matlab.System
         %% ================================================================
         % Fonction qui verifie le target reached
     
-        function isReached= targetReached(this, mesuredPose )
+        function isReached= targetReached(this, mesuredPose, mpcParams)
    
             isReached = false;
            
@@ -169,19 +179,24 @@ classdef MultiTrajectoryManager < matlab.System
                  mesuredPose(4:7) = this.qUtils.checkQuatFlip(mesuredPose(4:7), target(4:7));
 
                  % calculer l'erreur angulaire.
-                 errAngle = this.qUtils.angleBetween2Quaternion(target(4:7),mesuredPose(4:7).');
+                 errAngle = abs(this.qUtils.angleBetween2Quaternion(target(4:7),mesuredPose(4:7).'));
+                
+                 % Ramener l'erreur de 0 à pi
+                 if errAngle > 2*pi()
+                    errAngle = 2*pi() - errAngle;
+                 end
 
                  % calculer l'erreur lineaire 
                  errDist = norm(target(1:3) - mesuredPose(1:3).');
 
                 % vérifier si le sub est dans la zone de convergence (sphérique / conique)
-                if errDist < this.mpcParam.targetReached.linearTol &&  errAngle < this.mpcParam.targetReached.angularTol
+                if errDist < mpcParams.targetReached.linearTol && errAngle < mpcParams.targetReached.angularTol
                    
                    % incrementer le nombre de sample en target reached
                    this.targetReachedCount = this.targetReachedCount + 1;
                    
                    % si le sub est dans la zone de convergence depuis le temps demander
-                   if this.targetReachedCount * this.mpcParam.Ts >= this.mpcParam.targetReached.timeInTol
+                   if this.targetReachedCount * this.mpcConst.Ts >= mpcParams.targetReached.timeInTol
 
                         isReached = true;    
                    end
@@ -219,7 +234,7 @@ classdef MultiTrajectoryManager < matlab.System
 
          %% Definire outputs       
           function [currentPose, isReached, isTrajDone, initWpt] = getOutputSizeImpl(this)
-              currentPose = [this.mpcParam.p, this.mpcParam.nx];
+              currentPose = [this.mpcConst.p, this.mpcConst.nx];
               isReached = [1,1];
               isTrajDone = [1,1];
               initWpt = [1,7]; 
@@ -250,7 +265,7 @@ classdef MultiTrajectoryManager < matlab.System
          end
          function [sz,dt,cp] = getDiscreteStateSpecificationImpl(this,name)
              if strcmp(name,'poseBuffer')
-                  sz = [this.mpcParam.trajectory.bufferSize, this.mpcParam.nx];
+                  sz = [this.mpcConst.trajectory.bufferSize, this.mpcConst.nx];
                   dt = "double";
                   cp = false;
              elseif strcmp(name,'bufferCount')
