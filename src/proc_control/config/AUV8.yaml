@@ -89,7 +89,7 @@
 /proc_control/physics/cdl : '15,20,23.3,3.33,2.33,5'
 
 # Drag quadratic constants
-/proc_control/physics/cdq : '1.17,0.82,0.756,0.167,0.1,0.102' 
+/proc_control/physics/cdq : '1.17, 0.82, 0.756, 0.167, 0.1, 0.102' 
 
 # Added mass
 /proc_control/physics/added_mass : '-1.4648, -12.6156, -15.7695, -0.1164, -0.3493, -0.3493'
@@ -119,4 +119,4 @@
 /proc_control/physics/sonar_pose : '0.200, 0, -0.155' # m
 
 # transformation of the DVL frame to body frame
-/proc_control/physics/dvl_rotation : '0,3.1415,1.5708' # rad
+/proc_control/physics/dvl_rotation : '0, 3.1415, 1.5708' # rad
