@@ -21,8 +21,9 @@ classdef String2DoubleArray < matlab.System
 
     methods(Access = private)
         %% string2array
-        function array = extractionArray(this, str, nbElements)
-            array = ones(1, nbElements);
+        function array = extractionArray(this,str, nbElements)
+            array = ones(1, nbElements);      
+
             fprintf("input : %s \n", char(str));
             for i = 1:nbElements
                 [token, remain] = strtok(str, ',');
@@ -45,9 +46,13 @@ classdef String2DoubleArray < matlab.System
             % Implement algorithm. Calculate y as a function of input u and
             % discrete states.
 
-            if ~strcmp(char(this.lastMsg(1:length)), char(string(1:length)))
-                this.lastValues = extractionArray(this, char(string(1:length)), this.arraySize);
-                this.lastMsg(1:length) = string(1:length);
+            % remove space and add a comma at the end
+            cleanStr = [erase(char(string(1:length)),' ') ','];
+            l = strlength(cleanStr);
+
+            if ~strcmp(char(this.lastMsg(1:l)), char(cleanStr(1:l)))
+                this.lastValues = extractionArray(this, char(cleanStr(1:l)), this.arraySize);
+                this.lastMsg(1:l) = cleanStr(1:l);
             end
 
             array = this.lastValues;
