@@ -110,10 +110,10 @@
 # Sensors Definition
 #---------------------------------------------------------------------------------------------------------
 # depth sensor distance according to the geometric center
-/proc_control/physics/depth_pose : '0.0 -0.136 0.178' # m
+/proc_control/physics/depth_pose : '0.0, -0.136, 0.178' # m
 
 # hydrophones distance acording to auv center
-/proc_control/physics/hydro_pose : '0.160,0.0,0.155' # m
+/proc_control/physics/hydro_pose : '0.160, 0.0, 0.155' # m
 
 # sonar distance acording to auv center
 /proc_control/physics/sonar_pose : '0.200, 0, -0.155' # m
