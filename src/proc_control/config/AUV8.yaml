@@ -80,7 +80,7 @@
 
   
 # Center of mass              x     y     z
-/proc_control/physics/rg : '0.001,0.002, 0.018' # distance between center of mass and the geometric center of the sub.
+/proc_control/physics/rg : '0.001, 0.002, 0.018' # distance between center of mass and the geometric center of the sub.
 
 # Center of boyency           x     y     z
 /proc_control/physics/rb : '0.000, 0.000, -0.006' # distance between center of boyency and the geometric center of the sub.
@@ -98,7 +98,7 @@
 # each row reprensent a thurster and each colunm reprensent an DOF
 
 #                                    x      y      z    yaw  roll pitch
-/proc_control/physics/thrusters :  '0.292, 0.173, 0.082, -45,-90, 0;
+/proc_control/physics/thrusters : '0.292, 0.173, 0.082, -45,-90, 0;
                                   -0.292, 0.173, 0.082, 45,-90, 0;    
                                   -0.292,-0.173, 0.082,-45,-90, 0;    
                                    0.292,-0.173, 0.082, 45,-90, 0;    
