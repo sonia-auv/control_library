@@ -36,8 +36,8 @@
 /proc_control/mpc/gains/default/mvr : '0.1,0.1,0.1,0.1,0.3,0.3,0.3,0.3'
 
 #MPC Gain Mode 10
-/proc_control/mpc/gains/c10/ov : '30,30,30,50,45,45,45,0,0,0,0,0,0'
-/proc_control/mpc/gains/c10/mv : '0.1,0.0,0.0,0.0,0.0,0.0,0.0,0.0'
+/proc_control/mpc/gains/c10/ov : '30,30,30,45,45,45,45,0,0,0,0,0,0'
+/proc_control/mpc/gains/c10/mv : '0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0'
 /proc_control/mpc/gains/c10/mvr : '0.3,0.4,0.4,0.4,0.5,0.5,0.5,0.5'
 
 #MPC Gain Mode 11
@@ -56,7 +56,9 @@
 
 #=========================================================================================================
 # physical constants
-#=========================================================================================================
+# 
+# The AUV model use the MKS (Meters, Kilograms, Second) standard.
+#========================================================================================================= 
 
 # Basic constants
 #---------------------------------------------------------------------------------------------------------
@@ -80,19 +82,19 @@
 
   
 # Center of mass              x     y     z
-/proc_control/physics/rg : '0.001, 0.002, 0.018' # distance between center of mass and the geometric center of the sub.
+/proc_control/physics/rg : '0.001, 0.002, 0.018' # distance (m) between center of mass and the geometric center of the sub.
 
 # Center of boyency           x     y     z
-/proc_control/physics/rb : '0.000, 0.000, -0.006' # distance between center of boyency and the geometric center of the sub.
+/proc_control/physics/rb : '0.00, 0.00, -0.006' # distance (m) between center of boyency and the geometric center of the sub.
 
 # Drag linear constants
-/proc_control/physics/cdl : '15,20,23.3,3.33,2.33,5'
+/proc_control/physics/cdl : '15,20,23.3,3.33,2.33,5' # dimensionless
 
 # Drag quadratic constants
-/proc_control/physics/cdq : '1.17, 0.82, 0.756, 0.167, 0.1, 0.102' 
+/proc_control/physics/cdq : '1.17, 0.82, 0.756, 0.167, 0.1, 0.102' # dimensionless
 
 # Added mass
-/proc_control/physics/added_mass : '-1.4648, -12.6156, -15.7695, -0.1164, -0.3493, -0.3493'
+/proc_control/physics/added_mass : '-1.4648, -12.6156, -15.7695, -0.1164, -0.3493, -0.3493' # dimensionless
 
 # thusters definition
 # each row reprensent a thurster and each colunm reprensent an DOF
