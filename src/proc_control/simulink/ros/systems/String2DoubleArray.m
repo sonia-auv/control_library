@@ -49,23 +49,38 @@ classdef String2DoubleArray < matlab.System
             % remove space and add a comma at the end
             cleanStr = [erase(char(string(1:length)),' ') ','];
             l = strlength(cleanStr);
-
+            
+            % new msg
             if ~strcmp(char(this.lastMsg(1:l)), char(cleanStr(1:l)))
-                this.lastValues = extractionArray(this, char(cleanStr(1:l)), this.arraySize);
+                str = cleanStr;
+
+                for i = 1 : this.arraySize(1)
+                    [token, remain] = strtok(str, ';');
+                    this.lastValues(i,:) = extractionArray(this, token, this.arraySize(2));
+                    remainSize = max(size(remain));
+                    str(1:remainSize-1) = remain(2:end);
+                end
+
                 this.lastMsg(1:l) = cleanStr(1:l);
             end
+
+        
 
             array = this.lastValues;
         end
 
         function resetImpl(this)
             % Initialize / reset discrete-state properties
-            this.lastMsg = zeros(1,128);
-            this.lastValues = zeros(1, this.arraySize);
+            this.lastMsg = zeros(1,200);
+            this.lastValues = zeros(this.arraySize(1), this.arraySize(2));
+
         end
+
+
         %% Definire outputs       
         function [array] = getOutputSizeImpl(this)
-            array = [1, this.arraySize];
+
+            array = [this.arraySize(1), this.arraySize(2)];
 
         end 
     
@@ -86,11 +101,19 @@ classdef String2DoubleArray < matlab.System
 
        function [sz,dt,cp] = getDiscreteStateSpecificationImpl(this,name)
            if strcmp(name,'lastMsg')
-                sz = [1, 128];
+                sz = [1, 200];
                 dt = "double";
                 cp = false;
            elseif strcmp(name,'lastValues')
                 sz = [1, this.arraySize];
+                dt = "double";
+                cp = false;
+           elseif strcmp(name,'row')
+                sz = [1,1];
+                dt = "double";
+                cp = false;
+           elseif strcmp(name,'columns')
+                sz = [1,1];
                 dt = "double";
                 cp = false;
            end

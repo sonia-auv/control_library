@@ -1,6 +1,6 @@
 % This Script generate the c++ code for proc_planner.
 % Make sure to run this script in src/proc_planner folder.
-    
+function generateCppCode(build)
     clear;
     
 % add shared lib folder   
@@ -40,4 +40,13 @@
     try rmdir('msgdef','s'); end;
     try rmdir('src','s'); end;   
 
+ % Build Code
+    if build
+        rmdir ~/sonia_ws/src/proc_planner/src s
+        mkdir ~/sonia_ws/src/proc_planner/src
+        unzip('proc_planner.zip','~/sonia_ws/src/proc_planner/src/')
+    end
+
+
     disp('Done !');
+end

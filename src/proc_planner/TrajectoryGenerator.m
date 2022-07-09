@@ -15,7 +15,8 @@ classdef TrajectoryGenerator < handle
         ERR_RADIUS_TO_LARGE =-4;
         ERR_INVALID_IC = -5; 
         ERR_TRAJ_EXCEED_MAX_DEPTH = -6;
-
+        ERR_OBSTACLE_IS_NOT_DETECT = -7;
+     
     end
 
     properties
@@ -31,6 +32,7 @@ classdef TrajectoryGenerator < handle
         % Structures
         MAPM; % Multi Add Pose Msg.
         param; % paramètre de trajectoire.
+        obstacleData; % Information des obstacle
 
         % Parametres 
         nMAPM;     % nombre de waypoints dans la liste multiaddpose.
@@ -60,10 +62,12 @@ classdef TrajectoryGenerator < handle
     methods
         %==================================================================
         % Constructeur
-        function this = TrajectoryGenerator(multiAddposeMsg, param, icMsg)
+        function this = TrajectoryGenerator(multiAddposeMsg, param, icMsg, obstMsg)
             % Initialise l'objet trajectoire et vérifie si le message multi add pose est valide.
             
             this.status = this.RECIEVED_VALID_WAYPTS; % Validité de waypoints reçus.
+
+            this.obstacleData = obstMsg; % prendre les infos des obstacles.
 
             this.MAPM =multiAddposeMsg;
             this.nMAPM = max(size(multiAddposeMsg.Pose)); % matlab and cpp dont use same index. return max instead
@@ -207,10 +211,17 @@ classdef TrajectoryGenerator < handle
                         this.quatList(i+this.icOffset,:) = this.qUtils.getQuatDir(this.quatList(i+this.icOffset-1,:), q, this.MAPM.Pose(i).Rotation);
                         this.pointList(i+this.icOffset,:) = p;
         
-                    otherwise % Le referentiel n'est pas valide
-                        this.status = this.ERR_INVALID_FRAME_REF;
-                        fprintf('INFO : proc planner : Invalid Reference Frame.\n');
-                        return
+                    otherwise % Référentiel obstacles
+                        
+                        [pObst,qObst] = getObstacleFrame(this,id);
+
+                        if this.status >= 0
+                            this.quatList(i+this.icOffset,:) = this.qUtils.getQuatDir(qObst, q, this.MAPM.Pose(i).Rotation);
+                            this.pointList(i+this.icOffset,:) = pObst + this.qUtils.quatRotation(p,this.quatList(i+this.icOffset-1,:));
+                        else
+                            return ;
+                        end
+                        
 
                 end
 
@@ -229,7 +240,7 @@ classdef TrajectoryGenerator < handle
                         this.status = this.ERR_RADIUS_TO_LARGE;
                         fprintf('INFO : proc planner : Circle radius is to large.\n');
                         return
-
+                    
                     end
 
                     % Decaler les waypoints
@@ -262,7 +273,46 @@ classdef TrajectoryGenerator < handle
             this.speedList(end) = this.speedList(end-1);
         
         end
-      
+        
+
+        %================================================================== 
+        % Fonction qui vérifie frame obstacles
+
+        function [p,q] = getObstacleFrame(this,id)
+
+            % determiner le nombre d'obstacle
+            obstCount = max(size(this.obstacleData.Obstacles));
+            p = zeros(1,3);
+            q = zeros(1,4);
+
+            % check if obstacle exist
+            if (id - 3) > obstCount
+
+                % check if obstacle is found
+                if this.obstacleData.Obstacles(id - 3).isvalid
+                    
+                    p = [this.obstacleData.Obstacles(id - 3).Position.X,...
+                         this.obstacleData.Obstacles(id - 3).Position.Y,...
+                         this.obstacleData.Obstacles(id - 3).Position.Z];
+    
+                    q = [this.obstacleData.Obstacles(id - 3).Orientation.W,...
+                         this.obstacleData.Obstacles(id - 3).Orientation.X...
+                         this.obstacleData.Obstacles(id - 3).Orientation.Y...
+                         this.obstacleData.Obstacles(id - 3).Orientation.Z];
+                else
+                    this.status = this.ERR_OBSTACLE_IS_NOT_DETECT;
+                    fprintf('INFO : proc planner : Desired obstacle is not detected.\n');
+                end
+
+
+            else
+                this.status = this.ERR_INVALID_FRAME_REF;
+                fprintf('INFO : proc planner : Invalid Reference Frame.\n');
+            end
+
+        end
+
+
         %================================================================== 
         % Fonction qui retourne l'angle de course
          function angle = getCourseAngle(this, q)

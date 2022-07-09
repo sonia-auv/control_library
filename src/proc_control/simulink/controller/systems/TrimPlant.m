@@ -8,12 +8,18 @@ classdef TrimPlant < matlab.System
     properties(Nontunable)
     MPC;
     simulation
+    useDynamicsConst (1,1) logical = false; % Use dynamic physics constants
     end
 
     properties(DiscreteState)
         qkm; % mesured Quaternion of last step
         qkt; % trajectory Quaternion of last step
         xl;
+        Bc;
+        C;
+        D;
+        init;
+        constValues;
     end
 
     % Pre-computed constants
@@ -26,6 +32,8 @@ classdef TrimPlant < matlab.System
 
     methods(Access = protected)
 
+        % reset  fonction
+        %------------------------------------------------------------------------------
         function resetImpl(this)
             % Initialize / reset discrete-state properties
             this.qkm = this.MPC.Xi(4:7).';
@@ -33,6 +41,14 @@ classdef TrimPlant < matlab.System
             this.J = str2func(this.MPC.JacobianFnc);
             this.f = str2func(this.MPC.StateFnc);
             this.xl = this.MPC.Xi.';
+            this.constValues = zeros(1,38);
+
+            this.init = false;
+
+            % initialize matrix size
+            this.C = eye(this.MPC.nx);
+            this.D = zeros(this.MPC.nx, this.MPC.nu);
+            this.Bc = zeros(this.MPC.nx, this.MPC.nu);
         end
 
         function setupImpl(this)
@@ -40,8 +56,13 @@ classdef TrimPlant < matlab.System
             this.qUtils = quatUtilities();
         end
 
-        function [A, B, C, D, U, Y, X, DX, ref, Z] = stepImpl(this, u, y, ref)
+        % Step fonction
+        %------------------------------------------------------------------------------
+        function [A, B, C, D, U, Y, X, DX, ref, Z] = stepImpl(this, u, y, ref, constMec)
             
+            % check if block need to be init
+                this.initBloc(constMec);
+
             % Regarder la discontinuité entre le qk et qk-1 pour la mesure
             y(4:7) = this.qUtils.checkQuatFlip(y(4:7).', this.qkm).';
             this.qkm = y(4:7).';
@@ -58,10 +79,22 @@ classdef TrimPlant < matlab.System
 
         end
         
+        % Fonction qui linéarise le systeme
+        %------------------------------------------------------------------------------
         function [A, B, C, D, U, Y, X, DX] = trimPlantQuat(this, u, y)
 
-            % Lineariser le système
-            [Ac, Bc, C, D] = this.J(y,u);
+            if ~ this.useDynamicsConst
+                % Lineariser le système
+                [Ac, Bc, C, D] = this.J(y,u);
+            else
+                [Aa, ~, ~, ~] = this.J(y,u);
+                Ac = AUVQuatJacobianMatrix(y,u,this.constValues);
+                [~, Bc, ~, ~] = this.J(y,u);
+                % Bc = this.Bc;
+                C = this.C;
+                D = this.D;
+            end
+
     
             % Discrétiser le système.
             A = expm(Ac*this.MPC.Ts); % Fossen Eq B.10/B.9 page 662
@@ -98,6 +131,51 @@ classdef TrimPlant < matlab.System
             this.xl =xk.';
         end
 
+        % fonction qui initialise les constante mec
+        %------------------------------------------------------------------------------
+        function initBloc(this, physics)
+
+            if ~this.init
+                this.constValues = [physics.mass ...
+                                    physics.volume ...
+                                    physics.sub_height...
+                                    physics.I ...
+                                    physics.rg ...
+                                    physics.rb ...
+                                    physics.cdl ...
+                                    physics.cdq...
+                                    physics.added_mass...
+                                    physics.rho ...
+                                    physics.g];
+            
+                this.generateBmatrix(physics.thrusters);
+                this.init = true; 
+            end
+        end
+
+        % Fonction qui genere la matrice B
+        %------------------------------------------------------------------------------
+        function generateBmatrix(this, T)
+
+            % Crée la matrice thrusters 
+            Tm=zeros(6,this.MPC.nu);   
+        
+            for i=1:this.MPC.nu
+                    
+                qt= eul2quat(deg2rad(T(i,4:6)),'ZYX');% convertir les angle d'euler en uaternion
+                Tm(:,i)=ThrusterVector(T(i,1:3),qt);  % Calculer le vecteur thrusters     
+            end
+
+            % prendre la matrice M
+            [M,~,~,~] = AUVModelMatrices(this.MPC.Xi,this.constValues);
+
+            % M inverse * Tm
+            this.Bc = [zeros(7,this.MPC.nu) ; M\Tm];
+           
+        end
+
+        % Fonction qui regarde la discontinuiter entre 2 generations du planner
+        %------------------------------------------------------------------------------
         function traj = checkTrajectory(this, traj)
 
             % check fist ref 
@@ -112,7 +190,8 @@ classdef TrimPlant < matlab.System
 
         end
       
-         %% Definire outputs       
+        %% Definire outputs
+        %------------------------------------------------------------------------------       
         function [A, B, C, D, U, Y, X, DX, ref Z] = getOutputSizeImpl(this)
             A = [this.MPC.nx,this.MPC.nx];
             B = [this.MPC.nx,this.MPC.nu];
@@ -136,7 +215,7 @@ classdef TrimPlant < matlab.System
             Y = true;
             X = true;
             DX = true;   
-            ref = true  
+            ref = true;  
             Z = true; 
         end
       
@@ -176,6 +255,26 @@ classdef TrimPlant < matlab.System
                 cp = false;
             elseif strcmp(name,'xl')
                 sz = [1 this.MPC.nx];
+                dt = "double";
+                cp = false;
+            elseif strcmp(name,'Bc')
+                sz = [this.MPC.nx, this.MPC.nu];
+                dt = "double";
+                cp = false;
+            elseif strcmp(name,'C')
+                sz = [this.MPC.nx, this.MPC.nx];
+                dt = "double";
+                cp = false;
+            elseif strcmp(name,'D')
+                sz = [this.MPC.nx, this.MPC.nu];
+                dt = "double";
+                cp = false;
+            elseif strcmp(name,'init')
+                sz = [1 1];
+                dt = "boolean";
+                cp = false;
+            elseif strcmp(name,'constValues')
+                sz = [1 38];
                 dt = "double";
                 cp = false;
             end
