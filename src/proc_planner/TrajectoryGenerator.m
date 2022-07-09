@@ -213,7 +213,7 @@ classdef TrajectoryGenerator < handle
         
                     otherwise % Référentiel obstacles
                         
-                        [pObst,qObst] = getObstacleFrame(this,id);
+                        [pObst,qObst] = getObstacleFrame(this,this.MAPM.Pose(i).Frame);
 
                         if this.status >= 0
                             this.quatList(i+this.icOffset,:) = this.qUtils.getQuatDir(qObst, q, this.MAPM.Pose(i).Rotation);
@@ -289,16 +289,16 @@ classdef TrajectoryGenerator < handle
             if (id - 3) > obstCount
 
                 % check if obstacle is found
-                if this.obstacleData.Obstacles(id - 3).isvalid
+                if this.obstacleData.Obstacles(id - 3).IsValid
                     
-                    p = [this.obstacleData.Obstacles(id - 3).Position.X,...
-                         this.obstacleData.Obstacles(id - 3).Position.Y,...
-                         this.obstacleData.Obstacles(id - 3).Position.Z];
+                    p = [this.obstacleData.Obstacles(id - 3).Pose.Position.X,...
+                         this.obstacleData.Obstacles(id - 3).Pose.Position.Y,...
+                         this.obstacleData.Obstacles(id - 3).Pose.Position.Z];
     
-                    q = [this.obstacleData.Obstacles(id - 3).Orientation.W,...
-                         this.obstacleData.Obstacles(id - 3).Orientation.X...
-                         this.obstacleData.Obstacles(id - 3).Orientation.Y...
-                         this.obstacleData.Obstacles(id - 3).Orientation.Z];
+                    q = [this.obstacleData.Obstacles(id - 3).Pose.Orientation.W,...
+                         this.obstacleData.Obstacles(id - 3).Pose.Orientation.X...
+                         this.obstacleData.Obstacles(id - 3).Pose.Orientation.Y...
+                         this.obstacleData.Obstacles(id - 3).Pose.Orientation.Z];
                 else
                     this.status = this.ERR_OBSTACLE_IS_NOT_DETECT;
                     fprintf('INFO : proc planner : Desired obstacle is not detected.\n');

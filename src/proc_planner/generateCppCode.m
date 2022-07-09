@@ -1,7 +1,9 @@
 % This Script generate the c++ code for proc_planner.
 % Make sure to run this script in src/proc_planner folder.
 function generateCppCode(build)
-    clear;
+
+    ROSWS = "~/sonia_ws/";
+    
     
 % add shared lib folder   
     addpath("../shared_libraries/");
@@ -42,9 +44,19 @@ function generateCppCode(build)
 
  % Build Code
     if build
-        rmdir ~/sonia_ws/src/proc_planner/src s
-        mkdir ~/sonia_ws/src/proc_planner/src
-        unzip('proc_planner.zip','~/sonia_ws/src/proc_planner/src/')
+
+       try system(strcat("rm -r ",ROSWS,"/src/proc_planner/src")); end;
+        system(strcat("mkdir ",ROSWS,"/src/proc_planner/src"))
+        unzip('proc_planner.zip',strcat(ROSWS,"/src/proc_planner/src/"))
+
+        system(strcat("rm -r ",ROSWS,"/build"))
+        system(strcat("rm -r ",ROSWS,"/devel"))
+      
+        work_folder = pwd;
+
+        cd(ROSWS)
+        system('catkin_make')
+        cd(work_folder)
     end
 
 

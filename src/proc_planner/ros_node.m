@@ -61,7 +61,7 @@ classdef  ros_node < handle
                     this.TrajIsGenerating = true;
     
                     % Cree l'objet trajectoire
-                    TG = TrajectoryGenerator(this.madpSub.LatestMessage,this.param,this.icSub.LatestMessage);
+                    TG = TrajectoryGenerator(this.madpSub.LatestMessage,this.param,this.icSub.LatestMessage,this.obstacleSub.LatestMessage);
     
                     % Envoyer a ros si le mAddpose est valide
                     validMsg.Data = int8(TG.status);
