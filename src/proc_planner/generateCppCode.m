@@ -23,7 +23,7 @@ function generateCppCode(build)
     load('./codegen/exe/proc_planner/buildInfo.mat')
 
 % Generate zip file
-    packNGo(buildInfo, 'fileName', 'proc_planner.zip');
+    packNGo(buildInfo, 'fileName', 'proc_planner.zip')
 
 % Delete codeGen folders.
     rmpath(genpath('build'));
@@ -49,8 +49,8 @@ function generateCppCode(build)
         system(strcat("mkdir ",ROSWS,"/src/proc_planner/src"))
         unzip('proc_planner.zip',strcat(ROSWS,"/src/proc_planner/src/"))
 
-        system(strcat("rm -r ",ROSWS,"/build"))
-        system(strcat("rm -r ",ROSWS,"/devel"))
+        try system(strcat("rm -r ",ROSWS,"/build"));end;
+        try system(strcat("rm -r ",ROSWS,"/devel"));end;
       
         work_folder = pwd;
 

@@ -16,6 +16,8 @@ classdef TrajectoryGenerator < handle
         ERR_INVALID_IC = -5; 
         ERR_TRAJ_EXCEED_MAX_DEPTH = -6;
         ERR_OBSTACLE_IS_NOT_DETECT = -7;
+
+        obstacleOffset =10;
      
     end
 
@@ -286,19 +288,19 @@ classdef TrajectoryGenerator < handle
             q = zeros(1,4);
 
             % check if obstacle exist
-            if (id - 3) > obstCount
+            if id  <= obstCount + this.obstacleOffset && id > this.obstacleOffset
 
                 % check if obstacle is found
-                if this.obstacleData.Obstacles(id - 3).IsValid
+                if this.obstacleData.Obstacles(id - this.obstacleOffset).IsValid
                     
-                    p = [this.obstacleData.Obstacles(id - 3).Pose.Position.X,...
-                         this.obstacleData.Obstacles(id - 3).Pose.Position.Y,...
-                         this.obstacleData.Obstacles(id - 3).Pose.Position.Z];
+                    p = [this.obstacleData.Obstacles(id - this.obstacleOffset).Pose.Position.X,...
+                         this.obstacleData.Obstacles(id - this.obstacleOffset).Pose.Position.Y,...
+                         this.obstacleData.Obstacles(id - this.obstacleOffset).Pose.Position.Z];
     
-                    q = [this.obstacleData.Obstacles(id - 3).Pose.Orientation.W,...
-                         this.obstacleData.Obstacles(id - 3).Pose.Orientation.X...
-                         this.obstacleData.Obstacles(id - 3).Pose.Orientation.Y...
-                         this.obstacleData.Obstacles(id - 3).Pose.Orientation.Z];
+                    q = [this.obstacleData.Obstacles(id - this.obstacleOffset).Pose.Orientation.W,...
+                         this.obstacleData.Obstacles(id - this.obstacleOffset).Pose.Orientation.X...
+                         this.obstacleData.Obstacles(id - this.obstacleOffset).Pose.Orientation.Y...
+                         this.obstacleData.Obstacles(id - this.obstacleOffset).Pose.Orientation.Z];
                 else
                     this.status = this.ERR_OBSTACLE_IS_NOT_DETECT;
                     fprintf('INFO : proc planner : Desired obstacle is not detected.\n');
