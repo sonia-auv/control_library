@@ -97,8 +97,7 @@ classdef quatUtilities
             %                 q = quatconj(q);    
             %                 this.lastConj =true;
             % 
-            %             end
-                        
+            %             end        
             rq = quatmultiply(lq,q);
                         
         end   

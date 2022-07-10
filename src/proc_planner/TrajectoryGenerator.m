@@ -216,10 +216,11 @@ classdef TrajectoryGenerator < handle
                     otherwise % Référentiel obstacles
                         
                         [pObst,qObst] = getObstacleFrame(this,this.MAPM.Pose(i).Frame);
-
+                        
                         if this.status >= 0
-                            this.quatList(i+this.icOffset,:) = this.qUtils.getQuatDir(qObst, q, this.MAPM.Pose(i).Rotation);
-                            this.pointList(i+this.icOffset,:) = pObst + this.qUtils.quatRotation(p,this.quatList(i+this.icOffset-1,:));
+                            q =quatmultiply(qObst, q);
+                            this.quatList(i+this.icOffset,:) = this.qUtils.checkQuatFlip( q, this.quatList(i+this.icOffset-1,:));
+                            this.pointList(i+this.icOffset,:) = pObst + this.qUtils.quatRotation(p, qObst);
                         else
                             return ;
                         end
@@ -283,7 +284,7 @@ classdef TrajectoryGenerator < handle
         function [p,q] = getObstacleFrame(this,id)
 
             % determiner le nombre d'obstacle
-            obstCount = max(size(this.obstacleData.Obstacles));
+            obstCount = max(size(this.obstacleData.Obstacles))
             p = zeros(1,3);
             q = zeros(1,4);
 
@@ -626,6 +627,7 @@ classdef TrajectoryGenerator < handle
             if coder.target('MATLAB')
                 % Retourner la trajectoire
                 info = trajMsg;
+                Traj_viewer(trajMsg)
 
             else
                 % Retourner true (sucess)

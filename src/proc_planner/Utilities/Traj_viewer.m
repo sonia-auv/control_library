@@ -103,7 +103,6 @@ function Traj_viewer(trajMsg)
     title('Pose en fonction du temps');
     xlabel('x en mètre') ;
     ylabel('y en mètre');
-    set( hAxes, 'YDir', 'reverse' );
     zlabel('z en mètre');
     xlim([-1 18]);
     ylim([-9 9]);
