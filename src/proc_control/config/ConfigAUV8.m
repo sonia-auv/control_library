@@ -5,7 +5,7 @@ function [simulink, simulation, physics, kalman, MPC, mode] = ConfigAUV8()
     simulink.procNav.sampletime = simulink.sampletime;
     simulink.procNav.imuDepth.sampletime = simulink.sampletime;
     simulink.procNav.dvl.sampletime = 1/50;
-    simulink.ros.paramSampletime = 1;
+    simulink.ros.paramSampletime = 2;
         
 %% Constantes Physiques
    physics.mass = 31; % Kg
