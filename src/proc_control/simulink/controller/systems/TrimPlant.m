@@ -87,10 +87,9 @@ classdef TrimPlant < matlab.System
                 % Lineariser le système
                 [Ac, Bc, C, D] = this.J(y,u);
             else
-                [Aa, ~, ~, ~] = this.J(y,u);
+                
                 Ac = AUVQuatJacobianMatrix(y,u,this.constValues);
-                [~, Bc, ~, ~] = this.J(y,u);
-                % Bc = this.Bc;
+                Bc = this.Bc;
                 C = this.C;
                 D = this.D;
             end
@@ -148,14 +147,14 @@ classdef TrimPlant < matlab.System
                                     physics.rho ...
                                     physics.g];
             
-                this.generateBmatrix(physics.thrusters);
+                this.generateBmatrix(physics.thrusters,physics.rg);
                 this.init = true; 
             end
         end
 
         % Fonction qui genere la matrice B
         %------------------------------------------------------------------------------
-        function generateBmatrix(this, T)
+        function generateBmatrix(this, T, rg)
 
             % Crée la matrice thrusters 
             Tm=zeros(6,this.MPC.nu);   
@@ -163,9 +162,9 @@ classdef TrimPlant < matlab.System
             for i=1:this.MPC.nu
                     
                 qt= eul2quat(deg2rad(T(i,4:6)),'ZYX');% convertir les angle d'euler en uaternion
-                Tm(:,i)=ThrusterVector(T(i,1:3),qt);  % Calculer le vecteur thrusters     
+                 Tm(:,i)=ThrusterVector(T(i,1:3),qt,rg);  % Calculer le vecteur thrusters     
             end
-
+            Tm
             % prendre la matrice M
             [M,~,~,~] = AUVModelMatrices(this.MPC.Xi,this.constValues);
 

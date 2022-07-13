@@ -108,14 +108,14 @@
                 
             end
 
-%             %  Ajust gain if loosing dvl
-%             e = abs(quat2eul(q.','ZYX'));
-% 
-%             if(e(2) > deg2rad(20) || e(3) > deg2rad(20)) % If roll pitch exeed 20deg
-%     
-%                 MV = this.MPC.gains.noDvl.MV;
-%                 
-%             end
+            %  Ajust gain if loosing dvl
+            e = abs(quat2eul(q.','ZYX'));
+
+            if(e(2) > deg2rad(20) || e(3) > deg2rad(20)) % If roll pitch exeed 20deg
+    
+                MV = mpcParams.gains.noDvl.MV;
+                
+            end
             
         end
         

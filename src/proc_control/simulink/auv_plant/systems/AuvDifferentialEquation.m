@@ -96,7 +96,7 @@ classdef AuvDifferentialEquation < matlab.System
         function [sz,dt,cp] = getDiscreteStateSpecificationImpl(this,name)
             if strcmp(name,'init')
                 sz = [1 1];
-                dt = "double";
+                dt = "logical";
                 cp = false;
             end
         end 

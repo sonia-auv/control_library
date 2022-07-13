@@ -20,7 +20,7 @@ function [simulink, simulation, physics, kalman, MPC, mode] = ConfigAUV8()
                0.004, -0.001, 1.5371]; % Izx Izy Izz1.68
 
    % Center of mass      
-   physics.RG =[0.015,... x
+   physics.RG =[0.001,... x
                 0.002,... y
                 0.018]; % z
 
@@ -52,12 +52,12 @@ function [simulink, simulation, physics, kalman, MPC, mode] = ConfigAUV8()
    % Thrusters            x      y      z    yaw  roll pitch
    physics.thruster.T= [ 0.292, 0.173, 0.082, -45,-90, 0;   % T1
                         -0.292, 0.173, 0.082, 45,-90, 0;    % T2
-                        -0.292,-0.173, 0.082,-45,-90, 0;    % T3
-                         0.292,-0.173, 0.082, 45,-90, 0;    % T4
+                        -0.292, -0.173, 0.082,-45,-90, 0;    % T3
+                         0.292, -0.173, 0.082, 45,-90, 0;    % T4
                          0.181, 0.159, 0.082,  0,  0, 0;    % T5
                         -0.181, 0.159, 0.082,  0,180, 0;    % T6
-                        -0.181,-0.159, 0.082,  0,  0, 0;    % T7
-                         0.181,-0.159, 0.082,  0,180, 0];   % T8
+                        -0.181, -0.159, 0.082,  0,  0, 0;    % T7
+                         0.181, -0.159, 0.082,  0,180, 0];   % T8
    
    % Approximate 1st order tansfert function of the thruster 1 / (tau*s + 1)
    physics.thruster.tau = 0.10;

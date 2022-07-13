@@ -15,6 +15,7 @@
 
         % Definir AUV pour mode interprété
         setenv("AUV","AUV8");
+        system("rosparam load ./config/AUV8.yaml");
     end
 
 % Obtenir la variable d'environement du sub
@@ -65,7 +66,7 @@
     for i=1:size(physics.thruster.T,1)
         
        qt= eul2quat(deg2rad(physics.thruster.T(i,4:6)),'ZYX');% convertir les angle d'euler en uaternion
-       Tm(:,i)=ThrusterVector(physics.thruster.T(i,1:3),qt);  % Calculer le vecteur thrusters     
+       Tm(:,i)=ThrusterVector(physics.thruster.T(i,1:3),qt, physics.RG);  % Calculer le vecteur thrusters     
     end
     
     % crée la matrice inverse 

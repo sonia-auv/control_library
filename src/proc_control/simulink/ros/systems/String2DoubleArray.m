@@ -28,9 +28,9 @@ classdef String2DoubleArray < matlab.System
             for i = 1:nbElements
                 [token, remain] = strtok(str, ',');
                 array(i) = real(str2double(token));
-                
-                remainSize = max(size(remain));
-                str(1:remainSize-1) = remain(2:end);
+                str = remain(2:end);
+                %remainSize = max(size(remain));
+                %str(1:remainSize-1) = remain(2:end);
             end
         end
 
@@ -57,8 +57,9 @@ classdef String2DoubleArray < matlab.System
                 for i = 1 : this.arraySize(1)
                     [token, remain] = strtok(str, ';');
                     this.lastValues(i,:) = extractionArray(this, token, this.arraySize(2));
-                    remainSize = max(size(remain));
-                    str(1:remainSize-1) = remain(2:end);
+                    %remainSize = max(size(remain));
+                    str = remain(2:end);
+                    %str(1:remainSize-2) = remain(2:end-1);
                 end
 
                 this.lastMsg(1:l) = cleanStr(1:l);
@@ -71,7 +72,7 @@ classdef String2DoubleArray < matlab.System
 
         function resetImpl(this)
             % Initialize / reset discrete-state properties
-            this.lastMsg = zeros(1,200);
+            this.lastMsg = zeros(1,400);
             this.lastValues = zeros(this.arraySize(1), this.arraySize(2));
 
         end
@@ -101,11 +102,11 @@ classdef String2DoubleArray < matlab.System
 
        function [sz,dt,cp] = getDiscreteStateSpecificationImpl(this,name)
            if strcmp(name,'lastMsg')
-                sz = [1, 200];
+                sz = [1, 400];
                 dt = "double";
                 cp = false;
            elseif strcmp(name,'lastValues')
-                sz = [1, this.arraySize];
+                sz = [this.arraySize(1), this.arraySize(2)];
                 dt = "double";
                 cp = false;
            elseif strcmp(name,'row')
