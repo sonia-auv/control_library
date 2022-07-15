@@ -29,8 +29,6 @@ classdef String2DoubleArray < matlab.System
                 [token, remain] = strtok(str, ',');
                 array(i) = real(str2double(token));
                 str = remain(2:end);
-                %remainSize = max(size(remain));
-                %str(1:remainSize-1) = remain(2:end);
             end
         end
 
@@ -57,9 +55,8 @@ classdef String2DoubleArray < matlab.System
                 for i = 1 : this.arraySize(1)
                     [token, remain] = strtok(str, ';');
                     this.lastValues(i,:) = extractionArray(this, token, this.arraySize(2));
-                    %remainSize = max(size(remain));
                     str = remain(2:end);
-                    %str(1:remainSize-2) = remain(2:end-1);
+
                 end
 
                 this.lastMsg(1:l) = cleanStr(1:l);
@@ -74,6 +71,7 @@ classdef String2DoubleArray < matlab.System
             % Initialize / reset discrete-state properties
             this.lastMsg = zeros(1,400);
             this.lastValues = zeros(this.arraySize(1), this.arraySize(2));
+          
 
         end
 

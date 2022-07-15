@@ -20,7 +20,7 @@
 # See properties section here : https://www.mathworks.com/help/mpc/ref/mpc.html
 # must be integers
 /proc_control/mpc/p : 10 # prediction horizon MAX 10
-/proc_control/mpc/m : 1 # control horizon (m<=P otherwise crash)
+/proc_control/mpc/m : 2 # control horizon (m<=P otherwise crash)
 
 
 #=========================================================================================================
@@ -38,7 +38,7 @@
 #MPC Gain Mode 10
 /proc_control/mpc/gains/c10/ov : '30,30,30,45,45,45,45,0,0,0,0,0,0'
 /proc_control/mpc/gains/c10/mv : '0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.'
-/proc_control/mpc/gains/c10/mvr : '1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0'
+/proc_control/mpc/gains/c10/mvr : '0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1'
 
 #MPC Gain Mode 11
 /proc_control/mpc/gains/c11/ov : '30,30,30,45,45,45,45,0,0,0,0,0,0' 
@@ -51,7 +51,7 @@
 /proc_control/mpc/gains/c19/mvr : '0.1,0.1,0.1,0.1,0.3,0.3,0.3,0.3'
 
 #MPC no dvl Gains
-/proc_control/mpc/gains/noDvl/mv : "0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2"
+/proc_control/mpc/gains/noDvl/mv : "0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0"
 
 
 #=========================================================================================================
@@ -85,7 +85,7 @@
 /proc_control/physics/rg : '0.002, -0.001, 0.015' # distance (m) between center of mass and the geometric center of the sub.
 
 # Center of boyency           x     y     z
-/proc_control/physics/rb : '-0.00, 0.0, -0.006' # distance (m) between center of boyency and the geometric center of the sub.
+/proc_control/physics/rb : '-0.00, 0.00, -0.006' # distance (m) between center of boyency and the geometric center of the sub.
 
 # Drag linear constants
 /proc_control/physics/cdl : '15, 20, 23.3, 3.33, 2.33, 5' # dimensionless

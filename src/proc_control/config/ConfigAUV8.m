@@ -20,12 +20,12 @@ function [simulink, simulation, physics, kalman, MPC, mode] = ConfigAUV8()
                0.004, -0.001, 1.5371]; % Izx Izy Izz1.68
 
    % Center of mass      
-   physics.RG =[0.001,... x
+   physics.RG =[0.005,... x
                 0.002,... y
                 0.018]; % z
 
    % Center of boyency
-   physics.RB =[0.000,... x
+   physics.RB =[-0.005,... x
                 0.000,... y
                -0.006]; % z
    % Drag
