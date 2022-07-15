@@ -71,7 +71,7 @@ classdef TrimPlant < matlab.System
             ref = this.checkTrajectory(ref);
 
             % Calculer le residue de mesure
-            Z = y - this.xl.';
+            Z = this.getMesurementResidual(y.', this.xl).';
 
             % Linéariser le systeme.
             [A, B, C, D, U, Y, X, DX] = this.trimPlantQuat(u,y);
@@ -189,6 +189,23 @@ classdef TrimPlant < matlab.System
 
         end
       
+        % Fonction qui calcule le residue de mesure
+        %------------------------------------------------------------------------------
+        function residue = getMesurementResidual(this, y, xhat)
+
+            residue = y - xhat;
+
+            qHat = xhat(4:7);
+            qMes = y(4:7);
+
+            % compute the quaternion error
+            % https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6864719/
+
+            residue(4:7) = quatmultiply(qMes, quatinv(qHat));
+
+        end
+
+
         %% Definire outputs
         %------------------------------------------------------------------------------       
         function [A, B, C, D, U, Y, X, DX, ref Z] = getOutputSizeImpl(this)
