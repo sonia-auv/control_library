@@ -7,6 +7,7 @@ classdef String2DoubleArray < matlab.System
     % Public, tunable properties
     properties (Nontunable)
         arraySize;
+        constantName;
     end
 
     properties(DiscreteState)
@@ -24,7 +25,7 @@ classdef String2DoubleArray < matlab.System
         function array = extractionArray(this,str, nbElements)
             array = ones(1, nbElements);      
 
-            fprintf("input : %s \n", char(str));
+            %fprintf("input : %s \n", char(str));
             for i = 1:nbElements
                 [token, remain] = strtok(str, ',');
                 array(i) = real(str2double(token));
@@ -32,6 +33,44 @@ classdef String2DoubleArray < matlab.System
             end
         end
 
+        %% print result
+        function printResult(this)
+            index = 1;
+            strout = char(zeros(1,1000));
+
+            temp = max(size([this.constantName, ' : [']));
+            strout(index+1:index+temp ) = [this.constantName, ' : ['];
+            index = index+temp ;
+
+            for i = 1 : this.arraySize(1)
+
+                for j = 1 : this.arraySize(2) - 1
+                    temp  = max(size([sprintf('%.3f',this.lastValues(i,j)), ', ' ]));
+                    strout(index+1:index+temp ) = [sprintf('%.3f',this.lastValues(i,j)), ', ' ];
+                    index = index+temp ;
+                end
+                temp  =max(size(sprintf('%.3f',this.lastValues(i,j))));
+                strout(index+1:index+temp ) = [sprintf('%.3f',this.lastValues(i,j))];
+                index = index+temp ;
+
+                if i == this.arraySize(1)
+                    temp  = max(size([']']));
+                    strout(index+1:index+temp ) = [']'];
+                    index = index+temp ;
+                else
+                    temp  = max(size(['; ']));
+                    strout(index+1:index+temp ) = ['; '];
+                    index = index+temp ;
+                end
+                
+                fprintf('%s \n',strout(1:index));
+                temp =max(size(['                    ']));
+                strout(1:temp) = ['                    '];
+                index=temp;
+            end
+        
+            
+        end
         
     end
 
@@ -60,6 +99,7 @@ classdef String2DoubleArray < matlab.System
                 end
 
                 this.lastMsg(1:l) = cleanStr(1:l);
+                this.printResult();
             end
 
         
