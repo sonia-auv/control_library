@@ -7,6 +7,7 @@ classdef String2DoubleArray < matlab.System
     % Public, tunable properties
     properties (Nontunable)
         arraySize;
+        constantName;
     end
 
     properties(DiscreteState)
@@ -24,7 +25,7 @@ classdef String2DoubleArray < matlab.System
         function array = extractionArray(this,str, nbElements)
             array = ones(1, nbElements);      
 
-            fprintf("input : %s \n", char(str));
+            fprintf("input : %s : %s \n", this.constantName,char(str));
             for i = 1:nbElements
                 [token, remain] = strtok(str, ',');
                 array(i) = real(str2double(token));
@@ -32,6 +33,40 @@ classdef String2DoubleArray < matlab.System
             end
         end
 
+        %% print result
+        function printResult(this)
+   
+%            strout = [this.constantName, ' : ['];
+            
+
+%             for i = 1 : this.arraySize(1)
+% 
+%                 for j = 1 : this.arraySize(2) - 1
+%                    
+%                     strout = [strout, sprintf('%.3f',this.lastValues(i,j)), ', ' ];
+%                     
+%                 end
+%                
+%                 strout = [strout, sprintf('%.3f',this.lastValues(i,j))];
+%                 
+% 
+%                 if i == this.arraySize(1)
+%                    
+%                     strout = [strout,']'];
+%                     
+%                 else
+%                     
+%                     strout = [strout,'; '];
+% 
+%                 end
+%                 
+%                 fprintf('%s \n',strout);              
+%                 strout = [''];
+% 
+%             end
+        
+            
+        end
         
     end
 
@@ -60,6 +95,7 @@ classdef String2DoubleArray < matlab.System
                 end
 
                 this.lastMsg(1:l) = cleanStr(1:l);
+                this.printResult();
             end
 
         
