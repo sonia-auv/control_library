@@ -15,7 +15,7 @@
 
         % Definir AUV pour mode interprété
         setenv("AUV","AUV8");
-        %system("rosparam load ./config/AUV8.yaml");
+        system("rosparam load ./config/AUV7.yaml");
     end
 
 % Obtenir la variable d'environement du sub

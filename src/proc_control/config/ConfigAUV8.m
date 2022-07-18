@@ -20,12 +20,12 @@ function [simulink, simulation, physics, kalman, MPC, mode] = ConfigAUV8()
                0.004, -0.001, 1.5371]; % Izx Izy Izz1.68
 
    % Center of mass      
-   physics.RG =[0.005,... x
+   physics.RG =[0.001,... x
                 0.002,... y
                 0.018]; % z
 
    % Center of boyency
-   physics.RB =[-0.005,... x
+   physics.RB =[-0.000,... x
                 0.000,... y
                -0.006]; % z
    % Drag
@@ -147,9 +147,9 @@ function [simulink, simulation, physics, kalman, MPC, mode] = ConfigAUV8()
         kalman.Cx = 100;
 
     % Covariences des capteurs
-        kalman.Cimu = [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01];
+        kalman.Cimu = [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1];
         kalman.Cdvl = ones(1,3)*0.01;
-        kalman.Cdepth = [0.01];
+        kalman.Cdepth = [0.1];
   %% Paramèetre de Simulation
    % Gazebo
        simulation.gazebo.sampletime = simulink.sampletime;

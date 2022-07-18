@@ -51,7 +51,7 @@
 /proc_control/mpc/gains/c19/mvr : '0.1,0.1,0.1,0.1,0.3,0.3,0.3,0.3'
 
 #MPC no dvl Gains
-/proc_control/mpc/gains/noDvl/mv : "0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2"
+/proc_control/mpc/gains/noDvl/mv : "0.20,0.20,0.20,0.20,0.20,0.20,0.20,0.20"
 
 
 #=========================================================================================================
@@ -82,7 +82,7 @@
 
   
 # Center of mass              x     y     z
-/proc_control/physics/rg : '-0.005, 0.002, 0.09' # distance (m) between center of mass and the geometric center of the sub.
+/proc_control/physics/rg : '-0.005, 0.002, 0.009' # distance (m) between center of mass and the geometric center of the sub.
 
 # Center of boyency           x     y     z
 /proc_control/physics/rb : '0.00, 0.00, -0.004' # distance (m) between center of boyency and the geometric center of the sub.
@@ -94,7 +94,7 @@
 /proc_control/physics/cdq : '1.17, 1.17, 0.756, 0.167, 0.1, 0.102' # dimensionless
 
 # Added mass
-/proc_control/physics/added_mass : '-12.4686, -12.6156, -1.7695, -0.1164, -0.3493, -0.3493' # dimensionless
+/proc_control/physics/added_mass : '-12.4686, -12.6156, -15.7695, -0.1164, -0.3493, -0.3493' # dimensionless
 
 # thusters definition
 # each row reprensent a thurster and each colunm reprensent an DOF

@@ -7,7 +7,6 @@ classdef TrimPlant < matlab.System
     % Public, tunable properties
     properties(Nontunable)
     MPC;
-    simulation
     useDynamicsConst (1,1) logical = false; % Use dynamic physics constants
     end
 
@@ -83,11 +82,12 @@ classdef TrimPlant < matlab.System
         %------------------------------------------------------------------------------
         function [A, B, C, D, U, Y, X, DX] = trimPlantQuat(this, u, y)
 
+            
             if ~ this.useDynamicsConst
                 % Lineariser le système
-                [Ac, Bc, C, D] = this.J(y,u);
+                [Ac, Bc, C, D] = this.J(y,u); % Legacy
             else
-                
+                % Lineariser le système
                 Ac = AUVQuatJacobianMatrix(y,u,this.constValues);
                 Bc = this.Bc;
                 C = this.C;
@@ -96,24 +96,30 @@ classdef TrimPlant < matlab.System
 
     
             % Discrétiser le système.
-            A = expm(Ac*this.MPC.Ts); % Fossen Eq B.10/B.9 page 662
+            A = expm(Ac*this.MPC.Ts); % Fossen 2021 Eq B.10/B.9 page 662
     
-            BT = Ac(8:13,8:13)\(A(8:13,8:13)-eye(6))*Bc(8:13,1:8); % Fossen Eq B.11 p 662
+            BT = Ac(8:13,8:13)\(A(8:13,8:13)-eye(6))*Bc(8:13,1:8); % Fossen 2021 Eq B.11 p 662
             B = [zeros(7,8); BT];
     
             % Calculer F(x(k),u(k))
-            xk = y;
-    
-            % Intégration trapezoidale
+            xk = y;   
             x_dot_kk = zeros(13,1);
         
-    
-            for i = 1 : this.MPC.dts 
-              x_dot_k = this.f(xk,u);
+            for i = 1 : this.MPC.dts
+
+                if ~ this.useDynamicsConst
+                    x_dot_k = this.f(xk,u); % Legacy
+
+                else
+                    % X(k+1) = A(xk)*xk + B*xk
+                    x_dot_k = AUVQuatSimFcn(xk,this.constValues) +  Bc * u;
+
+                end
+
+                % Intégration trapezoidale
+                xk = xk + ((x_dot_k + x_dot_kk)*(this.MPC.Ts/this.MPC.dts ))/2;
         
-              xk = xk + ((x_dot_k + x_dot_kk)*(this.MPC.Ts/this.MPC.dts ))/2;
-        
-              x_dot_kk = x_dot_k;
+                x_dot_kk = x_dot_k;
         
                % correct Quaternion
                xk(4:7)=this.qUtils.quatNorm(xk(4:7));
@@ -164,7 +170,7 @@ classdef TrimPlant < matlab.System
                 qt= eul2quat(deg2rad(T(i,4:6)),'ZYX');% convertir les angle d'euler en uaternion
                  Tm(:,i)=ThrusterVector(T(i,1:3),qt,rg);  % Calculer le vecteur thrusters     
             end
-            Tm
+            
             % prendre la matrice M
             [M,~,~,~] = AUVModelMatrices(this.MPC.Xi,this.constValues);
 

@@ -28,11 +28,20 @@ B = [zeros(7,8);Minv*Tm]
 
 
 MPC.Xi(4:7) = eul2quat([0, 0,pi/2],"ZYX").';
+MPC.Xi(12) =0.5;
+
+MPC.Ui(5:8) = [20,20,20,20]
+
 J = str2func(MPC.JacobianFnc);
 [Ac, Bc, ~, ~] = J(MPC.Xi,MPC.Ui)
 
 A = AUVQuatJacobianMatrix(MPC.Xi,MPC.Ui,constValues);
 
-Ac-A
+Aerror = Ac-A
 
 Berror=Bc-B
+
+xkconst = AUV8QuatSimFcn(MPC.Xi,MPC.Ui)
+xkDynamic = AUVQuatSimFcn(MPC.Xi, constValues) + B*MPC.Ui
+
+simError = xkconst-xkDynamic
