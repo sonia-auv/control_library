@@ -20,7 +20,7 @@ function [simulink, simulation, physics, kalman, MPC, mode] = ConfigAUV7()
                0.004, -0.001, 2.9030]; % Izx Izy Izz1.68
 
    % Center of mass      
-   physics.RG =[-0.005,... x
+   physics.RG =[-0.001,... x
                 0.002,... y
                 0.009]; % z
 

@@ -1,5 +1,5 @@
 clc
-[simulink, simulation, physics, kalman, MPC, mode] = ConfigAUV8()
+[simulink, simulation, physics, kalman, MPC, mode] = ConfigAUV7()
 constValues = [physics.mass ...
             physics.volume ...
             physics.height...
@@ -41,7 +41,7 @@ Aerror = Ac-A
 
 Berror=Bc-B
 
-xkconst = AUV8QuatSimFcn(MPC.Xi,MPC.Ui)
+xkconst = AUV7QuatSimFcn(MPC.Xi,MPC.Ui)
 xkDynamic = AUVQuatSimFcn(MPC.Xi, constValues) + B*MPC.Ui
 
 simError = xkconst-xkDynamic

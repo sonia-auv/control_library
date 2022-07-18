@@ -15,7 +15,7 @@
 
         % Definir AUV pour mode interprété
         setenv("AUV","AUV8");
-        system("rosparam load ./config/AUV7.yaml");
+        
     end
 
 % Obtenir la variable d'environement du sub
@@ -24,8 +24,10 @@
     switch auv
         case 'AUV8'
             [simulink, simulation, physics, kalman, MPC, mode] = ConfigAUV8();
+            system("rosparam load ./config/AUV8.yaml");
         case 'AUV7'
             [simulink, simulation, physics, kalman, MPC, mode] = ConfigAUV7();
+            system("rosparam load ./config/AUV7.yaml");
         otherwise
             return;
     end
