@@ -212,6 +212,11 @@ classdef TrajectoryGenerator < handle
                     case 3 % position absolue et angle relatif
                         this.quatList(i+this.icOffset,:) = this.qUtils.getQuatDir(this.quatList(i+this.icOffset-1,:), q, this.MAPM.Pose(i).Rotation);
                         this.pointList(i+this.icOffset,:) = p;
+                    
+                    case 4 % z absolue et reste relatif
+                        this.quatList(i+this.icOffset,:) = this.qUtils.getQuatDir(this.quatList(i+this.icOffset-1,:), q, this.MAPM.Pose(i).Rotation);
+                        this.pointList(i+this.icOffset,:) = this.pointList(i+this.icOffset-1,:) + this.qUtils.quatRotation(p,this.quatList(i+this.icOffset-1,:));
+                        this.pointList(i+this.icOffset,3) = p(3);
         
                     otherwise % Référentiel obstacles
                         
