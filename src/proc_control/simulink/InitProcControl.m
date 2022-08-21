@@ -15,6 +15,7 @@
 
         % Definir AUV pour mode interprété
         setenv("AUV","AUV8");
+        
     end
 
 % Obtenir la variable d'environement du sub
@@ -23,56 +24,20 @@
     switch auv
         case 'AUV8'
             [simulink, simulation, physics, kalman, MPC, mode] = ConfigAUV8();
+            system("rosparam load ./config/AUV8.yaml");
         case 'AUV7'
             [simulink, simulation, physics, kalman, MPC, mode] = ConfigAUV7();
+            system("rosparam load ./config/AUV7.yaml");
         otherwise
             return;
     end
 
   fprintf('INFO : proc control : Load model of %s. \n', auv);
 
-%% Load Rosparam only in generated code.
-if ~ coder.target('MATLAB')
-        obtainRosparam = RosparamClass;
-        obtainRosparam.setParameterTree(rosparam);
-    
-    % Load MPC Gain Default
-        MPC.gains.defaut.OV = obtainRosparam.getArray("/proc_control/mpc/gains/default/ov", MPC.nx, MPC.gains.defaut.OV);
-        MPC.gains.defaut.MV = obtainRosparam.getArray("/proc_control/mpc/gains/default/mv", MPC.nu, MPC.gains.defaut.MV);
-        MPC.gains.defaut.MVR = obtainRosparam.getArray("/proc_control/mpc/gains/default/mvr", MPC.nu, MPC.gains.defaut.MVR);
-        
-    % Load MPC Gain Mode 10
-        MPC.gains.c10.OV = obtainRosparam.getArray("/proc_control/mpc/gains/c10/ov", MPC.nx, MPC.gains.c10.OV);
-        MPC.gains.c10.MV = obtainRosparam.getArray("/proc_control/mpc/gains/c10/mv", MPC.nu, MPC.gains.c10.MV);
-        MPC.gains.c10.MVR = obtainRosparam.getArray("/proc_control/mpc/gains/c10/mvr", MPC.nu, MPC.gains.c10.MVR);
 
-    % Load MPC Gain Mode 11
-        MPC.gains.c11.OV = obtainRosparam.getArray("/proc_control/mpc/gains/c11/ov", MPC.nx, MPC.gains.c11.OV);
-        MPC.gains.c11.MV = obtainRosparam.getArray("/proc_control/mpc/gains/c11/mv", MPC.nu, MPC.gains.c11.MV);
-        MPC.gains.c11.MVR = obtainRosparam.getArray("/proc_control/mpc/gains/c11/mvr", MPC.nu, MPC.gains.c11.MVR);
-        
-    % Load MPC Gain Mode 19
-        MPC.gains.c19.OV = obtainRosparam.getArray("/proc_control/mpc/gains/c19/ov", MPC.nx, MPC.gains.c19.OV);
-        MPC.gains.c19.MV = obtainRosparam.getArray("/proc_control/mpc/gains/c19/mv", MPC.nu, MPC.gains.c19.MV);
-        MPC.gains.c19.MVR = obtainRosparam.getArray("/proc_control/mpc/gains/c19/mvr", MPC.nu, MPC.gains.c19.MVR);
-    
-        MPC.gains.noDvl.MV = obtainRosparam.getArray("//proc_control/mpc/gains/noDvl/mv", MPC.nu, MPC.gains.noDvl.MV);
-
-    % Load Thruster min & max
-        MPC.tmax = obtainRosparam.getValue("/proc_control/mpc/tmax", MPC.tmax);
-        MPC.tmin = obtainRosparam.getValue("/proc_control/mpc/tmin", MPC.tmin);
-
-    % Param du target reached
-        MPC.targetReached.linearTol = obtainRosparam.getValue("/proc_control/target_reached/linear_tolerance", MPC.targetReached.linearTol);
-        MPC.targetReached.angularTol = obtainRosparam.getValue("/proc_control/target_reached/angular_tolerance",  MPC.targetReached.angularTol);
-        MPC.targetReached.timeInTol = obtainRosparam.getValue("/proc_control/target_reached/time_in_tolerance",  MPC.targetReached.timeInTol);
-
-end
-
-    % Insére les gains dans la liste des gains
-        MPC.gainsList = [ 10, MPC.gains.c10.OV, MPC.gains.c10.MV, MPC.gains.c10.MVR;
-                          11, MPC.gains.c11.OV, MPC.gains.c11.MV, MPC.gains.c11.MVR;
-                          19, MPC.gains.c19.OV, MPC.gains.c19.MV, MPC.gains.c19.MVR];
+%% Load BUS
+    mpcParamsBus();
+    physicsConstantsBus();
 
 %% Modèle du thruster
     load('T200-Spec-16V.mat');
@@ -103,7 +68,7 @@ end
     for i=1:size(physics.thruster.T,1)
         
        qt= eul2quat(deg2rad(physics.thruster.T(i,4:6)),'ZYX');% convertir les angle d'euler en uaternion
-       Tm(:,i)=ThrusterVector(physics.thruster.T(i,1:3),qt);  % Calculer le vecteur thrusters     
+       Tm(:,i)=ThrusterVector(physics.thruster.T(i,1:3),qt, physics.RG);  % Calculer le vecteur thrusters     
     end
     
     % crée la matrice inverse 

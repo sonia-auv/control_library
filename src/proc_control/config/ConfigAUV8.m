@@ -5,6 +5,7 @@ function [simulink, simulation, physics, kalman, MPC, mode] = ConfigAUV8()
     simulink.procNav.sampletime = simulink.sampletime;
     simulink.procNav.imuDepth.sampletime = simulink.sampletime;
     simulink.procNav.dvl.sampletime = 1/50;
+    simulink.ros.paramSampletime = 2;
         
 %% Constantes Physiques
    physics.mass = 31; % Kg
@@ -24,7 +25,7 @@ function [simulink, simulation, physics, kalman, MPC, mode] = ConfigAUV8()
                 0.018]; % z
 
    % Center of boyency
-   physics.RB =[0.000,... x
+   physics.RB =[-0.000,... x
                 0.000,... y
                -0.006]; % z
    % Drag
@@ -51,12 +52,12 @@ function [simulink, simulation, physics, kalman, MPC, mode] = ConfigAUV8()
    % Thrusters            x      y      z    yaw  roll pitch
    physics.thruster.T= [ 0.292, 0.173, 0.082, -45,-90, 0;   % T1
                         -0.292, 0.173, 0.082, 45,-90, 0;    % T2
-                        -0.292,-0.173, 0.082,-45,-90, 0;    % T3
-                         0.292,-0.173, 0.082, 45,-90, 0;    % T4
+                        -0.292, -0.173, 0.082,-45,-90, 0;    % T3
+                         0.292, -0.173, 0.082, 45,-90, 0;    % T4
                          0.181, 0.159, 0.082,  0,  0, 0;    % T5
                         -0.181, 0.159, 0.082,  0,180, 0;    % T6
-                        -0.181,-0.159, 0.082,  0,  0, 0;    % T7
-                         0.181,-0.159, 0.082,  0,180, 0];   % T8
+                        -0.181, -0.159, 0.082,  0,  0, 0;    % T7
+                         0.181, -0.159, 0.082,  0,180, 0];   % T8
    
    % Approximate 1st order tansfert function of the thruster 1 / (tau*s + 1)
    physics.thruster.tau = 0.10;
@@ -146,9 +147,9 @@ function [simulink, simulation, physics, kalman, MPC, mode] = ConfigAUV8()
         kalman.Cx = 100;
 
     % Covariences des capteurs
-        kalman.Cimu = [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01];
+        kalman.Cimu = [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1];
         kalman.Cdvl = ones(1,3)*0.01;
-        kalman.Cdepth = [0.01];
+        kalman.Cdepth = [0.1];
   %% Paramèetre de Simulation
    % Gazebo
        simulation.gazebo.sampletime = simulink.sampletime;

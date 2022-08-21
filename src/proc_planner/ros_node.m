@@ -4,12 +4,13 @@ classdef  ros_node < handle
     % Definir les Subscrier ros   
         madpSub; % multi add pose subscriber
         icSub; % current target sub 
+        obstacleSub; % proc_mapping info
     
     % Definir les publisher ROS
         trajpub;
         validPub;
     
-        % ROS Param
+    % ROS Param
         param;
     
         % new msgflag
@@ -23,6 +24,7 @@ classdef  ros_node < handle
         % Definir les Subscrier ros
             this.madpSub = rossubscriber('/proc_planner/send_multi_addpose','sonia_common/MultiAddPose',@this.madCallback,"DataFormat","struct");
             this.icSub = rossubscriber("/proc_control/current_target","geometry_msgs/Pose",@this.icCallback,"DataFormat","struct");
+            this.obstacleSub = rossubscriber("/proc_mapping/obstacle_infos", "sonia_common/ObstacleArray","DataFormat","struct");
     
         % Definir les publisher ROS
             this.trajpub = rospublisher('/proc_planner/send_trajectory_list','trajectory_msgs/MultiDOFJointTrajectoryPoint',"DataFormat","struct","IsLatching",false);
@@ -59,7 +61,7 @@ classdef  ros_node < handle
                     this.TrajIsGenerating = true;
     
                     % Cree l'objet trajectoire
-                    TG = TrajectoryGenerator(this.madpSub.LatestMessage,this.param,this.icSub.LatestMessage);
+                    TG = TrajectoryGenerator(this.madpSub.LatestMessage,this.param,this.icSub.LatestMessage,this.obstacleSub.LatestMessage);
     
                     % Envoyer a ros si le mAddpose est valide
                     validMsg.Data = int8(TG.status);

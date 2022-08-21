@@ -5,6 +5,7 @@ function [simulink, simulation, physics, kalman, MPC, mode] = ConfigAUV7()
     simulink.procNav.sampletime = simulink.sampletime;
     simulink.procNav.imuDepth.sampletime = simulink.sampletime;
     simulink.procNav.dvl.sampletime = 1/50;
+    simulink.ros.paramSampletime = 2;
         
 %% Constantes Physiques
    physics.mass = 43.78; % Kg
@@ -19,7 +20,7 @@ function [simulink, simulation, physics, kalman, MPC, mode] = ConfigAUV7()
                0.004, -0.001, 2.9030]; % Izx Izy Izz1.68
 
    % Center of mass      
-   physics.RG =[-0.005,... x
+   physics.RG =[-0.001,... x
                 0.002,... y
                 0.009]; % z
 
@@ -145,7 +146,7 @@ function [simulink, simulation, physics, kalman, MPC, mode] = ConfigAUV7()
         kalman.Cx = 100;
 
     % Covariences des capteurs
-        kalman.Cimu = [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01];
+        kalman.Cimu = [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1];
         kalman.Cdvl = ones(1,3)*0.01;
         kalman.Cdepth = [0.01];
         
@@ -173,7 +174,7 @@ function [simulink, simulation, physics, kalman, MPC, mode] = ConfigAUV7()
         simulation.sensors.dvl.resolution = 0.001;
         simulation.sensors.dvl.noise.power = 0.0000000004;
         
-        simulation.sensors.depth.sampletime = 1/10;
+        simulation.sensors.depth.sampletime = 1/50;
         simulation.sensors.depth.resolution = 0.001;
         simulation.sensors.depth.noise.power = 0.0000000004;
         
