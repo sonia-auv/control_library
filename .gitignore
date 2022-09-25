@@ -45,3 +45,6 @@ proc_control_node/
 *.sh
 *.tgz
 *.zip
+
+# catkin files
+*.catkin_workspace
