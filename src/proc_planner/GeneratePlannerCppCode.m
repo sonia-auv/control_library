@@ -1,6 +1,6 @@
 % This Script generate the c++ code for proc_planner.
 % Make sure to run this script in src/proc_planner folder.
-function generateCppCode(build)
+function GeneratePlannerCppCode(build)
 
     ROSWS = "~/sonia_ws/";
     
