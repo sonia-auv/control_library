@@ -1,4 +1,4 @@
-classdef MultiTrajectoryManager < matlab.System
+classdef ProcPlannerManager < matlab.System
     % Traite les trajectoires recu par proc planner. Calcule aussi target reached.
 
     % Public, tunable properties

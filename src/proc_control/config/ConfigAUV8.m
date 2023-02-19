@@ -31,7 +31,7 @@ function [simulink, simulation, physics, kalman, MPC, mode] = ConfigAUV8()
    % Drag
    physics.CDL=[45, 60, 70, 10, 7, 15]/3;
 
-   physics.CDQ=[1.17, 0.82, 0.756, 0.167, 0.1, 0.102];
+   physics.CDQ=[2.17, 1.82, 1.756, 0.167, 0.1, 0.102];
 
    physics.AF = [0.12, 0.22, 0.292];
 

@@ -6,7 +6,6 @@
     if coder.target('MATLAB')
 
         clear; 
-
         % Regarder si le node ros matlab est actif
        if ~ ros.internal.Global.isNodeActive
             % partir le node ros matlab 
@@ -17,7 +16,7 @@
         setenv("AUV","AUV8");
         
     end
-
+% 
 % Obtenir la variable d'environement du sub
     auv = getenv("AUV");
 % Parametre et constantes
@@ -52,12 +51,12 @@
     TMIN ={MPC.tmin; MPC.tmin; MPC.tmin; MPC.tmin; MPC.tmin; MPC.tmin; MPC.tmin; MPC.tmin};
     TMAX ={MPC.tmax; MPC.tmax; MPC.tmax; MPC.tmax; MPC.tmax; MPC.tmax; MPC.tmax; MPC.tmax};
 
-% z transform of the thruster 1st order transfert function.
+% z transform of the thruster 1st order transfert function approximation.
  physics.thruster.b0 = -exp(-(1/physics.thruster.tau) * simulink.sampletime);
  physics.thruster.a1 = 1 + physics.thruster.b0;
 
 
-%Vitesse Max
+% Contraintes des etats.
     XMIN ={ -inf; -inf; -inf; -1; -1; -1; -1; -1; -1; -1; -1; -1; -1};
     XMAX ={inf; inf; 5; 1; 1; 1; 1; 1; 1; 1; 1; 1; 1};
 

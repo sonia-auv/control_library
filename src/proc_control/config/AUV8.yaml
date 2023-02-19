@@ -7,8 +7,8 @@
 
 # Thrusters effort.
 # must be double.
-/proc_control/mpc/tmax : 40.0 # max thrust Newton
-/proc_control/mpc/tmin : -30.0 # min thrust Newtons
+/proc_control/mpc/tmax : 30.0 # max thrust Newton
+/proc_control/mpc/tmin : -25.0 # min thrust Newtons
 
 # TargetReached.
 # must be double.
@@ -20,7 +20,7 @@
 # See properties section here : https://www.mathworks.com/help/mpc/ref/mpc.html
 # must be integers
 /proc_control/mpc/p : 10 # prediction horizon MAX 10
-/proc_control/mpc/m : 2 # control horizon (m<=P otherwise crash)
+/proc_control/mpc/m : 1 # control horizon (m<=P otherwise crash)
 
 
 #=========================================================================================================
@@ -36,7 +36,7 @@
 /proc_control/mpc/gains/default/mvr : '0.1,0.1,0.1,0.1,0.3,0.3,0.3,0.3'
 
 #MPC Gain Mode 10
-/proc_control/mpc/gains/c10/ov : '30,30,30,45,45,45,45,0,0,0,0,0,0'
+/proc_control/mpc/gains/c10/ov : '30,30,30,30,45,45,45,0,0,0,0,0,0'
 /proc_control/mpc/gains/c10/mv : '0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.'
 /proc_control/mpc/gains/c10/mvr : '0.4,0.4,0.4,0.4,0.5,0.5,0.5,0.5'
 
@@ -51,7 +51,7 @@
 /proc_control/mpc/gains/c19/mvr : '0.1,0.1,0.1,0.1,0.3,0.3,0.3,0.3'
 
 #MPC no dvl Gains
-/proc_control/mpc/gains/noDvl/mv : "0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0"
+/proc_control/mpc/gains/noDvl/mv : "0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1"
 
 
 #=========================================================================================================
@@ -68,37 +68,42 @@
 
 # AUV Constant
 #---------------------------------------------------------------------------------------------------------
-/proc_control/physics/mass : 31 #Kg
-/proc_control/physics/volume : 0.032 # M^3
+/proc_control/physics/mass : 35.42 #Kg
+/proc_control/physics/volume : 0.0365 # M^3
 /proc_control/physics/sub_height : .3 # m
 
 # Inertia tensor matrix define as:
                           # Ixx Ixy Ixz
                           # Iyx Iyy Iyz
                           # Izx Izy Izz
-/proc_control/physics/I : '0.4756, 0.008, 0.004, 
-                           0.008, 1.3735, -0.001,
-                           0.004, -0.001, 1.5371'
+# This matrix is define with solidwork.
+/proc_control/physics/I : '0.5020, -0.0013, -0.0094, 
+                           -0.0013, 1.5266, -0.0021,
+                           -0.0094, -0.0021, 1.6682'
 
   
 # Center of mass              x     y     z
-/proc_control/physics/rg : '0.002, -0.001, 0.015' # distance (m) between center of mass and the geometric center of the sub.
+# This vector is define with solidwork.
+/proc_control/physics/rg : '0.0028, 0.0001, 0.0222' # distance (m) between center of mass and the geometric center of the sub.
 
 # Center of boyency           x     y     z
-/proc_control/physics/rb : '-0.00, 0.00, -0.006' # distance (m) between center of boyency and the geometric center of the sub.
+# This vector is define with solidwork.
+/proc_control/physics/rb : '0.003, -0.0002, 0.021' # distance (m) between center of boyency and the geometric center of the sub.
 
 # Drag linear constants
-/proc_control/physics/cdl : '15, 20, 23.3, 3.33, 2.33, 5' # dimensionless
+# This vector is guess
+/proc_control/physics/cdl : '1.17, 0.82, 0.756, 0.167, 0.1, 0.102' # dimensionless
 
 # Drag quadratic constants
-/proc_control/physics/cdq : '1.17, 0.82, 0.756, 0.167, 0.1, 0.102' # dimensionless
+# This vector is guess
+/proc_control/physics/cdq : '80, 90, 100, 10.330, 15.33, 20' # dimensionless
 
 # Added mass
-/proc_control/physics/added_mass : '-1.4648, -12.6156, -15.7695, -0.1164, -0.3493, -0.3493' # dimensionless
+# This vector is guess
+/proc_control/physics/added_mass : '-1.4648, -6.6156, -15.7695, -0.1164, -0.3493, -0.3493' # dimensionless
 
 # thusters definition
 # each row reprensent a thurster and each colunm reprensent an DOF
-
 #                                    x      y      z    yaw  roll pitch
 /proc_control/physics/thrusters : '0.292, 0.173, 0.082, -45,-90, 0;
                                   -0.292, 0.173, 0.082, 45,-90, 0;    
@@ -121,4 +126,4 @@
 /proc_control/physics/sonar_pose : '0.200, 0, -0.155' # m
 
 # transformation of the DVL frame to body frame
-/proc_control/physics/dvl_rotation : '0, 3.1415, 1.5708' # rad
+/proc_control/physics/dvl_rotation : '0, 3.14159265359, 1.57079632679' # rad

@@ -51,7 +51,8 @@ classdef AuvDifferentialEquation < matlab.System
             if ~ this.useDynamicsConst
                 Dynamics = this.f(states,perturbations,thrust); % legacy
             else
-                Dynamics = AUVQuatPerturbedSimFcn(states,perturbations,this.constValues) + this.Bc * thrust;
+                % xdot = f(x) +Bu
+                Dynamics = AUVQuatPerturbedSimFcn(states,perturbations,this.constValues) + (this.Bc * thrust);
             end
 
             Position_dot = Dynamics(1:3);
