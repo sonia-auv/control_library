@@ -76,8 +76,7 @@ classdef AuvDifferentialEquation < matlab.System
                                     physics.added_mass...
                                     physics.rho ...
                                     physics.g];
-
-                this.generateBmatrix(physics.thrusters,physics.rg);
+            this.generateBmatrix(physics.thrusters,physics.rg);
                 this.init = true; 
             end
         end
@@ -99,7 +98,7 @@ classdef AuvDifferentialEquation < matlab.System
             [M,~,~,~] = AUVModelMatrices(this.MPC.Xi,this.constValues);
 
             % M inverse * Tm
-            this.Bc = [zeros(7,this.MPC.nu) ; M\Tm];
+            this.Bc = [zeros(7,this.MPC.nu) ; M\Tm]
            
         end
       %% Definire outputs

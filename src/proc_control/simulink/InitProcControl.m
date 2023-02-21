@@ -66,7 +66,7 @@
     
     for i=1:size(physics.thruster.T,1)
         
-       qt= eul2quat(deg2rad(physics.thruster.T(i,4:6)),'ZYX');% convertir les angle d'euler en uaternion
+       qt= eul2quat(deg2rad(physics.thruster.T(i,4:6)),'ZYX');% convertir les angle d'euler en quaternion
        Tm(:,i)=ThrusterVector(physics.thruster.T(i,1:3),qt, physics.RG);  % Calculer le vecteur thrusters     
     end
     

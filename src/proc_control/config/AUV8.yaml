@@ -20,7 +20,7 @@
 # See properties section here : https://www.mathworks.com/help/mpc/ref/mpc.html
 # must be integers
 /proc_control/mpc/p : 10 # prediction horizon MAX 10
-/proc_control/mpc/m : 1 # control horizon (m<=P otherwise crash)
+/proc_control/mpc/m : 2 # control horizon (m<=P otherwise crash)
 
 
 #=========================================================================================================
@@ -51,7 +51,7 @@
 /proc_control/mpc/gains/c19/mvr : '0.1,0.1,0.1,0.1,0.3,0.3,0.3,0.3'
 
 #MPC no dvl Gains
-/proc_control/mpc/gains/noDvl/mv : "0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1"
+/proc_control/mpc/gains/noDvl/mv : "0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0"
 
 
 #=========================================================================================================
@@ -70,7 +70,7 @@
 #---------------------------------------------------------------------------------------------------------
 /proc_control/physics/mass : 35.42 #Kg
 /proc_control/physics/volume : 0.0365 # M^3
-/proc_control/physics/sub_height : .3 # m
+/proc_control/physics/sub_height : 1.0 # m
 
 # Inertia tensor matrix define as:
                           # Ixx Ixy Ixz
