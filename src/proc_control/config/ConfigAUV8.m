@@ -13,7 +13,7 @@ function [simulink, simulation, physics, kalman, MPC, mode] = ConfigAUV8()
    physics.rho = 998;
    physics.g = 9.81;
    physics.dvlCenterDist =0.1435;
-   physics.height=.3;
+   physics.height=.15;
 
    physics.I = [0.4756, 0.008, 0.004;... Ixx Ixy Ixz 0.5358
                0.008, 1.3735, -0.001;... Iyx Iyy Iyz 1.47
@@ -147,7 +147,7 @@ function [simulink, simulation, physics, kalman, MPC, mode] = ConfigAUV8()
         kalman.Cx = 100;
 
     % Covariences des capteurs
-        kalman.Cimu = [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1];
+        kalman.Cimu = [0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01];
         kalman.Cdvl = ones(1,3)*0.01;
         kalman.Cdepth = [0.1];
   %% Paramèetre de Simulation

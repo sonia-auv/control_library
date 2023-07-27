@@ -151,7 +151,7 @@ Maddposemsg.Pose = [Maddposemsg.Pose, addposemsg];
 
 send(pospub,Maddposemsg);
 
-TG = TrajectoryGenerator(Maddposemsg,param,icMsg);
+TG = TrajectoryGenerator(Maddposemsg,param,icMsg,[]);
 if TG.status
     test= TG.Compute(trajpub);
     Traj_viewer(test);

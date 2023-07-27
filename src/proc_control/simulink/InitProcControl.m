@@ -9,7 +9,7 @@
         % Regarder si le node ros matlab est actif
        if ~ ros.internal.Global.isNodeActive
             % partir le node ros matlab 
-            rosinit;
+            %rosinit;
         end
 
         % Definir AUV pour mode interprété

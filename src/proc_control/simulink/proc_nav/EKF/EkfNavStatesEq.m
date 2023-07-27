@@ -7,7 +7,7 @@ function xk = EkfNavStatesEq(x,inputs)
     rg = inputs(22 : 24 );
 
     % Crée la matrice thrusters 
-    T = zeros(nu,6)
+    T = zeros(nu,6);
     Tm=zeros(6,nu);
     T(1,:) =inputs(48:53);
     T(2,:) =inputs(54:59);
@@ -17,9 +17,7 @@ function xk = EkfNavStatesEq(x,inputs)
     T(6,:) =inputs(78:83);
     T(7,:) =inputs(84:89);
     T(8,:) =inputs(90:95);
-    %disp(T);
-    %disp(rg);
-    %disp('  ');
+   
    
     for i=1:nu  
         qt= eul2quat(deg2rad(T(i,4:6)),'ZYX');% convertir les angle d'euler en quaternion
@@ -31,7 +29,6 @@ function xk = EkfNavStatesEq(x,inputs)
 
     % M inverse * Tm
     Bc = [zeros(7,nu) ; M\Tm];
-    disp(Bc)
     
     % Préparer estimation 
     M = 2;
@@ -39,18 +36,18 @@ function xk = EkfNavStatesEq(x,inputs)
     xk = x;
   
     x_dot_kk = zeros(13,1);
+   
+     for i=1:M
+    %     % X(k+1) = A(xk)*xk + B*xk
+    %     x_dot_k =  AUVQuatPerturbedSimFcn(xk,zeros(6,1),constValues) + Bc*u.' ;
 
-    for i=1:M
-        % X(k+1) = A(xk)*xk + B*xk
-        x_dot_k =  AUVQuatPerturbedSimFcn(xk,zeros(6,1),constValues) + Bc*u.' ;
-
-        % Intégration trapezoidale
-        xk = xk + ((x_dot_k + x_dot_kk)*(Ts))/2;
+    %     % Intégration trapezoidale
+    %     xk = xk + ((x_dot_k + x_dot_kk)*(Ts))/2;
             
-        x_dot_kk = x_dot_k;
-
+    %     x_dot_kk = x_dot_k;
+    xk=  xk + (AUVQuatPerturbedSimFcn(xk,zeros(6,1),constValues) + Bc*u.') * Ts;
     % correct Quaternion
-    xk(4:7)=quatUtilities.quatNorm(xk(4:7)); 
+     xk(4:7)=quatUtilities.quatNorm(xk(4:7)); 
     end
  
 end

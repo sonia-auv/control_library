@@ -20,7 +20,7 @@
 # See properties section here : https://www.mathworks.com/help/mpc/ref/mpc.html
 # must be integers
 /proc_control/mpc/p : 10 # prediction horizon MAX 10
-/proc_control/mpc/m : 2 # control horizon (m<=P otherwise crash)
+/proc_control/mpc/m : 1 # control horizon (m<=P otherwise crash)
 
 
 #=========================================================================================================
@@ -70,7 +70,7 @@
 #---------------------------------------------------------------------------------------------------------
 /proc_control/physics/mass : 35.42 #Kg
 /proc_control/physics/volume : 0.0365 # M^3
-/proc_control/physics/sub_height : 1.0 # m
+/proc_control/physics/sub_height : .3 # m
 
 # Inertia tensor matrix define as:
                           # Ixx Ixy Ixz
@@ -92,11 +92,11 @@
 
 # Drag linear constants
 # This vector is guess
-/proc_control/physics/cdl : '1.17, 0.82, 0.756, 0.167, 0.1, 0.102' # dimensionless
+/proc_control/physics/cdl : '15, 20, 23.3, 3.33, 2.33, 5' # dimensionless
 
 # Drag quadratic constants
 # This vector is guess
-/proc_control/physics/cdq : '80, 90, 100, 10.330, 15.33, 20' # dimensionless
+/proc_control/physics/cdq : '1.17, 0.82, 0.756, 0.167, 0.1, 0.102' # dimensionless
 
 # Added mass
 # This vector is guess
@@ -118,6 +118,9 @@
 #---------------------------------------------------------------------------------------------------------
 # depth sensor distance according to the geometric center
 /proc_control/physics/depth_pose : '0.0, -0.136, 0.178' # m
+
+# Force dvl ON even when data is invalid
+/proc_control/physics/dvl_lost_override : TRUE
 
 # hydrophones distance acording to auv center
 /proc_control/physics/hydro_pose : '0.160, 0.0, 0.155' # m
