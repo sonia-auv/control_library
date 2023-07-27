@@ -1,5 +1,5 @@
 ## Control Library
-This constains our Matlab/Simulink projects to develop the control for AUVs.
+This constains our Matlab/Simulink projects to develop the proc_control and proc_planner for AUVs.
 
 If you are interested with this project's documentation, I suggest that you look at the [SONIA's documentation website](https://wiki.sonia.etsmtl.ca/en/software/Navigation-and-Control).
 
@@ -9,6 +9,17 @@ The ReadMe file will focus on the setup procedure.
 It is possible to develop on windows but this instalation tutorial will focus on Ubuntu 20.04.
 You therefore need to have an ubuntu machine with ROS installed and having a catkin workspace.
 
+## Increase  SWAP
+For computers with 16 GB of RAM or less, increase the swap size to avoid killing your machine while compiling or generating code.
+``` 
+sudo swapoff /swapfile
+sudo rm /swapfile
+sudo dd if=/dev/zero of=/swapfile bs=1M count=16384
+sudo chmod 600 /swapfile
+sudo mkswap /swapfile
+sudo swapon /swapfile
+reboot
+``` 
 ## Install MATAB
 Since ROS support in MATLAB is relatively new, the installation procedure may change sligly we newer matlab version.
 For now, This project is using **MATLAB 2022a**.
