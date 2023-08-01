@@ -1,8 +1,8 @@
 # AUV8 proc_control parameters 
-# Alexandre Lamarre - 2022
+# Alexandre Lamarre - 2023
 # Matlab codegen does not support array for rosparam. the array must be declare as string
 
-#*** proc_control update the parameter only when soft kill (mode 0) is selected. ***
+#***For safety concern, proc_control update the parameter only when soft kill (mode 0) is selected. ***
 #=========================================================================================================
 
 # Thrusters effort.
@@ -19,8 +19,8 @@
 # MPC horizon
 # See properties section here : https://www.mathworks.com/help/mpc/ref/mpc.html
 # must be integers
-/proc_control/mpc/p : 10 # prediction horizon MAX 10
-/proc_control/mpc/m : 1 # control horizon (m<=P otherwise crash)
+/proc_control/mpc/p : 10 # prediction horizon MAX 10.
+/proc_control/mpc/m : 1 # control horizon (m<=P otherwise crash).
 
 
 #=========================================================================================================
@@ -51,7 +51,7 @@
 /proc_control/mpc/gains/c19/mvr : '0.1,0.1,0.1,0.1,0.3,0.3,0.3,0.3'
 
 #MPC no dvl Gains
-/proc_control/mpc/gains/noDvl/mv : "0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0"
+/proc_control/mpc/gains/noDvl/mv : "0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2"
 
 
 #=========================================================================================================
@@ -105,7 +105,7 @@
 # thusters definition
 # each row reprensent a thurster and each colunm reprensent an DOF
 #                                    x      y      z    yaw  roll pitch
-/proc_control/physics/thrusters : '0.292, 0.173, 0.082, -45,-90, 0;
+/proc_control/physics/thrusters : '0.292, 0.173, 0.082, -45,-90, 0; 
                                   -0.292, 0.173, 0.082, 45,-90, 0;    
                                   -0.292, -0.173, 0.082,-45,-90, 0;    
                                    0.292, -0.173, 0.082, 45,-90, 0;    
@@ -116,11 +116,13 @@
 
 # Sensors Definition
 #---------------------------------------------------------------------------------------------------------
-# depth sensor distance according to the geometric center
-/proc_control/physics/depth_pose : '0.0, -0.136, 0.178' # m
-
 # Force dvl ON even when data is invalid
-/proc_control/physics/dvl_lost_override : TRUE
+# (If Set to TRUE, when dvl is lost, kalman filter will assume DVL return 0m/s)
+# (If set to FALSE' when dvl is lost Kalman will use the theorectical model)
+/proc_control/physics/dvl_lost_override : TRUE # Boolean
+
+# transformation of the DVL frame to body frame
+/proc_control/physics/dvl_rotation : '0, 3.14159265359, 1.57079632679' # rad
 
 # hydrophones distance acording to auv center
 /proc_control/physics/hydro_pose : '0.160, 0.0, 0.155' # m
@@ -128,5 +130,5 @@
 # sonar distance acording to auv center
 /proc_control/physics/sonar_pose : '0.200, 0, -0.155' # m
 
-# transformation of the DVL frame to body frame
-/proc_control/physics/dvl_rotation : '0, 3.14159265359, 1.57079632679' # rad
+# depth sensor distance according to the geometric center
+/proc_control/physics/depth_pose : '0.0, -0.136, 0.178' # m
