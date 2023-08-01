@@ -23,15 +23,14 @@ sccprj/
 
 # Matlab code generation folders
 codegen/
+proc_control_ert_rtw/
+proc_planner_ert_rtw/
 
 # Simulink autosave extension
 *.autosave
 
 # Simulink cache files
 *.slxc
-
-# Octave session info
-octave-workspace
 
 #Generated msgtoBus and bustoMsg from Matlab
 +bus_conv_fcns/
@@ -41,6 +40,11 @@ src/src/
 src/proc_control_node/
 proc_control_node/
 
+# c/c++ code
+*.h
+*.c 
+*.cpp
+
 #Build files from Simulink
 *.sh
 *.tgz
@@ -48,3 +52,7 @@ proc_control_node/
 
 # catkin files
 *.catkin_workspace
+
+# vs code
+.vs/
+.vscode/
