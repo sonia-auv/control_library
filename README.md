@@ -1,12 +1,14 @@
 ## Control Library
-This constains our Matlab/Simulink projects to develop the proc_control and proc_planner for AUVs.
+This constains our Matlab/Simulink projects to develop the [proc_control](https://github.com/sonia-auv/proc_control) and [proc_planner](https://github.com/sonia-auv/proc_planner/) for AUVs.
 
 If you are interested in this project's documentation, I suggest that you look at the [SONIA's documentation website](https://wiki.sonia.etsmtl.ca/en/software/Navigation-and-Control).
 
 The ReadMe file will focus on the setup procedure.
 # Installation
+It is possible to develop on Windows to a certain point, **but I highly recommend using a Linux machine**. This installation tutorial will focus on Ubuntu 20.04.
+
 ## Prerequisites 
-It is possible to develop on Windows but this installation tutorial will focus on Ubuntu 20.04.
+For this project, MATLAB environement doesn't work within a container.
 You therefore need to have an Ubuntu machine with ROS installed and having a catkin workspace.
 
 ## Increase  SWAP
