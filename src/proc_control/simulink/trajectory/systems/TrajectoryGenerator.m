@@ -11,13 +11,13 @@ classdef TrajectoryGenerator < matlab.System
 
         accRapide = [0.2 0.2 0.1 .02 .02 .02 .02]; % acceleration Rapide
         accPrecision = [0.1 0.1 0.05 .01 .01 .01 .01]; % acceleration Precision
-        
+
         Ts=.25;
     end
-    
+
     % Public, tunable properties
     properties(Nontunable)
-     bufferSize=1000; % Taille statique 
+     bufferSize=1000; % Taille statique
     end
 
     properties(DiscreteState)
@@ -38,27 +38,27 @@ classdef TrajectoryGenerator < matlab.System
         function [pose, new] = stepImpl(this, wpts, wpt_count)
             % Implement algorithm. Calculate y as a function of input u and
             % discrete states.
-        
+
             % Initialiser les tableau
             List = [ wpts(1,:); wpts(:,:)];
-            
-            
-            
+
+
+
             % Remplire les tablau avec le dernier waypoint
             for i=wpt_count:size(List,1)
                 List(i,:) = List(wpt_count,:);
             end
-            
+
             linwpts =List(:,1:3);% wpts(1:wpt_count-1,1:3);
             qwpts = List(:,4:7);
             quatwpts = quaternion(qwpts);
-            
+
 
             % Gestion des vitesses et des accélérations.
- 
+
             % Génération d'un vecteur de temps
             tpts = zeros(size(linwpts, 1),1);
-            
+
             for i = 2: wpt_count
                 maxTime= this.Ts;
                 for j =1 : 7
@@ -72,10 +72,10 @@ classdef TrajectoryGenerator < matlab.System
                         maxTime=temp;
                     end
                 end
-                
+
                 tpts(i) = maxTime + tpts(i-1);
             end
-            
+
             for i=wpt_count+1 : size(tpts,1)
                 tpts(i)=tpts(i-1)+this.Ts ;
             end
@@ -83,37 +83,37 @@ classdef TrajectoryGenerator < matlab.System
              linwpts
              tpts
              quatwpts
-            
+
             final=tpts(wpt_count);
-            
+
             nbPoint=floor(final/this.Ts);
-            
+
             trajectory = waypointTrajectory(linwpts, tpts,'SampleRate', 1/this.Ts,'SamplesPerFrame',1, 'Orientation', quatwpts);
             pose=repmat(999,this.bufferSize, 13);
-                        
+
            % while ~isDone(trajectory)
            nbpts=1;
            for i=1 : nbPoint
-                    
+
                    [bufferPose, bufferQuat, bufferVelocity , acc ,bufferAngRate] = trajectory();%, bufferVelocity, bufferAcc, bufferAngRate
                     pose(i, 1:3) = bufferPose;
                     pose(i, 4:7) = compact(bufferQuat);
                     pose(i, 8:10) = bufferVelocity;
                     pose(i, 11:13) = bufferAngRate;
                     nbpts=i;
-                  
+
            end
-           
+
             this.computeCount = this.computeCount + 1;
             new = [this.computeCount,  nbpts];
-           
+
         end
- %% Definire outputs       
+ %% Definire outputs
       function [pose, new] = getOutputSizeImpl(this)
       pose = [1000 13];
       new = [1 2];
-      end 
-      
+      end
+
       function [pose, new] = isOutputFixedSizeImpl(this)
           pose = true;
           new=true;
@@ -122,7 +122,7 @@ classdef TrajectoryGenerator < matlab.System
           pose = "double";
           new = "double";
       end
-      
+
      function [pose, new] = isOutputComplexImpl(this)
          pose = false;
          new=false;
@@ -130,7 +130,7 @@ classdef TrajectoryGenerator < matlab.System
         function resetImpl(this)
             % Initialize / reset discrete-state properties
         end
-        
+
         function [sz,dt,cp] = getDiscreteStateSpecificationImpl(~,computeCount)
           sz = [1 1];
           dt = "double";

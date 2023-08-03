@@ -1,4 +1,4 @@
-# AUV8 proc_control parameters 
+# AUV8 proc_control parameters
 # Alexandre Lamarre - 2022
 # Matlab codegen does not support array for rosparam. the array must be declare as string
 
@@ -41,7 +41,7 @@
 /proc_control/mpc/gains/c10/mvr : '0.4,0.4,0.4,0.4,0.5,0.5,0.5,0.5'
 
 #MPC Gain Mode 11
-/proc_control/mpc/gains/c11/ov : '30,30,30,45,45,45,45,0,0,0,0,0,0' 
+/proc_control/mpc/gains/c11/ov : '30,30,30,45,45,45,45,0,0,0,0,0,0'
 /proc_control/mpc/gains/c11/mv : '0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0'
 /proc_control/mpc/gains/c11/mvr : '0.4,0.4,0.4,0.4,0.5,0.5,0.5,0.5'
 
@@ -56,9 +56,9 @@
 
 #=========================================================================================================
 # physical constants
-# 
+#
 # The AUV model use the MKS (Meters, Kilograms, Second) standard.
-#========================================================================================================= 
+#=========================================================================================================
 
 # Basic constants
 #---------------------------------------------------------------------------------------------------------
@@ -76,11 +76,11 @@
                           # Ixx Ixy Ixz
                           # Iyx Iyy Iyz
                           # Izx Izy Izz
-/proc_control/physics/I : '0.4756, 0.008, 0.004, 
+/proc_control/physics/I : '0.4756, 0.008, 0.004,
                            0.008, 1.3735, -0.001,
                            0.004, -0.001, 1.5371'
 
-  
+
 # Center of mass              x     y     z
 /proc_control/physics/rg : '0.002, -0.001, 0.015' # distance (m) between center of mass and the geometric center of the sub.
 
@@ -101,12 +101,12 @@
 
 #                                    x      y      z    yaw  roll pitch
 /proc_control/physics/thrusters : '0.292, 0.173, 0.082, -45,-90, 0;
-                                  -0.292, 0.173, 0.082, 45,-90, 0;    
-                                  -0.292, -0.173, 0.082,-45,-90, 0;    
-                                   0.292, -0.173, 0.082, 45,-90, 0;    
-                                   0.181, 0.159, 0.082,  0,  0, 0;    
-                                  -0.181, 0.159, 0.082,  0,180, 0;    
-                                  -0.181, -0.159, 0.082,  0,  0, 0;    
+                                  -0.292, 0.173, 0.082, 45,-90, 0;
+                                  -0.292, -0.173, 0.082,-45,-90, 0;
+                                   0.292, -0.173, 0.082, 45,-90, 0;
+                                   0.181, 0.159, 0.082,  0,  0, 0;
+                                  -0.181, 0.159, 0.082,  0,180, 0;
+                                  -0.181, -0.159, 0.082,  0,  0, 0;
                                    0.181, -0.159, 0.082,  0,180, 0'
 
 # Sensors Definition

@@ -13,12 +13,12 @@ classdef TrajectoryGenerator < handle
         ERR_INVALID_FRAME_REF = -2;
         ERR_INVALID_SPEED_PARAM = -3;
         ERR_RADIUS_TO_LARGE =-4;
-        ERR_INVALID_IC = -5; 
+        ERR_INVALID_IC = -5;
         ERR_TRAJ_EXCEED_MAX_DEPTH = -6;
         ERR_OBSTACLE_IS_NOT_DETECT = -7;
 
         obstacleOffset =10;
-     
+
     end
 
     properties
@@ -36,37 +36,37 @@ classdef TrajectoryGenerator < handle
         param; % paramètre de trajectoire.
         obstacleData; % Information des obstacle
 
-        % Parametres 
+        % Parametres
         nMAPM;     % nombre de waypoints dans la liste multiaddpose.
         n;         % Nombre de waypoints réel.
         lastConj = false; % condition de discontinute du quaternion.
         icOffset = 2; % nombre de point pour la condition initial.
-        
+
         % Liste waypoints
         pointList; % liste de position.
         quatList;  % liste de quaternion.
         timeList;  % liste de temp
         courseList; % Liste de courbe
         speedList; % parametre de vitesse
-        
-        
+
+
         % liste de trajectoire
         nbPoint = 1;      % Nombre de points dans la trajectoire
-        trajPosition;     
-        trajQuat; 
+        trajPosition;
+        trajQuat;
         trajBodyVelocity;
         trajAngulairRates;
         trajLinearAcceleration;
         trajAngularAcceleration;
 
     end
-    
+
     methods
         %==================================================================
         % Constructeur
         function this = TrajectoryGenerator(multiAddposeMsg, param, icMsg, obstMsg)
             % Initialise l'objet trajectoire et vérifie si le message multi add pose est valide.
-            
+
             this.status = this.RECIEVED_VALID_WAYPTS; % Validité de waypoints reçus.
 
             this.obstacleData = obstMsg; % prendre les infos des obstacles.
@@ -91,15 +91,15 @@ classdef TrajectoryGenerator < handle
             % point supplementaire pour l'arrondissement.
             suppPoint = 0;
             for i=1 : this.nMAPM
-                
+
                 if ~(this.MAPM.Pose(i).Fine == 0)
                     suppPoint =suppPoint + 1;
                 end
             end
 
             % nombre de waypoints  + point supp + offset + point initial
-            this.n = this.nMAPM + suppPoint + this.icOffset + 1; 
-            
+            this.n = this.nMAPM + suppPoint + this.icOffset + 1;
+
              % Initialiser les tableaux
             this.pointList = zeros(this.n,3);
             this.quatList = zeros(this.n,4);
@@ -111,7 +111,7 @@ classdef TrajectoryGenerator < handle
             if ~this.getInitialWaypoint(icMsg)
                 this.status = this.ERR_INVALID_IC;
                 fprintf('INFO : proc planner : initial waypoint not received \n');
-                
+
             end
 
             % Verifier si le mode d'interpolation est valide
@@ -122,7 +122,7 @@ classdef TrajectoryGenerator < handle
 
             % Process le message addpose
                 this.processWpt();
-              
+
             % Calculer les temps entre chaque waypoints
             if (this.status == this.RECIEVED_VALID_WAYPTS && logical(this.computetimeArrival()))
                 % Déterminer le nombre de points
@@ -130,7 +130,7 @@ classdef TrajectoryGenerator < handle
 
             else
                 this.nbPoint = 1;
-                
+
             end
 
             % vérifier la profondeur maximum.
@@ -145,13 +145,13 @@ classdef TrajectoryGenerator < handle
 %             end
 
             % Definir la taille de la trajectoire
-            this.trajPosition = zeros(this.nbPoint,3);     
-            this.trajQuat = zeros(this.nbPoint,4); 
+            this.trajPosition = zeros(this.nbPoint,3);
+            this.trajQuat = zeros(this.nbPoint,4);
             this.trajBodyVelocity = zeros(this.nbPoint,3);
             this.trajAngulairRates = zeros(this.nbPoint,3);
             this.trajLinearAcceleration = zeros(this.nbPoint,3);
             this.trajAngularAcceleration = zeros(this.nbPoint,3);
-  
+
         end
         %==================================================================
         % Fonction Main qui génère les waypoints
@@ -159,17 +159,17 @@ classdef TrajectoryGenerator < handle
 
             %Vérifier la pré-validation
             if (this.status == this.RECIEVED_VALID_WAYPTS)
-                % Interpoler les waypoints               
+                % Interpoler les waypoints
                 this.interpolateWaypoints();
-            
+
                 % Envoyer la trajectoire sur ROS.
-                status = this.sendTrajectory(trajpub);  
+                status = this.sendTrajectory(trajpub);
 
             else
                 status =false;
 
             end
-            
+
         end
     end
 %% ========================================================================
@@ -188,7 +188,7 @@ classdef TrajectoryGenerator < handle
                                       this.MAPM.Pose(i).Orientation.Y,...
                                       this.MAPM.Pose(i).Orientation.X]),'ZYX');
 
-                % cree le vecteur pose 
+                % cree le vecteur pose
                 p = [this.MAPM.Pose(i).Position.X,...
                      this.MAPM.Pose(i).Position.Y,...
                      this.MAPM.Pose(i).Position.Z];
@@ -198,30 +198,30 @@ classdef TrajectoryGenerator < handle
 
                     case 0 % position et angle absolue
                         this.quatList(i+this.icOffset,:) = this.qUtils.checkQuatFlip(q, this.quatList(i+this.icOffset-1,:));
-                        this.pointList(i+this.icOffset,:) = p; 
-        
+                        this.pointList(i+this.icOffset,:) = p;
+
                     case 1 % position et angle relatif
                         this.quatList(i+this.icOffset,:) = this.qUtils.getQuatDir(this.quatList(i+this.icOffset-1,:), q, this.MAPM.Pose(i).Rotation);
                         this.pointList(i+this.icOffset,:) = this.pointList(i+this.icOffset-1,:) + this.qUtils.quatRotation(p,this.quatList(i+this.icOffset-1,:));
-                        
-        
-                    case 2 % position relatif et angle absolue             
+
+
+                    case 2 % position relatif et angle absolue
                         this.quatList(i+this.icOffset,:) = this.qUtils.checkQuatFlip(q, this.quatList(i+this.icOffset-1,:));
                         this.pointList(i+this.icOffset,:) = this.pointList(i+this.icOffset-1,:) + this.qUtils.quatRotation(p,this.quatList(i+this.icOffset-1,:));
-        
+
                     case 3 % position absolue et angle relatif
                         this.quatList(i+this.icOffset,:) = this.qUtils.getQuatDir(this.quatList(i+this.icOffset-1,:), q, this.MAPM.Pose(i).Rotation);
                         this.pointList(i+this.icOffset,:) = p;
-                    
+
                     case 4 % z absolue et reste relatif
                         this.quatList(i+this.icOffset,:) = this.qUtils.getQuatDir(this.quatList(i+this.icOffset-1,:), q, this.MAPM.Pose(i).Rotation);
                         this.pointList(i+this.icOffset,:) = this.pointList(i+this.icOffset-1,:) + this.qUtils.quatRotation(p,this.quatList(i+this.icOffset-1,:));
                         this.pointList(i+this.icOffset,3) = p(3);
-        
+
                     otherwise % Référentiel obstacles
-                        
+
                         [pObst,qObst] = getObstacleFrame(this,this.MAPM.Pose(i).Frame);
-                        
+
                         if this.status >= 0
                             q =quatmultiply(qObst, q);
                             this.quatList(i+this.icOffset,:) = this.qUtils.checkQuatFlip( q, this.quatList(i+this.icOffset-1,:));
@@ -229,7 +229,7 @@ classdef TrajectoryGenerator < handle
                         else
                             return ;
                         end
-                        
+
 
                 end
 
@@ -248,14 +248,14 @@ classdef TrajectoryGenerator < handle
                         this.status = this.ERR_RADIUS_TO_LARGE;
                         fprintf('INFO : proc planner : Circle radius is to large.\n');
                         return
-                    
+
                     end
 
                     % Decaler les waypoints
                     this.pointList(i+this.icOffset+1,:) = this.pointList(i+this.icOffset,:);
-                    this.pointList(i+this.icOffset,:) = p12; 
+                    this.pointList(i+this.icOffset,:) = p12;
                     this.pointList(i+this.icOffset-1,:) = p01;
-                    
+
                     this.quatList(i+this.icOffset+1,:) = this.quatList(i+this.icOffset,:);
                     this.quatList(i+this.icOffset,:) = this.quatList(i+this.icOffset-1,:);
                     this.quatList(i+this.icOffset-1,:) = this.quatList(i+this.icOffset-2,:);
@@ -272,18 +272,18 @@ classdef TrajectoryGenerator < handle
                 end
             end
 
-           
+
             % Copier le dernier waypoint 2 fois pour éviter un comportement
             % du generateur de trajecteur
-            this.pointList(end,:) = this.pointList(end-1,:); 
+            this.pointList(end,:) = this.pointList(end-1,:);
             this.quatList(end,:) = this.quatList(end-1,:);
             this.courseList(end) = this.courseList(end-1);
             this.speedList(end) = this.speedList(end-1);
-        
-        end
-        
 
-        %================================================================== 
+        end
+
+
+        %==================================================================
         % Fonction qui vérifie frame obstacles
 
         function [p,q] = getObstacleFrame(this,id)
@@ -298,11 +298,11 @@ classdef TrajectoryGenerator < handle
 
                 % check if obstacle is found
                 if this.obstacleData.Obstacles(id - this.obstacleOffset).IsValid
-                    
+
                     p = [this.obstacleData.Obstacles(id - this.obstacleOffset).Pose.Position.X,...
                          this.obstacleData.Obstacles(id - this.obstacleOffset).Pose.Position.Y,...
                          this.obstacleData.Obstacles(id - this.obstacleOffset).Pose.Position.Z];
-    
+
                     q = [this.obstacleData.Obstacles(id - this.obstacleOffset).Pose.Orientation.W,...
                          this.obstacleData.Obstacles(id - this.obstacleOffset).Pose.Orientation.X...
                          this.obstacleData.Obstacles(id - this.obstacleOffset).Pose.Orientation.Y...
@@ -321,12 +321,12 @@ classdef TrajectoryGenerator < handle
         end
 
 
-        %================================================================== 
+        %==================================================================
         % Fonction qui retourne l'angle de course
          function angle = getCourseAngle(this, q)
-            
-            eul = rad2deg(quat2eul(q,"ZYX")); 
-                        
+
+            eul = rad2deg(quat2eul(q,"ZYX"));
+
             if eul(1)<0
 
                 eul(1) = 360+eul(1);
@@ -336,7 +336,7 @@ classdef TrajectoryGenerator < handle
          end
 
 
-        %================================================================== 
+        %==================================================================
         % Fonction qui arrondie les waypoints.
 
         function [status, p01, p12] = inscribedCircles(this,i)
@@ -349,7 +349,7 @@ classdef TrajectoryGenerator < handle
                     P0 = this.pointList(i-2,:);
                     P1 = this.pointList(i-1,:);
                     P2 = this.pointList(i,:);
-                    
+
                 % Determiner les vecteurs
                     v02 = P2-P0;
                     v01 = P1-P0;
@@ -385,11 +385,11 @@ classdef TrajectoryGenerator < handle
             else
                 p01 = this.pointList(i-1, :);
                 p12 = this.pointList(i-1, :);
-                status = true; 
+                status = true;
             end
         end
 
-        %================================================================== 
+        %==================================================================
         % Fonnction qui calcul le temps entre chaque waypoint
 
         function  valid = computetimeArrival(this)
@@ -398,14 +398,14 @@ classdef TrajectoryGenerator < handle
 
             for i = 2 : this.n % pour chaques waypoints
 
-                % Determiner le parametre de vitesse 
+                % Determiner le parametre de vitesse
                 switch this.speedList(i)
 
                     case 0 % Vitesse normale
                         amax = this.param.normalSpeed.amax;
                         vlmax = this.param.normalSpeed.vlmax;
                         vamax = this.param.normalSpeed.vamax;
-                    
+
                     case 1 % Vitesse rapide
                         amax = this.param.highSpeed.amax;
                         vlmax = this.param.highSpeed.vlmax;
@@ -419,7 +419,7 @@ classdef TrajectoryGenerator < handle
                     otherwise % mode non reconue.
                         this.status = this.ERR_INVALID_SPEED_PARAM;
                         fprintf('INFO : proc planner : Speed parameter is not recognized \n');
-                        return 
+                        return
                 end
 
                 % Trouver la distance Eucledienne entre 2 points
@@ -441,7 +441,7 @@ classdef TrajectoryGenerator < handle
                 qRel = quatmultiply( quatconj( this.quatList(i-1,:)), this.quatList(i,:));
                 travelAngle = 2 * atan2(norm(qRel(2:4)),qRel(1));
 
-                % Déterminer le temps angulaire 
+                % Déterminer le temps angulaire
                 ta = travelAngle / vamax;
 
                 % Déterminer le temps maximale
@@ -452,16 +452,16 @@ classdef TrajectoryGenerator < handle
 
                 if tresidual > 0
                     tmax = tmax + (this.param.ts - tresidual);
-                end  
-                
-                
+                end
+
+
                 this.timeList(i) = this.timeList(i-1) + tmax;
             end
 
             valid = true;
         end
 
-        %================================================================== 
+        %==================================================================
         % Fonction qui interpole les waypoints
         function interpolateWaypoints(this)
 
@@ -472,19 +472,19 @@ classdef TrajectoryGenerator < handle
              this.trajPosition(:,1) = this.interpStrategy(this.timeList,this.pointList(:,1),t,false).';
              this.trajPosition(:,2)  = this.interpStrategy(this.timeList,this.pointList(:,2),t,false).';
              this.trajPosition(:,3) = interp1(this.timeList,this.pointList(:,3),t,'pchip').'; % par sécurité, on ne veux pas de courbe en z. laissez pchip
- 
+
              % Deriver la trajectoire pour avoir les vitesse linéare;
              this.trajBodyVelocity(:,1) = [0 ; diff(this.trajPosition(:,1))];
              this.trajBodyVelocity(:,2) = [0 ; diff(this.trajPosition(:,2))];
              this.trajBodyVelocity(:,3) = [0 ; diff(this.trajPosition(:,3))];
- 
+
              % Deriver la vitesse pour avoir les acceleration linéare;
              this.trajLinearAcceleration(:,1) = [0 ; diff(this.trajBodyVelocity(:,1))];
              this.trajLinearAcceleration(:,2) = [0 ; diff(this.trajBodyVelocity(:,2))];
              this.trajLinearAcceleration(:,3) = [0 ; diff(this.trajBodyVelocity(:,3))];
- 
+
              % Interpoler l'orientation avec pchip. résultat plus smooth/moins jerk que slerp.
-             % De plus, pas d'oscillation 
+             % De plus, pas d'oscillation
              this.trajQuat(:,1) = interp1(this.timeList,this.quatList(:,1),t,'pchip').'; % eta
              this.trajQuat(:,2) = interp1(this.timeList,this.quatList(:,2),t,'pchip').'; % epsilon 1
              this.trajQuat(:,3) = interp1(this.timeList,this.quatList(:,3),t,'pchip').'; % epsilon 2
@@ -496,7 +496,7 @@ classdef TrajectoryGenerator < handle
              qdot(:,2) = [0 ; diff(this.trajQuat(:,2))]; % epsilon 1 dot
              qdot(:,3) = [0 ; diff(this.trajQuat(:,3))]; % epsilon 2 dot
              qdot(:,4) = [0 ; diff(this.trajQuat(:,4))]; % epsilon 3 dot
- 
+
              % Post traitement
              for i = 1 : this.nbPoint
 
@@ -517,7 +517,7 @@ classdef TrajectoryGenerator < handle
 
                 % Convertir les vitesse angulaire dans le ref sub
                 this.trajAngulairRates(i,:) = - this.trajAngulairRates(i,:);
-                
+
                 % Convertire les accélération angulaire dans le ref sub
                 this.trajLinearAcceleration(i,:) = this.qUtils.quatRotation(this.trajLinearAcceleration(i,:), this.trajQuat(i,:));
 
@@ -529,7 +529,7 @@ classdef TrajectoryGenerator < handle
              this.trajAngularAcceleration(:,3) = [0 ; diff(this.trajAngulairRates(:,3))]; % rs_dot
         end
 
-        %================================================================== 
+        %==================================================================
         % Fonction qui envoie les message sur ros
         function trajList = interpStrategy(this, timeList, pointList, sample, verif)
 
@@ -539,18 +539,18 @@ classdef TrajectoryGenerator < handle
 
             case 0 % piecewise cubic interpolation
                 if~(verif)
-                     trajList = interp1(timeList,pointList,sample,'pchip'); 
+                     trajList = interp1(timeList,pointList,sample,'pchip');
 
-                else 
+                else
                     trajList = 1 ;
 
-                end    
+                end
 
             case 1 % spline
                 if~(verif)
                     trajList = interp1(timeList,pointList,sample,'spline');
 
-                else 
+                else
                     trajList = 1 ;
 
                 end
@@ -559,29 +559,29 @@ classdef TrajectoryGenerator < handle
                 if~(verif)
                     trajList = interp1(timeList,pointList,sample,'v5cubic');
 
-                else 
+                else
                     trajList = 1 ;
 
                 end
-            
+
             otherwise
-                trajList = 0 ; 
+                trajList = 0 ;
 
             end
-            
+
         end
 
-        %================================================================== 
+        %==================================================================
         % Fonction qui envoie les message sur ros
 
-        function info = sendTrajectory(this, trajpub)  
+        function info = sendTrajectory(this, trajpub)
 
             % Initialiser le message trajectoire.
             trajMsg = rosmessage('trajectory_msgs/MultiDOFJointTrajectoryPoint',"DataFormat","struct"); % message point
             transformBuff  = rosmessage('geometry_msgs/Transform.msg',"DataFormat","struct"); % trajectoire
             twistBuff = rosmessage('geometry_msgs/Twist.msg',"DataFormat","struct"); % trajectoire
 
-           % initialiser la dimention vecteur de points 
+           % initialiser la dimention vecteur de points
             trajMsg.Transforms = repelem(transformBuff,this.nbPoint).';
             trajMsg.Velocities = repelem(twistBuff,this.nbPoint).';
             trajMsg.Accelerations = repelem(twistBuff,this.nbPoint).';
@@ -593,23 +593,23 @@ classdef TrajectoryGenerator < handle
                 transformBuff.Translation.X = this.trajPosition(i,1);
                 transformBuff.Translation.Y = this.trajPosition(i,2);
                 transformBuff.Translation.Z = this.trajPosition(i,3);
-                
+
                 transformBuff.Rotation.W = this.trajQuat(i,1);
                 transformBuff.Rotation.X = this.trajQuat(i,2);
                 transformBuff.Rotation.Y = this.trajQuat(i,3);
                 transformBuff.Rotation.Z = this.trajQuat(i,4);
 
                 trajMsg.Transforms(i) = transformBuff;
-               
+
                 % Remplire les vitesse
                 twistBuff.Linear.X = this.trajBodyVelocity(i,1);
                 twistBuff.Linear.Y = this.trajBodyVelocity(i,2);
                 twistBuff.Linear.Z = this.trajBodyVelocity(i,3);
 
-                twistBuff.Angular.X = this.trajAngulairRates(i,1); 
+                twistBuff.Angular.X = this.trajAngulairRates(i,1);
                 twistBuff.Angular.Y = this.trajAngulairRates(i,2);
                 twistBuff.Angular.Z = this.trajAngulairRates(i,3);
-                
+
                 trajMsg.Velocities(i) = twistBuff;
 
                % Remplire les acceleration
@@ -640,7 +640,7 @@ classdef TrajectoryGenerator < handle
 
             end
         end
-        %================================================================== 
+        %==================================================================
         % Fonnction qui retoure le waypoint initial
         function status = getInitialWaypoint(this,icMsg)
 
@@ -648,7 +648,7 @@ classdef TrajectoryGenerator < handle
                  this.pointList(1,:) = [icMsg.Position.X,...
                                         icMsg.Position.Y,...
                                         icMsg.Position.Z];
-    
+
                  this.quatList(1,:) = [icMsg.Orientation.W,...
                                        icMsg.Orientation.X...
                                        icMsg.Orientation.Y...
@@ -656,8 +656,8 @@ classdef TrajectoryGenerator < handle
 
                  this.timeList(1) = 0;
                  this.speedList(1) = 0;
-                 
-                 eul = rad2deg(quat2eul(this.quatList(1,:),"ZYX")); 
+
+                 eul = rad2deg(quat2eul(this.quatList(1,:),"ZYX"));
                  this.courseList(1) = eul(1);
 
                 % Copier le point 2 fois pour forcé accInit a 0.

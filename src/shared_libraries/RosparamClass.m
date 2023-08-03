@@ -1,17 +1,17 @@
 classdef RosparamClass < handle
    %
-    
+
     properties
         ptree
     end
-    
+
     methods (Access = public)
         function this = RosparamClass(ptree_ros)
             %ROSPARAM Construct an instance of this class
             %   Detailed explanation goes here
             this.ptree = ptree_ros;
         end
-        
+
         %% get rosparam number
         function valueRequested = getValue(this, value, actualValue)
             valueRequested = zeros(1,1);
@@ -28,7 +28,7 @@ classdef RosparamClass < handle
         function gainRequested = getArray(this, gain, nbGains, actualGain)
             % rosparam array not supported for codegen. use string instead
             gainRequested =zeros(1,nbGains);
-           
+
             if has(this.ptree, gain)
 
                 if coder.target('MATLAB')
@@ -50,7 +50,7 @@ classdef RosparamClass < handle
                 gainRequested(1,1:nbGains) = actualGain(1,1:nbGains);
             end
         end
-        
+
     end
 
 
@@ -70,6 +70,6 @@ classdef RosparamClass < handle
         end
     end
 
-  
+
 end
 

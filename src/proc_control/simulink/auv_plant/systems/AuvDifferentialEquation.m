@@ -24,7 +24,7 @@ classdef AuvDifferentialEquation < matlab.System
     end
 
     methods(Access = protected)
-        
+
         % reset  fonction
         %------------------------------------------------------------------------------
         function resetImpl(this)
@@ -77,7 +77,7 @@ classdef AuvDifferentialEquation < matlab.System
                                     physics.rho ...
                                     physics.g];
                 this.generateBmatrix(physics.thrusters,physics.rg);
-                this.init = true; 
+                this.init = true;
             end
         end
 
@@ -85,51 +85,51 @@ classdef AuvDifferentialEquation < matlab.System
         %------------------------------------------------------------------------------
         function generateBmatrix(this, T, rg)
 
-            % Crée la matrice thrusters 
-            Tm=zeros(6,this.MPC.nu);   
-        
+            % Crée la matrice thrusters
+            Tm=zeros(6,this.MPC.nu);
+
             for i=1:this.MPC.nu
-                    
+
                 qt= eul2quat(deg2rad(T(i,4:6)),'ZYX');% convertir les angle d'euler en uaternion
-                 Tm(:,i)=ThrusterVector(T(i,1:3),qt,rg);  % Calculer le vecteur thrusters     
+                 Tm(:,i)=ThrusterVector(T(i,1:3),qt,rg);  % Calculer le vecteur thrusters
             end
-            
+
             % prendre la matrice M
             [M,~,~,~] = AUVModelMatrices(this.MPC.Xi,this.constValues);
 
             % M inverse * Tm
             this.Bc = [zeros(7,this.MPC.nu) ; M\Tm];
-           
+
         end
       %% Definire outputs
-      %------------------------------------------------------------------------------       
+      %------------------------------------------------------------------------------
         function [Position_dot,Quaternion_dot,BodyVelocity_dot, AngularRates_dot] = getOutputSizeImpl(this)
             Position_dot = [3,1];
             Quaternion_dot = [4,1];
             BodyVelocity_dot = [3,1];
             AngularRates_dot = [3,1];
-        end 
-      
+        end
+
         function [Position_dot,Quaternion_dot,BodyVelocity_dot, AngularRates_dot] = isOutputFixedSizeImpl(this)
             Position_dot = true;
             Quaternion_dot = true;
             BodyVelocity_dot = true;
-            AngularRates_dot = true;        
+            AngularRates_dot = true;
         end
-      
+
         function [Position_dot,Quaternion_dot,BodyVelocity_dot, AngularRates_dot] = getOutputDataTypeImpl(this)
             Position_dot = "double";
             Quaternion_dot = "double";
             BodyVelocity_dot = "double";
             AngularRates_dot = "double";
         end
-      
+
         function [Position_dot,Quaternion_dot,BodyVelocity_dot, AngularRates_dot] = isOutputComplexImpl(this)
             Position_dot = false;
             Quaternion_dot = false;
             BodyVelocity_dot = false;
             AngularRates_dot = false;
-         
+
         end
 
         function [sz,dt,cp] = getDiscreteStateSpecificationImpl(this,name)
@@ -146,9 +146,6 @@ classdef AuvDifferentialEquation < matlab.System
                 dt = "double";
                 cp = false;
             end
-        end 
-     
-    
-    
+        end
     end
 end

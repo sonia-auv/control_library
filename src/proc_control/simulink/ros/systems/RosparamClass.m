@@ -1,11 +1,11 @@
 classdef RosparamClass < handle
     %ROSPARAM Summary of this class goes here
     %   Detailed explanation goes here
-    
+
     properties
         ptree
     end
-    
+
     methods (Access = public)
         function setParameterTree(this, ptree_ros)
             %ROSPARAM Construct an instance of this class

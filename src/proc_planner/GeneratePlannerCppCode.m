@@ -3,9 +3,8 @@
 function GeneratePlannerCppCode(build)
 
     ROSWS = "~/sonia_ws/";
-    
-    
-% add shared lib folder   
+
+% add shared lib folder
     addpath("../shared_libraries/");
 
 % Set the code generation config
@@ -40,7 +39,7 @@ function GeneratePlannerCppCode(build)
     try rmdir('install','s'); end;
     try rmdir('log','s'); end;
     try rmdir('msgdef','s'); end;
-    try rmdir('src','s'); end;   
+    try rmdir('src','s'); end;
 
  % Build Code
     if build
@@ -51,7 +50,7 @@ function GeneratePlannerCppCode(build)
 
         try system(strcat("rm -r ",ROSWS,"/build"));end;
         try system(strcat("rm -r ",ROSWS,"/devel"));end;
-      
+
         work_folder = pwd;
 
         cd(ROSWS)

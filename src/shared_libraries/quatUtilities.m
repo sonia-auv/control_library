@@ -14,11 +14,11 @@ classdef quatUtilities
              qu = q(2:4); % quaternion partie vectoriel
 
              % QuatRotate n'est pas compilable
-             rp= (2*dot(qu,p)*qu +(qs^2-dot(qu,qu))*p + 2*qs*cross(qu,p)); 
+             rp= (2*dot(qu,p)*qu +(qs^2-dot(qu,qu))*p + 2*qs*cross(qu,p));
          end
-        
+
          %=================================================================
-         % Fonction qui normalise un quaternion. 
+         % Fonction qui normalise un quaternion.
          % quatnormalize de matlab demande areospace block set pour etre compilable.
          function nq = quatNorm(q)
 
@@ -34,7 +34,7 @@ classdef quatUtilities
             if  dot(qk,q) < 0
                 q = -q;
             end
-            
+
         end
 
         %=================================================================
@@ -61,46 +61,46 @@ classdef quatUtilities
 
         end
          %=================================================================
-         % Fonction qui convertie un quaternion instantané en vitesses angulaires. 
+         % Fonction qui convertie un quaternion instantané en vitesses angulaires.
          function angularRates = qDot2angularRates(q,qDot)
 
             E2 = quatUtilities.liniairzeE2(q);
             invE2 = pinv(E2);
-            
+
             angularRates = -(invE2 * qDot.').';
-            
+
          end
 
         %=================================================================
-         % Fonction qui convertie des vitesses angulaires quaternion instantané en quaternion instantané. 
+         % Fonction qui convertie des vitesses angulaires quaternion instantané en quaternion instantané.
          function qDot = angularRates2qDot(this, q, omega)
 
             E2 = quatUtilities.liniairzeE2(q);
-            
+
             qDot = -E2* omega.';
          end
-        
-        %================================================================== 
+
+        %==================================================================
         % Fonnction qui retoure le quaternion le plus court/long selon
         % l'utilisateur
-     
-        function rq = getQuatDir(lq,q,dir)    
+
+        function rq = getQuatDir(lq,q,dir)
 
             %---------------------------------------------------------------
-            % Code not ready for deploy yet. It is comment to avoid instablitiy 
+            % Code not ready for deploy yet. It is comment to avoid instablitiy
             % during pool testing.
             %---------------------------------------------------------------
             %           norm = dot(lq,q);
             %             % conjuger le quaternion au besoin
             %             %if  norm > 1 && dir == 0 || norm < 1 && dir == 1
             %            if  norm < 0  && dir == 0 || norm >= 0 && dir == 1
-            %                 q = quatconj(q);    
+            %                 q = quatconj(q);
             %                 this.lastConj =true;
-            % 
-            %             end        
+            %
+            %             end
             rq = quatmultiply(lq,q);
-                        
-        end   
+
+        end
 
     end
 
@@ -108,7 +108,7 @@ classdef quatUtilities
 
        %=================================================================
         % Fonction qui Convertie un vecteur 3x1 en une matrice antisymétrique 3x3
-        function sm = skew3(u) 
+        function sm = skew3(u)
             % Fossen(2021) eq 2.47 p30
             sm=[0,-u(3),u(2);
                 u(3), 0, -u(1);
@@ -120,10 +120,10 @@ classdef quatUtilities
         function E2 = liniairzeE2(q)
             % Fossen(2021) eq 2.77 - 2.78 page 35
             E2 = (1/2) * [-q(2:4); q(1)*eye(3) + quatUtilities.skew3(q(2:4))];
-        end  
-        
+        end
 
-        
+
+
     end
 end
 

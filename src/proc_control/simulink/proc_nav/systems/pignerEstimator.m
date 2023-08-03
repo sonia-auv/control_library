@@ -36,19 +36,19 @@ classdef pignerEstimator < matlab.System
         function [pp, rho] = stepImpl(this, worldPosition, quaternion, isNewHydro, hydro)
             % Implement algorithm. Calculate y as a function of input u and
             % discrete states.
-            
+
 
             if isNewHydro
                 this.p = worldPosition;
                 this.q = quaternion.';
                 this.h = [hydro.Heading, hydro.Elevation];
-                
+
                 if ~this.start
                     this.start = true;
                 else
                     % Estimer Rho
                     this.rho = abs(rhoEstimator(this.p, this.q, this.h, this.pk, this.qk, this.hk ,this.physics.hydroPose.'));
-                    
+
                     % Calculer la position du pigner
                     this.pp = hydroAngles2pinger(this.p, this.q, this.physics.hydroPose.', this.h, this.rho);
 
@@ -75,25 +75,25 @@ classdef pignerEstimator < matlab.System
             this.rho = 0;
             this.pp = zeros(3,1);
         end
-          %% Definire outputs       
+          %% Definire outputs
        function [pp, rho] = getOutputSizeImpl(this)
 
             pp = [3,1];
             rho = [1,1];
-        end 
-      
+        end
+
         function [pp, rho] = isOutputFixedSizeImpl(this)
 
             pp = true;
-            rho = true;      
+            rho = true;
         end
-      
+
         function [pp, rho] = getOutputDataTypeImpl(this)
 
             pp = "double";
-            rho = "double";  
+            rho = "double";
         end
-      
+
         function [pp, rho] = isOutputComplexImpl(this)
 
             pp = false;
@@ -138,6 +138,6 @@ classdef pignerEstimator < matlab.System
               dt = "double";
               cp = false;
          end
-     end 
+     end
     end
 end

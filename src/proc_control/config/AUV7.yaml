@@ -1,4 +1,4 @@
-# AUV8 proc_control parameters 
+# AUV8 proc_control parameters
 # Alexandre Lamarre - 2022
 # Matlab codegen does not support array for rosparam. the array must be declare as string
 
@@ -41,7 +41,7 @@
 /proc_control/mpc/gains/c10/mvr : '0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1'
 
 #MPC Gain Mode 11
-/proc_control/mpc/gains/c11/ov : '30,30,30,45,45,45,45,0,0,0,0,0,0' 
+/proc_control/mpc/gains/c11/ov : '30,30,30,45,45,45,45,0,0,0,0,0,0'
 /proc_control/mpc/gains/c11/mv : '0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0'
 /proc_control/mpc/gains/c11/mvr : '0.4,0.4,0.4,0.4,0.5,0.5,0.5,0.5'
 
@@ -56,9 +56,9 @@
 
 #=========================================================================================================
 # physical constants
-# 
+#
 # The AUV model use the MKS (Meters, Kilograms, Second) standard.
-#========================================================================================================= 
+#=========================================================================================================
 
 # Basic constants
 #---------------------------------------------------------------------------------------------------------
@@ -76,11 +76,11 @@
                           # Ixx Ixy Ixz
                           # Iyx Iyy Iyz
                           # Izx Izy Izz
-/proc_control/physics/I : '1.613, 0.008, 0.004, 
+/proc_control/physics/I : '1.613, 0.008, 0.004,
                            0.008, 1.613, -0.001,
                            0.004, -0.001, 2.9030'
 
-  
+
 # Center of mass              x     y     z
 /proc_control/physics/rg : '-0.0035, 0.001, 0.008' # distance (m) between center of mass and the geometric center of the sub.
 
