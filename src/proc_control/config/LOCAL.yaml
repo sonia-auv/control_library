@@ -1,0 +1,124 @@
+# AUV8 proc_control parameters
+# Alexandre Lamarre - 2022
+# Matlab codegen does not support array for rosparam. the array must be declare as string
+
+#*** proc_control update the parameter only when soft kill (mode 0) is selected. ***
+#=========================================================================================================
+
+# Thrusters effort.
+# must be double.
+/proc_control/mpc/tmax : 40.0 # max thrust Newton
+/proc_control/mpc/tmin : -30.0 # min thrust Newtons
+
+# TargetReached.
+# must be double.
+/proc_control/target_reached/linear_tolerance : 0.2 # meters
+/proc_control/target_reached/angular_tolerance : 0.3 # radians
+/proc_control/target_reached/time_in_tolerance : 3.0 # seconds
+
+# MPC horizon
+# See properties section here : https://www.mathworks.com/help/mpc/ref/mpc.html
+# must be integers
+/proc_control/mpc/p : 10 # prediction horizon MAX 10
+/proc_control/mpc/m : 1 # control horizon (m<=P otherwise crash)
+
+
+#=========================================================================================================
+## MPC gains
+# gains definition : see properties section under weight : https://www.mathworks.com/help/mpc/ref/mpc.html
+# tips for tunning : https://www.mathworks.com/help/mpc/ug/tuning-weights.html
+# must be defined as strings.
+#=========================================================================================================
+
+#MPC Gains Default
+/proc_control/mpc/gains/default/ov : '70,60,70,90,90,90,90,0,0,0,0,0,0'
+/proc_control/mpc/gains/default/mv : '0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2'
+/proc_control/mpc/gains/default/mvr : '0.1,0.1,0.1,0.1,0.3,0.3,0.3,0.3'
+
+#MPC Gain Mode 10
+/proc_control/mpc/gains/c10/ov : '30,30,30,45,45,45,45,0,0,0,0,0,0'
+/proc_control/mpc/gains/c10/mv : '0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.'
+/proc_control/mpc/gains/c10/mvr : '0.4,0.4,0.4,0.4,0.5,0.5,0.5,0.5'
+
+#MPC Gain Mode 11
+/proc_control/mpc/gains/c11/ov : '30,30,30,45,45,45,45,0,0,0,0,0,0'
+/proc_control/mpc/gains/c11/mv : '0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0'
+/proc_control/mpc/gains/c11/mvr : '0.4,0.4,0.4,0.4,0.5,0.5,0.5,0.5'
+
+#MPC Gain Mode 19
+/proc_control/mpc/gains/c19/ov : '0,0,0,0,0,0,0,20,20,20,20,20,20'
+/proc_control/mpc/gains/c19/mv : '0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2'
+/proc_control/mpc/gains/c19/mvr : '0.1,0.1,0.1,0.1,0.3,0.3,0.3,0.3'
+
+#MPC no dvl Gains
+/proc_control/mpc/gains/noDvl/mv : "0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0"
+
+
+#=========================================================================================================
+# physical constants
+#
+# The AUV model use the MKS (Meters, Kilograms, Second) standard.
+#=========================================================================================================
+
+# Basic constants
+#---------------------------------------------------------------------------------------------------------
+/proc_control/physics/rho : 998 # kg/m^3
+/proc_control/physics/g : 9.81 # m/s^2
+
+
+# AUV Constant
+#---------------------------------------------------------------------------------------------------------
+/proc_control/physics/mass : 31 #Kg
+/proc_control/physics/volume : 0.032 # M^3
+/proc_control/physics/sub_height : .3 # m
+
+# Inertia tensor matrix define as:
+                          # Ixx Ixy Ixz
+                          # Iyx Iyy Iyz
+                          # Izx Izy Izz
+/proc_control/physics/I : '0.4756, 0.008, 0.004,
+                           0.008, 1.3735, -0.001,
+                           0.004, -0.001, 1.5371'
+
+
+# Center of mass              x     y     z
+/proc_control/physics/rg : '0.002, -0.001, 0.015' # distance (m) between center of mass and the geometric center of the sub.
+
+# Center of boyency           x     y     z
+/proc_control/physics/rb : '-0.00, 0.001 ,-0.006' # distance (m) between center of boyency and the geometric center of the sub.
+
+# Drag linear constants
+/proc_control/physics/cdl : '15, 20, 23.3, 7.33, 2.33, 5' # dimensionless
+
+# Drag quadratic constants
+/proc_control/physics/cdq : '1.17, 0.82, 2.756, 0.167, 0.1, 0.102' # dimensionless
+
+# Added mass
+/proc_control/physics/added_mass : '1.4648, 12.6156, 1.7695, 0.1164, 0.3493, 0.3493' # dimensionless
+
+# thusters definition
+# each row reprensent a thurster and each colunm reprensent an DOF
+
+#                                    x      y      z    yaw  roll pitch
+/proc_control/physics/thrusters : '0.292, 0.173, 0.082, -45,-90, 0;
+                                  -0.292, 0.173, 0.082, 45,-90, 0;
+                                  -0.292, -0.173, 0.082,-45,-90, 0;
+                                   0.292, -0.173, 0.082, 45,-90, 0;
+                                   0.181, 0.159, 0.082,  0,  0, 0;
+                                  -0.181, 0.159, 0.082,  0,180, 0;
+                                  -0.181, -0.159, 0.082,  0,  0, 0;
+                                   0.181, -0.159, 0.082,  0,180, 0'
+
+# Sensors Definition
+#---------------------------------------------------------------------------------------------------------
+# depth sensor distance according to the geometric center
+/proc_control/physics/depth_pose : '0.0, -0.136, 0.178' # m
+
+# hydrophones distance acording to auv center
+/proc_control/physics/hydro_pose : '0.160, 0.0, 0.155' # m
+
+# sonar distance acording to auv center
+/proc_control/physics/sonar_pose : '0.200, 0, -0.155' # m
+
+# transformation of the DVL frame to body frame
+/proc_control/physics/dvl_rotation : '0, 3.1415, 1.5708' # rad

@@ -20,12 +20,11 @@ classdef OpenLoopController < matlab.System
         AF = ones(1,3); % Aire de surfaces
         g = 9.81 % constante gravitationel
         rho = 998; % Masse volumique du fluide
-        
-        
+
     end
 
     properties(DiscreteState)
-       
+
     end
 
     % Pre-computed constants
@@ -44,11 +43,11 @@ classdef OpenLoopController < matlab.System
             % discrete states.
             mv = this.computeCommand(ref, ref_dot, mo, mode).';
         end
-        
+
         function mv = computeCommand(this, ref, ref_dot, mo, mode)
            switch mode
                case 20 % Open loop avec modèle physique
-                   
+
                    % Construire le vecteur constantes
                     constValues = [
                          this.mass ...
@@ -67,22 +66,22 @@ classdef OpenLoopController < matlab.System
                          this.g];
                    %construire le vecteur state avec la imu et spaceNAV
                     state = [0;0;0;1;0;0;0;ref.'];%[0;0;0;mo(4:7);ref.'];;
-                    
+
                    % Déterminer les matrices du modèle physique
-                   
+
                    [M,C,D,Gq] = AUVModelMatrices(state,constValues);
                    % CAlculer la comande
                    mv= this.binv*(M*ref_dot.'+(C + D)*ref.'+ Gq);
-                   
+
                case 21% Open loop matrice b invese directe
                    mv = (this.binv*ref.')*this.k;
-                   
+
                otherwise
                    mv = zeros(8,1);
            end
-           
+
         end
-       
+
         function resetImpl(obj)
             % Initialize / reset discrete-state properties
         end

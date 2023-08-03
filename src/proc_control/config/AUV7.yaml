@@ -1,4 +1,4 @@
-# AUV8 proc_control parameters 
+# AUV8 proc_control parameters
 # Alexandre Lamarre - 2022
 # Matlab codegen does not support array for rosparam. the array must be declare as string
 
@@ -7,8 +7,8 @@
 
 # Thrusters effort.
 # must be double.
-/proc_control/mpc/tmax : 40.0 # max thrust Newton
-/proc_control/mpc/tmin : -30.0 # min thrust Newtons
+/proc_control/mpc/tmax : 30.0 # max thrust Newton
+/proc_control/mpc/tmin : -25.0 # min thrust Newtons
 
 # TargetReached.
 # must be double.
@@ -36,12 +36,12 @@
 /proc_control/mpc/gains/default/mvr : '0.1,0.1,0.1,0.1,0.3,0.3,0.3,0.3'
 
 #MPC Gain Mode 10
-/proc_control/mpc/gains/c10/ov : '30,30,30,45,45,45,45,0,0,0,0,0,0'
+/proc_control/mpc/gains/c10/ov : '30,30,30,30,45,45,45,0,0,0,0,0,0'
 /proc_control/mpc/gains/c10/mv : '0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0'
-/proc_control/mpc/gains/c10/mvr : '0.3,0.4,0.4,0.4,0.5,0.5,0.5,0.5'
+/proc_control/mpc/gains/c10/mvr : '0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1'
 
 #MPC Gain Mode 11
-/proc_control/mpc/gains/c11/ov : '30,30,30,45,45,45,45,0,0,0,0,0,0' 
+/proc_control/mpc/gains/c11/ov : '30,30,30,45,45,45,45,0,0,0,0,0,0'
 /proc_control/mpc/gains/c11/mv : '0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0'
 /proc_control/mpc/gains/c11/mvr : '0.4,0.4,0.4,0.4,0.5,0.5,0.5,0.5'
 
@@ -51,14 +51,14 @@
 /proc_control/mpc/gains/c19/mvr : '0.1,0.1,0.1,0.1,0.3,0.3,0.3,0.3'
 
 #MPC no dvl Gains
-/proc_control/mpc/gains/noDvl/mv : "0.20,0.20,0.20,0.20,0.20,0.20,0.20,0.20"
+/proc_control/mpc/gains/noDvl/mv : "0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2"
 
 
 #=========================================================================================================
 # physical constants
-# 
+#
 # The AUV model use the MKS (Meters, Kilograms, Second) standard.
-#========================================================================================================= 
+#=========================================================================================================
 
 # Basic constants
 #---------------------------------------------------------------------------------------------------------
@@ -76,13 +76,13 @@
                           # Ixx Ixy Ixz
                           # Iyx Iyy Iyz
                           # Izx Izy Izz
-/proc_control/physics/I : '0.4756, 0.008, 0.004, 
-                           0.008, 1.3735, -0.001,
-                           0.004, -0.001, 1.5371'
+/proc_control/physics/I : '1.613, 0.008, 0.004,
+                           0.008, 1.613, -0.001,
+                           0.004, -0.001, 2.9030'
 
-  
+
 # Center of mass              x     y     z
-/proc_control/physics/rg : '-0.005, 0.002, 0.009' # distance (m) between center of mass and the geometric center of the sub.
+/proc_control/physics/rg : '-0.0035, 0.001, 0.008' # distance (m) between center of mass and the geometric center of the sub.
 
 # Center of boyency           x     y     z
 /proc_control/physics/rb : '0.00, 0.00, -0.004' # distance (m) between center of boyency and the geometric center of the sub.
@@ -94,7 +94,7 @@
 /proc_control/physics/cdq : '1.17, 1.17, 0.756, 0.167, 0.1, 0.102' # dimensionless
 
 # Added mass
-/proc_control/physics/added_mass : '-12.4686, -12.6156, -15.7695, -0.1164, -0.3493, -0.3493' # dimensionless
+/proc_control/physics/added_mass : '-12.4686, -12.6156, -15.7695, 0, 0, 0' # dimensionless
 
 # thusters definition
 # each row reprensent a thurster and each colunm reprensent an DOF
@@ -111,6 +111,13 @@
 
 # Sensors Definition
 #---------------------------------------------------------------------------------------------------------
+# Force dvl ON even when data is invalid
+# (If Set to TRUE, when dvl is lost, kalman filter will assume DVL return 0m/s)
+# (If set to FALSE' when dvl is lost Kalman will use the theorectical model)
+/proc_control/physics/dvl_lost_override : FALSE # Boolean
+
+# transformation of the DVL frame to body frame
+/proc_control/physics/dvl_rotation : '0.0, 0.0, 3.1415' # rad
 # depth sensor distance according to the geometric center
 /proc_control/physics/depth_pose : '0.0, 0.0, 0.160' # m
 
@@ -120,5 +127,4 @@
 # sonar distance acording to auv center
 /proc_control/physics/sonar_pose : '0.0, 0.0, 0.0' # m
 
-# transformation of the DVL frame to body frame
-/proc_control/physics/dvl_rotation : '0.0, 0.0, 3.1415' # rad
+

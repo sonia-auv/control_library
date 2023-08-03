@@ -23,10 +23,10 @@ classdef TrimPlant < matlab.System
 
     % Pre-computed constants
     properties(Access = private)
-        J; % Jacobian function 
+        J; % Jacobian function
         f; % state function
         qUtils; % quatUtil class
-        
+
     end
 
     methods(Access = protected)
@@ -58,7 +58,7 @@ classdef TrimPlant < matlab.System
         % Step fonction
         %------------------------------------------------------------------------------
         function [A, B, C, D, U, Y, X, DX, ref, Z] = stepImpl(this, u, y, ref, constMec)
-            
+
             % check if block need to be init
                 this.initBloc(constMec);
 
@@ -77,12 +77,12 @@ classdef TrimPlant < matlab.System
 
 
         end
-        
+
         % Fonction qui linéarise le systeme
         %------------------------------------------------------------------------------
         function [A, B, C, D, U, Y, X, DX] = trimPlantQuat(this, u, y)
 
-            
+
             if ~ this.useDynamicsConst
                 % Lineariser le système
                 [Ac, Bc, C, D] = this.J(y,u); % Legacy
@@ -94,17 +94,17 @@ classdef TrimPlant < matlab.System
                 D = this.D;
             end
 
-    
+
             % Discrétiser le système.
             A = expm(Ac*this.MPC.Ts); % Fossen 2021 Eq B.10/B.9 page 662
-    
+
             BT = Ac(8:13,8:13)\(A(8:13,8:13)-eye(6))*Bc(8:13,1:8); % Fossen 2021 Eq B.11 p 662
             B = [zeros(7,8); BT];
-    
+
             % Calculer F(x(k),u(k))
-            xk = y;   
+            xk = y;
             x_dot_kk = zeros(13,1);
-        
+
             for i = 1 : this.MPC.dts
 
                 if ~ this.useDynamicsConst
@@ -118,20 +118,20 @@ classdef TrimPlant < matlab.System
 
                 % Intégration trapezoidale
                 xk = xk + ((x_dot_k + x_dot_kk)*(this.MPC.Ts/this.MPC.dts ))/2;
-        
+
                 x_dot_kk = x_dot_k;
-        
+
                % correct Quaternion
                xk(4:7)=this.qUtils.quatNorm(xk(4:7));
-               
+
             end
-            
+
             % Nominal conditions for discrete-time plant
             U = u.';
             Y = y.';%(Cc*x + Dc*u).';
             X = y.';
             DX = (xk-y).' ;
-            
+
             % save prediction for next step
             this.xl =xk.';
         end
@@ -152,9 +152,9 @@ classdef TrimPlant < matlab.System
                                     physics.added_mass...
                                     physics.rho ...
                                     physics.g];
-            
+
                 this.generateBmatrix(physics.thrusters,physics.rg);
-                this.init = true; 
+                this.init = true;
             end
         end
 
@@ -162,28 +162,28 @@ classdef TrimPlant < matlab.System
         %------------------------------------------------------------------------------
         function generateBmatrix(this, T, rg)
 
-            % Crée la matrice thrusters 
-            Tm=zeros(6,this.MPC.nu);   
-        
+            % Crée la matrice thrusters
+            Tm=zeros(6,this.MPC.nu);
+
             for i=1:this.MPC.nu
-                    
+
                 qt= eul2quat(deg2rad(T(i,4:6)),'ZYX');% convertir les angle d'euler en uaternion
-                 Tm(:,i)=ThrusterVector(T(i,1:3),qt,rg);  % Calculer le vecteur thrusters     
+                 Tm(:,i)=ThrusterVector(T(i,1:3),qt,rg);  % Calculer le vecteur thrusters
             end
-            
+
             % prendre la matrice M
             [M,~,~,~] = AUVModelMatrices(this.MPC.Xi,this.constValues);
 
             % M inverse * Tm
             this.Bc = [zeros(7,this.MPC.nu) ; M\Tm];
-           
+
         end
 
         % Fonction qui regarde la discontinuiter entre 2 generations du planner
         %------------------------------------------------------------------------------
         function traj = checkTrajectory(this, traj)
 
-            % check fist ref 
+            % check fist ref
             traj(1,4:7) = this.qUtils.checkQuatFlip(traj(1,4:7), this.qkt);
 
             for i = 2 : this.MPC.p
@@ -194,7 +194,7 @@ classdef TrimPlant < matlab.System
             this.qkt = traj(1,4:7);
 
         end
-      
+
         % Fonction qui calcule le residue de mesure
         %------------------------------------------------------------------------------
         function residue = getMesurementResidual(this, y, xhat)
@@ -213,7 +213,7 @@ classdef TrimPlant < matlab.System
 
 
         %% Definire outputs
-        %------------------------------------------------------------------------------       
+        %------------------------------------------------------------------------------
         function [A, B, C, D, U, Y, X, DX, ref Z] = getOutputSizeImpl(this)
             A = [this.MPC.nx,this.MPC.nx];
             B = [this.MPC.nx,this.MPC.nu];
@@ -226,8 +226,8 @@ classdef TrimPlant < matlab.System
             ref = [this.MPC.p, this.MPC.nx];
             Z = [this.MPC.nx,1];
 
-        end 
-      
+        end
+
         function [A, B, C, D, U, Y, X, DX, ref, Z] = isOutputFixedSizeImpl(this)
             A = true;
             B = true;
@@ -236,11 +236,11 @@ classdef TrimPlant < matlab.System
             U = true;
             Y = true;
             X = true;
-            DX = true;   
-            ref = true;  
-            Z = true; 
+            DX = true;
+            ref = true;
+            Z = true;
         end
-      
+
         function [A, B, C, D, U, Y, X, DX, ref, Z] = getOutputDataTypeImpl(this)
             A = "double";
             B = "double";
@@ -253,7 +253,7 @@ classdef TrimPlant < matlab.System
             ref = "double";
             Z = "double";
         end
-      
+
         function [A, B, C, D, U, Y, X, DX, ref, Z] = isOutputComplexImpl(this)
             A = false;
             B = false;
@@ -262,7 +262,7 @@ classdef TrimPlant < matlab.System
             U = false;
             Y = false;
             X = false;
-            DX = false;  
+            DX = false;
             ref = false;
             Z = false;
         end
@@ -300,6 +300,6 @@ classdef TrimPlant < matlab.System
                 dt = "double";
                 cp = false;
             end
-        end 
+        end
     end
 end

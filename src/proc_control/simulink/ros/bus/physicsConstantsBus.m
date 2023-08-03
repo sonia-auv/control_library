@@ -572,6 +572,17 @@ elems(16).Max = [];
 elems(16).DocUnits = '';
 elems(16).Description = '';
 
+elems(17) = Simulink.BusElement;
+elems(17).Name = 'dvl_lost_override';
+elems(17).Dimensions = [1 1];
+elems(17).DimensionsMode = 'Fixed';
+elems(17).DataType = 'double';
+elems(17).Complexity = 'real';
+elems(17).Min = [];
+elems(17).Max = [];
+elems(17).DocUnits = '';
+elems(17).Description = '';
+
 physicsConstants = Simulink.Bus;
 physicsConstants.HeaderFile = '';
 physicsConstants.Description = '';

@@ -1,7 +1,7 @@
-classdef AuvConfig 
+classdef AuvConfig
     %AUVCONFIG Summary of this class goes here
     %   Detailed explanation goes here
-    
+
     properties
         auv;
         simulink;
@@ -11,13 +11,13 @@ classdef AuvConfig
         MPC;
         mode;
         B;
-        Jauv7; % Jacobian function 
+        Jauv7; % Jacobian function
         fauv7; % state function
-        Jauv8; % Jacobian function 
+        Jauv8; % Jacobian function
         fauv8; % state function
 
     end
-    
+
     methods
 
         function this = AuvConfig()
@@ -26,7 +26,7 @@ classdef AuvConfig
 
             if coder.target('MATLAB')
                 % Definir AUV pour mode interprété
-                setenv("AUV","AUV8");  
+                setenv("AUV","AUV8");
             end
 
             this.auv = getenv("AUV");
@@ -46,10 +46,10 @@ classdef AuvConfig
                     [this.simulink, this.simulation, this.physics, this.kalman, this.MPC, this.mode] = ConfigAUV8();
                     this.Jauv8 = str2func(this.MPC.JacobianFnc);
                     this.fauv8 = str2func(this.MPC.StateFnc);
-           
+
             end
 
-            % Définire la matrice B                  
+            % Définire la matrice B
             this.B = this.getBMatrix();
 
             % z transform of the thruster 1st order transfert function.
@@ -59,21 +59,21 @@ classdef AuvConfig
 
     end
     methods (Access = private)
-        
+
         function B = getBMatrix(this)
 
-            %% Crée la matrice thrusters 
-            Tm=zeros(6,size(this.physics.thruster.T,1));   
+            %% Crée la matrice thrusters
+            Tm=zeros(6,size(this.physics.thruster.T,1));
             for i=1:size(this.physics.thruster.T,1)
-        
+
                 qt= eul2quat(deg2rad(this.physics.thruster.T(i,4:6)),'ZYX');% convertir les angle d'euler en quaternion
-                Tm(:,i)=ThrusterVector(this.physics.thruster.T(i,1:3),qt);  % Calculer le vecteur thrusters     
+                Tm(:,i)=ThrusterVector(this.physics.thruster.T(i,1:3),qt);  % Calculer le vecteur thrusters
             end
 
             B = [zeros(7,8);Tm];
         end
     end
 
-   
+
 end
 

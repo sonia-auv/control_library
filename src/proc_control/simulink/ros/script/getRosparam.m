@@ -8,10 +8,10 @@ function [simulation,physics, thrusters, mpc] = getRosparam()
 
         % Paramètres pour la physique.
         physics.mass = get(rosparam, '/control/physics/mass');
-        physics.volume = get(rosparam, '/control/physics/volume');  
-        physics.rho = get(rosparam, '/control/physics/rho');  
-        physics.g = get(rosparam, '/control/physics/g'); 
-        physics.dvlCenterDist = get(rosparam, '/control/physics/dvlCenterDist'); 
+        physics.volume = get(rosparam, '/control/physics/volume');
+        physics.rho = get(rosparam, '/control/physics/rho');
+        physics.g = get(rosparam, '/control/physics/g');
+        physics.dvlCenterDist = get(rosparam, '/control/physics/dvlCenterDist');
         physics.height = get(rosparam, '/control/physics/height');
 
         buffer = get(rosparam, '/control/physics/inertia');

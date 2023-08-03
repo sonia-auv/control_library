@@ -9,7 +9,7 @@ classdef HydroModel < matlab.System
     pingerStartPosition;
 
     end
-    
+
     properties(DiscreteState)
 
     end
@@ -25,7 +25,7 @@ classdef HydroModel < matlab.System
         end
 
         function [pingerPosition,HydroMesurements] = stepImpl(this,isNewPosition,pingerPosition,worldPosition,quaternion)
-           
+
             if isNewPosition
                 this.updatePignerPosition(pingerPosition);
             end
@@ -33,7 +33,7 @@ classdef HydroModel < matlab.System
             p =[this.pingerPosition.X ;
                 this.pingerPosition.Y ;
                 this.pingerPosition.Z ] + (rand(3,1)  *this.simulation.hydro.maxDeviation);
-            
+
             % Calculer les angles des hydros.
             HydroMesurements = pinger2hydroAngles(worldPosition, quaternion.' ,this.Physics.hydroPose.', p);
             pingerPosition = this.pingerPosition;
@@ -54,43 +54,43 @@ classdef HydroModel < matlab.System
             this.pingerPosition.Z = msg.Z;
         end
 
-      %% Definire outputs       
+      %% Definire outputs
       function [pingerPosition,HydroMesurements] = getOutputSizeImpl(this)
           pingerPosition = [1,1];
           HydroMesurements = [3,1];
-          
-      end 
-      
+
+      end
+
       function [pingerPosition,HydroMesurements] = isOutputFixedSizeImpl(this)
           pingerPosition = true;
           HydroMesurements = true;
-          
+
       end
-      
+
       function [pingerPosition,HydroMesurements] = getOutputDataTypeImpl(this)
           pingerPosition = "SL_Bus_proc_control_geometry_msgs_Vector3";
           HydroMesurements = "double";
 
       end
-      
+
      function [pingerPosition,HydroMesurements] = isOutputComplexImpl(this)
          pingerPosition = false;
          HydroMesurements = false;
-         
+
      end
      function [sz,dt,cp] = getDiscreteStateSpecificationImpl(this,name)
          if strcmp(name,'init')
               sz = [1 1];
               dt = "double";
               cp = false;
-      
+
          end
-     end 
-     
+     end
+
      function this = slexBusesMATLABSystemMathOpSysObj(varargin)
       % Support name-value pair arguments
       setProperties(this,nargin,varargin{:});
-     end    
-         
+     end
+
     end
 end

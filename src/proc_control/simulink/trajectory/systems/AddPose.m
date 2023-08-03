@@ -27,7 +27,7 @@ classdef AddPose < matlab.System
 %==========================================================================
 %% Fonction appeler a l'initialisation
     function setupImpl(this, reset, compute, clearBuffer, isNew, waypoint,initCond )
-        % Perform one-time calculations, such as computing constants   
+        % Perform one-time calculations, such as computing constants
     end
 %% Main appeller à chaque exécution
     function [waypoints, count, initCond] = stepImpl(this, reset, compute, clearBuffer, isNew, waypoint,xk)
@@ -47,9 +47,9 @@ classdef AddPose < matlab.System
     end
 %% ========================================================================
 % Sous Routines
-%==========================================================================        
+%==========================================================================
 % Fonction qui interprete les message ROS
-        
+
     function CheckEvent(this,compute, clearBuffer, isNew,waypoint,xk, reset )
 
 
@@ -58,20 +58,20 @@ classdef AddPose < matlab.System
                 this.poseList(2:end,:) = repmat(999, this.buffSize-1, this.elementSize);
                 this.i = 2;
         end
-        
+
         % Ajout d'un waypoint provenant de ROS.
         if isNew == 1
-            
+
            if this.i <= this.buffSize
-        
+
                     this.poseList(this.i,:) = this.processWpt(waypoint.').';
                     this.i = this.i + 1;
            end
         end
-        
+
         % Générer la trajectoire
        if   compute == 1
-           
+
             this.poseList(1,:)= this.poseList(this.i-1,:);
             this.poseList(2:end,:) = repmat(999, this.buffSize-1, this.elementSize);
             this.i = 2;
@@ -79,31 +79,31 @@ classdef AddPose < matlab.System
 
         % Reset Trajectoire
         if reset
-            
+
             this.resetTrajectory(xk);
         end
     end
-    
-%==========================================================================   
+
+%==========================================================================
 % Fonction qui interprete les waypoints reçu par ROS
     function pwpt = processWpt(this, wpt)
         % Determiner le quaternion en fonction des angles d'euler.
         % Orde de rotation : ZYX.
         % Reel
-        
+
         % Information sur le nouveau waypoints
             twpt = zeros(1, this.elementSize);
             twpt(8)=wpt(8);
             p= wpt(1:3);
             dir= wpt(9);
-        
+
         % Information de la pose précédente
             lp = this.poseList(this.i-1,1:3); % LastPosition
             lq = this.poseList(this.i-1,4:7); % LastQuaternion
-        
+
         % transformer les angle d'euler quaternions
             q = eul2quat(deg2rad(wpt(4:6)),'ZYX');
-        
+
        % calculer
          qs = lq(1);   % quaternion partie scalaire
          qu = lq(2:4); % quaternion partie vectoriel
@@ -140,35 +140,35 @@ classdef AddPose < matlab.System
 
         pwpt =twpt;
     end
-%==========================================================================   
+%==========================================================================
  % Fonnction qui retoure le quaternion le plus court/long selon
  % l'utilisateur
- 
-     function rq =  getQuatDir(this,lq,q,dir)    
-         
+
+     function rq =  getQuatDir(this,lq,q,dir)
+
          norm = dot(lq,q);
-        
+
         % conjuger le quaternion au besoin
         if  norm > 1 && dir == 0 || norm < 1 && dir == 1
-            q = quatconj(q);      
+            q = quatconj(q);
         end
-        
+
         rq = quatmultiply(lq,q);
      end
-     
+
 %==========================================================================
 
-%==========================================================================   
+%==========================================================================
  % Fonction qui reset la trajectoire
- 
+
  function resetTrajectory(this, initcond)
-     
+
      % remove roll and pitch from initial condition
      eul = quat2eul(initcond(4:7).','XYZ').*[0,0,1];
-     
+
      % Retransformer en quaternion
      initcond(4:7) = eul2quat(eul,'XYZ').';
-     
+
      this.initcond = initcond.';
      % definir les conditions initiaux
      this.poseList(2:end,:) = repmat(999, this.buffSize-1, this.elementSize);
@@ -176,17 +176,17 @@ classdef AddPose < matlab.System
             this.poseList(2,:) = [this.initcond,1,0];
             this.i = 2;
  end
- 
- 
-%%=========================================================================          
- % Definire outputs   
-%==========================================================================    
+
+
+%%=========================================================================
+ % Definire outputs
+%==========================================================================
       function [waypoints, count, initCond] = getOutputSizeImpl(this)
       waypoints = [this.buffSize this.elementSize];
       count = [1 1];
       initCond =[1 7];
-      end 
-      
+      end
+
       function [waypoints, count, initCond] = isOutputFixedSizeImpl(this)
           waypoints = true;
           count = true;
@@ -197,33 +197,33 @@ classdef AddPose < matlab.System
           count = "double";
           initCond = "double";
       end
-      
+
      function [waypoints, count, initCond] = isOutputComplexImpl(this)
          waypoints = false;
          count = false;
          initCond = false;
      end
-     
+
      function [sz,dt,cp] = getDiscreteStateSpecificationImpl(this,name)
          if strcmp(name,'i')
               sz = [1 1];
               dt = "double";
               cp = false;
-         
+
          elseif strcmp(name,'poseList')
              sz = [this.buffSize this.elementSize];
              dt = "double";
              cp = false;
-             
+
          elseif strcmp(name,'initcond')
              sz = [1 7];
              dt = "double";
              cp = false;
          end
-     end 
-      
-         
+     end
 
-     
+
+
+
     end
 end

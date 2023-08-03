@@ -39,12 +39,13 @@ param.normalSpeed.vamax = 0.5;
 param.highSpeed.amax = 0.15;
 param.highSpeed.vlmax = 0.8;
 param.highSpeed.vamax = 0.8;
+param.maxDepth = 5;
 
 send(mappub , newmsg);
 pause(1);
 send(icpub, icMsg);
 
-TG = TrajectoryGenerator(newmsg,param,icMsg);
+TG = TrajectoryGenerator(newmsg,param,icMsg,[]);
 if TG.status == TG.RECIEVED_VALID_WAYPTS
     test= TG.Compute(trajpub);
     send(trajpub,test);
