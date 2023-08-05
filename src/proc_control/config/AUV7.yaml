@@ -82,7 +82,7 @@
 
 
 # Center of mass              x     y     z
-/proc_control/physics/rg : '-0.0035, 0.001, 0.008' # distance (m) between center of mass and the geometric center of the sub.
+/proc_control/physics/rg : '-0.0035, -0.001, 0.008' # distance (m) between center of mass and the geometric center of the sub.
 
 # Center of boyency           x     y     z
 /proc_control/physics/rb : '0.00, 0.00, -0.004' # distance (m) between center of boyency and the geometric center of the sub.
